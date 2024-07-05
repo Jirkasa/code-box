@@ -1,5 +1,5 @@
 import CodeView from "./CodeView";
-import CSSClasses from "./CSSClasses";
+import CSSClasses from "../CSSClasses";
 
 class HighlightBox {
     private readonly element : HTMLElement;
@@ -8,7 +8,7 @@ class HighlightBox {
     private end : number;
 
     constructor(container : HTMLElement, start : number, end : number, codeView : CodeView) {
-        this.start = Math.max(Math.trunc(start), 1);
+        this.start = Math.min(Math.max(Math.trunc(start), 1), codeView.linesCount);
         this.end = Math.max(Math.min(Math.trunc(end), codeView.linesCount), this.start);
         this.codeView = codeView;
 
@@ -36,7 +36,7 @@ class HighlightBox {
     }
 
     public setRange(start : number, end : number = start) : void {
-        this.start = Math.max(Math.trunc(start), 1);
+        this.start = Math.min(Math.max(Math.trunc(start), 1), this.codeView.linesCount);
         this.end = Math.max(Math.min(Math.trunc(end), this.codeView.linesCount), this.start);
 
         this.element.style.transform = `translateY(${this.codeView.lineHeight * (this.start-1)}${this.codeView.lineHeightUnit})`;

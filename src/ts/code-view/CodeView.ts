@@ -1,46 +1,55 @@
 import CodeViewOptions from "./CodeViewOptions";
-import CSSClasses from "./CSSClasses";
-import GlobalConfig from "./GlobalConfig";
+import CSSClasses from "../CSSClasses";
+import GlobalConfig from "../GlobalConfig";
 import HighlightBox from "./HighlightBox";
+import { deleteEmptyStringFromArray } from "../utils";
 
 class CodeView {
+    private initialOptions : CodeViewOptions;
     private rootElement : HTMLElement;
     private gutterElement : HTMLElement;
     private containerElement : HTMLElement;
     private lineNumberElements : HTMLElement[];
+    private preElement : HTMLPreElement;
     private lineNumberElementsVisible : boolean;
     private highlightBoxes = new Array<HighlightBox>();
     public readonly lineHeight : number;
     public readonly lineHeightUnit : string;
     public readonly linesCount : number;
 
-    constructor(element : HTMLPreElement, options : CodeViewOptions = {}) {
+    constructor(element : HTMLPreElement, options : CodeViewOptions = {}, parentElement : HTMLElement | null = null) {
         if (element.tagName !== "PRE") throw new Error("Passed element is not pre element.");
-        if (element.parentElement === null) throw new Error("Passed element does not have parent element.");
+        if (element.parentElement === null && parentElement === null) throw new Error("No parent element could be determined.");
 
-        this.fillOptionsFromDataset(options, element.dataset); // todo - ještě validovat hodnoty - kdyžtak vyhazovat chybu
+        this.preElement = element;
+        this.initialOptions = this.createOptionsCopy(options);
+
+        this.fillOptionsFromDataset(this.initialOptions, element.dataset);
+
+        if (this.initialOptions.cssClasses) {
+            deleteEmptyStringFromArray(this.initialOptions.cssClasses);
+        }
 
         const codeElement = this.getCodeElement(element);
         
-        this.lineHeight = options.lineHeight || 2;
-        this.lineHeightUnit = options.lineHeightUnit || "rem";
-
-        this.lineNumberElementsVisible = options.showLineNumbers || false;
+        this.lineHeight = this.initialOptions.lineHeight || 2;
+        this.lineHeightUnit = this.initialOptions.lineHeightUnit || "rem";
 
         codeElement.style.lineHeight = this.lineHeight.toString() + this.lineHeightUnit;
         this.linesCount = this.getLinesCount(codeElement);
         
         this.rootElement = document.createElement("div");
         this.rootElement.classList.add(CSSClasses.CODE_VIEW);
-        element.parentElement.insertBefore(this.rootElement, element);
+        if (parentElement) {
+            parentElement.appendChild(this.rootElement);
+        } else {
+            element.parentElement?.insertBefore(this.rootElement, element);
+        }
         this.rootElement.innerHTML = "";
 
         this.gutterElement = document.createElement("div");
         this.gutterElement.classList.add(CSSClasses.CODE_VIEW_GUTTER);
         this.rootElement.appendChild(this.gutterElement);
-        if (options.showGutter !== undefined && !options.showGutter) {
-            this.hideGutter();
-        }
 
         this.containerElement = document.createElement("div");
         this.containerElement.classList.add(CSSClasses.CODE_VIEW_CONTAINER);
@@ -51,15 +60,40 @@ class CodeView {
         this.containerElement.appendChild(contentContainerElement);
         contentContainerElement.appendChild(element);
 
-        if (options.showLineNumbers === undefined || options.showLineNumbers) {
+        if (this.initialOptions.showLineNumbers === undefined || this.initialOptions.showLineNumbers) {
+            this.lineNumberElementsVisible = true;
             this.lineNumberElements = this.fillLineNumbers(this.gutterElement, codeElement);
         } else {
+            this.lineNumberElementsVisible = false;
             this.lineNumberElements = this.fillLineNumbers(this.gutterElement, codeElement, true);
         }
 
-        if (options.highlight !== undefined) {
-            this.initHighlights(options.highlight);
+        this.reset();
+    }
+
+    public reset() : void {
+        this.removeHighlights();
+        if (this.initialOptions.showGutter !== undefined && !this.initialOptions.showGutter) {
+            this.hideGutter();
+        } else {
+            this.showGutter();
         }
+        if (this.initialOptions.showLineNumbers === undefined || this.initialOptions.showLineNumbers && !this.lineNumberElementsVisible) {
+            this.showLineNumbers();
+        } else if (this.lineNumberElementsVisible) {
+            this.hideLineNumbers();
+        }
+        if (this.initialOptions.highlight !== undefined) {
+            this.initHighlights(this.initialOptions.highlight);
+        }
+        if (this.initialOptions.cssClasses !== undefined) {
+            this.rootElement.classList.add(...this.initialOptions.cssClasses);
+        }
+    }
+
+    public clone(parentElement : HTMLElement) : CodeView {
+        const preElementCopy = this.preElement.cloneNode(true) as HTMLPreElement;
+        return new CodeView(preElementCopy, this.initialOptions, parentElement);
     }
 
     public addHighlight(start : number, end : number = start) : void {
@@ -177,30 +211,44 @@ class CodeView {
         return numberElements;
     }
 
+    private createOptionsCopy(options : CodeViewOptions) : CodeViewOptions {
+        return {
+            highlight: options.highlight,
+            lineHeight: options.lineHeight,
+            lineHeightUnit: options.lineHeightUnit,
+            showGutter: options.showGutter,
+            showLineNumbers: options.showLineNumbers,
+            cssClasses: options.cssClasses
+        }
+    }
+
     private getLinesCount(codeElement : HTMLElement) : number {
         if (codeElement.textContent === null) return 0;
         return codeElement.textContent.split('\n').length;
     }
 
     private fillOptionsFromDataset(options : CodeViewOptions, dataset : DOMStringMap) : void {
-        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Highlight"] !== undefined && options.highlight === undefined) {
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Highlight"] !== undefined) {
             options.highlight = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Highlight"];
         }
-        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ShowGutter"] !== undefined && options.showGutter === undefined) {
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ShowGutter"] !== undefined) {
             options.showGutter = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ShowGutter"] === "true";
         }
-        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ShowLineNumbers"] !== undefined && options.showLineNumbers === undefined) {
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ShowLineNumbers"] !== undefined) {
             options.showLineNumbers = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ShowLineNumbers"] === "true";
         }
-        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeight"] !== undefined && options.lineHeight === undefined) {
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeight"] !== undefined) {
             try {
                 options.lineHeight = Number.parseFloat(dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeight"] || "");
             } catch {
                 throw new Error("Line height option must be a number.");
             }
         }
-        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeightUnit"] !== undefined && options.lineHeightUnit === undefined) {
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeightUnit"] !== undefined) {
             options.lineHeightUnit = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeightUnit"];
+        }
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "CssClasses"] !== undefined) {
+            options.cssClasses = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "CssClasses"]?.split(" ") || new Array<string>();
         }
     }
 
@@ -218,7 +266,7 @@ class CodeView {
 export default CodeView;
 
 /**
- * - javascript nastavení bude mít přednost před data atributy
+ * - javascript nastavení bude mít přednost před data atributy - ne, naopak to v mém případě dává větší smysl - uživatel tak bude mít možnost změnit nějakou věc pro jednu ukázku bez zasažení do js
  */
 
 /**

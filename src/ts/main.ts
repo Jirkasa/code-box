@@ -1,4 +1,4 @@
-export { default as CodeView } from "./CodeView";
+export { default as CodeView } from "./code-view/CodeView";
 // todo - vyexportovat to
 
 /**

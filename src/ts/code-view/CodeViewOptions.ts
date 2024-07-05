@@ -4,8 +4,7 @@ type CodeViewOptions = {
     showLineNumbers ?: boolean;
     lineHeight ?: number;
     lineHeightUnit ?: string;
+    cssClasses ?: string[];
 } // todo - ještě možnost přidat plugin
-
-// todo - půjdou nastavit additional třídy
 
 export default CodeViewOptions;
