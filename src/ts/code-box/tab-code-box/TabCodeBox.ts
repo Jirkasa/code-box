@@ -1,7 +1,6 @@
 import Codebox from "../CodeBox";
 
-class TabCodeBox extends Codebox {
-    
+class TabCodeBox {
 }
 
 export default TabCodeBox;

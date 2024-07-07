@@ -3,7 +3,6 @@ import {CodeView} from "../../src/ts/main";
 const codeView = new CodeView(document.getElementById("CodeViewTest") as HTMLPreElement, {
     highlight: "g,3,15",
     showGutter: true,
-    showLineNumbers: false,
     cssClasses: ["u-mb-4"]
 });
 

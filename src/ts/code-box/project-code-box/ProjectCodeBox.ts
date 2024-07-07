@@ -1,7 +1,6 @@
 import Codebox from "../CodeBox";
 
-class ProjectCodeBox extends Codebox {
-
+class ProjectCodeBox {
 }
 
 export default ProjectCodeBox;

@@ -4,7 +4,7 @@ import GlobalConfig from "../GlobalConfig";
 import HighlightBox from "./HighlightBox";
 import { deleteEmptyStringFromArray } from "../utils";
 
-class CodeView {
+class CodeView { // todo - udělat to tak, že pokud se parent element vůbec nenajde, tak se element jen vytvoří
     private initialOptions : CodeViewOptions;
     private rootElement : HTMLElement;
     private gutterElement : HTMLElement;
@@ -18,7 +18,7 @@ class CodeView {
     public readonly linesCount : number;
 
     constructor(element : HTMLPreElement, options : CodeViewOptions = {}, parentElement : HTMLElement | null = null) {
-        if (element.tagName !== "PRE") throw new Error("Passed element is not pre element.");
+        if (!(element instanceof HTMLPreElement)) throw new Error("Passed element is not pre element.");
         if (element.parentElement === null && parentElement === null) throw new Error("No parent element could be determined.");
 
         this.preElement = element;
@@ -62,10 +62,10 @@ class CodeView {
 
         if (this.initialOptions.showLineNumbers === undefined || this.initialOptions.showLineNumbers) {
             this.lineNumberElementsVisible = true;
-            this.lineNumberElements = this.fillLineNumbers(this.gutterElement, codeElement);
+            this.lineNumberElements = this.fillLineNumbers(this.gutterElement);
         } else {
             this.lineNumberElementsVisible = false;
-            this.lineNumberElements = this.fillLineNumbers(this.gutterElement, codeElement, true);
+            this.lineNumberElements = this.fillLineNumbers(this.gutterElement, true);
         }
 
         this.reset();
@@ -195,7 +195,7 @@ class CodeView {
         }
     }
 
-    private fillLineNumbers(container : HTMLElement, codeElement : HTMLElement, hidden = false) : HTMLElement[] {
+    private fillLineNumbers(container : HTMLElement, hidden = false) : HTMLElement[] {
         const numberElements = new Array<HTMLElement>();
 
         for (let i = 1; i <= this.linesCount; i++) {
@@ -255,8 +255,8 @@ class CodeView {
     private getCodeElement(preElement : HTMLPreElement) : HTMLElement {
         const children = Array.from(preElement.children);
         for (let child of children) {
-            if (child.tagName === "CODE") {
-                return child as HTMLElement;
+            if (child.tagName === "CODE" && child instanceof HTMLElement) {
+                return child;
             }
         }
         throw new Error("Passed element does not have code element as its children");
@@ -267,10 +267,4 @@ export default CodeView;
 
 /**
  * - javascript nastavení bude mít přednost před data atributy - ne, naopak to v mém případě dává větší smysl - uživatel tak bude mít možnost změnit nějakou věc pro jednu ukázku bez zasažení do js
- */
-
-/**
- * toto bude takový základní blok
- *  - prostě to jen zobrazí ukázku - kdyžtak s posuvníkem
- *      - tímto začnu
  */
