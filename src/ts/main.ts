@@ -1,4 +1,5 @@
 export { default as CodeView } from "./code-view/CodeView";
+export { default as TabCodeBox } from "./code-box/tab-code-box/TabCodeBox";
 // todo - vyexportovat to
 
 /**

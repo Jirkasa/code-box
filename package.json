@@ -32,6 +32,8 @@
     "postcss-loader": "^8.1.1",
     "postcss-preset-env": "^9.5.15",
     "style-loader": "^4.0.0",
+    "svg-sprite-loader": "^6.0.11",
+    "svgo-loader": "^4.0.0",
     "template-ejs-loader": "^0.9.4",
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.3",

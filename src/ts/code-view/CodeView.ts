@@ -4,7 +4,7 @@ import GlobalConfig from "../GlobalConfig";
 import HighlightBox from "./HighlightBox";
 import { deleteEmptyStringFromArray } from "../utils";
 
-class CodeView { // todo - udělat to tak, že pokud se parent element vůbec nenajde, tak se element jen vytvoří
+class CodeView { // todo - ještě přidat přesouvání do elementu, skrývání, atd..
     private initialOptions : CodeViewOptions;
     private rootElement : HTMLElement;
     private gutterElement : HTMLElement;
@@ -17,9 +17,8 @@ class CodeView { // todo - udělat to tak, že pokud se parent element vůbec ne
     public readonly lineHeightUnit : string;
     public readonly linesCount : number;
 
-    constructor(element : HTMLPreElement, options : CodeViewOptions = {}, parentElement : HTMLElement | null = null) {
+    constructor(element : HTMLPreElement, options : CodeViewOptions = {}) {
         if (!(element instanceof HTMLPreElement)) throw new Error("Passed element is not pre element.");
-        if (element.parentElement === null && parentElement === null) throw new Error("No parent element could be determined.");
 
         this.preElement = element;
         this.initialOptions = this.createOptionsCopy(options);
@@ -32,18 +31,16 @@ class CodeView { // todo - udělat to tak, že pokud se parent element vůbec ne
 
         const codeElement = this.getCodeElement(element);
         
-        this.lineHeight = this.initialOptions.lineHeight || 2;
-        this.lineHeightUnit = this.initialOptions.lineHeightUnit || "rem";
+        this.lineHeight = this.initialOptions.lineHeight || GlobalConfig.DEFAULT_LINE_HEIGHT;
+        this.lineHeightUnit = this.initialOptions.lineHeightUnit || GlobalConfig.DEFAULT_LINE_HEIGHT_UNIT;
 
         codeElement.style.lineHeight = this.lineHeight.toString() + this.lineHeightUnit;
         this.linesCount = this.getLinesCount(codeElement);
         
         this.rootElement = document.createElement("div");
         this.rootElement.classList.add(CSSClasses.CODE_VIEW);
-        if (parentElement) {
-            parentElement.appendChild(this.rootElement);
-        } else {
-            element.parentElement?.insertBefore(this.rootElement, element);
+        if (element.parentElement) {
+            element.parentElement.insertBefore(this.rootElement, element);
         }
         this.rootElement.innerHTML = "";
 
@@ -91,9 +88,17 @@ class CodeView { // todo - udělat to tak, že pokud se parent element vůbec ne
         }
     }
 
-    public clone(parentElement : HTMLElement) : CodeView {
+    public appendTo(element : HTMLElement) : void {
+        element.appendChild(this.rootElement);
+    }
+
+    public detach() : void {
+        this.rootElement.remove();
+    }
+
+    public clone() : CodeView {
         const preElementCopy = this.preElement.cloneNode(true) as HTMLPreElement;
-        return new CodeView(preElementCopy, this.initialOptions, parentElement);
+        return new CodeView(preElementCopy, this.initialOptions);
     }
 
     public addHighlight(start : number, end : number = start) : void {
@@ -238,9 +243,8 @@ class CodeView { // todo - udělat to tak, že pokud se parent element vůbec ne
             options.showLineNumbers = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ShowLineNumbers"] === "true";
         }
         if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeight"] !== undefined) {
-            try {
-                options.lineHeight = Number.parseFloat(dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeight"] || "");
-            } catch {
+            options.lineHeight = Number.parseFloat(dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeight"] || "");
+            if (Number.isNaN(options.lineHeight)) {
                 throw new Error("Line height option must be a number.");
             }
         }

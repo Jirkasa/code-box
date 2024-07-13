@@ -1,5 +1,12 @@
 const GlobalConfig = {
-    DATA_ATTRIBUTE_PREFIX: "cb"
+    DATA_ATTRIBUTE_PREFIX: "cb",
+    LAZY_INITIALIZATION_MARGIN: "100px",
+    DEFAULT_LINE_HEIGHT: 2,
+    DEFAULT_LINE_HEIGHT_UNIT: "rem",
+    DEFAULT_NO_CODE_VIEW_SELECTED_ELEMENT_HEIGHT: "50rem",
+    DEFAULT_NO_CODE_VIEW_SELECTED_TEXT: "No code view selected",
+    DEFAULT_CODE_VIEW_BUTTON_TEXT: "unnamed",
+    DEFAULT_FILE_BUTTON_TEXT: "unnamed"
 }
 
 export default GlobalConfig;

@@ -1,73 +1,234 @@
 import CodeView from "../code-view/CodeView";
+import CodeViewOptions from "../code-view/CodeViewOptions";
+import GlobalConfig from "../GlobalConfig";
+import ViewportIntersectionObserver from "../utils/ViewportIntersectionObserver";
 import CodeBoxBuilder from "./CodeBoxBuilder";
 import CodeBoxOptions from "./CodeBoxOptions";
+
+export type CodeViewInfo = {
+    dataset : DOMStringMap;
+    codeView : CodeView; // name by se mohlo taky předávat, ať to nemusím zjišťovat v podtřídách
+}
+
+export type FileInfo = {
+    dataset : DOMStringMap;
+    name : string;
+    downloadLink : string | null;
+}
+
+export type CodeBoxItemInfo = {
+    type : "CodeView" | "FileInfo";
+    codeViewInfo ?: CodeViewInfo;
+    fileInfo ?: FileInfo;
+}
+
+type InitializationInfo = {
+    type : "PreElement" | "FileInfo";
+    preElement ?: HTMLPreElement;
+    fileInfo ?: FileInfo;
+}
 
 abstract class Codebox {
     protected readonly rootElement : HTMLElement;
     private readonly codeViewContainer : HTMLElement;
     private readonly noCodeViewSelectedElement : HTMLElement;
-    // private lazyInitialingElement : HTMLElement | null = null;
+    private readonly noCodeViewSelectedCSSHiddenClass : string;
+    protected initialCodeViewLinesCount : number | null = null;
+    private initialized : boolean  = false;
+    private initializationData : InitializationInfo[] | null;
+    //private preElements : HTMLPreElement[] | null;
+    private defaultCodeViewOptions : CodeViewOptions | null;
+    private activeCodeView : CodeView | null = null;
+    private lazyInitPlaceholderElement : HTMLElement | null = null;
+    //private fileInfos : FileInfo[] | null;
 
-    constructor(element : HTMLElement, options : CodeBoxOptions, codeBoxBuilder : CodeBoxBuilder) { // možná předávat additional elementy, aby se brali tak, že nebyli přidáni až po inicializaci? - a asi by to možná bylo lepší? - no nevím, možná i code views by byla možnost posílat už napřímo // // ale psal jsem že resetování tu nebude - to bude na podtřídách jak to implementují, takže ne
+    constructor(element : HTMLElement, options : CodeBoxOptions, codeBoxBuilder : CodeBoxBuilder) { // todo - dívat se na code box options v datasetu - na to jsem ještě u code boxu nemyslel
         this.rootElement = element;
 
-        codeBoxBuilder.customizeRootElement(this.rootElement);
-        this.codeViewContainer = codeBoxBuilder.createCodeViewContainer();
-        this.noCodeViewSelectedElement = codeBoxBuilder.createNoCodeViewSelectedElement();
-
-        codeBoxBuilder.assembleElements(this.rootElement, this.codeViewContainer, this.noCodeViewSelectedElement);
-
-        // tak určitě vím, že budu chtít zpracovat pre elementy, tak si to připravím
-        //const preElements = new Array<HTMLPreElement>();
+        this.defaultCodeViewOptions = options.defaultCodeViewOptions || null;
 
         const preElements = Array<HTMLPreElement>();
+        this.initializationData = new Array<InitializationInfo>();
+
+        let activePreElement : HTMLPreElement | null = null;
+
+        //this.fileInfos = new Array<FileInfo>();
 
         for (let i = 0; i < this.rootElement.children.length; i++) {
             const child = this.rootElement.children[i];
-            if (!(child instanceof HTMLPreElement)) continue;
-            const codeElement = this.getCodeElement(child);
-            if (!codeElement) continue;
-            preElements.push(child);
+            if (!(child instanceof HTMLElement)) continue;
+            if (child instanceof HTMLPreElement) {
+                const codeElement = this.getCodeElement(child);
+                if (!codeElement) continue;
+                if (child.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined) {
+                    if (activePreElement) {
+                        delete activePreElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"];
+                    }
+                    activePreElement = child;
+                }
+                preElements.push(child);
+                this.initializationData.push({
+                    type: "PreElement",
+                    preElement: child
+                })
+            } else if (child.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "File"] !== undefined) {
+                const fileInfo = {
+                    dataset: child.dataset,
+                    name: child.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Name"] || GlobalConfig.DEFAULT_FILE_BUTTON_TEXT,
+                    downloadLink: child.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "File"] || null
+                };
+                this.initializationData.push({
+                    type: "FileInfo",
+                    fileInfo: fileInfo
+                });
+            }
         }
 
-        if (options.lazyInit === undefined || options.lazyInit) {
-            // let maxLinesCount = 
-            // pro lazyInit bude ještě konfigurovatelný padding v options
+        if (options.implicitActive && !activePreElement && preElements.length > 0) {
+            const preElement = preElements[0];
+            preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] = "true";
+        }
 
-            // if (this.rootElement.parentElement === null) throw new Error("Code box has to have parent element for lazy initializing.");
-            // this.lazyInitialingElement = document.createElement("div");
-            // this.rootElement.parentElement.insertBefore(this.lazyInitialingElement, this.rootElement);
+        this.rootElement.innerHTML = ""; // todo - pro získání dalších elementů během inicializace se může v podtřídách implementovat nějaká volitelná metoda - takže pro project code box půjdou vytvořit ty command elementy
+
+        codeBoxBuilder.customizeRootElement(this.rootElement);
+        this.codeViewContainer = codeBoxBuilder.createCodeViewContainer();
+        this.noCodeViewSelectedCSSHiddenClass = codeBoxBuilder.getNoCodeViewCSSHiddenClass();
+        this.noCodeViewSelectedElement = codeBoxBuilder.createNoCodeViewSelectedElement(options.noCodeViewSelectedElementHeight || GlobalConfig.DEFAULT_NO_CODE_VIEW_SELECTED_ELEMENT_HEIGHT, options.noCodeViewSelectedText || GlobalConfig.DEFAULT_NO_CODE_VIEW_SELECTED_TEXT);
+
+        codeBoxBuilder.assembleElements(this.rootElement, this.codeViewContainer, this.noCodeViewSelectedElement);
+
+        if (preElements.length === 0 || (!options.implicitActive && !activePreElement)) {
+            this.showNoCodeViewSelectedMessage();
+        }
+
+        if ((options.lazyInit === undefined || options.lazyInit) && this.rootElement.parentElement) { // todo - do dokumentace napsat, že aby se lazy inicializování aplikovalo, musí mít CodeBox parent element
+            this.lazyInitPlaceholderElement = document.createElement("div");
+
+            if (activePreElement) {
+                const codeElement = this.getCodeElement(activePreElement);
+                if (codeElement) {
+                    this.initialCodeViewLinesCount = this.getLinesCount(codeElement);
+                    const height = this.initialCodeViewLinesCount * this.getCodeViewLineHeight(activePreElement, options.defaultCodeViewOptions || {});
+                    this.lazyInitPlaceholderElement.style.height = `${height}${this.getCodeViewLineHeightUnit(activePreElement, options.defaultCodeViewOptions || {})}`;
+                } else {
+                    this.init();
+                    return;
+                }
+            } else {
+                this.lazyInitPlaceholderElement.style.height = options.noCodeViewSelectedElementHeight || GlobalConfig.DEFAULT_NO_CODE_VIEW_SELECTED_ELEMENT_HEIGHT;
+            }
+
+            this.rootElement.parentElement.insertBefore(this.lazyInitPlaceholderElement, this.rootElement);
+            this.rootElement.style.setProperty("display", "none");
+
+            ViewportIntersectionObserver.observe(this.lazyInitPlaceholderElement, isIntersecting => this.onLazyInitPlaceholderElementIntersectionChange(isIntersecting));
+        } else {
+            this.init();
         }
     }
 
-    public init() : void { // pokud se tohle nezavolá hned, tak se to zavolá potom pro lazy inicializování | a nebo to může být voláno, pokud je lazy initializing zapnutý, ale ještě nedošlo k inicializování při najetí viewportu
-        // pro ProjectCodeBoxy se bude jako argument do konstruktoru posílat code box, od kterého se dědí, takže tady není problém
-            // na tvorbu ProjectCodeBoxů stejně bude ještě nějaká další třída
-                // no jo, ale jak bude probíhat dědění?
-                    // tak mohlo by se to třeba zatím nějak zablokovat?
-                        // co ale potom se zobrazováním pro lazy loading, když se bude dědit a zobrazovat již starší code view?
-                        // no - asi bych úplně nezobrazoval přímo skryté code view, ale spočítal bych si jeho řádky kódu plus výšku řádku (navíc tam mám i rem jednotky)
+    public init() : void {
+        if (this.initialized) throw new Error("Code box is already initialized."); // todo - nevím jestli vyhazovat chybu... - možná ani ne, jen by se nic neprovedlo
+
+        this.rootElement.style.removeProperty("display");
+
+        if (this.lazyInitPlaceholderElement) {
+            ViewportIntersectionObserver.unobserve(this.lazyInitPlaceholderElement);
+            this.lazyInitPlaceholderElement.remove();
+            this.lazyInitPlaceholderElement = null;
+        }
+
+        /*const codeViewInfos = new Array<CodeViewInfo>();
+        if (this.preElements) {
+            for (let preElement of this.preElements) {
+                const codeView = new CodeView(preElement, this.defaultCodeViewOptions || {});
+                codeView.detach();
+
+                if (preElement.dataset.cbActive !== undefined) {
+                    this.setActiveCodeView(codeView);
+                }
+
+                codeViewInfos.push({
+                    dataset: preElement.dataset,
+                    codeView: codeView
+                });
+            }
+        }*/
+
+        const codeBoxItemInfos = new Array<CodeBoxItemInfo>();
+        if (this.initializationData) {
+            for (let initializationInfo of this.initializationData) {
+                if (initializationInfo.type === "PreElement" && initializationInfo.preElement) {
+                    const preElement = initializationInfo.preElement;
+
+                    const codeView = new CodeView(preElement, this.defaultCodeViewOptions || {});
+                    codeView.detach();
+
+                    if (preElement.dataset.cbActive !== undefined) {
+                        this.setActiveCodeView(codeView);
+                    }
+
+                    codeBoxItemInfos.push({
+                        type: "CodeView",
+                        codeViewInfo: {
+                            codeView: codeView,
+                            dataset: preElement.dataset
+                        }
+                    })
+                } else if (initializationInfo.type === "FileInfo" && initializationInfo.fileInfo) {
+                    codeBoxItemInfos.push({
+                        type: "FileInfo",
+                        fileInfo: initializationInfo.fileInfo
+                    })
+                }
+            }
+        }
+
+        //this.onInit(codeViewInfos, this.fileInfos || []);
+        this.onInit(codeBoxItemInfos);
+
+        //this.preElements = null;
+        this.initializationData = null;
+        this.defaultCodeViewOptions = null;
+        this.initialized = true;
+        //this.fileInfos = null;
     }
 
-    // protected abstract createNoCodeViewSelectedElement() : HTMLElement;
+    public isInitialized() : boolean {
+        return this.initialized;
+    }
 
-    // protected getMaxLinesCount() : number { // todo ve třídě ProjectCodeBox to přepíšu
-
-    // } // - ne, mělo by to být pro aktivní code view
+    //protected abstract onInit(codeViewInfos : CodeViewInfo[], fileInfos : FileInfo[]) : void;
+    protected abstract onInit(codeBoxItemInfos : CodeBoxItemInfo[]) : void;
 
     protected setActiveCodeView(codeView : CodeView) {
+        if (this.activeCodeView) {
+            this.activeCodeView.detach();
+        }
 
+        codeView.appendTo(this.codeViewContainer);
+
+        this.activeCodeView = codeView;
+
+        this.hideNoCodeViewSelectedMessage();
     }
 
-    // private hasElementCodeElementChild(element : HTMLElement) : boolean {
-    //     const children = Array.from(element.children);
-    //     for (let child of children) {
-    //         if (child.tagName === "CODE") {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
+    // protected getInitialActiveCodeViewLinesCount() : number | null { // null pro nic
+    //     return this.initialCodeViewLinesCount;
+    // } // todo - tato metoda možná ani nebude potřeba
+
+    private showNoCodeViewSelectedMessage() : void {
+        this.noCodeViewSelectedElement.classList.remove(this.noCodeViewSelectedCSSHiddenClass);
+    }
+
+    private hideNoCodeViewSelectedMessage() : void {
+        this.noCodeViewSelectedElement.classList.add(this.noCodeViewSelectedCSSHiddenClass);
+    }
+
+    private onLazyInitPlaceholderElementIntersectionChange(isIntersecting : boolean) : void {
+        if (isIntersecting) this.init();
+    }
 
     private getLinesCount(codeElement : HTMLElement) : number {
         if (codeElement.textContent === null) return 0;
@@ -84,21 +245,36 @@ abstract class Codebox {
         return null;
     }
 
-    // když to nepůjde vidět, udělám to jako prázdný element...
-    // protected createLoadingElement() : HTMLElement {
-    //     const loadingElement = document.createElement("div");
-    //     loadingElement.classList.add("something"); // todo - změnit
-    //     loadingElement.innerText = "Waiting for initialization.";
-    //     return loadingElement;
-    // }
+    private getCodeViewLineHeight(preElement : HTMLPreElement, defaultCodeViewOptions : CodeViewOptions) : number {
+        if (preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeight"] !== undefined) {
+            const lineHeight = Number.parseFloat(preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeight"] || "");
+            if (Number.isNaN(lineHeight)) return GlobalConfig.DEFAULT_LINE_HEIGHT;
+            return lineHeight;
+        } else if (defaultCodeViewOptions.lineHeight !== undefined) {
+            return defaultCodeViewOptions.lineHeight;
+        } else {
+            return GlobalConfig.DEFAULT_LINE_HEIGHT;
+        }
+    }
+
+    private getCodeViewLineHeightUnit(preElement : HTMLPreElement, defaultCodeViewOptions : CodeViewOptions) : string {
+        if (preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeightUnit"] !== undefined) {
+            return preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeightUnit"] || GlobalConfig.DEFAULT_LINE_HEIGHT_UNIT;
+        } else if (defaultCodeViewOptions.lineHeightUnit !== undefined) {
+            return defaultCodeViewOptions.lineHeightUnit;
+        } else {
+            return GlobalConfig.DEFAULT_LINE_HEIGHT_UNIT;
+        }
+    }
 }
 
 export default Codebox;
 
 /**
 Co tady teda implementovat:
-    - lazy loading - ale jak?
-    - 
+    X- lazy loading
+    X- předávání code views
+        - ještě brát v potaz file elementy - ty jsou taky společné pro oba code boxy, ale bude se předávat dataset
 
 Co to vlastně code box je?
     - je to komponenta, obsahující code views, která je zobrazuje - to je v podstatě všechno co to je
@@ -123,9 +299,6 @@ Operace, které bych chtěl u obou code boxů:
     - resetovat code view do initial stavu (v jakém byl než se aplikovali změny přes metody)
         - a nebo ne?
             - budu - kvůli lazy loadingu (ale to až u ProjectCodeBox)
-    - mohla by se o lazy loading starat už i tato třída?
-        - ne, ale její init metoda by se mohla klidně zavolat až potom
-        - takže by se tato metoda ještě mohla starat o stav code boxu
 
     - lazy initializing
         - jak to udělat?
@@ -136,14 +309,6 @@ Operace, které bych chtěl u obou code boxů:
                 - ne, asi tam hodím default, ale tak kdyby náhodou, tak to půjde přepsat
                 - ale toto není tak důležité... - protože to stejně většinou vidět nepůjde - načte se to dřív, načte (nebo teda inicializuje) se to dřív, než se tam obrazovka dostane
             - a ten element nebude součástí root elementu
-        - lazy initializing bude fungovat asi jen směrem dolů
-            - vlastně můžu zjistit, jestli je nějaký code view nastaven jako aktivní a vzít to podle jeho výšky
-                - a pokud ne, tak to vezmu podle výšky elementu, který zobrazuje, že žádná ukázka není vybrána
-
-    - jaké stavy by tedy code box mohl mít?
-        - uninitialized
-        - initialized
-            - nejsou to stavy - prostě to jen určuje, jestli je code box inicializován
     
     - aby uživatel nemusel kdyžtak inicializovat code boxy a code views ručně, tak by na to mohla být nějaká speciální třída, kde by se předal selektor
         - CodeViewInitializer
