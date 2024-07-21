@@ -16,31 +16,21 @@ class ProjectCodeBox extends Codebox {
     private activeCodeViewButton : CodeViewButton | null = null;
 
     constructor(element : HTMLElement, options : ProjectCodeBoxOptions = {}, parentCodeBox : ProjectCodeBox | null = null) { // todo - ještě by možná mohlo jít nastavit, jestli dědit od aktuálního stavu code boxu nebo ne
-        const codeBoxBuilder = new ProjectCodeBoxBuilder(options.svgSpritePath || null, options.svgSpriteIcons ? (options.svgSpriteIcons.panelOpenButton || null) : null); // todo - na to získávání ikony udělat nějakou helper metodu
+        const codeBoxBuilder = new ProjectCodeBoxBuilder(
+            options.folderStructureHeading || GlobalConfig.DEFAULT_PROJECT_FOLDER_STRUCTURE_HEADING,
+            options.packagesHeading || GlobalConfig.DEFAULT_PROJECT_PACKAGES_HEADING,
+            options.svgSpritePath || null,
+            options.svgSpriteIcons ? (options.svgSpriteIcons.panelOpenButton || null) : null
+        ); // todo - na to získávání ikony udělat nějakou helper metodu
         super(element, options, codeBoxBuilder);
 
-        const folderStructureHeading = document.createElement("div");
-        folderStructureHeading.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_HEADING);
-        folderStructureHeading.innerText = options.folderStructureHeading || GlobalConfig.DEFAULT_PROJECT_FOLDER_STRUCTURE_HEADING;
-        codeBoxBuilder.getPanelContentElement().appendChild(folderStructureHeading);
-
-        const folderStructureContainer = document.createElement("div");
-        codeBoxBuilder.getPanelContentElement().appendChild(folderStructureContainer);
-
-        // todo - ale budu to chtít skrývat, takže to potom nějak pořešit (ale ve FoldersManageru už ne, ten toho dělá už dost)
-        const packagesHeading = document.createElement("div");
-        packagesHeading.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_HEADING);
-        packagesHeading.innerText = options.packagesHeading || GlobalConfig.DEFAULT_PROJECT_PACKAGES_HEADING;
-        codeBoxBuilder.getPanelContentElement().appendChild(packagesHeading);
-
-        const packagesContainer = document.createElement("div");
-        codeBoxBuilder.getPanelContentElement().appendChild(packagesContainer);
+        // todo - ale budu to chtít skrývat (ty packages), takže to potom nějak pořešit (ale ve FoldersManageru už ne, ten toho dělá už dost)
 
         this.panelToggle = new PanelToggle(codeBoxBuilder.getPanelElement(), codeBoxBuilder.getPanelOpenButtonElement());
         if (options.svgSpritePath && options.svgSpriteIcons) {
             this.foldersManager = new FoldersManager(
-                folderStructureContainer,
-                packagesContainer,
+                codeBoxBuilder.getFolderStructureContainer(),
+                codeBoxBuilder.getPackagesContainer(),
                 options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME,
                 options.packagesFolderPath || null,
                 options.defaultPackageName || null,
@@ -55,8 +45,8 @@ class ProjectCodeBox extends Codebox {
             );
         } else {
             this.foldersManager = new FoldersManager(
-                folderStructureContainer,
-                packagesContainer,
+                codeBoxBuilder.getFolderStructureContainer(),
+                codeBoxBuilder.getPackagesContainer(),
                 options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME,
                 options.packagesFolderPath || null,
                 options.defaultPackageName || null
@@ -67,7 +57,6 @@ class ProjectCodeBox extends Codebox {
     }
 
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]): void {
-        console.log("initialized");
         // jenom jeden konfigurační element pro složky bude asi dovolen - uvidím, možná to vadit nebude
         for (let codeBoxItemInfo of codeBoxItemInfos) {
             if (codeBoxItemInfo.type === "HTMLElement" && codeBoxItemInfo.element) {

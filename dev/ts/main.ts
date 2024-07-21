@@ -22,8 +22,7 @@ const tabCodeBox = new TabCodeBox(document.getElementById("TabCodeBoxTest") as H
         codeFile: "file",
         file: "file-2",
         download: "download"
-    },
-    minCodeViewLinesCount: 16
+    }
 });
 // tabCodeBox.init();
 
@@ -40,5 +39,5 @@ new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement,
         package: "package",
         project: "inventory"
     },
-    minCodeViewLinesCount: 30
+    minCodeViewLinesCount: 20
 });

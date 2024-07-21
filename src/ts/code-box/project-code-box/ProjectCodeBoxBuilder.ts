@@ -6,8 +6,14 @@ class ProjectCodeBoxBuilder implements CodeBoxBuilder {
     private panelElement : HTMLElement;
     private panelContentElement : HTMLElement;
     private panelOpenButton : HTMLButtonElement;
+    private folderStructureHeadingElement : HTMLElement;
+    private folderStructureContainer : HTMLElement;
+    private horizontalRule : HTMLElement;
+    private packagesHeadingElement : HTMLElement;
+    private packagesContainer : HTMLElement;
 
-    constructor(svgSpritePath : string | null = null, openButtonIconName : string | null = null) {
+
+    constructor(folderStructureHeading : string, packagesHeading : string, svgSpritePath : string | null = null, openButtonIconName : string | null = null) {
         this.panelElement = document.createElement("div");
         this.panelElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL);
 
@@ -23,14 +29,39 @@ class ProjectCodeBoxBuilder implements CodeBoxBuilder {
             panelOpenButtonIcon.innerHTML = SVGIconElementCreator.create(svgSpritePath, openButtonIconName);
         }
         this.panelOpenButton.appendChild(panelOpenButtonIcon);
+
+        this.folderStructureHeadingElement = document.createElement("div");
+        this.folderStructureHeadingElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_HEADING);
+        this.folderStructureHeadingElement.innerText = folderStructureHeading;
+
+        this.folderStructureContainer = document.createElement("div");
+        this.folderStructureContainer.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_FOLDER_STRUCTURE_CONTAINER);
+
+        this.horizontalRule = document.createElement("hr");
+        this.horizontalRule.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_HORIZONTAL_RULE);
+
+        this.packagesHeadingElement = document.createElement("div");
+        this.packagesHeadingElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_HEADING);
+        this.packagesHeadingElement.innerText = packagesHeading;
+
+        this.packagesContainer = document.createElement("div");
+        this.packagesContainer.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_PACKAGES_CONTAINER);
     }
 
     public getPanelElement() : HTMLElement {
         return this.panelElement;
     }
 
-    public getPanelContentElement() : HTMLElement {
+    /*public getPanelContentElement() : HTMLElement {
         return this.panelContentElement;
+    }*/
+
+    public getFolderStructureContainer() : HTMLElement {
+        return this.folderStructureContainer;
+    }
+
+    public getPackagesContainer() : HTMLElement {
+        return this.packagesContainer;
     }
 
     public getPanelOpenButtonElement() : HTMLButtonElement {
@@ -83,6 +114,11 @@ class ProjectCodeBoxBuilder implements CodeBoxBuilder {
 
         rootElement.appendChild(noCodeViewSelectedElement);
 
+        this.panelContentElement.appendChild(this.folderStructureHeadingElement);
+        this.panelContentElement.appendChild(this.folderStructureContainer);
+        this.panelContentElement.appendChild(this.horizontalRule);
+        this.panelContentElement.appendChild(this.packagesHeadingElement);
+        this.panelContentElement.appendChild(this.packagesContainer);
     }
 }
 

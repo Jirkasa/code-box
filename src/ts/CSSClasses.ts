@@ -36,6 +36,8 @@ class CSSClasses {
     public static readonly PROJECT_CODE_BOX_PANEL_OPEN_BUTTON_OPENED_MODIFIER = "cb-project-code-box__panel-open-button--opened";
     public static readonly PROJECT_CODE_BOX_PANEL_OPEN_BUTTON_ICON = "cb-project-code-box__panel-open-button-icon";
     public static readonly PROJECT_CODE_BOX_PANEL_HEADING = "cb-project-code-box__panel-heading";
+    public static readonly PROJECT_CODE_BOX_PANEL_FOLDER_STRUCTURE_CONTAINER = "cb-project-code-box__panel-folder-structure-container";
+    public static readonly PROJECT_CODE_BOX_PANEL_PACKAGES_CONTAINER = "cb-project-code-box__panel-packages-container";
     public static readonly PROJECT_CODE_BOX_PANEL_ITEM = "cb-project-code-box__panel-item";
     public static readonly PROJECT_CODE_BOX_PANEL_ITEM_ACTIVE_MODIFIER = "cb-project-code-box__panel-item--active";
     public static readonly PROJECT_CODE_BOX_PANEL_ITEM_PROJECT_MODIFIER = "cb-project-code-box__panel-item--project";

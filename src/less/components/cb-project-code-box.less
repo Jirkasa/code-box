@@ -114,6 +114,12 @@
         margin-bottom: .4rem;
     }
 
+    &__panel-folder-structure-container {
+    }
+
+    &__panel-packages-container {
+    }
+
     &__panel-item {
         &, &:link, &:visited {
             display: flex;
@@ -125,6 +131,8 @@
             width: fit-content;
 
             cursor: pointer;
+
+            margin-bottom: .4rem;
         }
 
         &--active {
@@ -134,21 +142,15 @@
         }
 
         &--project {
-            &, &:link, &:visited {
-                margin-bottom: .4rem;
-            }
+
         }
 
         &--package {
-            &, &:link, &:visited {
-                margin-bottom: .4rem;
-            }
+
         }
 
         &--default-package {
-            &, &:link, &:visited {
-                margin-bottom: .4rem;
-            }
+
         }
 
         &--folder {
@@ -206,7 +208,6 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: .4rem;
 
         padding-left: 1.9rem;
     }
