@@ -8,10 +8,27 @@ type CodeViewOptions = {
     // active je html only - a slouží to pro code boxy (a kdyžtak CodeBoxOptions budou mít jako vlastnost CodeViewOptions)
 } // todo - ještě možnost přidat plugin
 
-// html only:
+// html only: (něco je i pro File elementy)
 /**
+ * Project + Tab:
  * data-cb-active
  * data-cb-name
+ * 
+ * Project:
+ * data-cb-folder
+ * data-cb-package
  */
 
 export default CodeViewOptions;
+
+/**
+ * File elementy:
+ * data-cb-file
+ */
+
+/**
+ * Konfigurační element se složkami:
+ * data-cb-folders (ul element)
+ * data-cb-packages-folder
+ * data-cb-commands
+ */

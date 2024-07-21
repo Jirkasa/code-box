@@ -1,7 +1,7 @@
 import CodeView from "../../code-view/CodeView";
 import GlobalConfig from "../../GlobalConfig";
 import EventSourcePoint from "../../utils/EventSourcePoint";
-import Codebox, { CodeBoxItemInfo, CodeViewInfo, FileInfo } from "../CodeBox";
+import Codebox, { CodeBoxItemInfo } from "../CodeBox";
 import CodeViewButton from "../CodeViewButton";
 import TabCodeBoxBuilder from "./TabCodeBoxBuilder";
 import TabCodeBoxOptions from "./TabCodeBoxOptions";
@@ -15,45 +15,15 @@ class TabCodeBox extends Codebox {
     private activeCodeViewButton : CodeViewButton | null = null;
 
     constructor(element : HTMLElement, options : TabCodeBoxOptions = {}) {
-        const tabsContainer = document.createElement("div");
-
-        const codeBoxBuilder = new TabCodeBoxBuilder(tabsContainer);
+        const codeBoxBuilder = new TabCodeBoxBuilder();
         super(element, options, codeBoxBuilder);
 
-        this.tabsContainer = tabsContainer;
+        this.tabsContainer = codeBoxBuilder.getTabsContainer();
 
         this.showCodeViewEventSource.subscribe((codeViewButton, codeView) => this.onShowCodeView(codeViewButton, codeView));
 
         this.options = options;
     }
-
-    /*protected onInit(codeViewInfos : CodeViewInfo[], fileInfos : FileInfo[]) : void {
-        for (let codeViewInfo of codeViewInfos) {
-            let codeViewButton : TabCodeViewButton;
-            let buttonText = codeViewInfo.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Name"] || GlobalConfig.DEFAULT_CODE_VIEW_BUTTON_TEXT;
-            if (this.options.svgSpritePath && this.options.svgSpriteIcons && this.options.svgSpriteIcons.codeFile) {
-                codeViewButton = new TabCodeViewButton(buttonText, this.showCodeViewEventSource, codeViewInfo.codeView, this.options.svgSpritePath, this.options.svgSpriteIcons.codeFile);
-            } else {
-                codeViewButton = new TabCodeViewButton(buttonText, this.showCodeViewEventSource, codeViewInfo.codeView);
-            }
-            if (codeViewInfo.dataset.cbActive !== undefined) {
-                codeViewButton.setAsActive();
-                this.activeCodeViewButton = codeViewButton;
-            }
-            codeViewButton.appendTo(this.tabsContainer);
-        }
-
-        for (let fileInfo of fileInfos) {
-            let fileButton : TabFileButton;
-            if (this.options.svgSpritePath && this.options.svgSpriteIcons) {
-                fileButton = new TabFileButton(fileInfo.name, fileInfo.downloadLink, this.options.svgSpritePath, this.options.svgSpriteIcons.codeFile || null, this.options.svgSpriteIcons.download || null);
-            } else {
-                fileButton = new TabFileButton(fileInfo.name, fileInfo.downloadLink);
-            }
-
-            fileButton.appendTo(this.tabsContainer);
-        }
-    }*/
 
     protected onInit(codeBoxItemInfos : CodeBoxItemInfo[]) : void {
         for (let codeBoxItemInfo of codeBoxItemInfos) {
@@ -67,7 +37,7 @@ class TabCodeBox extends Codebox {
                 } else {
                     codeViewButton = new TabCodeViewButton(buttonText, this.showCodeViewEventSource, codeViewInfo.codeView);
                 }
-                if (codeViewInfo.dataset.cbActive !== undefined) {
+                if (codeViewInfo.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined) {
                     codeViewButton.setAsActive();
                     this.activeCodeViewButton = codeViewButton;
                 }

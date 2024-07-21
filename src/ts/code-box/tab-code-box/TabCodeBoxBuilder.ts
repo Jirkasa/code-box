@@ -4,20 +4,27 @@ import CodeBoxBuilder from "../CodeBoxBuilder";
 class TabCodeBoxBuilder implements CodeBoxBuilder {
     private tabsContainer : HTMLElement;
 
-    constructor(tabsContainer : HTMLElement) {
-        this.tabsContainer = tabsContainer;
-
+    constructor() {
+        this.tabsContainer = document.createElement("div");
         this.tabsContainer.classList.add(CSSClasses.TAB_CODE_BOX_TABS);
+    }
+
+    public getTabsContainer() : HTMLElement {
+        return this.tabsContainer;
     }
 
     public customizeRootElement(element: HTMLElement) : void {
         element.classList.add(CSSClasses.TAB_CODE_BOX);
     }
 
-    public createCodeViewContainer(): HTMLElement {
+    public createCodeViewContainer() : HTMLElement {
         const codeViewContainer = document.createElement("div");
         codeViewContainer.classList.add(CSSClasses.TAB_CODE_BOX_CODE_VIEW_CONTAINER);
         return codeViewContainer;
+    }
+
+    public getCodeViewContainerCSSHiddenClass() : string {
+        return CSSClasses.TAB_CODE_BOX_CODE_VIEW_CONTAINER_HIDDEN_MODIFIER;
     }
 
     public createNoCodeViewSelectedElement(height: string, text : string) : HTMLElement {
@@ -33,7 +40,7 @@ class TabCodeBoxBuilder implements CodeBoxBuilder {
         return container;
     }
 
-    public getNoCodeViewCSSHiddenClass(): string {
+    public getNoCodeViewCSSHiddenClass() : string {
         return CSSClasses.TAB_CODE_BOX_NO_CODE_VIEW_HIDDEN_MODIFIER;
     }
 

@@ -57,7 +57,16 @@
     }
 
     &__code-view-container {
+        display: flex;
+        flex-direction: column;
 
+        &--hidden {
+            display: none;
+        }
+
+        > div {
+            flex-grow: 1;
+        }
     }
 
     &__no-code-view {

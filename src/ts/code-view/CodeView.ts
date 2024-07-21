@@ -2,7 +2,7 @@ import CodeViewOptions from "./CodeViewOptions";
 import CSSClasses from "../CSSClasses";
 import GlobalConfig from "../GlobalConfig";
 import HighlightBox from "./HighlightBox";
-import { deleteEmptyStringFromArray } from "../utils";
+import { deleteEmptyStringFromArray } from "../utils/utils";
 
 class CodeView { // todo - ještě přidat přesouvání do elementu, skrývání, atd..
     private initialOptions : CodeViewOptions;

@@ -6,7 +6,11 @@ const GlobalConfig = {
     DEFAULT_NO_CODE_VIEW_SELECTED_ELEMENT_HEIGHT: "50rem",
     DEFAULT_NO_CODE_VIEW_SELECTED_TEXT: "No code view selected",
     DEFAULT_CODE_VIEW_BUTTON_TEXT: "unnamed",
-    DEFAULT_FILE_BUTTON_TEXT: "unnamed"
+    DEFAULT_FILE_BUTTON_TEXT: "unnamed",
+    DEFAULT_PROJECT_NAME: "unnamed",
+    DEFAULT_PROJECT_FOLDER_STRUCTURE_HEADING: "Folder structure",
+    DEFAULT_PROJECT_PACKAGES_HEADING: "Packages",
+    DEFAULT_DEFAULT_PACKAGE_NAME: "default"
 }
 
 export default GlobalConfig;

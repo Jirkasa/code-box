@@ -17,9 +17,38 @@ class CSSClasses {
     public static readonly TAB_CODE_BOX_TAB_DOWNLOAD_ICON = "cb-tab-code-box__tab-download-icon";
     public static readonly TAB_CODE_BOX_TAB_TEXT = "cb-tab-code-box__tab-text";
     public static readonly TAB_CODE_BOX_CODE_VIEW_CONTAINER = "cb-tab-code-box__code-view-container";
+    public static readonly TAB_CODE_BOX_CODE_VIEW_CONTAINER_HIDDEN_MODIFIER = "cb-tab-code-box__code-view-container--hidden";
     public static readonly TAB_CODE_BOX_NO_CODE_VIEW = "cb-tab-code-box__no-code-view";
     public static readonly TAB_CODE_BOX_NO_CODE_VIEW_HIDDEN_MODIFIER = "cb-tab-code-box__no-code-view--hidden";
     public static readonly TAB_CODE_BOX_NO_CODE_VIEW_MESSAGE = "cb-tab-code-box__no-code-view-message";
+    // PROJECT CODE BOX
+    public static readonly PROJECT_CODE_BOX = "cb-project-code-box";
+    public static readonly PROJECT_CODE_BOX_PANEL_CONTAINER = "cb-project-code-box__panel-container";
+    public static readonly PROJECT_CODE_BOX_CODE_VIEW_CONTAINER = "cb-project-code-box__code-view-container";
+    public static readonly PROJECT_CODE_BOX_CODE_VIEW_CONTAINER_HIDDEN_MODIFIER = "cb-project-code-box__code-view-container--hidden";
+    public static readonly PROJECT_CODE_BOX_NO_CODE_VIEW = "cb-project-code-box__no-code-view";
+    public static readonly PROJECT_CODE_BOX_NO_CODE_VIEW_HIDDEN_MODIFIER = "cb-project-code-box__no-code-view--hidden";
+    public static readonly PROJECT_CODE_BOX_NO_CODE_VIEW_MESSAGE = "cb-project-code-box__no-code-view-message";
+    public static readonly PROJECT_CODE_BOX_PANEL = "cb-project-code-box__panel";
+    public static readonly PROJECT_CODE_BOX_PANEL_OPENED_MODIFIER = "cb-project-code-box__panel--opened";
+    public static readonly PROJECT_CODE_BOX_PANEL_CONTENT = "cb-project-code-box__panel-content";
+    public static readonly PROJECT_CODE_BOX_PANEL_OPEN_BUTTON = "cb-project-code-box__panel-open-button";
+    public static readonly PROJECT_CODE_BOX_PANEL_OPEN_BUTTON_OPENED_MODIFIER = "cb-project-code-box__panel-open-button--opened";
+    public static readonly PROJECT_CODE_BOX_PANEL_OPEN_BUTTON_ICON = "cb-project-code-box__panel-open-button-icon";
+    public static readonly PROJECT_CODE_BOX_PANEL_HEADING = "cb-project-code-box__panel-heading";
+    public static readonly PROJECT_CODE_BOX_PANEL_ITEM = "cb-project-code-box__panel-item";
+    public static readonly PROJECT_CODE_BOX_PANEL_ITEM_ACTIVE_MODIFIER = "cb-project-code-box__panel-item--active";
+    public static readonly PROJECT_CODE_BOX_PANEL_ITEM_PROJECT_MODIFIER = "cb-project-code-box__panel-item--project";
+    public static readonly PROJECT_CODE_BOX_PANEL_ITEM_PACKAGE_MODIFIER = "cb-project-code-box__panel-item--package";
+    public static readonly PROJECT_CODE_BOX_PANEL_ITEM_DEFAULT_PACKAGE_MODIFIER = "cb-project-code-box__panel-item--default-package";
+    public static readonly PROJECT_CODE_BOX_PANEL_ITEM_FOLDER_MODIFIER = "cb-project-code-box__panel-item--folder";
+    public static readonly PROJECT_CODE_BOX_PANEL_ITEM_FILE_MODIFIER = "cb-project-code-box__panel-item--file";
+    public static readonly PROJECT_CODE_BOX_PANEL_ITEM_ICON = "cb-project-code-box__panel-item-icon";
+    public static readonly PROJECT_CODE_BOX_PANEL_ITEM_ARROW_ICON = "cb-project-code-box__panel-item-arrow-icon";
+    public static readonly PROJECT_CODE_BOX_PANEL_ITEM_TEXT = "cb-project-code-box__panel-item-text";
+    public static readonly PROJECT_CODE_BOX_PANEL_ITEM_DOWNLOAD_ICON = "cb-project-code-box__panel-item-download-icon";
+    public static readonly PROJECT_CODE_BOX_PANEL_COLLAPSIBLE = "cb-project-code-box__panel-collapsible";
+    public static readonly PROJECT_CODE_BOX_PANEL_HORIZONTAL_RULE = "cb-project-code-box__panel-horizontal-rule";
 }
 
 export default CSSClasses;

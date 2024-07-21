@@ -1,6 +1,8 @@
 export { default as CodeView } from "./code-view/CodeView";
 export { default as TabCodeBox } from "./code-box/tab-code-box/TabCodeBox";
+export { default as ProjectCodeBox } from "./code-box/project-code-box/ProjectCodeBox";
 // todo - vyexportovat to
+// todo - upravit importy, aby se to neimportovalo odtud
 
 /**
  

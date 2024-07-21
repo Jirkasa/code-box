@@ -17,23 +17,27 @@ export type FileInfo = {
 }
 
 export type CodeBoxItemInfo = {
-    type : "CodeView" | "FileInfo";
+    type : "CodeView" | "FileInfo" | "HTMLElement";
     codeViewInfo ?: CodeViewInfo;
     fileInfo ?: FileInfo;
+    element ?: HTMLElement;
 }
 
 type InitializationInfo = {
-    type : "PreElement" | "FileInfo";
+    type : "PreElement" | "FileInfo" | "HTMLElement";
     preElement ?: HTMLPreElement;
     fileInfo ?: FileInfo;
+    element ?: HTMLElement;
 }
 
 abstract class Codebox {
     protected readonly rootElement : HTMLElement;
     private readonly codeViewContainer : HTMLElement;
+    private readonly codeViewContainerCSSHiddenClass : string;
     private readonly noCodeViewSelectedElement : HTMLElement;
     private readonly noCodeViewSelectedCSSHiddenClass : string;
     protected initialCodeViewLinesCount : number | null = null;
+    private minCodeViewLinesCount : number | null = null;
     private initialized : boolean  = false;
     private initializationData : InitializationInfo[] | null;
     //private preElements : HTMLPreElement[] | null;
@@ -45,7 +49,10 @@ abstract class Codebox {
     constructor(element : HTMLElement, options : CodeBoxOptions, codeBoxBuilder : CodeBoxBuilder) { // todo - dívat se na code box options v datasetu - na to jsem ještě u code boxu nemyslel
         this.rootElement = element;
 
+        this.fillOptionsFromDataset(options, element.dataset);
+
         this.defaultCodeViewOptions = options.defaultCodeViewOptions || null;
+        this.minCodeViewLinesCount = options.minCodeViewLinesCount || null;
 
         const preElements = Array<HTMLPreElement>();
         this.initializationData = new Array<InitializationInfo>();
@@ -81,6 +88,11 @@ abstract class Codebox {
                     type: "FileInfo",
                     fileInfo: fileInfo
                 });
+            } else {
+                this.initializationData.push({
+                    type: "HTMLElement",
+                    element: child
+                });
             }
         }
 
@@ -93,6 +105,7 @@ abstract class Codebox {
 
         codeBoxBuilder.customizeRootElement(this.rootElement);
         this.codeViewContainer = codeBoxBuilder.createCodeViewContainer();
+        this.codeViewContainerCSSHiddenClass = codeBoxBuilder.getCodeViewContainerCSSHiddenClass();
         this.noCodeViewSelectedCSSHiddenClass = codeBoxBuilder.getNoCodeViewCSSHiddenClass();
         this.noCodeViewSelectedElement = codeBoxBuilder.createNoCodeViewSelectedElement(options.noCodeViewSelectedElementHeight || GlobalConfig.DEFAULT_NO_CODE_VIEW_SELECTED_ELEMENT_HEIGHT, options.noCodeViewSelectedText || GlobalConfig.DEFAULT_NO_CODE_VIEW_SELECTED_TEXT);
 
@@ -109,7 +122,13 @@ abstract class Codebox {
                 const codeElement = this.getCodeElement(activePreElement);
                 if (codeElement) {
                     this.initialCodeViewLinesCount = this.getLinesCount(codeElement);
-                    const height = this.initialCodeViewLinesCount * this.getCodeViewLineHeight(activePreElement, options.defaultCodeViewOptions || {});
+                    let linesCount;
+                    if (this.minCodeViewLinesCount !== null && this.minCodeViewLinesCount >= this.initialCodeViewLinesCount) {
+                        linesCount = this.minCodeViewLinesCount;
+                    } else {
+                        linesCount = this.initialCodeViewLinesCount;
+                    }
+                    const height = linesCount * this.getCodeViewLineHeight(activePreElement, options.defaultCodeViewOptions || {});
                     this.lazyInitPlaceholderElement.style.height = `${height}${this.getCodeViewLineHeightUnit(activePreElement, options.defaultCodeViewOptions || {})}`;
                 } else {
                     this.init();
@@ -175,12 +194,17 @@ abstract class Codebox {
                             codeView: codeView,
                             dataset: preElement.dataset
                         }
-                    })
+                    });
                 } else if (initializationInfo.type === "FileInfo" && initializationInfo.fileInfo) {
                     codeBoxItemInfos.push({
                         type: "FileInfo",
                         fileInfo: initializationInfo.fileInfo
-                    })
+                    });
+                } else if (initializationInfo.type === "HTMLElement" && initializationInfo.element) {
+                    codeBoxItemInfos.push({
+                        type: "HTMLElement",
+                        element: initializationInfo.element
+                    });
                 }
             }
         }
@@ -209,6 +233,13 @@ abstract class Codebox {
 
         codeView.appendTo(this.codeViewContainer);
 
+        if (this.minCodeViewLinesCount !== null) {
+            const minHeight = this.minCodeViewLinesCount * codeView.lineHeight;
+            this.codeViewContainer.style.setProperty("min-height", minHeight + codeView.lineHeightUnit);
+        } else {
+            this.codeViewContainer.style.removeProperty("min-height");
+        }
+
         this.activeCodeView = codeView;
 
         this.hideNoCodeViewSelectedMessage();
@@ -220,10 +251,12 @@ abstract class Codebox {
 
     private showNoCodeViewSelectedMessage() : void {
         this.noCodeViewSelectedElement.classList.remove(this.noCodeViewSelectedCSSHiddenClass);
+        this.codeViewContainer.classList.add(this.codeViewContainerCSSHiddenClass);
     }
 
     private hideNoCodeViewSelectedMessage() : void {
         this.noCodeViewSelectedElement.classList.add(this.noCodeViewSelectedCSSHiddenClass);
+        this.codeViewContainer.classList.remove(this.codeViewContainerCSSHiddenClass);
     }
 
     private onLazyInitPlaceholderElementIntersectionChange(isIntersecting : boolean) : void {
@@ -233,6 +266,27 @@ abstract class Codebox {
     private getLinesCount(codeElement : HTMLElement) : number {
         if (codeElement.textContent === null) return 0;
         return codeElement.textContent.split('\n').length;
+    }
+
+    private fillOptionsFromDataset(options : CodeBoxOptions, dataset : DOMStringMap) { // todo - do dokumentace napsat, které vlastnosti je možné měnit i pomocí data atributů
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LazyInit"] !== undefined) {
+            options.lazyInit = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LazyInit"] === "true";
+        }
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ImplicitActive"] !== undefined) {
+            options.implicitActive = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ImplicitActive"] === "true";
+        }
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "NoCodeViewSelectedElementHeight"] !== undefined) {
+            options.noCodeViewSelectedElementHeight = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "NoCodeViewSelectedElementHeight"];
+        }
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "NoCodeViewSelectedText"] !== undefined) {
+            options.noCodeViewSelectedText = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "NoCodeViewSelectedText"];
+        }
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "MinCodeViewLinesCount"] !== undefined) {
+            options.minCodeViewLinesCount = Number.parseInt(dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "MinCodeViewLinesCount"] || "");
+            if (Number.isNaN(options.minCodeViewLinesCount)) {
+                throw new Error("Min code view lines count option must be a number.");
+            }
+        }
     }
 
     private getCodeElement(preElement : HTMLPreElement) : HTMLElement | null {

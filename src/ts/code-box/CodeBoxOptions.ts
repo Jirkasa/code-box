@@ -6,6 +6,7 @@ type CodeBoxOptions = {
     defaultCodeViewOptions ?: CodeViewOptions;
     noCodeViewSelectedElementHeight ?: string; // prostě se to bude nastavovat tady a ne v CSS
     noCodeViewSelectedText ?: string;
+    minCodeViewLinesCount ?: number; // ale okomentovat to - podle toho se jen bere minimální výška pro code view containery - není to přesné - nebere to v potaz padding (je to jen k tomu, aby se mohla nastavit nějaká optimální minimální výška)
 }
 
 // dále jsou tu file elementy:

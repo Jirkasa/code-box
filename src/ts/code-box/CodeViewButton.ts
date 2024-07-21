@@ -10,6 +10,10 @@ abstract class CodeViewButton {
         this.codeView = codeView;
     }
 
+    public abstract appendTo(container : HTMLElement) : void;
+
+    public abstract detach() : void;
+
     public abstract setAsActive() : void;
 
     public abstract setAsInactive() : void;
