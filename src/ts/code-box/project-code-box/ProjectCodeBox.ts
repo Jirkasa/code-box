@@ -2,14 +2,14 @@ import CSSClasses from "../../CSSClasses";
 import GlobalConfig from "../../GlobalConfig";
 import { CodeView } from "../../main";
 import EventSourcePoint from "../../utils/EventSourcePoint";
-import Codebox, { CodeBoxItemInfo } from "../CodeBox";
+import CodeBox, { CodeBoxItemInfo } from "../CodeBox";
 import CodeViewButton from "../CodeViewButton";
 import FoldersManager from "./FoldersManager";
 import PanelToggle from "./PanelToggle";
 import ProjectCodeBoxBuilder from "./ProjectCodeBoxBuilder";
 import ProjectCodeBoxOptions from "./ProjectCodeBoxOptions";
 
-class ProjectCodeBox extends Codebox {
+class ProjectCodeBox extends CodeBox {
     private panelToggle : PanelToggle;
     private foldersManager : FoldersManager;
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();

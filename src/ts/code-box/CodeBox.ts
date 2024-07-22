@@ -3,6 +3,7 @@ import CodeViewOptions from "../code-view/CodeViewOptions";
 import GlobalConfig from "../GlobalConfig";
 import ViewportIntersectionObserver from "../utils/ViewportIntersectionObserver";
 import CodeBoxBuilder from "./CodeBoxBuilder";
+import CodeBoxCodeView from "./CodeBoxCodeView";
 import CodeBoxOptions from "./CodeBoxOptions";
 
 export type CodeViewInfo = {
@@ -30,7 +31,7 @@ type InitializationInfo = {
     element ?: HTMLElement;
 }
 
-abstract class Codebox {
+abstract class CodeBox {
     protected readonly rootElement : HTMLElement;
     private readonly codeViewContainer : HTMLElement;
     private readonly codeViewContainerCSSHiddenClass : string;
@@ -223,10 +224,15 @@ abstract class Codebox {
         return this.initialized;
     }
 
-    //protected abstract onInit(codeViewInfos : CodeViewInfo[], fileInfos : FileInfo[]) : void;
+    public abstract getCodeViews() : CodeBoxCodeView[];
+
+    public abstract getCodeView(identifier : string) : CodeBoxCodeView;
+
+    public abstract removeCodeView(identifier : string) : void;
+
     protected abstract onInit(codeBoxItemInfos : CodeBoxItemInfo[]) : void;
 
-    protected setActiveCodeView(codeView : CodeView) {
+    protected setActiveCodeView(codeView : CodeView) { // todo - toto bude asi jediná věc, která se tady bude měnit
         if (this.activeCodeView) {
             this.activeCodeView.detach();
         }
@@ -322,7 +328,7 @@ abstract class Codebox {
     }
 }
 
-export default Codebox;
+export default CodeBox;
 
 /**
 Co tady teda implementovat:

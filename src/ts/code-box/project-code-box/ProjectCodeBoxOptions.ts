@@ -19,6 +19,8 @@ type ProjectCodeBoxOptions = {
     defaultPackageName ?: string;
     folderAnimationSpeed ?: number;
     folderAnimationEasingFunction ?: string;
+    openActiveCodeViewFolder ?: boolean;
+    openActiveCodeViewPackage ?: boolean;
 } & CodeBoxOptions;
 
 export default ProjectCodeBoxOptions;
