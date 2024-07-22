@@ -4,11 +4,7 @@ import CodeViewButton from "../CodeViewButton";
 import FileButton from "../FileButton";
 import Collapsible from "./Collapsible";
 
-/**
- * Tab indexy:
- * 
- * - ......
- */
+// ještě zbývají ty aria atributy, ale o tom se budu muset dozvědět více info
 
 class Folder {
     protected buttonElement : HTMLButtonElement;

@@ -81,6 +81,10 @@ class ProjectMultiElementFileButton extends FileButton {
         const buttonElement = document.createElement("a");
 
         buttonElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_FILE_MODIFIER);
+        buttonElement.setAttribute("download", "");
+        if (this.downloadLink !== null) {
+            buttonElement.setAttribute("href", this.downloadLink);
+        }
 
         const iconElement = document.createElement("div");
         iconElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_ICON);
