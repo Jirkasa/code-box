@@ -40,6 +40,7 @@ class CSSClasses {
     public static readonly PROJECT_CODE_BOX_PANEL_PACKAGES_CONTAINER = "cb-project-code-box__panel-packages-container";
     public static readonly PROJECT_CODE_BOX_PANEL_ITEM = "cb-project-code-box__panel-item";
     public static readonly PROJECT_CODE_BOX_PANEL_ITEM_ACTIVE_MODIFIER = "cb-project-code-box__panel-item--active";
+    public static readonly PROJECT_CODE_BOX_PANEL_ITEM_FOLDER_OPENED_MODIFIER = "cb-project-code-box__panel-item--folder-opened";
     public static readonly PROJECT_CODE_BOX_PANEL_ITEM_PROJECT_MODIFIER = "cb-project-code-box__panel-item--project";
     public static readonly PROJECT_CODE_BOX_PANEL_ITEM_PACKAGE_MODIFIER = "cb-project-code-box__panel-item--package";
     public static readonly PROJECT_CODE_BOX_PANEL_ITEM_DEFAULT_PACKAGE_MODIFIER = "cb-project-code-box__panel-item--default-package";
@@ -50,6 +51,7 @@ class CSSClasses {
     public static readonly PROJECT_CODE_BOX_PANEL_ITEM_TEXT = "cb-project-code-box__panel-item-text";
     public static readonly PROJECT_CODE_BOX_PANEL_ITEM_DOWNLOAD_ICON = "cb-project-code-box__panel-item-download-icon";
     public static readonly PROJECT_CODE_BOX_PANEL_COLLAPSIBLE = "cb-project-code-box__panel-collapsible";
+    public static readonly PROJECT_CODE_BOX_PANEL_COLLAPSIBLE_OPENED_MODIFIDER = "cb-project-code-box__panel-collapsible--opened";
     public static readonly PROJECT_CODE_BOX_PANEL_HORIZONTAL_RULE = "cb-project-code-box__panel-horizontal-rule";
 }
 

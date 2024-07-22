@@ -5,6 +5,10 @@ export { default as ProjectCodeBox } from "./code-box/project-code-box/ProjectCo
 // todo - upravit importy, aby se to neimportovalo odtud
 
 /**
+ * přidat licenci: něco jako tady: https://github.com/sk-rt/handy-collapse/blob/main/src/index.ts
+ */
+
+/**
  
 Tři UI komponenty:
     CodeView

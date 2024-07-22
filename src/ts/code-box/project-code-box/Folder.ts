@@ -2,14 +2,18 @@ import CSSClasses from "../../CSSClasses";
 import SVGIconElementCreator from "../../utils/SVGIconElementCreator";
 import CodeViewButton from "../CodeViewButton";
 import FileButton from "../FileButton";
+import Collapsible from "./Collapsible";
 
 class Folder {
     protected buttonElement : HTMLButtonElement;
     private itemsContainer : HTMLElement;
+    private collapsible : Collapsible;
 
     private subfolders = new Map<string, Folder>();
     private codeViewButtons = new Map<string, CodeViewButton>();
     private fileButtons = new Map<string, FileButton>();
+
+    //private opened : boolean = false;
 
     constructor(name : string, svgSpritePath : string | null = null, arrowIconName : string | null = null, folderIconName : string | null = null, cssModifierClass : string | null = null, parentElement : HTMLElement | null = null) {
         this.buttonElement = document.createElement("button");
@@ -44,6 +48,9 @@ class Folder {
             parentElement.appendChild(this.buttonElement);
             parentElement.appendChild(this.itemsContainer);
         }
+
+        // this.buttonElement.addEventListener("click", () => this.onButtonClick());
+        this.collapsible = new Collapsible(this.buttonElement, this.itemsContainer, 200, "linear");
     }
 
     /*public appendTo(parent : HTMLElement | Folder) : void {
@@ -80,6 +87,21 @@ class Folder {
     public addFileButton(fileButton : FileButton) {
         fileButton.appendTo(this.itemsContainer);
     }
+
+    // // todo - jinak - bude na to samostatná třída
+    // private onButtonClick() : void {
+    //     this.opened = !this.opened;
+
+    //     if (this.opened) {
+    //         this.buttonElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_FOLDER_OPENED_MODIFIER);
+    //         this.itemsContainer.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_COLLAPSIBLE_OPENED_MODIFIDER);
+    //         this.itemsContainer.style.setProperty("max-height", this.itemsContainer.scrollHeight + "px");
+    //     } else {
+    //         this.buttonElement.classList.remove(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_FOLDER_OPENED_MODIFIER);
+    //         this.itemsContainer.classList.remove(CSSClasses.PROJECT_CODE_BOX_PANEL_COLLAPSIBLE_OPENED_MODIFIDER);
+    //         this.itemsContainer.style.removeProperty("max-height");
+    //     }
+    // }
 }
 
 export default Folder;

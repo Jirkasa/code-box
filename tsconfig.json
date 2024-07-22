@@ -7,7 +7,7 @@
         "target": "ES5",
         "allowJs": true,
         "declaration": true,
-        "moduleResolution": "node",
+        "moduleResolution": "Node",
         "strict": true
     }
 }
