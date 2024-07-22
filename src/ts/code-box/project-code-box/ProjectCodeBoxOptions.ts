@@ -17,6 +17,8 @@ type ProjectCodeBoxOptions = {
     projectName ?: string;
     packagesFolderPath ?: string; // bude se dát přepsat přes ty konfigurační elementy
     defaultPackageName ?: string;
+    folderAnimationSpeed ?: number;
+    folderAnimationEasingFunction ?: string;
 } & CodeBoxOptions;
 
 export default ProjectCodeBoxOptions;

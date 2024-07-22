@@ -4,6 +4,12 @@ import CodeViewButton from "../CodeViewButton";
 import FileButton from "../FileButton";
 import Collapsible from "./Collapsible";
 
+/**
+ * Tab indexy:
+ * 
+ * - ......
+ */
+
 class Folder {
     protected buttonElement : HTMLButtonElement;
     private itemsContainer : HTMLElement;
@@ -13,9 +19,12 @@ class Folder {
     private codeViewButtons = new Map<string, CodeViewButton>();
     private fileButtons = new Map<string, FileButton>();
 
+    private lastParentOpened : boolean = false; // todo - a tady to taky okomentovat - není to přímo jakoby parent
+
     //private opened : boolean = false;
 
-    constructor(name : string, svgSpritePath : string | null = null, arrowIconName : string | null = null, folderIconName : string | null = null, cssModifierClass : string | null = null, parentElement : HTMLElement | null = null) {
+    // todo - budu muset předávat, zda je parent otevřený - a budu si muset držet takovou proměnnou
+    constructor(name : string, openCloseAnimationSpeed : number, openCloseAnimationEasingFunction : string, svgSpritePath : string | null = null, arrowIconName : string | null = null, folderIconName : string | null = null, cssModifierClass : string | null = null, parentElement : HTMLElement | null = null) {
         this.buttonElement = document.createElement("button");
         this.buttonElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM);
         if (cssModifierClass) {
@@ -49,29 +58,49 @@ class Folder {
             parentElement.appendChild(this.itemsContainer);
         }
 
-        // this.buttonElement.addEventListener("click", () => this.onButtonClick());
-        this.collapsible = new Collapsible(this.buttonElement, this.itemsContainer, 200, "linear");
+        this.collapsible = new Collapsible(this.buttonElement, this.itemsContainer, openCloseAnimationSpeed, openCloseAnimationEasingFunction, () => this.onCollapsibleToggled());
+        this.updateTabNavigation();
     }
 
-    /*public appendTo(parent : HTMLElement | Folder) : void {
-        if (parent instanceof HTMLElement) {
-            parent.appendChild(this.buttonElement);
-            parent.appendChild(this.itemsContainer);
+    // pokud se volá open/close metoda, tak je tato metoda volána automaticky (open a close metodu zatím nemám)
+    public updateTabNavigation(parentOpened : boolean = false) : void { // parentOpened není tak úplně parent opened (přejmenovat to - ale na co? - spíš přidám komentář)
+        if (parentOpened) {
+            this.buttonElement.setAttribute("tabindex", "0");
         } else {
-            parent.itemsContainer.appendChild(this.buttonElement);
-            parent.itemsContainer.appendChild(this.itemsContainer);
+            this.buttonElement.setAttribute("tabindex", "-1");
         }
+
+        if (parentOpened && this.collapsible.isOpened()) {
+            
+            this.codeViewButtons.forEach(codeViewButton => {
+                codeViewButton.enableTabNavigation(this.itemsContainer);
+            });
+            this.fileButtons.forEach(fileButton => {
+                fileButton.enableTabNavigation(this.itemsContainer);
+            });
+        } else {
+            
+            this.codeViewButtons.forEach(codeViewButton => {
+                codeViewButton.disableTabNavigation(this.itemsContainer);
+            });
+            this.fileButtons.forEach(fileButton => {
+                fileButton.disableTabNavigation(this.itemsContainer);
+            });
+        }
+
+        this.subfolders.forEach(subfolder => {
+            subfolder.updateTabNavigation(parentOpened && this.collapsible.isOpened());
+        });
+
+        this.lastParentOpened = parentOpened;
     }
 
-    public detach() : void {
-        this.buttonElement.remove();
-        this.itemsContainer.remove();
-    }*/
-
-    public addFolder(name : string, folder : Folder) {
+    public addFolder(name : string, folder : Folder) : void {
         this.subfolders.set(name, folder);
         this.itemsContainer.appendChild(folder.buttonElement);
         this.itemsContainer.appendChild(folder.itemsContainer);
+
+        folder.updateTabNavigation(this.lastParentOpened && this.collapsible.isOpened());
     }
 
     public getFolder(folderName : string) : Folder | null {
@@ -80,28 +109,29 @@ class Folder {
         return folder;
     }
 
-    public addCodeViewButton(codeViewButton : CodeViewButton) {
+    public addCodeViewButton(name : string, codeViewButton : CodeViewButton) : void {
         codeViewButton.appendTo(this.itemsContainer);
+        if (this.lastParentOpened && this.collapsible.isOpened()) {
+            codeViewButton.enableTabNavigation(this.itemsContainer);
+        } else {
+            codeViewButton.disableTabNavigation(this.itemsContainer);
+        }
+        this.codeViewButtons.set(name, codeViewButton);
     }
 
-    public addFileButton(fileButton : FileButton) {
+    public addFileButton(name : string, fileButton : FileButton) : void {
         fileButton.appendTo(this.itemsContainer);
+        if (this.lastParentOpened && this.collapsible.isOpened()) {
+            fileButton.enableTabNavigation(this.itemsContainer);
+        } else {
+            fileButton.disableTabNavigation(this.itemsContainer);
+        }
+        this.fileButtons.set(name, fileButton);
     }
 
-    // // todo - jinak - bude na to samostatná třída
-    // private onButtonClick() : void {
-    //     this.opened = !this.opened;
-
-    //     if (this.opened) {
-    //         this.buttonElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_FOLDER_OPENED_MODIFIER);
-    //         this.itemsContainer.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_COLLAPSIBLE_OPENED_MODIFIDER);
-    //         this.itemsContainer.style.setProperty("max-height", this.itemsContainer.scrollHeight + "px");
-    //     } else {
-    //         this.buttonElement.classList.remove(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_FOLDER_OPENED_MODIFIER);
-    //         this.itemsContainer.classList.remove(CSSClasses.PROJECT_CODE_BOX_PANEL_COLLAPSIBLE_OPENED_MODIFIDER);
-    //         this.itemsContainer.style.removeProperty("max-height");
-    //     }
-    // }
+    private onCollapsibleToggled() : void {
+        this.updateTabNavigation(this.lastParentOpened);
+    }
 }
 
 export default Folder;

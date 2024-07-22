@@ -10,7 +10,9 @@ const GlobalConfig = {
     DEFAULT_PROJECT_NAME: "unnamed",
     DEFAULT_PROJECT_FOLDER_STRUCTURE_HEADING: "Folder structure",
     DEFAULT_PROJECT_PACKAGES_HEADING: "Packages",
-    DEFAULT_DEFAULT_PACKAGE_NAME: "default"
+    DEFAULT_DEFAULT_PACKAGE_NAME: "default",
+    DEFAULT_FOLDER_ANIMATION_SPEED: 200,
+    DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION: "ease-in-out"
 }
 
 export default GlobalConfig;

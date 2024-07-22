@@ -17,6 +17,14 @@ abstract class ElementCodeViewButton extends CodeViewButton {
         container.appendChild(this.buttonElement);
     }
 
+    public enableTabNavigation() : void {
+        this.buttonElement.setAttribute("tabindex", "0");
+    }
+
+    public disableTabNavigation() : void {
+        this.buttonElement.setAttribute("tabindex", "-1");
+    }
+
     public detach() : void {
         this.buttonElement.remove();
     }

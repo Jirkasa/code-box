@@ -28,6 +28,14 @@ abstract class ElementFileButton extends FileButton {
     public detach() : void {
         this.buttonElement.remove();
     }
+
+    public enableTabNavigation() : void {
+        this.buttonElement.setAttribute("tabindex", "0");
+    }
+
+    public disableTabNavigation() : void {
+        this.buttonElement.setAttribute("tabindex", "-1");
+    }
 }
 
 export default ElementFileButton;

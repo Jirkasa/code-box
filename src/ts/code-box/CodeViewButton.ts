@@ -18,6 +18,10 @@ abstract class CodeViewButton {
 
     public abstract setAsInactive() : void;
 
+    public abstract enableTabNavigation(parentElement : HTMLElement | null) : void;
+
+    public abstract disableTabNavigation(parentElement : HTMLElement | null) : void;
+
     protected showCodeView() : void {
         this.showCodeViewEventSource.fire(this, this.codeView);
     }

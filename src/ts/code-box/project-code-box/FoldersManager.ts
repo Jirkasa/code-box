@@ -26,8 +26,10 @@ class FoldersManager {
     private readonly fileIconName : string | null;
     private readonly downloadIconName : string | null;
     private readonly defaultPackageName : string;
+    private readonly openCloseAnimationSpeed : number;
+    private readonly openCloseAnimationEasingFunction : string;
 
-    constructor(folderStructureContainer : HTMLElement, packagesContainer : HTMLElement, projectName : string, packagesFolderPath : string | null, defaultPackageName : string | null, svgSpritePath : string | null = null, folderArrowIconName : string | null = null, projectIconName : string | null = null, folderIconName : string | null = null, packageIconName : string | null = null, codeFileIconName : string | null = null, fileIconName : string | null = null, downloadIconName : string | null = null) {
+    constructor(folderStructureContainer : HTMLElement, packagesContainer : HTMLElement, projectName : string, packagesFolderPath : string | null, defaultPackageName : string | null, openCloseAnimationSpeed : number, openCloseAnimationEasingFunction : string, svgSpritePath : string | null = null, folderArrowIconName : string | null = null, projectIconName : string | null = null, folderIconName : string | null = null, packageIconName : string | null = null, codeFileIconName : string | null = null, fileIconName : string | null = null, downloadIconName : string | null = null) {
         this.packagesContainer = packagesContainer;
         this.packagesFolderPath = packagesFolderPath || "/";
 
@@ -39,8 +41,10 @@ class FoldersManager {
         this.fileIconName = fileIconName;
         this.downloadIconName = downloadIconName;
         this.defaultPackageName = defaultPackageName || GlobalConfig.DEFAULT_DEFAULT_PACKAGE_NAME;
+        this.openCloseAnimationSpeed = openCloseAnimationSpeed;
+        this.openCloseAnimationEasingFunction = openCloseAnimationEasingFunction;
 
-        this.rootFolder = new Folder(projectName, svgSpritePath, folderArrowIconName, projectIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PROJECT_MODIFIER, folderStructureContainer);
+        this.rootFolder = new Folder(projectName, openCloseAnimationSpeed, openCloseAnimationEasingFunction, svgSpritePath, folderArrowIconName, projectIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PROJECT_MODIFIER, folderStructureContainer);
     }
 
     public setPackagesFolderPath(folderPath : string) : void {
@@ -64,7 +68,7 @@ class FoldersManager {
             codeViewButton = new ProjectMultiElementCodeViewButton(buttonText, showCodeViewEventSource, codeView, this.svgSpritePath, this.codeFileIconName);
 
             const packageFolder = this.getPackageFolder(packageName, true);
-            packageFolder?.addCodeViewButton(codeViewButton);
+            packageFolder?.addCodeViewButton(buttonText, codeViewButton);
         } else {
             codeViewButton = new ProjectCodeViewButton(buttonText, showCodeViewEventSource, codeView, this.svgSpritePath, this.codeFileIconName);
         }
@@ -78,7 +82,7 @@ class FoldersManager {
         }
 
         const folder = this.getFolder(folderPath, true);
-        folder?.addCodeViewButton(codeViewButton);
+        folder?.addCodeViewButton(buttonText, codeViewButton);
 
         return codeViewButton;
     }
@@ -90,7 +94,7 @@ class FoldersManager {
             fileButton = new ProjectMultiElementFileButton(buttonText, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
 
             const packageFolder = this.getPackageFolder(packageName, true);
-            packageFolder?.addFileButton(fileButton);
+            packageFolder?.addFileButton(buttonText, fileButton);
         } else {
             fileButton = new ProjectFileButton(buttonText, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
         }
@@ -104,9 +108,17 @@ class FoldersManager {
         }
 
         const folder = this.getFolder(folderPath, true);
-        folder?.addFileButton(fileButton);
+        folder?.addFileButton(buttonText, fileButton);
 
         return fileButton;
+    }
+
+    public updateTabNavigation(panelOpened : boolean) : void {
+        this.rootFolder.updateTabNavigation(panelOpened);
+        if (this.defaultPackage) {
+            this.defaultPackage.updateTabNavigation(panelOpened);
+        }
+        this.packages.forEach(packageFolder => packageFolder.updateTabNavigation(panelOpened));
     }
 
     private getFolder(folderPath : string, createIfNotExist : boolean = false) : Folder | null {
@@ -118,7 +130,7 @@ class FoldersManager {
 
             if (!subfolder) {
                 if (createIfNotExist) {
-                    subfolder = new Folder(folderName, this.svgSpritePath, this.folderArrowIconName, this.folderIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_FOLDER_MODIFIER);
+                    subfolder = new Folder(folderName, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.folderIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_FOLDER_MODIFIER);
                     folder.addFolder(folderName, subfolder);
                 } else {
                     return null;
@@ -134,7 +146,7 @@ class FoldersManager {
         if (packageName === null) {
             if (!this.defaultPackage) {
                 if (createIfNotExist) {
-                    this.defaultPackage = new Folder(this.defaultPackageName, this.svgSpritePath, this.folderArrowIconName, this.packageIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_DEFAULT_PACKAGE_MODIFIER, this.packagesContainer);
+                    this.defaultPackage = new Folder(this.defaultPackageName, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.packageIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_DEFAULT_PACKAGE_MODIFIER, this.packagesContainer);
                 } else {
                     return null;
                 }
@@ -146,7 +158,7 @@ class FoldersManager {
 
         if (!packageFolder) {
             if (createIfNotExist) {
-                packageFolder = new Folder(packageName, this.svgSpritePath, this.folderArrowIconName, this.packageIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PACKAGE_MODIFIER, this.packagesContainer);
+                packageFolder = new Folder(packageName, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.packageIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PACKAGE_MODIFIER, this.packagesContainer);
                 this.packages.set(packageName, packageFolder);
             } else {
                 return null;

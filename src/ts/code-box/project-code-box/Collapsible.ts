@@ -16,6 +16,8 @@ class Collapsible {
     private animationSpeed : number;
     /** CSS easing function for open/close animation. */
     private animationEasingFunction : string;
+    /** Function that is called when collapsible is opened/closed. */
+    private onToggle : () => void;
 
     /** Indicates whether collapsible is currently opened. */
     private opened : boolean = false;
@@ -33,16 +35,20 @@ class Collapsible {
      * @param collapsibleElement Collapsible element.
      * @param animationSpeed Open/close animation speed.
      * @param animationEasingFunction CSS easing function for open/close animation.
+     * @param onToggle Function to be called when collapsible is opened/closed.
      */
-    constructor(buttonElement : HTMLButtonElement, collapsibleElement : HTMLElement, animationSpeed : number, animationEasingFunction : string) {
+    constructor(buttonElement : HTMLButtonElement, collapsibleElement : HTMLElement, animationSpeed : number, animationEasingFunction : string, onToggle : () => void) {
         this.buttonElement = buttonElement;
         this.collapsibleElement = collapsibleElement;
         this.animationSpeed = animationSpeed;
         this.animationEasingFunction = animationEasingFunction;
+        this.onToggle = onToggle;
 
         this.buttonElement.addEventListener("click", () => this.onButtonClick());
 
-        this.close(false);
+        this.collapsibleElement.style.setProperty("visibility", "hidden");
+        this.collapsibleElement.style.setProperty("overflow", "hidden");
+        this.collapsibleElement.style.setProperty("max-height", "0px");
     }
 
     /**
@@ -55,6 +61,8 @@ class Collapsible {
         this.isAnimating = false;
 
         this.opened = true;
+
+        this.onToggle();
 
         // add CSS modifier classes
         this.buttonElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_FOLDER_OPENED_MODIFIER);
@@ -107,6 +115,8 @@ class Collapsible {
 
         this.opened = false;
 
+        this.onToggle();
+
         // remove CSS modifier classes
         this.buttonElement.classList.remove(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_FOLDER_OPENED_MODIFIER);
         this.collapsibleElement.classList.remove(CSSClasses.PROJECT_CODE_BOX_PANEL_COLLAPSIBLE_OPENED_MODIFIDER);
@@ -139,6 +149,14 @@ class Collapsible {
         } else {
             this.collapsibleElement.style.setProperty("max-height", "0px");
         }
+    }
+
+    /**
+     * Checks whether collapsible is opened.
+     * @returns Indicates whether collapsible is opened.
+     */
+    public isOpened() : boolean {
+        return this.opened;
     }
 
     /**

@@ -26,7 +26,7 @@ class ProjectCodeBox extends Codebox {
 
         // todo - ale budu to chtít skrývat (ty packages), takže to potom nějak pořešit (ale ve FoldersManageru už ne, ten toho dělá už dost)
 
-        this.panelToggle = new PanelToggle(codeBoxBuilder.getPanelElement(), codeBoxBuilder.getPanelOpenButtonElement());
+        this.panelToggle = new PanelToggle(codeBoxBuilder.getPanelElement(), codeBoxBuilder.getPanelOpenButtonElement(), () => this.onPanelToggled());
         if (options.svgSpritePath && options.svgSpriteIcons) {
             this.foldersManager = new FoldersManager(
                 codeBoxBuilder.getFolderStructureContainer(),
@@ -34,6 +34,8 @@ class ProjectCodeBox extends Codebox {
                 options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME,
                 options.packagesFolderPath || null,
                 options.defaultPackageName || null,
+                options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED,
+                options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION,
                 options.svgSpritePath,
                 options.svgSpriteIcons.folderArrow || null,
                 options.svgSpriteIcons.project || null,
@@ -49,7 +51,9 @@ class ProjectCodeBox extends Codebox {
                 codeBoxBuilder.getPackagesContainer(),
                 options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME,
                 options.packagesFolderPath || null,
-                options.defaultPackageName || null
+                options.defaultPackageName || null,
+                options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED,
+                options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION,
             );
         }
 
@@ -105,6 +109,10 @@ class ProjectCodeBox extends Codebox {
         this.activeCodeViewButton = codeViewButton;
 
         this.setActiveCodeView(codeView);
+    }
+
+    private onPanelToggled() : void {
+        this.foldersManager.updateTabNavigation(this.panelToggle.isOpened());
     }
 
     private createFolderStructure(element : HTMLElement, parentFolderNames : string[] = []) {

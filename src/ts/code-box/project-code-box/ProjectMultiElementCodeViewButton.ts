@@ -57,6 +57,20 @@ class ProjectMultiElementCodeViewButton extends CodeViewButton {
         }
     }
 
+    public enableTabNavigation(parentElement : HTMLElement | null) : void {
+        for (let buttonElement of this.buttonElements) {
+            if (parentElement !== null && buttonElement.parentElement !== parentElement) continue;
+            buttonElement.setAttribute("tabindex", "0");
+        }
+    }
+
+    public disableTabNavigation(parentElement : HTMLElement | null) : void {
+        for (let buttonElement of this.buttonElements) {
+            if (parentElement !== null && buttonElement.parentElement !== parentElement) continue;
+            buttonElement.setAttribute("tabindex", "-1");
+        }
+    }
+
     private createButtonElement() : HTMLButtonElement {
         const buttonElement = document.createElement("button");
 

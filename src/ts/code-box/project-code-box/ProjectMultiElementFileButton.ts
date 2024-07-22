@@ -44,6 +44,20 @@ class ProjectMultiElementFileButton extends FileButton {
         this.currentButtonElementIndex = 0;
     }
 
+    public enableTabNavigation(parentElement : HTMLElement | null) : void {
+        for (let buttonElement of this.buttonElements) {
+            if (parentElement !== null && buttonElement.parentElement !== parentElement) continue;
+            buttonElement.setAttribute("tabindex", "0");
+        }
+    }
+
+    public disableTabNavigation(parentElement : HTMLElement | null) : void {
+        for (let buttonElement of this.buttonElements) {
+            if (parentElement !== null && buttonElement.parentElement !== parentElement) continue;
+            buttonElement.setAttribute("tabindex", "-1");
+        }
+    }
+
     public setDownloadLink(downloadLink: string | null) : void {
         for (let i = 0; i < this.buttonElements.length; i++) {
             const buttonElement = this.buttonElements[i];

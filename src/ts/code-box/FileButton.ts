@@ -4,6 +4,10 @@ abstract class FileButton {
     public abstract appendTo(container : HTMLElement) : void;
 
     public abstract detach() : void;
+
+    public abstract enableTabNavigation(parentElement : HTMLElement | null) : void;
+
+    public abstract disableTabNavigation(parentElement : HTMLElement | null) : void;
 }
 
 export default FileButton;

@@ -104,9 +104,9 @@ class ProjectCodeBoxBuilder implements CodeBoxBuilder {
         panelContainer.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_CONTAINER);
         panelContainer.appendChild(this.panelElement);
 
-        this.panelElement.appendChild(this.panelContentElement);
-
         this.panelElement.appendChild(this.panelOpenButton);
+
+        this.panelElement.appendChild(this.panelContentElement);
 
         rootElement.appendChild(panelContainer);
 
