@@ -52,6 +52,8 @@ type InitializationInfo = {
 
 /** Base class for code boxes. */
 abstract class CodeBox {
+    protected static readonly PROJECT_NOT_INITIALIZED_ERROR = "Code box is not initialized.";
+
     /** Root element of code box. */
     protected readonly rootElement : HTMLElement;
     /** Element in which code view are displayed. */
@@ -268,9 +270,9 @@ abstract class CodeBox {
     /**
      * Returns code view based on identifier.
      * @param identifier Identifier of code view.
-     * @returns Code view.
+     * @returns Code view (or null if code view wasn't found).
      */
-    public abstract getCodeView(identifier : string) : CodeBoxCodeView;
+    public abstract getCodeView(identifier : string) : CodeBoxCodeView | null;
 
     /**
      * Removes code view from code box.
@@ -308,9 +310,9 @@ abstract class CodeBox {
     /**
      * Returns file based on identifier.
      * @param identifier Identifier of file.
-     * @returns File.
+     * @returns File (or null if file wasn't found).
      */
-    public abstract getFile(identifier : string) : CodeBoxFile;
+    public abstract getFile(identifier : string) : CodeBoxFile | null;
 
     /**
      * Removes file from code box.

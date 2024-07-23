@@ -1,4 +1,4 @@
-interface CodeBoxBuilder { // podtřídy kdyžtak můžou vytvořit konstruktor a předat si tam elementy
+interface CodeBoxBuilder {
     customizeRootElement(element : HTMLElement) : void;
     createCodeViewContainer() : HTMLElement;
     getCodeViewContainerCSSHiddenClass() : string;

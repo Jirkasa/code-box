@@ -6,6 +6,8 @@ import CodeViewButton from "../CodeViewButton";
 import ElementCodeViewButton from "../ElementCodeViewButton";
 
 class TabCodeViewButton extends ElementCodeViewButton {
+    private textElement : HTMLElement;
+
     constructor(text : string, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, codeView : CodeView, svgSpritePath : string | null = null, iconName : string | null = null) {
         super(showCodeViewEventSource, codeView);
 
@@ -18,10 +20,14 @@ class TabCodeViewButton extends ElementCodeViewButton {
         }
         this.buttonElement.appendChild(iconElement);
 
-        const textElement = document.createElement("div");
-        textElement.classList.add(CSSClasses.TAB_CODE_BOX_TAB_TEXT);
-        textElement.innerText = text;
-        this.buttonElement.appendChild(textElement);
+        this.textElement = document.createElement("div");
+        this.textElement.classList.add(CSSClasses.TAB_CODE_BOX_TAB_TEXT);
+        this.textElement.innerText = text;
+        this.buttonElement.appendChild(this.textElement);
+    }
+
+    public setText(text: string) : void {
+        this.textElement.innerText = text;
     }
 
     public setAsActive() : void {

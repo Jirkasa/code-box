@@ -1,33 +1,39 @@
 import HighlightBox from "../code-view/HighlightBox";
 import { CodeView } from "../main";
 import CodeBox from "./CodeBox";
+import CodeBoxCodeViewManager from "./CodeBoxCodeViewManager";
 
 class CodeBoxCodeView {
     private identifier : string;
     private codeView : CodeView;
-    private codeBox : CodeBox;
+    private codeBox : CodeBox | null;
 
-    constructor(identifier : string, codeView : CodeView, codeBox : CodeBox) {
+    constructor(identifier : string, codeView : CodeView, codeBox : CodeBox, manager : CodeBoxCodeViewManager) {
         this.identifier = identifier;
         this.codeView = codeView;
         this.codeBox = codeBox;
+
+        manager.onIdentifierChange = newIdentifier => this.onIdentifierChange(newIdentifier);
+        manager.onUnlinkCodeBox = () => this.onUnlinkCodeBox();
     }
 
-    public getIdentifier() : string {
+    public getIdentifier() : string | null {
+        if (!this.codeBox) return null;
         return this.identifier;
     }
 
     public changeIdentifier(newIdentifier : string) : boolean {
-        const success = this.codeBox.changeCodeViewIdentifier(this.identifier, newIdentifier);
-        if (success) this.identifier = newIdentifier;
-        return success;
+        if (!this.codeBox) return false;
+        return this.codeBox.changeCodeViewIdentifier(this.identifier, newIdentifier);
     }
 
     public setAsActive() : void {
+        if (!this.codeBox) return;
         this.codeBox.setActiveCodeView(this.identifier);
     }
 
     public remove() : void {
+        if (!this.codeBox) return;
         this.codeBox.removeCodeView(this.identifier);
     }
 
@@ -39,8 +45,8 @@ class CodeBoxCodeView {
         return this.codeView.clone();
     }
 
-    public addHighlight(start : number, end : number = start) : void { // todo - toto by mohlo zároveň i vracet ten HighlightBox - asi jo, asi to tak udělám, bude to lepší
-        this.codeView.addHighlight(start, end);
+    public addHighlight(start : number, end : number = start) : HighlightBox {
+        return this.codeView.addHighlight(start, end);
     }
 
     public removeHighlights(start : number | null = null, end : number | null = start) : void {
@@ -69,6 +75,14 @@ class CodeBoxCodeView {
 
     public areLineNumbersVisible() : boolean {
         return this.codeView.areLineNumbersVisible();
+    }
+
+    private onIdentifierChange(newIdentifier : string) : void {
+        this.identifier = newIdentifier;
+    }
+
+    private onUnlinkCodeBox() : void {
+        this.codeBox = null;
     }
 }
 

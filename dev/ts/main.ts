@@ -1,5 +1,9 @@
 import {CodeView, TabCodeBox, ProjectCodeBox} from "../../src/ts/main";
 
+declare global {
+    interface Window { myCodeBox: TabCodeBox; }
+}
+
 const codeView = new CodeView(document.getElementById("CodeViewTest") as HTMLPreElement, {
     highlight: "g,3,15",
     showGutter: true
@@ -24,6 +28,7 @@ const tabCodeBox = new TabCodeBox(document.getElementById("TabCodeBoxTest") as H
         download: "download"
     }
 });
+window.myCodeBox = tabCodeBox;
 // tabCodeBox.init();
 
 new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement, {

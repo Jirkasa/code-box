@@ -5,6 +5,7 @@ import FileButton from "../FileButton";
 class ProjectMultiElementFileButton extends FileButton {
     private buttonElements : HTMLAnchorElement[];
     private downloadIcons : HTMLElement[];
+    private textElements : HTMLElement[];
     private currentButtonElementIndex : number = 0;
     private text : string;
     private downloadLink : string | null;
@@ -17,6 +18,7 @@ class ProjectMultiElementFileButton extends FileButton {
 
         this.buttonElements = new Array<HTMLAnchorElement>();
         this.downloadIcons = new Array<HTMLElement>();
+        this.textElements = new Array<HTMLElement>();
         this.text = text;
         this.downloadLink = downloadLink;
         this.svgSpritePath = svgSpritePath;
@@ -55,6 +57,13 @@ class ProjectMultiElementFileButton extends FileButton {
         for (let buttonElement of this.buttonElements) {
             if (parentElement !== null && buttonElement.parentElement !== parentElement) continue;
             buttonElement.setAttribute("tabindex", "-1");
+        }
+    }
+
+    public setText(text: string) : void {
+        this.text = text;
+        for (let textElement of this.textElements) {
+            textElement.innerText = text;
         }
     }
 
@@ -103,6 +112,7 @@ class ProjectMultiElementFileButton extends FileButton {
         textElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_TEXT);
         textElement.innerText = this.text;
         buttonElement.appendChild(textElement);
+        this.textElements.push(textElement);
 
         if (this.svgSpritePath && this.downloadIconName) {
             const downloadIcon = document.createElement("div");

@@ -4,6 +4,7 @@ import ElementFileButton from "../ElementFileButton";
 
 class TabFileButton extends ElementFileButton {
     private downloadIcon : HTMLElement | null = null;
+    private textElement : HTMLElement;
 
     constructor(text : string, downloadLink : string | null = null, svgSpritePath : string | null = null, iconName : string | null = null, downloadIconName : string | null = null) {
         super(downloadLink);
@@ -17,10 +18,10 @@ class TabFileButton extends ElementFileButton {
         }
         this.buttonElement.appendChild(iconElement);
 
-        const textElement = document.createElement("div");
-        textElement.innerText = text;
-        textElement.classList.add(CSSClasses.TAB_CODE_BOX_TAB_TEXT);
-        this.buttonElement.appendChild(textElement);
+        this.textElement = document.createElement("div");
+        this.textElement.innerText = text;
+        this.textElement.classList.add(CSSClasses.TAB_CODE_BOX_TAB_TEXT);
+        this.buttonElement.appendChild(this.textElement);
 
         if (svgSpritePath && downloadIconName) {
             this.downloadIcon = document.createElement("div");
@@ -32,7 +33,11 @@ class TabFileButton extends ElementFileButton {
         }
     }
 
-    public setDownloadLink(downloadLink: string | null): void {
+    public setText(text: string) : void {
+        this.textElement.innerText = text;
+    }
+
+    public setDownloadLink(downloadLink: string | null) : void {
         super.setDownloadLink(downloadLink);
 
         if (this.downloadIcon) {

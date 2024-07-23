@@ -1,4 +1,6 @@
 abstract class FileButton {
+    public abstract setText(text : string) : void;
+
     public abstract setDownloadLink(downloadLink : string | null) : void;
 
     public abstract getDownloadLink() : string | null;

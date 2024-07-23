@@ -26,6 +26,7 @@ Další komponenty:
 Ta knihovna by měla být teda rozšiřitelná
     - chci potom vytvářet ten code highlight runner atp., tak na to myslet
 
+- ještě by se hodil code box, který by se dal ovládat jen přes kód - někdo by to třeba někde využil
 
 Co mi ještě zbývá:
 - extendnutí pomocí atributu (ale to až potom, protože to se netýká přímo ProjectCodeBoxu, ale spíš nějaké komponenty, která je bude inicializovat)

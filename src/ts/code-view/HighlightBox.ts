@@ -7,7 +7,7 @@ class HighlightBox {
     private start : number;
     private end : number;
 
-    constructor(container : HTMLElement, start : number, end : number, codeView : CodeView) {
+    constructor(container : HTMLElement, start : number, end : number, codeView : CodeView) { // todo - potom si vzít příklad z CodeBoxCodeView a nějak to detachování propojit, ať to v CodeView nestraší
         this.start = Math.min(Math.max(Math.trunc(start), 1), codeView.linesCount);
         this.end = Math.max(Math.min(Math.trunc(end), codeView.linesCount), this.start);
         this.codeView = codeView;

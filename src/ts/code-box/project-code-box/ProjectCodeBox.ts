@@ -3,6 +3,8 @@ import GlobalConfig from "../../GlobalConfig";
 import { CodeView } from "../../main";
 import EventSourcePoint from "../../utils/EventSourcePoint";
 import CodeBox, { CodeBoxItemInfo } from "../CodeBox";
+import CodeBoxCodeView from "../CodeBoxCodeView";
+import CodeBoxFile from "../CodeBoxFile";
 import CodeViewButton from "../CodeViewButton";
 import FoldersManager from "./FoldersManager";
 import PanelToggle from "./PanelToggle";
@@ -59,6 +61,48 @@ class ProjectCodeBox extends CodeBox {
 
         this.showCodeViewEventSource.subscribe((codeViewButton, codeView) => this.onShowCodeView(codeViewButton, codeView));
     }
+
+    // BEGIN - NOT IMPLEMENTED (JUST TO GET RID OF ERRORS FOR NOW)
+    public changeCodeViewIdentifier(identifier: string, newIdentifier: string): boolean {
+        return false
+    }
+
+    public changeFileIdentifier(identifier: string, newIdentifier: string): boolean {
+        return false;
+    }
+
+    public getCodeView(identifier: string): CodeBoxCodeView | null {
+        return null;
+    }
+
+    public getCodeViews(): CodeBoxCodeView[] {
+        return [];
+    }
+
+    public getFile(identifier: string): CodeBoxFile | null {
+        return null;
+    }
+
+    public getFiles(): CodeBoxFile[] {
+        return [];
+    }
+
+    public removeCodeView(identifier: string): boolean {
+        return false;
+    }
+
+    public removeFile(identifier: string): boolean {
+        return false;
+    }
+
+    public setActiveCodeView(identifier: string): boolean {
+        return false;
+    }
+
+    public setNoActiveCodeView(): void {
+        
+    }
+    // END - NOT IMPLEMENTED (JUST TO GET RID OF ERRORS FOR NOW)
 
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]): void {
         // jenom jeden konfigurační element pro složky bude asi dovolen - uvidím, možná to vadit nebude

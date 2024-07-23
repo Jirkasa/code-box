@@ -14,6 +14,8 @@ abstract class CodeViewButton {
 
     public abstract detach() : void;
 
+    public abstract setText(text : string) : void;
+
     public abstract setAsActive() : void;
 
     public abstract setAsInactive() : void;

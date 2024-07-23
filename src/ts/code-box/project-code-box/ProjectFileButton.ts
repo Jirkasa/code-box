@@ -4,6 +4,7 @@ import ElementFileButton from "../ElementFileButton";
 
 class ProjectFileButton extends ElementFileButton {
     private downloadIcon : HTMLElement | null = null;
+    private textElement : HTMLElement;
 
     constructor(text : string, downloadLink : string | null = null, svgSpritePath : string | null = null, iconName : string | null = null, downloadIconName : string | null = null) {
         super(downloadLink);
@@ -17,10 +18,10 @@ class ProjectFileButton extends ElementFileButton {
         }
         this.buttonElement.appendChild(iconElement);
 
-        const textElement = document.createElement("div");
-        textElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_TEXT);
-        textElement.innerText = text;
-        this.buttonElement.appendChild(textElement);
+        this.textElement = document.createElement("div");
+        this.textElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_TEXT);
+        this.textElement.innerText = text;
+        this.buttonElement.appendChild(this.textElement);
 
         if (svgSpritePath && downloadIconName) {
             this.downloadIcon = document.createElement("div");
@@ -30,6 +31,10 @@ class ProjectFileButton extends ElementFileButton {
                 this.buttonElement.appendChild(this.downloadIcon);
             }
         }
+    }
+
+    public setText(text: string) : void {
+        this.textElement.innerText = text;
     }
 
     public setDownloadLink(downloadLink: string | null): void {

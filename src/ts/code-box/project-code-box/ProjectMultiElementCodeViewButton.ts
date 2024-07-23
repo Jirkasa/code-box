@@ -6,6 +6,7 @@ import CodeViewButton from "../CodeViewButton";
 
 class ProjectMultiElementCodeViewButton extends CodeViewButton {
     private buttonElements : HTMLButtonElement[];
+    private textElements : HTMLElement[];
     private currentButtonElementIndex : number = 0;
     private isActive : boolean = false;
     private text : string;
@@ -16,6 +17,7 @@ class ProjectMultiElementCodeViewButton extends CodeViewButton {
         super(showCodeViewEventSource, codeView);
 
         this.buttonElements = new Array<HTMLButtonElement>();
+        this.textElements = new Array<HTMLElement>();
         this.text = text;
         this.svgSpritePath = svgSpritePath;
         this.iconName = iconName;
@@ -43,6 +45,13 @@ class ProjectMultiElementCodeViewButton extends CodeViewButton {
             buttonElement.remove();
         }
         this.currentButtonElementIndex = 0;
+    }
+
+    public setText(text: string) : void {
+        this.text = text;
+        for (let textElement of this.textElements) {
+            textElement.innerText = text;
+        }
     }
     
     public setAsActive() : void {
@@ -87,6 +96,7 @@ class ProjectMultiElementCodeViewButton extends CodeViewButton {
         textElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_TEXT);
         textElement.innerText = this.text;
         buttonElement.appendChild(textElement);
+        this.textElements.push(textElement);
 
         return buttonElement;
     }

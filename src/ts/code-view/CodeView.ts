@@ -101,9 +101,10 @@ class CodeView { // todo - ještě přidat přesouvání do elementu, skrýván�
         return new CodeView(preElementCopy, this.initialOptions);
     }
 
-    public addHighlight(start : number, end : number = start) : void {
+    public addHighlight(start : number, end : number = start) : HighlightBox {
         const highlightBox = new HighlightBox(this.containerElement, start, end, this);
         this.highlightBoxes.push(highlightBox);
+        return highlightBox;
     }
 
     public removeHighlights(start : number | null = null, end : number | null = start) : void {
