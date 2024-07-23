@@ -23,7 +23,7 @@ class HighlightBox {
         this.element.remove();
     }
 
-    public getElement() : HTMLElement {
+    public getElement() : HTMLElement { // todo - toto asi není úplně nejlepší nápad - možná si vzít příklad z CodeBoxCodeView třídy - tady tímto by to uživatel mohl nějak rozbít
         return this.element;
     }
 

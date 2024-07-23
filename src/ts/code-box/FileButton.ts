@@ -1,6 +1,8 @@
 abstract class FileButton {
     public abstract setDownloadLink(downloadLink : string | null) : void;
 
+    public abstract getDownloadLink() : string | null;
+
     public abstract appendTo(container : HTMLElement) : void;
 
     public abstract detach() : void;

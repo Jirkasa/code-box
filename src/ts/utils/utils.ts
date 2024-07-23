@@ -1,3 +1,5 @@
+import CodeViewOptions from "../code-view/CodeViewOptions";
+
 export function deleteEmptyStringFromArray(array : string[]) : void {
     for (let i = 0; i < array.length; i++) {
         if (array[i].trim().length === 0) {
@@ -20,4 +22,15 @@ export function parseFolderPath(folderPath : string) : string[] {
         return [];
     }
     return result;
+}
+
+export function createCodeViewOptionsCopy(options : CodeViewOptions) : CodeViewOptions {
+    return {
+        highlight: options.highlight,
+        lineHeight: options.lineHeight,
+        lineHeightUnit: options.lineHeightUnit,
+        showGutter: options.showGutter,
+        showLineNumbers: options.showLineNumbers,
+        cssClasses: options.cssClasses
+    }
 }

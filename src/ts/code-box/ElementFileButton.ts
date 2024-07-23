@@ -21,6 +21,10 @@ abstract class ElementFileButton extends FileButton {
         }
     }
 
+    public getDownloadLink() : string | null {
+        return this.buttonElement.getAttribute("href");
+    }
+
     public appendTo(container : HTMLElement) : void {
         container.appendChild(this.buttonElement);
     }

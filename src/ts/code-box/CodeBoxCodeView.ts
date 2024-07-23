@@ -17,7 +17,15 @@ class CodeBoxCodeView {
         return this.identifier;
     }
 
-    // todo - changeIdentifier : boolean
+    public changeIdentifier(newIdentifier : string) : boolean {
+        const success = this.codeBox.changeCodeViewIdentifier(this.identifier, newIdentifier);
+        if (success) this.identifier = newIdentifier;
+        return success;
+    }
+
+    public setAsActive() : void {
+        this.codeBox.setActiveCodeView(this.identifier);
+    }
 
     public remove() : void {
         this.codeBox.removeCodeView(this.identifier);

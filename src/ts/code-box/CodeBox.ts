@@ -1,69 +1,107 @@
 import CodeView from "../code-view/CodeView";
 import CodeViewOptions from "../code-view/CodeViewOptions";
 import GlobalConfig from "../GlobalConfig";
+import { createCodeViewOptionsCopy } from "../utils/utils";
 import ViewportIntersectionObserver from "../utils/ViewportIntersectionObserver";
 import CodeBoxBuilder from "./CodeBoxBuilder";
 import CodeBoxCodeView from "./CodeBoxCodeView";
+import CodeBoxFile from "./CodeBoxFile";
 import CodeBoxOptions from "./CodeBoxOptions";
 
+/** Informations about code view. */
 export type CodeViewInfo = {
+    /** Dataset of pre element used to create code view. */
     dataset : DOMStringMap;
-    codeView : CodeView; // name by se mohlo taky předávat, ať to nemusím zjišťovat v podtřídách
+    /** Code view. */
+    codeView : CodeView;
 }
 
+/** Informations about file. */
 export type FileInfo = {
+    /** Dataset of element used to create file. */
     dataset : DOMStringMap;
+    /** Name of file. */
     name : string;
+    /** File download link (or null if no download link was set). */
     downloadLink : string | null;
 }
 
+/** Code box item informations. */
 export type CodeBoxItemInfo = {
-    type : "CodeView" | "FileInfo" | "HTMLElement";
+    /** Type of item. */
+    type : "CodeViewInfo" | "FileInfo" | "HTMLElement";
+    /** Informations about code view (if type is "CodeViewInfo"). */
     codeViewInfo ?: CodeViewInfo;
+    /** Informations about file (if type is "FileInfo"). */
     fileInfo ?: FileInfo;
+    /** HTML element (if type is "HTMLElement"). */
     element ?: HTMLElement;
 }
 
+/** Initialization informations about code box item. */
 type InitializationInfo = {
+    /** Type of initialization informations. */
     type : "PreElement" | "FileInfo" | "HTMLElement";
+    /** Pre element (if type is "PreElement"). */
     preElement ?: HTMLPreElement;
+    /** Informations about file (if type is "FileInfo"). */
     fileInfo ?: FileInfo;
+    /** HTML element (if type is "HTMLElement"). */
     element ?: HTMLElement;
 }
 
+/** Base class for code boxes. */
 abstract class CodeBox {
+    /** Root element of code box. */
     protected readonly rootElement : HTMLElement;
+    /** Element in which code view are displayed. */
     private readonly codeViewContainer : HTMLElement;
+    /** CSS class that is used to hide code view container. */
     private readonly codeViewContainerCSSHiddenClass : string;
+    /** Element that is displayed when no code view is displayed. */
     private readonly noCodeViewSelectedElement : HTMLElement;
+    /** CSS class that is used to hide element that is displayed when no code view is displayed. */
     private readonly noCodeViewSelectedCSSHiddenClass : string;
-    protected initialCodeViewLinesCount : number | null = null;
-    private minCodeViewLinesCount : number | null = null;
-    private initialized : boolean  = false;
-    private initializationData : InitializationInfo[] | null;
-    //private preElements : HTMLPreElement[] | null;
-    private defaultCodeViewOptions : CodeViewOptions | null;
-    private activeCodeView : CodeView | null = null;
-    private lazyInitPlaceholderElement : HTMLElement | null = null;
-    //private fileInfos : FileInfo[] | null;
 
-    constructor(element : HTMLElement, options : CodeBoxOptions, codeBoxBuilder : CodeBoxBuilder) { // todo - dívat se na code box options v datasetu - na to jsem ještě u code boxu nemyslel
+    /** Minimal number of code view lines count (used for setting minimal height of code view container). */
+    private minCodeViewLinesCount : number | null = null;
+    /** Default code view options. */
+    private defaultCodeViewOptions : CodeViewOptions | null;
+    /** Currently displayed code view. */
+    private activeCodeView : CodeView | null = null;
+
+    /** Indicates whether code box is initialized. */
+    private initialized : boolean  = false;
+    /** Number of code view lines count that is going to be displayed when code box is initialized. */
+    protected initialCodeViewLinesCount : number | null = null;
+    /** Initialization data that is passed to subclasses on initialization. */
+    private initializationData : InitializationInfo[] | null;
+    /** Placeholder element for lazy initialization. */
+    private lazyInitPlaceholderElement : HTMLElement | null = null;
+
+    /**
+     * Creates new code box.
+     * @param element Code box root element.
+     * @param options Code box options.
+     * @param codeBoxBuilder Code box builder that should be used to build code box.
+     */
+    constructor(element : HTMLElement, options : CodeBoxOptions, codeBoxBuilder : CodeBoxBuilder) {
         this.rootElement = element;
 
         this.fillOptionsFromDataset(options, element.dataset);
 
-        this.defaultCodeViewOptions = options.defaultCodeViewOptions || null;
+        this.defaultCodeViewOptions = options.defaultCodeViewOptions ? createCodeViewOptionsCopy(options.defaultCodeViewOptions) : null;
         this.minCodeViewLinesCount = options.minCodeViewLinesCount || null;
 
         const preElements = Array<HTMLPreElement>();
         this.initializationData = new Array<InitializationInfo>();
-
         let activePreElement : HTMLPreElement | null = null;
 
-        //this.fileInfos = new Array<FileInfo>();
-
+        // traverse all children of passed element
+        // (get pre elements and create initialization data)
         for (let i = 0; i < this.rootElement.children.length; i++) {
             const child = this.rootElement.children[i];
+
             if (!(child instanceof HTMLElement)) continue;
             if (child instanceof HTMLPreElement) {
                 const codeElement = this.getCodeElement(child);
@@ -97,28 +135,32 @@ abstract class CodeBox {
             }
         }
 
+        // if no active pre element was found and implicit one should be set, set it
         if (options.implicitActive && !activePreElement && preElements.length > 0) {
             const preElement = preElements[0];
             preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] = "true";
         }
 
-        this.rootElement.innerHTML = ""; // todo - pro získání dalších elementů během inicializace se může v podtřídách implementovat nějaká volitelná metoda - takže pro project code box půjdou vytvořit ty command elementy
-
+        // build code box elements
+        this.rootElement.innerHTML = "";
         codeBoxBuilder.customizeRootElement(this.rootElement);
         this.codeViewContainer = codeBoxBuilder.createCodeViewContainer();
         this.codeViewContainerCSSHiddenClass = codeBoxBuilder.getCodeViewContainerCSSHiddenClass();
         this.noCodeViewSelectedCSSHiddenClass = codeBoxBuilder.getNoCodeViewCSSHiddenClass();
         this.noCodeViewSelectedElement = codeBoxBuilder.createNoCodeViewSelectedElement(options.noCodeViewSelectedElementHeight || GlobalConfig.DEFAULT_NO_CODE_VIEW_SELECTED_ELEMENT_HEIGHT, options.noCodeViewSelectedText || GlobalConfig.DEFAULT_NO_CODE_VIEW_SELECTED_TEXT);
-
         codeBoxBuilder.assembleElements(this.rootElement, this.codeViewContainer, this.noCodeViewSelectedElement);
 
+        // potentionally show no code view selected message
         if (preElements.length === 0 || (!options.implicitActive && !activePreElement)) {
             this.showNoCodeViewSelectedMessage();
         }
 
-        if ((options.lazyInit === undefined || options.lazyInit) && this.rootElement.parentElement) { // todo - do dokumentace napsat, že aby se lazy inicializování aplikovalo, musí mít CodeBox parent element
+        // prepare for lazy initialization or initialize right away
+        if ((options.lazyInit === undefined || options.lazyInit) && this.rootElement.parentElement) {
+            // create placeholder element
             this.lazyInitPlaceholderElement = document.createElement("div");
 
+            // set height of placeholder element
             if (activePreElement) {
                 const codeElement = this.getCodeElement(activePreElement);
                 if (codeElement) {
@@ -132,6 +174,7 @@ abstract class CodeBox {
                     const height = linesCount * this.getCodeViewLineHeight(activePreElement, options.defaultCodeViewOptions || {});
                     this.lazyInitPlaceholderElement.style.height = `${height}${this.getCodeViewLineHeightUnit(activePreElement, options.defaultCodeViewOptions || {})}`;
                 } else {
+                    // just to be sure
                     this.init();
                     return;
                 }
@@ -139,43 +182,33 @@ abstract class CodeBox {
                 this.lazyInitPlaceholderElement.style.height = options.noCodeViewSelectedElementHeight || GlobalConfig.DEFAULT_NO_CODE_VIEW_SELECTED_ELEMENT_HEIGHT;
             }
 
+            // display placeholder element instead of code box element for initialization
             this.rootElement.parentElement.insertBefore(this.lazyInitPlaceholderElement, this.rootElement);
             this.rootElement.style.setProperty("display", "none");
 
+            // observe intersection between viewport and placeholder element
             ViewportIntersectionObserver.observe(this.lazyInitPlaceholderElement, isIntersecting => this.onLazyInitPlaceholderElementIntersectionChange(isIntersecting));
         } else {
             this.init();
         }
     }
 
+    /**
+     * Initializes code box if it hasn't been initialized yet. (When lazy initialization is disabled, code box is initialized right away.)
+     */
     public init() : void {
-        if (this.initialized) throw new Error("Code box is already initialized."); // todo - nevím jestli vyhazovat chybu... - možná ani ne, jen by se nic neprovedlo
+        if (this.initialized) return;
 
         this.rootElement.style.removeProperty("display");
 
+        // remove placeholder element
         if (this.lazyInitPlaceholderElement) {
             ViewportIntersectionObserver.unobserve(this.lazyInitPlaceholderElement);
             this.lazyInitPlaceholderElement.remove();
             this.lazyInitPlaceholderElement = null;
         }
 
-        /*const codeViewInfos = new Array<CodeViewInfo>();
-        if (this.preElements) {
-            for (let preElement of this.preElements) {
-                const codeView = new CodeView(preElement, this.defaultCodeViewOptions || {});
-                codeView.detach();
-
-                if (preElement.dataset.cbActive !== undefined) {
-                    this.setActiveCodeView(codeView);
-                }
-
-                codeViewInfos.push({
-                    dataset: preElement.dataset,
-                    codeView: codeView
-                });
-            }
-        }*/
-
+        // create info objects about items in code box
         const codeBoxItemInfos = new Array<CodeBoxItemInfo>();
         if (this.initializationData) {
             for (let initializationInfo of this.initializationData) {
@@ -185,12 +218,12 @@ abstract class CodeBox {
                     const codeView = new CodeView(preElement, this.defaultCodeViewOptions || {});
                     codeView.detach();
 
-                    if (preElement.dataset.cbActive !== undefined) {
-                        this.setActiveCodeView(codeView);
+                    if (preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined) {
+                        this.changeActiveCodeView(codeView);
                     }
 
                     codeBoxItemInfos.push({
-                        type: "CodeView",
+                        type: "CodeViewInfo",
                         codeViewInfo: {
                             codeView: codeView,
                             dataset: preElement.dataset
@@ -210,71 +243,164 @@ abstract class CodeBox {
             }
         }
 
-        //this.onInit(codeViewInfos, this.fileInfos || []);
         this.onInit(codeBoxItemInfos);
 
-        //this.preElements = null;
         this.initializationData = null;
         this.defaultCodeViewOptions = null;
+
         this.initialized = true;
-        //this.fileInfos = null;
     }
 
+    /**
+     * Checks whether code box is initialized.
+     * @returns Indicates whether code box is initialized.
+     */
     public isInitialized() : boolean {
         return this.initialized;
     }
 
+    /**
+     * Returns all code views of code box.
+     * @returns Code views.
+     */
     public abstract getCodeViews() : CodeBoxCodeView[];
 
+    /**
+     * Returns code view based on identifier.
+     * @param identifier Identifier of code view.
+     * @returns Code view.
+     */
     public abstract getCodeView(identifier : string) : CodeBoxCodeView;
 
-    public abstract removeCodeView(identifier : string) : void;
+    /**
+     * Removes code view from code box.
+     * @param identifier Identifier of code view to be removed.
+     * @returns Indicates whether code view has been removed.
+     */
+    public abstract removeCodeView(identifier : string) : boolean;
 
+    /**
+     * Changes identifier of code view in code box.
+     * @param identifier Identifier of code view whose identifier should be changed.
+     * @param newIdentifier New identifier.
+     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other code view in code box, it should return false).
+     */
+    public abstract changeCodeViewIdentifier(identifier : string, newIdentifier : string) : boolean;
+
+    /**
+     * Sets code view as active (displays it in code box).
+     * @param identifier Identifier of code view which should be set as active.
+     * @returns Indicates whether code view was found and has been successfully set as active.
+     */
+    public abstract setActiveCodeView(identifier : string) : boolean;
+
+    /**
+     * Displays no code view in code box.
+     */
+    public abstract setNoActiveCodeView() : void;
+
+    /**
+     * Returns all files of code box.
+     * @returns Files.
+     */
+    public abstract getFiles() : CodeBoxFile[];
+
+    /**
+     * Returns file based on identifier.
+     * @param identifier Identifier of file.
+     * @returns File.
+     */
+    public abstract getFile(identifier : string) : CodeBoxFile;
+
+    /**
+     * Removes file from code box.
+     * @param identifier Identifier of file to be remove.
+     * @returns Indicates whether file has been removed.
+     */
+    public abstract removeFile(identifier : string) : boolean;
+
+    /**
+     * Changes identifier of file in code box.
+     * @param identifier Indentifier of file whose identifier should be changed.
+     * @param newIdentifier New identifier.
+     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other file in code box, it should return false).
+     */
+    public abstract changeFileIdentifier(identifier : string, newIdentifier : string) : boolean;
+
+    /**
+     * Called on initialization.
+     * @param codeBoxItemInfos Info objects about code box items.
+     */
     protected abstract onInit(codeBoxItemInfos : CodeBoxItemInfo[]) : void;
 
-    protected setActiveCodeView(codeView : CodeView) { // todo - toto bude asi jediná věc, která se tady bude měnit
+    /**
+     * Changes active code view displayed in code box.
+     * @param codeView Code view that should be displayed in code box or null if no code view should be displayed.
+     */
+    protected changeActiveCodeView(codeView : CodeView | null) : void {
         if (this.activeCodeView) {
             this.activeCodeView.detach();
         }
 
-        codeView.appendTo(this.codeViewContainer);
-
-        if (this.minCodeViewLinesCount !== null) {
-            const minHeight = this.minCodeViewLinesCount * codeView.lineHeight;
-            this.codeViewContainer.style.setProperty("min-height", minHeight + codeView.lineHeightUnit);
-        } else {
-            this.codeViewContainer.style.removeProperty("min-height");
-        }
-
         this.activeCodeView = codeView;
 
-        this.hideNoCodeViewSelectedMessage();
+        if (codeView !== null) {
+            codeView.appendTo(this.codeViewContainer);
+    
+            // potentionally set min height to code view container
+            if (this.minCodeViewLinesCount !== null) {
+                const minHeight = this.minCodeViewLinesCount * codeView.lineHeight;
+                this.codeViewContainer.style.setProperty("min-height", minHeight + codeView.lineHeightUnit);
+            } else {
+                this.codeViewContainer.style.removeProperty("min-height");
+            }
+
+            this.hideNoCodeViewSelectedMessage();
+        } else {
+            this.showNoCodeViewSelectedMessage();
+        }
     }
 
-    // protected getInitialActiveCodeViewLinesCount() : number | null { // null pro nic
-    //     return this.initialCodeViewLinesCount;
-    // } // todo - tato metoda možná ani nebude potřeba
-
+    /**
+     * Shows element with no selected code view message.
+     */
     private showNoCodeViewSelectedMessage() : void {
         this.noCodeViewSelectedElement.classList.remove(this.noCodeViewSelectedCSSHiddenClass);
         this.codeViewContainer.classList.add(this.codeViewContainerCSSHiddenClass);
     }
 
+    /**
+     * Hides element with no selected code view message.
+     */
     private hideNoCodeViewSelectedMessage() : void {
         this.noCodeViewSelectedElement.classList.add(this.noCodeViewSelectedCSSHiddenClass);
         this.codeViewContainer.classList.remove(this.codeViewContainerCSSHiddenClass);
     }
 
+    /**
+     * Called when intersection between placeholder element and viewport changes.
+     * @param isIntersecting Indicates whether placeholder element and viewport are intersecting.
+     */
     private onLazyInitPlaceholderElementIntersectionChange(isIntersecting : boolean) : void {
         if (isIntersecting) this.init();
     }
 
+    /**
+     * Returns number of lines count in code element.
+     * @param codeElement Code element.
+     * @returns Number of lines count in code element.
+     */
     private getLinesCount(codeElement : HTMLElement) : number {
         if (codeElement.textContent === null) return 0;
         return codeElement.textContent.split('\n').length;
     }
 
-    private fillOptionsFromDataset(options : CodeBoxOptions, dataset : DOMStringMap) { // todo - do dokumentace napsat, které vlastnosti je možné měnit i pomocí data atributů
+    /**
+     * Fills code box options based on dataset.
+     * @param options Code box options.
+     * @param dataset Dataset.
+     */
+    private fillOptionsFromDataset(options : CodeBoxOptions, dataset : DOMStringMap) {
         if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LazyInit"] !== undefined) {
             options.lazyInit = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LazyInit"] === "true";
         }
@@ -295,6 +421,11 @@ abstract class CodeBox {
         }
     }
 
+    /**
+     * Returns child code element of pre element.
+     * @param preElement Pre element.
+     * @returns Code element.
+     */
     private getCodeElement(preElement : HTMLPreElement) : HTMLElement | null {
         const children = Array.from(preElement.children);
         for (let child of children) {
@@ -305,6 +436,12 @@ abstract class CodeBox {
         return null;
     }
 
+    /**
+     * Returns code view line height.
+     * @param preElement Pre element.
+     * @param defaultCodeViewOptions Default code view options.
+     * @returns Code view line height.
+     */
     private getCodeViewLineHeight(preElement : HTMLPreElement, defaultCodeViewOptions : CodeViewOptions) : number {
         if (preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeight"] !== undefined) {
             const lineHeight = Number.parseFloat(preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeight"] || "");
@@ -317,6 +454,12 @@ abstract class CodeBox {
         }
     }
 
+    /**
+     * Returns code view line height unit.
+     * @param preElement Pre element.
+     * @param defaultCodeViewOptions Default code view options.
+     * @returns Code view line height unit.
+     */
     private getCodeViewLineHeightUnit(preElement : HTMLPreElement, defaultCodeViewOptions : CodeViewOptions) : string {
         if (preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeightUnit"] !== undefined) {
             return preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeightUnit"] || GlobalConfig.DEFAULT_LINE_HEIGHT_UNIT;
@@ -330,55 +473,20 @@ abstract class CodeBox {
 
 export default CodeBox;
 
-/**
-Co tady teda implementovat:
-    X- lazy loading
-    X- předávání code views
-        - ještě brát v potaz file elementy - ty jsou taky společné pro oba code boxy, ale bude se předávat dataset
-
-Co to vlastně code box je?
-    - je to komponenta, obsahující code views, která je zobrazuje - to je v podstatě všechno co to je
-    - bude možné přidávat code views
-        - ale asi to bude implementované nějak v podtřídách
-    - taky mazat
-    - taky měnit názvy - názvy by možná řešili až podtřídy
+/*
+todo - ještě teda budu muset nějak zajistit resetování
+        - možná
+     - 
  */
 
 /**
-Co by měla tato základní třída dělat:
-- může najít všechny pre elementy v předaném elementu a vytvořit z nich code views
-    - zároveň může taky vzít datasety, protože ty budou taky potřeba - ProjectCodeBox jich bude mít pro code view víc
-- vytvoří root element, na kterém potom mohou podtřídy stavět
-- taky by se to mohlo starat o zobrazování aktivních ukázek kódu v nějakém elementu, který by se vytvořil podtřídou
-    - 
-
-Operace, které bych chtěl u obou code boxů:
-    - přidat code view
-    - nastavit code view název
-    - smazat code view
-    - resetovat code view do initial stavu (v jakém byl než se aplikovali změny přes metody)
-        - a nebo ne?
-            - budu - kvůli lazy loadingu (ale to až u ProjectCodeBox)
-
-    - lazy initializing
-        - jak to udělat?
-        - u project code boxů se kdyžtak načtou i ty, na kterých je ukázka závislá
-            - takže je půjde kdyžtak inicializovat zavoláním metody
-        - musí být nějaký element, který se nejdříve zobrazí namísto ukázky
-            - měl by jej asi vytvořit implementující code box?
-                - ne, asi tam hodím default, ale tak kdyby náhodou, tak to půjde přepsat
-                - ale toto není tak důležité... - protože to stejně většinou vidět nepůjde - načte se to dřív, načte (nebo teda inicializuje) se to dřív, než se tam obrazovka dostane
-            - a ten element nebude součástí root elementu
-    
     - aby uživatel nemusel kdyžtak inicializovat code boxy a code views ručně, tak by na to mohla být nějaká speciální třída, kde by se předal selektor
         - CodeViewInitializer
         - TabCodeBoxInitializer
         - ProjectCodeBoxInitializer
             - je to ale hromadné, takže nějaký trochu jiný název
-
-    - o resetování se asi tady ta základní třída vůbec starat nebude
     
-    - Pluginy:
+    - Pluginy (uvidím jak to s pluginama nakonec bude):
         - v options by byla vlastnost plugin
             - předával by se tam new PluginInitializer<MyPlugin>()
                 - přičemž CodeView by mělo tohle jako typ:

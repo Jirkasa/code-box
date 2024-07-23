@@ -75,7 +75,7 @@ class ProjectCodeBox extends CodeBox {
         }
 
         for (let codeBoxItemInfo of codeBoxItemInfos) {
-            if (codeBoxItemInfo.type === "CodeView" && codeBoxItemInfo.codeViewInfo) {
+            if (codeBoxItemInfo.type === "CodeViewInfo" && codeBoxItemInfo.codeViewInfo) {
                 let codeViewInfo = codeBoxItemInfo.codeViewInfo;
 
                 let folderPath = this.getFolderPathFromDataset(codeViewInfo.dataset);
@@ -108,7 +108,7 @@ class ProjectCodeBox extends CodeBox {
         codeViewButton.setAsActive();
         this.activeCodeViewButton = codeViewButton;
 
-        this.setActiveCodeView(codeView);
+        this.changeActiveCodeView(codeView);
     }
 
     private onPanelToggled() : void {

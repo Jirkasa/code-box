@@ -59,6 +59,8 @@ class ProjectMultiElementFileButton extends FileButton {
     }
 
     public setDownloadLink(downloadLink: string | null) : void {
+        this.downloadLink = downloadLink;
+
         for (let i = 0; i < this.buttonElements.length; i++) {
             const buttonElement = this.buttonElements[i];
             const downloadIcon = this.downloadIcons[i];
@@ -75,6 +77,10 @@ class ProjectMultiElementFileButton extends FileButton {
                 }
             }
         }
+    }
+
+    public getDownloadLink() : string | null {
+        return this.downloadLink;
     }
 
     private createButtonElement() : HTMLAnchorElement {

@@ -27,7 +27,7 @@ class TabCodeBox extends CodeBox {
 
     protected onInit(codeBoxItemInfos : CodeBoxItemInfo[]) : void {
         for (let codeBoxItemInfo of codeBoxItemInfos) {
-            if (codeBoxItemInfo.type === "CodeView" && codeBoxItemInfo.codeViewInfo) {
+            if (codeBoxItemInfo.type === "CodeViewInfo" && codeBoxItemInfo.codeViewInfo) {
                 let codeViewInfo = codeBoxItemInfo.codeViewInfo;
 
                 let codeViewButton : TabCodeViewButton;
@@ -65,7 +65,7 @@ class TabCodeBox extends CodeBox {
         codeViewButton.setAsActive();
         this.activeCodeViewButton = codeViewButton;
 
-        this.setActiveCodeView(codeView);
+        this.changeActiveCodeView(codeView);
     }
 }
 
@@ -103,6 +103,9 @@ Teď jinak. Co tu budu chtít za metody, nebo co budu chtít mít možnost uděl
             - bude navíc obsahovat i vlastnost název
                 - půjde změnit přes metodu, ale pokud se nezmění (pokud už bude mít tento název někdo jiný, tak se vrátí false)
             - bude tam obsahovat i metodu na odstranění - takže chci vůbec samostatnou metodu i na toto, když to bude tady?
+        - budu muset předělat i ty code view buttons atd...
+            - nebo nebudu - stejně si budu muset nějak držet i ty normální CodeViews abych s nimi mohl pracovat - takže jinak, jednodušeji:
+                - bude mapa: CodeView -> CodeBoxCodeView
 
     - to co jsem teď napsal se týká jen Code views. Nic dalšího potřebovat nebudu? Zdá se že asi ne.
     - ještě by se teda hodila metoda pro destroynutí celého code boxu.

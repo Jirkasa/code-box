@@ -2,7 +2,7 @@ import CodeViewOptions from "./CodeViewOptions";
 import CSSClasses from "../CSSClasses";
 import GlobalConfig from "../GlobalConfig";
 import HighlightBox from "./HighlightBox";
-import { deleteEmptyStringFromArray } from "../utils/utils";
+import { createCodeViewOptionsCopy, deleteEmptyStringFromArray } from "../utils/utils";
 
 class CodeView { // todo - ještě přidat přesouvání do elementu, skrývání, atd..
     private initialOptions : CodeViewOptions;
@@ -21,7 +21,7 @@ class CodeView { // todo - ještě přidat přesouvání do elementu, skrýván�
         if (!(element instanceof HTMLPreElement)) throw new Error("Passed element is not pre element.");
 
         this.preElement = element;
-        this.initialOptions = this.createOptionsCopy(options);
+        this.initialOptions = createCodeViewOptionsCopy(options);
 
         this.fillOptionsFromDataset(this.initialOptions, element.dataset);
 
@@ -214,17 +214,6 @@ class CodeView { // todo - ještě přidat přesouvání do elementu, skrýván�
         }
 
         return numberElements;
-    }
-
-    private createOptionsCopy(options : CodeViewOptions) : CodeViewOptions {
-        return {
-            highlight: options.highlight,
-            lineHeight: options.lineHeight,
-            lineHeightUnit: options.lineHeightUnit,
-            showGutter: options.showGutter,
-            showLineNumbers: options.showLineNumbers,
-            cssClasses: options.cssClasses
-        }
     }
 
     private getLinesCount(codeElement : HTMLElement) : number {
