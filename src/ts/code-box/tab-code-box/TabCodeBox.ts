@@ -21,7 +21,6 @@ class TabCodeBox extends CodeBox {
 
     private tabsContainer : HTMLElement;
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
-    private activeCodeViewButton : CodeViewButton | null = null;
 
     private codeViews = new Map<string, CodeView>();
     private codeViewEntries = new Map<CodeView, CodeViewEntry>();
@@ -77,7 +76,7 @@ class TabCodeBox extends CodeBox {
         if (!codeViewEntry) return false;
 
         codeViewEntry.codeViewButton.detach();
-        if (this.activeCodeViewButton === codeViewEntry.codeViewButton) {
+        if (this.getCurrentlyActiveCodeView() === codeView) {
             this.setNoActiveCodeView();
         }
 
@@ -117,12 +116,13 @@ class TabCodeBox extends CodeBox {
         const codeViewEntry = this.codeViewEntries.get(codeView);
         if (!codeViewEntry) return false;
 
-        if (this.activeCodeViewButton) {
-            this.activeCodeViewButton.setAsInactive();
+        const activeCodeView = this.getCurrentlyActiveCodeView();
+        if (activeCodeView) {
+            const activeCodeViewEntry = this.codeViewEntries.get(activeCodeView);
+            activeCodeViewEntry?.codeViewButton.setAsInactive();
         }
         
         codeViewEntry.codeViewButton.setAsActive();
-        this.activeCodeViewButton = codeViewEntry.codeViewButton;
 
         this.changeActiveCodeView(codeView);
 
@@ -132,12 +132,23 @@ class TabCodeBox extends CodeBox {
     public setNoActiveCodeView() : void {
         if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
 
-        if (this.activeCodeViewButton) {
-            this.activeCodeViewButton.setAsInactive();
-            this.activeCodeViewButton = null;
+        const activeCodeView = this.getCurrentlyActiveCodeView();
+        if (activeCodeView) {
+            const activeCodeViewEntry = this.codeViewEntries.get(activeCodeView);
+            activeCodeViewEntry?.codeViewButton.setAsInactive();
         }
 
         this.changeActiveCodeView(null);
+    }
+
+    public getActiveCodeView() : CodeBoxCodeView | null {
+        const codeView = this.getCurrentlyActiveCodeView();
+        if (!codeView) return null;
+
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return null;
+
+        return codeViewEntry.codeBoxCodeView;
     }
 
     public getFiles() : CodeBoxFile[] {
@@ -201,7 +212,6 @@ class TabCodeBox extends CodeBox {
                 let codeViewButton = new TabCodeViewButton(identifier, this.showCodeViewEventSource, codeViewInfo.codeView, this.svgSpritePath, this.codeFileIconName);
                 if (isActive) {
                     codeViewButton.setAsActive();
-                    this.activeCodeViewButton = codeViewButton;
                 }
                 codeViewButton.appendTo(this.tabsContainer);
 
@@ -228,12 +238,13 @@ class TabCodeBox extends CodeBox {
     }
 
     private onShowCodeView(codeViewButton : CodeViewButton, codeView : CodeView) : void {
-        if (this.activeCodeViewButton) {
-            this.activeCodeViewButton.setAsInactive();
+        const activeCodeView = this.getCurrentlyActiveCodeView();
+        if (activeCodeView) {
+            const activeCodeViewEntry = this.codeViewEntries.get(activeCodeView);
+            activeCodeViewEntry?.codeViewButton.setAsInactive();
         }
 
         codeViewButton.setAsActive();
-        this.activeCodeViewButton = codeViewButton;
 
         this.changeActiveCodeView(codeView);
     }
@@ -244,9 +255,8 @@ export default TabCodeBox;
 /*
 Todo
 - reordrování
-- ještě musím implementovat metodu na získání aktivního code view (i v code boxu)
-- přidat metody appendTo a detach na code box (potom možná i metodu insertBefore - i pro code view)
-- reset metoda v code boxu (možná - ještě uvidím)
+- potom možná přidat i metodu insertBefore
+- reset metoda v code boxu (možná - ještě uvidím, ale asi jo)
 */
 
 /*

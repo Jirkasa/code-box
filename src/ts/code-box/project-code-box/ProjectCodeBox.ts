@@ -102,6 +102,10 @@ class ProjectCodeBox extends CodeBox {
     public setNoActiveCodeView(): void {
         
     }
+
+    public getActiveCodeView(): CodeBoxCodeView | null {
+        return null;
+    }
     // END - NOT IMPLEMENTED (JUST TO GET RID OF ERRORS FOR NOW)
 
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]): void {

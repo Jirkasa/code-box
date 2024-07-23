@@ -55,7 +55,7 @@ abstract class CodeBox {
     protected static readonly PROJECT_NOT_INITIALIZED_ERROR = "Code box is not initialized.";
 
     /** Root element of code box. */
-    protected readonly rootElement : HTMLElement;
+    private readonly rootElement : HTMLElement;
     /** Element in which code view are displayed. */
     private readonly codeViewContainer : HTMLElement;
     /** CSS class that is used to hide code view container. */
@@ -196,6 +196,21 @@ abstract class CodeBox {
     }
 
     /**
+     * Appends code box to element.
+     * @param element Element to append code box to.
+     */
+    public appendTo(element : HTMLElement) : void {
+        element.appendChild(this.rootElement);
+    }
+
+    /**
+     * Detaches code box from its parent element.
+     */
+    public detach() : void {
+        this.rootElement.remove();
+    }
+
+    /**
      * Initializes code box if it hasn't been initialized yet. (When lazy initialization is disabled, code box is initialized right away.)
      */
     public init() : void {
@@ -302,6 +317,12 @@ abstract class CodeBox {
     public abstract setNoActiveCodeView() : void;
 
     /**
+     * Returns currently active code view.
+     * @returns Active code view or null if no code view is set as active.
+     */
+    public abstract getActiveCodeView() : CodeBoxCodeView | null;
+
+    /**
      * Returns all files of code box.
      * @returns Files.
      */
@@ -361,6 +382,14 @@ abstract class CodeBox {
         } else {
             this.showNoCodeViewSelectedMessage();
         }
+    }
+
+    /**
+     * Returns currently active instance of CodeView.
+     * @returns Currently active instance of CodeView.
+     */
+    protected getCurrentlyActiveCodeView() : CodeView | null {
+        return this.activeCodeView;
     }
 
     /**
