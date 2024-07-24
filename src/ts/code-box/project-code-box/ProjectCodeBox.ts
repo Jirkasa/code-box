@@ -15,7 +15,6 @@ class ProjectCodeBox extends CodeBox {
     private panelToggle : PanelToggle;
     private foldersManager : FoldersManager;
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
-    // private activeCodeViewButton : CodeViewButton | null = null;
 
     constructor(element : HTMLElement, options : ProjectCodeBoxOptions = {}, parentCodeBox : ProjectCodeBox | null = null) { // todo - ještě by možná mohlo jít nastavit, jestli dědit od aktuálního stavu code boxu nebo ne
         const codeBoxBuilder = new ProjectCodeBoxBuilder(
@@ -29,35 +28,25 @@ class ProjectCodeBox extends CodeBox {
         // todo - ale budu to chtít skrývat (ty packages), takže to potom nějak pořešit (ale ve FoldersManageru už ne, ten toho dělá už dost)
 
         this.panelToggle = new PanelToggle(codeBoxBuilder.getPanelElement(), codeBoxBuilder.getPanelOpenButtonElement(), () => this.onPanelToggled());
-        if (options.svgSpritePath && options.svgSpriteIcons) {
-            this.foldersManager = new FoldersManager(
-                codeBoxBuilder.getFolderStructureContainer(),
-                codeBoxBuilder.getPackagesContainer(),
-                options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME,
-                options.packagesFolderPath || null,
-                options.defaultPackageName || null,
-                options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED,
-                options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION,
-                options.svgSpritePath,
-                options.svgSpriteIcons.folderArrow || null,
-                options.svgSpriteIcons.project || null,
-                options.svgSpriteIcons.folder || null,
-                options.svgSpriteIcons.package || null,
-                options.svgSpriteIcons.codeFile || null,
-                options.svgSpriteIcons.file || null,
-                options.svgSpriteIcons.download || null
-            );
-        } else {
-            this.foldersManager = new FoldersManager(
-                codeBoxBuilder.getFolderStructureContainer(),
-                codeBoxBuilder.getPackagesContainer(),
-                options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME,
-                options.packagesFolderPath || null,
-                options.defaultPackageName || null,
-                options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED,
-                options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION,
-            );
-        }
+        this.foldersManager = new FoldersManager(
+            codeBoxBuilder.getFolderStructureContainer(),
+            codeBoxBuilder.getPackagesContainer(),
+            options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME,
+            options.packagesFolderPath || null,
+            options.defaultPackageName || null,
+            options.createFoldersForPackages !== undefined ? options.createFoldersForPackages : true,
+            options.foldersDelimiterForPackages || null,
+            options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED,
+            options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION,
+            options.svgSpritePath,
+            this.getIconName(options, "folderArrow"),
+            this.getIconName(options, "project"),
+            this.getIconName(options, "folder"),
+            this.getIconName(options, "package"),
+            this.getIconName(options, "codeFile"),
+            this.getIconName(options, "file"),
+            this.getIconName(options, "download")
+        );
 
         this.showCodeViewEventSource.subscribe((codeViewButton, codeView) => this.onShowCodeView(codeViewButton, codeView));
     }
@@ -131,15 +120,6 @@ class ProjectCodeBox extends CodeBox {
                 let packageName = this.getPackageNameFromDataset(codeViewInfo.dataset);
                 let isActive = codeViewInfo.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined;
 
-                //let codeViewButton = this.foldersManager.addCodeViewButton(fileName, codeViewInfo.codeView, this.showCodeViewEventSource, folderPath, packageName !== null, packageName !== "" ? packageName : null);
-
-
-                // if (codeViewInfo.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined) {
-                //     codeViewButton.setAsActive();
-                //     this.activeCodeViewButton = codeViewButton;
-                // }
-
-
                 this.foldersManager.addCodeView(fileName, codeViewInfo.codeView, this.showCodeViewEventSource, folderPath, packageName !== null, packageName !== "" ? packageName : null, isActive);
             } else if (codeBoxItemInfo.type === "FileInfo" && codeBoxItemInfo.fileInfo) {
                 let fileInfo = codeBoxItemInfo.fileInfo;
@@ -147,8 +127,6 @@ class ProjectCodeBox extends CodeBox {
                 let folderPath = this.getFolderPathFromDataset(fileInfo.dataset);
                 let fileName = this.getNameFromDataset(fileInfo.dataset) || GlobalConfig.DEFAULT_FILE_BUTTON_TEXT;
                 let packageName = this.getPackageNameFromDataset(fileInfo.dataset);
-
-                //this.foldersManager.addFileButton(fileName, fileInfo.downloadLink, folderPath, packageName !== null, packageName !== "" ? packageName : null);
 
                 this.foldersManager.addFile(fileName, fileInfo.downloadLink, folderPath, packageName !== null, packageName !== "" ? packageName : null);
             }
@@ -221,6 +199,11 @@ class ProjectCodeBox extends CodeBox {
     private getPackageNameFromDataset(dataset : DOMStringMap) : string | null {
         const packageName = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Package"];
         return packageName !== undefined ? packageName : null;
+    }
+
+    private getIconName(options : ProjectCodeBoxOptions, iconName : "codeFile" | "file" | "download" | "panelOpenButton" | "folderArrow" | "project" | "folder" | "package") : string | null {
+        if (!options.svgSpriteIcons) return null;
+        return options.svgSpriteIcons[iconName] || null;
     }
 }
 

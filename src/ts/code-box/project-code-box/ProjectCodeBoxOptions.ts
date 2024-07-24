@@ -17,6 +17,8 @@ type ProjectCodeBoxOptions = {
     projectName ?: string;
     packagesFolderPath ?: string; // bude se dát přepsat přes ty konfigurační elementy
     defaultPackageName ?: string;
+    createFoldersForPackages ?: boolean;
+    foldersDelimiterForPackages ?: string;
     folderAnimationSpeed ?: number;
     folderAnimationEasingFunction ?: string;
     openActiveCodeViewFolder ?: boolean;
