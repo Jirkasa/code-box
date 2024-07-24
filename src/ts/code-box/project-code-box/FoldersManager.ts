@@ -13,8 +13,10 @@ class FoldersManager {
     private defaultPackage : Folder | null = null;
     private packagesContainer : HTMLElement;
     private packagesFolderPath : string;
-    private createFoldersForPackages : boolean; // todo - defaultně true
-    private foldersDelimiterForPackages : string | null; // todo - defaultně null a budou se jen vytvářet složky podle názvů
+    private createFoldersForPackages : boolean;
+    private foldersDelimiterForPackages : string | null;
+
+    // todo - u složek generovaných pro balíčky se bude muset ukládat, jestli byly vygenerovány nebo ne
 
     private readonly svgSpritePath : string | null;
     private readonly folderArrowIconName : string | null;
@@ -92,12 +94,18 @@ class FoldersManager {
     public addFile(fileName : string, downloadLink : string | null, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : void {
         folderPath = this.getFolderPath(folderPath, usePackage, packageName);
 
+        // ten identifier dělat jinak - víc to promyslet - nevím jestli je to takto jednoznačné
+            // a menší problém - nemám FileButton
+        // const codeBoxFile = new CodeBoxFile(folderPath + "/" + fileName, );
+
         const folder = this.getFolder(folderPath, true);
-        folder?.addFile(fileName, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
+        // odkomentovat
+        // folder?.addFile(fileName, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
 
         if (usePackage) {
             const packageFolder = this.getPackageFolder(packageName, true);
-            packageFolder?.addFile(fileName, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
+            // odkomentovat
+            // packageFolder?.addFile(fileName, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
         }
     }
 
@@ -119,7 +127,21 @@ class FoldersManager {
 
     private getFolderPath(folderPath : string | null, usePackage : boolean, packageName : string | null) : string {
         if (folderPath !== null) return folderPath;
-        if (usePackage) this.packagesFolderPath; // todo - potom kdyžtak ještě brát v potaz, že se můžou vytvořit ty další složky podle názvu balíčku
+        if (usePackage) {
+            if (!this.createFoldersForPackages || packageName === null) return this.packagesFolderPath;
+
+            const parsedPackagesFolderPath = parseFolderPath(this.packagesFolderPath);
+            if (this.foldersDelimiterForPackages) {
+                const packageFolderNames = packageName.split(this.foldersDelimiterForPackages);
+                for (let folderName of packageFolderNames) {
+                    parsedPackagesFolderPath.push(folderName);
+                }
+            } else {
+                parsedPackagesFolderPath.push(packageName);
+            }
+
+            return parsedPackagesFolderPath.join("/");
+        }
         return "/";
     }
 

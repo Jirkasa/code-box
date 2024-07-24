@@ -34,7 +34,7 @@ class ProjectCodeBox extends CodeBox {
             options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME,
             options.packagesFolderPath || null,
             options.defaultPackageName || null,
-            options.createFoldersForPackages !== undefined ? options.createFoldersForPackages : true,
+            options.createFoldersForPackages !== undefined ? options.createFoldersForPackages : GlobalConfig.DEFAULT_CREATE_FOLDERS_FOR_PACKAGES,
             options.foldersDelimiterForPackages || null,
             options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED,
             options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION,
@@ -188,8 +188,8 @@ class ProjectCodeBox extends CodeBox {
         }
     }
 
-    private getFolderPathFromDataset(dataset : DOMStringMap) : string {
-        return dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Folder"] || "/";
+    private getFolderPathFromDataset(dataset : DOMStringMap) : string | null {
+        return dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Folder"] || null;
     }
 
     private getNameFromDataset(dataset : DOMStringMap) : string | null {

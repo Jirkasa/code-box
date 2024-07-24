@@ -2,9 +2,12 @@ import CSSClasses from "../../CSSClasses";
 import { CodeView } from "../../main";
 import EventSourcePoint from "../../utils/EventSourcePoint";
 import SVGIconElementCreator from "../../utils/SVGIconElementCreator";
+import CodeBoxFile from "../CodeBoxFile";
 import CodeViewButton from "../CodeViewButton";
 import FileButton from "../FileButton";
+import CodeViewFolderItem from "./CodeViewFolderItem";
 import Collapsible from "./Collapsible";
+import FileFolderItem from "./FileFolderItem";
 import ProjectCodeViewButton from "./ProjectCodeViewButton";
 import ProjectFileButton from "./ProjectFileButton";
 
@@ -16,8 +19,10 @@ class Folder {
     private collapsible : Collapsible;
 
     private subfolders = new Map<string, Folder>();
-    private codeViewButtons = new Map<string, CodeViewButton>();
-    private fileButtons = new Map<string, FileButton>();
+    private codeViewItems = new Map<string, CodeViewFolderItem>();
+    private fileItems = new Map<string, FileFolderItem>();
+    // private codeViewButtons = new Map<string, CodeViewButton>();
+    // private fileButtons = new Map<string, FileButton>();
 
     private lastParentOpened : boolean = false; // todo - a tady to taky okomentovat - není to přímo jakoby parent
 
@@ -72,20 +77,25 @@ class Folder {
 
         if (parentOpened && this.collapsible.isOpened()) {
             
-            this.codeViewButtons.forEach(codeViewButton => {
-                codeViewButton.enableTabNavigation();
-            });
-            this.fileButtons.forEach(fileButton => {
-                fileButton.enableTabNavigation();
-            });
+            // this.codeViewButtons.forEach(codeViewButton => {
+            //     codeViewButton.enableTabNavigation();
+            // });
+            // this.fileButtons.forEach(fileButton => {
+            //     fileButton.enableTabNavigation();
+            // });
+
+            this.codeViewItems.forEach(codeViewItem => codeViewItem.codeViewButton.enableTabNavigation());
+            this.fileItems.forEach(fileItem => fileItem.fileButton.enableTabNavigation());
         } else {
             
-            this.codeViewButtons.forEach(codeViewButton => {
-                codeViewButton.disableTabNavigation();
-            });
-            this.fileButtons.forEach(fileButton => {
-                fileButton.disableTabNavigation();
-            });
+            // this.codeViewButtons.forEach(codeViewButton => {
+            //     codeViewButton.disableTabNavigation();
+            // });
+            // this.fileButtons.forEach(fileButton => {
+            //     fileButton.disableTabNavigation();
+            // });
+            this.codeViewItems.forEach(codeViewItem => codeViewItem.codeViewButton.disableTabNavigation());
+            this.fileItems.forEach(fileItem => fileItem.fileButton.disableTabNavigation());
         }
 
         this.subfolders.forEach(subfolder => {
@@ -109,35 +119,6 @@ class Folder {
         return folder;
     }
 
-    // public addCodeViewButton(name : string, codeViewButton : CodeViewButton) : void {
-    //     codeViewButton.appendTo(this.itemsContainer);
-    //     if (this.lastParentOpened && this.collapsible.isOpened()) {
-    //         codeViewButton.enableTabNavigation(this.itemsContainer);
-    //     } else {
-    //         codeViewButton.disableTabNavigation(this.itemsContainer);
-    //     }
-    //     this.codeViewButtons.set(name, codeViewButton);
-    // }
-
-    // public addFileButton(name : string, fileButton : FileButton) : void {
-    //     fileButton.appendTo(this.itemsContainer);
-    //     if (this.lastParentOpened && this.collapsible.isOpened()) {
-    //         fileButton.enableTabNavigation(this.itemsContainer);
-    //     } else {
-    //         fileButton.disableTabNavigation(this.itemsContainer);
-    //     }
-    //     this.fileButtons.set(name, fileButton);
-    // }
-
-    // todo - bude to vracet button - to nepůjde - protože může být multi element
-        // nevím jestli tady ty multi element věci byly nejlepší nápad
-            // spíš se začíná ukazovat, že ne - asi to udělám jinak
-    // public addCodeView(name : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, svgSpritePath : string | null = null, iconName : string | null = null) : void {
-
-    // }
-    // public addCodeView(name : string, codeView : CodeView, codeViewButton : CodeViewButton) : void {
-
-    // }
     public addCodeView(name : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, svgSpritePath : string | null = null, buttonIconName : string | null = null) : CodeViewButton { // nebo se bude vracet entry nebo tak něco - ale spíš to code view button
         const codeViewButton = new ProjectCodeViewButton(name, showCodeViewEventSource, codeView, svgSpritePath, buttonIconName);
         codeViewButton.appendTo(this.itemsContainer);
@@ -146,19 +127,21 @@ class Folder {
         } else {
             codeViewButton.disableTabNavigation();
         }
-        this.codeViewButtons.set(name, codeViewButton); // todo - tohle se stejně bude ukládat ale jinak
+        
+        this.codeViewItems.set(name, new CodeViewFolderItem(codeView, codeViewButton));
         return codeViewButton;
     }
 
-    public addFile(name : string, downloadLink : string | null, svgSpritePath : string | null = null, buttonIconName : string | null = null, buttonDownloadIconName : string | null = null) : FileButton {
-        const fileButton = new ProjectFileButton(name, downloadLink, svgSpritePath, buttonIconName, buttonDownloadIconName);
+    public addFile(name : string, codeBoxFile : CodeBoxFile, svgSpritePath : string | null = null, buttonIconName : string | null = null, buttonDownloadIconName : string | null = null) : FileButton {
+        const fileButton = new ProjectFileButton(name, codeBoxFile.getDownloadLink(), svgSpritePath, buttonIconName, buttonDownloadIconName);
         fileButton.appendTo(this.itemsContainer);
         if (this.lastParentOpened && this.collapsible.isOpened()) {
             fileButton.enableTabNavigation();
         } else {
             fileButton.disableTabNavigation();
         }
-        this.fileButtons.set(name, fileButton); // toto bude jinak
+
+        this.fileItems.set(name, new FileFolderItem(codeBoxFile, fileButton));
         return fileButton;
     }
 
