@@ -3,13 +3,14 @@ import GlobalConfig from "../../GlobalConfig";
 import { CodeView } from "../../main";
 import EventSourcePoint from "../../utils/EventSourcePoint";
 import { parseFolderPath } from "../../utils/utils";
+import CodeBoxFile from "../CodeBoxFile";
 import CodeViewButton from "../CodeViewButton";
 import FileButton from "../FileButton";
 import Folder from "./Folder";
 import ProjectCodeViewButton from "./ProjectCodeViewButton";
 import ProjectFileButton from "./ProjectFileButton";
-import ProjectMultiElementCodeViewButton from "./ProjectMultiElementCodeViewButton";
-import ProjectMultiElementFileButton from "./ProjectMultiElementFileButton";
+// import ProjectMultiElementCodeViewButton from "./ProjectMultiElementCodeViewButton";
+// import ProjectMultiElementFileButton from "./ProjectMultiElementFileButton";
 
 class FoldersManager {
     private rootFolder : Folder;
@@ -56,61 +57,105 @@ class FoldersManager {
     }
 
     public addPackage(packageName : string) : void {
-        // todo
+        this.getPackageFolder(packageName, true);
     }
 
     // todo - ještě pozor na duplicity
     // pořádně potom okomentovat, co se stane když se pošle třeba folderPath i packageName
-    public addCodeViewButton(buttonText : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : CodeViewButton {
-        let codeViewButton : CodeViewButton;
+    // přejmenovat na addCodeView (možná by se mohla předávat jen folderPath - přejmnovat na path? - spíš předávat folderPath i codeViewName (nebo to pojmenovat jako fileName))
+    // public addCodeViewButton(buttonText : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : CodeViewButton {
+    //     let codeViewButton : CodeViewButton;
 
-        if (usePackage) {
-            codeViewButton = new ProjectMultiElementCodeViewButton(buttonText, showCodeViewEventSource, codeView, this.svgSpritePath, this.codeFileIconName);
+    //     if (usePackage) {
+    //         codeViewButton = new ProjectMultiElementCodeViewButton(buttonText, showCodeViewEventSource, codeView, this.svgSpritePath, this.codeFileIconName);
 
-            const packageFolder = this.getPackageFolder(packageName, true);
-            packageFolder?.addCodeViewButton(buttonText, codeViewButton);
-        } else {
-            codeViewButton = new ProjectCodeViewButton(buttonText, showCodeViewEventSource, codeView, this.svgSpritePath, this.codeFileIconName);
-        }
+    //         const packageFolder = this.getPackageFolder(packageName, true);
+    //         packageFolder?.addCodeViewButton(buttonText, codeViewButton);
+    //     } else {
+    //         codeViewButton = new ProjectCodeViewButton(buttonText, showCodeViewEventSource, codeView, this.svgSpritePath, this.codeFileIconName);
+    //     }
 
-        if (folderPath === null) {
-            if (usePackage) {
-                folderPath = this.packagesFolderPath;
-            } else {
-                folderPath = "/";
+    //     if (folderPath === null) {
+    //         if (usePackage) {
+    //             folderPath = this.packagesFolderPath;
+    //         } else {
+    //             folderPath = "/";
+    //         }
+    //     }
+
+    //     const folder = this.getFolder(folderPath, true);
+    //     folder?.addCodeViewButton(buttonText, codeViewButton);
+
+    //     return codeViewButton;
+    // }
+
+    public addCodeView(fileName : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null, isActive : boolean = false) : void {
+        folderPath = this.getFolderPath(folderPath, usePackage, packageName);
+
+        const folder = this.getFolder(folderPath, true);
+        if (folder) {
+            const codeViewButton = folder.addCodeView(fileName, codeView, showCodeViewEventSource, this.svgSpritePath, this.codeFileIconName);
+            if (isActive) {
+                codeViewButton.setAsActive();
             }
         }
 
-        const folder = this.getFolder(folderPath, true);
-        folder?.addCodeViewButton(buttonText, codeViewButton);
-
-        return codeViewButton;
+        if (usePackage) {
+            const packageFolder = this.getPackageFolder(packageName, true);
+            if (packageFolder) {
+                const codeViewButton = packageFolder.addCodeView(fileName, codeView, showCodeViewEventSource, this.svgSpritePath, this.codeFileIconName);
+                if (isActive) {
+                    codeViewButton.setAsActive();
+                }
+            }
+        }
     }
 
-    public addFileButton(buttonText : string, downloadLink : string | null, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : FileButton {
-        let fileButton : FileButton;
+    public getCodeView(path : string) : CodeView | null {
+        return null;
+    }
 
-        if (usePackage) {
-            fileButton = new ProjectMultiElementFileButton(buttonText, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
+    // todo - přejmenovat na addFile
+    // public addFileButton(buttonText : string, downloadLink : string | null, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : FileButton {
+    //     let fileButton : FileButton;
 
-            const packageFolder = this.getPackageFolder(packageName, true);
-            packageFolder?.addFileButton(buttonText, fileButton);
-        } else {
-            fileButton = new ProjectFileButton(buttonText, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
-        }
+    //     if (usePackage) {
+    //         fileButton = new ProjectMultiElementFileButton(buttonText, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
 
-        if (folderPath === null) {
-            if (usePackage) {
-                folderPath = this.packagesFolderPath;
-            } else {
-                folderPath = "/";
-            }
-        }
+    //         const packageFolder = this.getPackageFolder(packageName, true);
+    //         packageFolder?.addFileButton(buttonText, fileButton);
+    //     } else {
+    //         fileButton = new ProjectFileButton(buttonText, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
+    //     }
+
+    //     if (folderPath === null) {
+    //         if (usePackage) {
+    //             folderPath = this.packagesFolderPath;
+    //         } else {
+    //             folderPath = "/";
+    //         }
+    //     }
+
+    //     const folder = this.getFolder(folderPath, true);
+    //     folder?.addFileButton(buttonText, fileButton);
+
+    //     return fileButton;
+    // }
+
+    public addFile(fileName : string, downloadLink : string | null, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : void {
+        folderPath = this.getFolderPath(folderPath, usePackage, packageName);
 
         const folder = this.getFolder(folderPath, true);
-        folder?.addFileButton(buttonText, fileButton);
+        folder?.addFile(fileName, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
 
-        return fileButton;
+        if (usePackage) {
+            const packageFolder = this.getPackageFolder(packageName, true);
+            packageFolder?.addFile(fileName, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
+        }
+    }
+
+    public getFile(path : string) : CodeBoxFile | null {
+        return null;
     }
 
     public updateTabNavigation(panelOpened : boolean) : void {
@@ -119,6 +164,12 @@ class FoldersManager {
             this.defaultPackage.updateTabNavigation(panelOpened);
         }
         this.packages.forEach(packageFolder => packageFolder.updateTabNavigation(panelOpened));
+    }
+
+    private getFolderPath(folderPath : string | null, usePackage : boolean, packageName : string | null) : string {
+        if (folderPath !== null) return folderPath;
+        if (usePackage) this.packagesFolderPath; // todo - potom kdyžtak ještě brát v potaz, že se můžou vytvořit ty další složky podle názvu balíčku
+        return "/";
     }
 
     private getFolder(folderPath : string, createIfNotExist : boolean = false) : Folder | null {

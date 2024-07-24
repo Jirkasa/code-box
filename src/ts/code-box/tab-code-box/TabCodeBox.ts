@@ -257,6 +257,7 @@ Todo
 - reordrování
 - potom možná přidat i metodu insertBefore
 - reset metoda v code boxu (možná - ještě uvidím, ale asi jo)
+- ještě jsem chtěl metodu na přidávání code views - ale jak to řešit?
 */
 
 /*

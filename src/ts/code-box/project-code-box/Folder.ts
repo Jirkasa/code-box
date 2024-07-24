@@ -1,8 +1,12 @@
 import CSSClasses from "../../CSSClasses";
+import { CodeView } from "../../main";
+import EventSourcePoint from "../../utils/EventSourcePoint";
 import SVGIconElementCreator from "../../utils/SVGIconElementCreator";
 import CodeViewButton from "../CodeViewButton";
 import FileButton from "../FileButton";
 import Collapsible from "./Collapsible";
+import ProjectCodeViewButton from "./ProjectCodeViewButton";
+import ProjectFileButton from "./ProjectFileButton";
 
 // ještě zbývají ty aria atributy, ale o tom se budu muset dozvědět více info
 
@@ -69,18 +73,18 @@ class Folder {
         if (parentOpened && this.collapsible.isOpened()) {
             
             this.codeViewButtons.forEach(codeViewButton => {
-                codeViewButton.enableTabNavigation(this.itemsContainer);
+                codeViewButton.enableTabNavigation();
             });
             this.fileButtons.forEach(fileButton => {
-                fileButton.enableTabNavigation(this.itemsContainer);
+                fileButton.enableTabNavigation();
             });
         } else {
             
             this.codeViewButtons.forEach(codeViewButton => {
-                codeViewButton.disableTabNavigation(this.itemsContainer);
+                codeViewButton.disableTabNavigation();
             });
             this.fileButtons.forEach(fileButton => {
-                fileButton.disableTabNavigation(this.itemsContainer);
+                fileButton.disableTabNavigation();
             });
         }
 
@@ -105,24 +109,57 @@ class Folder {
         return folder;
     }
 
-    public addCodeViewButton(name : string, codeViewButton : CodeViewButton) : void {
+    // public addCodeViewButton(name : string, codeViewButton : CodeViewButton) : void {
+    //     codeViewButton.appendTo(this.itemsContainer);
+    //     if (this.lastParentOpened && this.collapsible.isOpened()) {
+    //         codeViewButton.enableTabNavigation(this.itemsContainer);
+    //     } else {
+    //         codeViewButton.disableTabNavigation(this.itemsContainer);
+    //     }
+    //     this.codeViewButtons.set(name, codeViewButton);
+    // }
+
+    // public addFileButton(name : string, fileButton : FileButton) : void {
+    //     fileButton.appendTo(this.itemsContainer);
+    //     if (this.lastParentOpened && this.collapsible.isOpened()) {
+    //         fileButton.enableTabNavigation(this.itemsContainer);
+    //     } else {
+    //         fileButton.disableTabNavigation(this.itemsContainer);
+    //     }
+    //     this.fileButtons.set(name, fileButton);
+    // }
+
+    // todo - bude to vracet button - to nepůjde - protože může být multi element
+        // nevím jestli tady ty multi element věci byly nejlepší nápad
+            // spíš se začíná ukazovat, že ne - asi to udělám jinak
+    // public addCodeView(name : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, svgSpritePath : string | null = null, iconName : string | null = null) : void {
+
+    // }
+    // public addCodeView(name : string, codeView : CodeView, codeViewButton : CodeViewButton) : void {
+
+    // }
+    public addCodeView(name : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, svgSpritePath : string | null = null, buttonIconName : string | null = null) : CodeViewButton { // nebo se bude vracet entry nebo tak něco - ale spíš to code view button
+        const codeViewButton = new ProjectCodeViewButton(name, showCodeViewEventSource, codeView, svgSpritePath, buttonIconName);
         codeViewButton.appendTo(this.itemsContainer);
         if (this.lastParentOpened && this.collapsible.isOpened()) {
-            codeViewButton.enableTabNavigation(this.itemsContainer);
+            codeViewButton.enableTabNavigation();
         } else {
-            codeViewButton.disableTabNavigation(this.itemsContainer);
+            codeViewButton.disableTabNavigation();
         }
-        this.codeViewButtons.set(name, codeViewButton);
+        this.codeViewButtons.set(name, codeViewButton); // todo - tohle se stejně bude ukládat ale jinak
+        return codeViewButton;
     }
 
-    public addFileButton(name : string, fileButton : FileButton) : void {
+    public addFile(name : string, downloadLink : string | null, svgSpritePath : string | null = null, buttonIconName : string | null = null, buttonDownloadIconName : string | null = null) : FileButton {
+        const fileButton = new ProjectFileButton(name, downloadLink, svgSpritePath, buttonIconName, buttonDownloadIconName);
         fileButton.appendTo(this.itemsContainer);
         if (this.lastParentOpened && this.collapsible.isOpened()) {
-            fileButton.enableTabNavigation(this.itemsContainer);
+            fileButton.enableTabNavigation();
         } else {
-            fileButton.disableTabNavigation(this.itemsContainer);
+            fileButton.disableTabNavigation();
         }
-        this.fileButtons.set(name, fileButton);
+        this.fileButtons.set(name, fileButton); // toto bude jinak
+        return fileButton;
     }
 
     private onCollapsibleToggled() : void {

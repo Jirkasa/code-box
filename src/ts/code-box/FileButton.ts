@@ -9,9 +9,9 @@ abstract class FileButton {
 
     public abstract detach() : void;
 
-    public abstract enableTabNavigation(parentElement : HTMLElement | null) : void;
+    public abstract enableTabNavigation() : void;
 
-    public abstract disableTabNavigation(parentElement : HTMLElement | null) : void;
+    public abstract disableTabNavigation() : void;
 }
 
 export default FileButton;

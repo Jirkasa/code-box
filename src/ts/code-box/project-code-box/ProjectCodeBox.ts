@@ -15,7 +15,7 @@ class ProjectCodeBox extends CodeBox {
     private panelToggle : PanelToggle;
     private foldersManager : FoldersManager;
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
-    private activeCodeViewButton : CodeViewButton | null = null;
+    // private activeCodeViewButton : CodeViewButton | null = null;
 
     constructor(element : HTMLElement, options : ProjectCodeBoxOptions = {}, parentCodeBox : ProjectCodeBox | null = null) { // todo - ještě by možná mohlo jít nastavit, jestli dědit od aktuálního stavu code boxu nebo ne
         const codeBoxBuilder = new ProjectCodeBoxBuilder(
@@ -129,13 +129,18 @@ class ProjectCodeBox extends CodeBox {
                 let folderPath = this.getFolderPathFromDataset(codeViewInfo.dataset);
                 let fileName = this.getNameFromDataset(codeViewInfo.dataset) || GlobalConfig.DEFAULT_CODE_VIEW_BUTTON_TEXT;
                 let packageName = this.getPackageNameFromDataset(codeViewInfo.dataset);
+                let isActive = codeViewInfo.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined;
 
-                let codeViewButton = this.foldersManager.addCodeViewButton(fileName, codeViewInfo.codeView, this.showCodeViewEventSource, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+                //let codeViewButton = this.foldersManager.addCodeViewButton(fileName, codeViewInfo.codeView, this.showCodeViewEventSource, folderPath, packageName !== null, packageName !== "" ? packageName : null);
 
-                if (codeViewInfo.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined) {
-                    codeViewButton.setAsActive();
-                    this.activeCodeViewButton = codeViewButton;
-                }
+
+                // if (codeViewInfo.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined) {
+                //     codeViewButton.setAsActive();
+                //     this.activeCodeViewButton = codeViewButton;
+                // }
+
+
+                this.foldersManager.addCodeView(fileName, codeViewInfo.codeView, this.showCodeViewEventSource, folderPath, packageName !== null, packageName !== "" ? packageName : null, isActive);
             } else if (codeBoxItemInfo.type === "FileInfo" && codeBoxItemInfo.fileInfo) {
                 let fileInfo = codeBoxItemInfo.fileInfo;
 
@@ -143,18 +148,20 @@ class ProjectCodeBox extends CodeBox {
                 let fileName = this.getNameFromDataset(fileInfo.dataset) || GlobalConfig.DEFAULT_FILE_BUTTON_TEXT;
                 let packageName = this.getPackageNameFromDataset(fileInfo.dataset);
 
-                this.foldersManager.addFileButton(fileName, fileInfo.downloadLink, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+                //this.foldersManager.addFileButton(fileName, fileInfo.downloadLink, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+
+                this.foldersManager.addFile(fileName, fileInfo.downloadLink, folderPath, packageName !== null, packageName !== "" ? packageName : null);
             }
         }
     }
 
     private onShowCodeView(codeViewButton : CodeViewButton, codeView : CodeView) {
-        if (this.activeCodeViewButton) {
-            this.activeCodeViewButton.setAsInactive();
-        }
+        // if (this.activeCodeViewButton) {
+        //     this.activeCodeViewButton.setAsInactive();
+        // }
 
-        codeViewButton.setAsActive();
-        this.activeCodeViewButton = codeViewButton;
+        // codeViewButton.setAsActive();
+        // this.activeCodeViewButton = codeViewButton;
 
         this.changeActiveCodeView(codeView);
     }
