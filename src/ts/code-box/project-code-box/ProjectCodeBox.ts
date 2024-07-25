@@ -4,9 +4,12 @@ import { CodeView } from "../../main";
 import EventSourcePoint from "../../utils/EventSourcePoint";
 import CodeBox, { CodeBoxItemInfo } from "../CodeBox";
 import CodeBoxCodeView from "../CodeBoxCodeView";
+import CodeBoxCodeViewManager from "../CodeBoxCodeViewManager";
 import CodeBoxFile from "../CodeBoxFile";
 import CodeBoxFileManager from "../CodeBoxFileManager";
 import CodeViewButton from "../CodeViewButton";
+import CodeViewEntry from "./CodeViewEntry";
+import FileEntry from "./FileEntry";
 import FoldersManager from "./FoldersManager";
 import PanelToggle from "./PanelToggle";
 import ProjectCodeBoxBuilder from "./ProjectCodeBoxBuilder";
@@ -16,6 +19,8 @@ class ProjectCodeBox extends CodeBox {
     private panelToggle : PanelToggle;
     private foldersManager : FoldersManager;
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
+    private codeViewEntries = new Map<CodeView, CodeViewEntry>(); // todo - možná spíš podle identifieru?
+    private fileEntries = new Map<CodeBoxFile, FileEntry>();
 
     constructor(element : HTMLElement, options : ProjectCodeBoxOptions = {}, parentCodeBox : ProjectCodeBox | null = null) { // todo - ještě by možná mohlo jít nastavit, jestli dědit od aktuálního stavu code boxu nebo ne
         const codeBoxBuilder = new ProjectCodeBoxBuilder(
@@ -125,6 +130,12 @@ class ProjectCodeBox extends CodeBox {
                 let packageName = this.getPackageNameFromDataset(codeViewInfo.dataset);
                 let isActive = codeViewInfo.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined;
 
+                const identifier = this.foldersManager.getItemIdentifier(fileName, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+
+                const codeBoxCodeViewManager = new CodeBoxCodeViewManager();
+                const codeBoxCodeView = new CodeBoxCodeView(identifier, codeViewInfo.codeView, this, codeBoxCodeViewManager);
+                this.codeViewEntries.set(codeViewInfo.codeView, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager));
+
                 this.foldersManager.addCodeView(fileName, codeViewInfo.codeView, this.showCodeViewEventSource, folderPath, packageName !== null, packageName !== "" ? packageName : null, isActive);
             } else if (codeBoxItemInfo.type === "FileInfo" && codeBoxItemInfo.fileInfo) {
                 let fileInfo = codeBoxItemInfo.fileInfo;
@@ -137,12 +148,14 @@ class ProjectCodeBox extends CodeBox {
 
                 const codeBoxFileManager = new CodeBoxFileManager();
                 const codeBoxFile = new CodeBoxFile(identifier, fileInfo.downloadLink, this, codeBoxFileManager);
+                this.fileEntries.set(codeBoxFile, new FileEntry(codeBoxFileManager));
+
                 this.foldersManager.addFile(fileName, codeBoxFile, folderPath, packageName !== null, packageName !== "" ? packageName : null);
             }
         }
     }
 
-    private onShowCodeView(codeViewButton : CodeViewButton, codeView : CodeView) {
+    private onShowCodeView(codeViewButton : CodeViewButton, codeView : CodeView) : void {
         // if (this.activeCodeViewButton) {
         //     this.activeCodeViewButton.setAsInactive();
         // }
@@ -151,6 +164,15 @@ class ProjectCodeBox extends CodeBox {
         // this.activeCodeViewButton = codeViewButton;
 
         this.changeActiveCodeView(codeView);
+
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return;
+        const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
+        if (identifier === null) return;
+        this.foldersManager.setCodeViewButtonsAsActiveByIdentifier(identifier);
+        // const codeView = this.foldersManager.getCodeViewByIdentifier(identifier);
+
+        
     }
 
     private onPanelToggled() : void {

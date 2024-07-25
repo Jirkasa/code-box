@@ -10,20 +10,20 @@ export function deleteEmptyStringFromArray(array : string[]) : void {
 }
 
 // todo - uvidím jestli to nedám jen do FoldersManager
-export function parseFolderPath(folderPath : string) : string[] {
-    if (folderPath.startsWith("/")) {
-        folderPath = folderPath.substring(1, folderPath.length);
-    }
-    if (folderPath.endsWith("/")) {
-        folderPath = folderPath.substring(0, folderPath.length-1);
-    }
+// export function parseFolderPath(folderPath : string) : string[] {
+//     if (folderPath.startsWith("/")) {
+//         folderPath = folderPath.substring(1, folderPath.length);
+//     }
+//     if (folderPath.endsWith("/")) {
+//         folderPath = folderPath.substring(0, folderPath.length-1);
+//     }
 
-    const result = folderPath.split("/");
-    if (result.length === 1 && result[0] === "") {
-        return [];
-    }
-    return result;
-}
+//     const result = folderPath.split("/");
+//     if (result.length === 1 && result[0] === "") {
+//         return [];
+//     }
+//     return result;
+// }
 
 // // todo - možná to potom přesunout do ProjectCodeBox třídy - nebo možná spíš všechny ty věci na parsování atd. přemístit sem?
 // export function getProjectCodeBoxItemIdentifier(folderPath : string | null, fileName : string) : string {

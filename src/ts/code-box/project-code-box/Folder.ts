@@ -132,6 +132,12 @@ class Folder {
         return codeViewButton;
     }
 
+    public getCodeView(name : string) : CodeViewFolderItem | null {
+        const codeViewItem = this.codeViewItems.get(name);
+        if (!codeViewItem) return null;
+        return codeViewItem;
+    }
+
     public addFile(name : string, codeBoxFile : CodeBoxFile, svgSpritePath : string | null = null, buttonIconName : string | null = null, buttonDownloadIconName : string | null = null) : FileButton {
         const fileButton = new ProjectFileButton(name, codeBoxFile.getDownloadLink(), svgSpritePath, buttonIconName, buttonDownloadIconName);
         fileButton.appendTo(this.itemsContainer);
@@ -143,6 +149,12 @@ class Folder {
 
         this.fileItems.set(name, new FileFolderItem(codeBoxFile, fileButton));
         return fileButton;
+    }
+
+    public getFile(name : string) : FileFolderItem | null {
+        const fileItem = this.fileItems.get(name);
+        if (!fileItem) return null;
+        return fileItem;
     }
 
     private onCollapsibleToggled() : void {
