@@ -5,6 +5,7 @@ import EventSourcePoint from "../../utils/EventSourcePoint";
 import CodeBox, { CodeBoxItemInfo } from "../CodeBox";
 import CodeBoxCodeView from "../CodeBoxCodeView";
 import CodeBoxFile from "../CodeBoxFile";
+import CodeBoxFileManager from "../CodeBoxFileManager";
 import CodeViewButton from "../CodeViewButton";
 import FoldersManager from "./FoldersManager";
 import PanelToggle from "./PanelToggle";
@@ -132,7 +133,11 @@ class ProjectCodeBox extends CodeBox {
                 let fileName = this.getNameFromDataset(fileInfo.dataset) || GlobalConfig.DEFAULT_FILE_BUTTON_TEXT;
                 let packageName = this.getPackageNameFromDataset(fileInfo.dataset);
 
-                this.foldersManager.addFile(fileName, fileInfo.downloadLink, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+                const identifier = this.foldersManager.getItemIdentifier(fileName, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+
+                const codeBoxFileManager = new CodeBoxFileManager();
+                const codeBoxFile = new CodeBoxFile(identifier, fileInfo.downloadLink, this, codeBoxFileManager);
+                this.foldersManager.addFile(fileName, codeBoxFile, folderPath, packageName !== null, packageName !== "" ? packageName : null);
             }
         }
     }

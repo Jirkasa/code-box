@@ -49,6 +49,13 @@ class FoldersManager {
         this.rootFolder = new Folder(projectName, openCloseAnimationSpeed, openCloseAnimationEasingFunction, svgSpritePath, folderArrowIconName, projectIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PROJECT_MODIFIER, folderStructureContainer);
     }
 
+    public getItemIdentifier(fileName : string, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : string {
+        folderPath = this.getFolderPath(folderPath, usePackage, packageName);
+        const parsedFolderPath = parseFolderPath(folderPath);
+
+        return parsedFolderPath.join("/") + "/" + fileName;
+    }
+
     public setPackagesFolderPath(folderPath : string) : void {
         this.packagesFolderPath = folderPath;
     }
@@ -91,21 +98,34 @@ class FoldersManager {
         return null;
     }
 
-    public addFile(fileName : string, downloadLink : string | null, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : void {
+    // smazat
+    // public addFileOld(fileName : string, downloadLink : string | null, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : void {
+    //     folderPath = this.getFolderPath(folderPath, usePackage, packageName);
+
+    //     // ten identifier dělat jinak - víc to promyslet - nevím jestli je to takto jednoznačné
+    //         // asi by to měl vytvářet code box a jen se to sem předávat
+    //     // const codeBoxFile = new CodeBoxFile(folderPath + "/" + fileName, downloadLink, );
+
+    //     const folder = this.getFolder(folderPath, true);
+    //     // odkomentovat
+    //     // folder?.addFile(fileName, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
+
+    //     if (usePackage) {
+    //         const packageFolder = this.getPackageFolder(packageName, true);
+    //         // odkomentovat
+    //         // packageFolder?.addFile(fileName, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
+    //     }
+    // }
+
+    public addFile(fileName : string, codeBoxFile : CodeBoxFile, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) {
         folderPath = this.getFolderPath(folderPath, usePackage, packageName);
 
-        // ten identifier dělat jinak - víc to promyslet - nevím jestli je to takto jednoznačné
-            // a menší problém - nemám FileButton
-        // const codeBoxFile = new CodeBoxFile(folderPath + "/" + fileName, );
-
         const folder = this.getFolder(folderPath, true);
-        // odkomentovat
-        // folder?.addFile(fileName, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
+        folder?.addFile(fileName, codeBoxFile, this.svgSpritePath, this.fileIconName, this.downloadIconName);
 
         if (usePackage) {
             const packageFolder = this.getPackageFolder(packageName, true);
-            // odkomentovat
-            // packageFolder?.addFile(fileName, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
+            packageFolder?.addFile(fileName, codeBoxFile, this.svgSpritePath, this.fileIconName, this.downloadIconName);
         }
     }
 
