@@ -351,6 +351,14 @@ abstract class CodeBox {
     public abstract changeFileIdentifier(identifier : string, newIdentifier : string) : boolean;
 
     /**
+     * Changes download link of file.
+     * @param identifier Identifier of file whose download link should be changed.
+     * @param newDownloadLink Download link (or null if file should not be downloadable).
+     * @returns Indicates whether file was found and its link has been successfully changed.
+     */
+    public abstract changeFileDownloadLink(identifier : string, newDownloadLink : string | null) : boolean;
+
+    /**
      * Called on initialization.
      * @param codeBoxItemInfos Info objects about code box items.
      */

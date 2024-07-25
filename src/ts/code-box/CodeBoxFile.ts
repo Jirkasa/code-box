@@ -1,39 +1,54 @@
 import CodeBox from "./CodeBox";
-import FileButton from "./FileButton";
+import CodeBoxFileManager from "./CodeBoxFileManager";
 
 class CodeBoxFile {
     private identifier : string;
-    private fileButton : FileButton;
-    private codeBox : CodeBox;
+    private downloadLink : string | null;
+    private codeBox : CodeBox | null;
 
-    constructor(identifier : string, fileButton : FileButton, codeBox : CodeBox) { // todo - pokud se potom bude mění fileButton, tak na to sem budu předávat metodu, pomocí které se to bude dát udělat
+    constructor(identifier : string, downloadLink : string | null, codeBox : CodeBox, manager : CodeBoxFileManager) {
         this.identifier = identifier;
-        this.fileButton = fileButton;
+        this.downloadLink = downloadLink;
         this.codeBox = codeBox;
+
+        manager.onDownloadLinkChange = newDownloadLink => this.onDownloadLinkChange(newDownloadLink);
+        manager.onUnlinkCodeBox = () => this.onUnlinkCodeBox();
     }
 
-    public getIdentifier() : string {
+    public getIdentifier() : string | null {
+        if (!this.codeBox) return null;
         return this.identifier;
     }
 
     public changeIdentifier(newIdentifier : string) : boolean {
-        const success = this.codeBox.changeFileIdentifier(this.identifier, newIdentifier);
-        if (success) this.identifier = newIdentifier;
-        return success;
+        if (!this.codeBox) return false;
+        return this.codeBox.changeFileIdentifier(this.identifier, newIdentifier);
+        // if (success) this.identifier = newIdentifier; // todo - toto není potřeba, ale ověřit to
+        // return success;
     }
 
     // todo - možná reset
 
     public remove() : void {
+        if (!this.codeBox) return;
         this.codeBox.removeFile(this.identifier);
     }
 
     public getDownloadLink() : string | null {
-        return this.fileButton.getDownloadLink();
+        return this.downloadLink;
     }
 
     public setDownloadLink(downloadLink : string | null) : void {
-        this.fileButton.setDownloadLink(downloadLink);
+        if (!this.codeBox) return;
+        this.codeBox.changeFileDownloadLink(this.identifier, downloadLink);
+    }
+
+    private onDownloadLinkChange(newDownloadLink : string | null) : void {
+        this.downloadLink = newDownloadLink;
+    }
+
+    private onUnlinkCodeBox() : void {
+        this.codeBox = null;
     }
 }
 

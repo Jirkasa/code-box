@@ -95,6 +95,10 @@ class ProjectCodeBox extends CodeBox {
     public getActiveCodeView(): CodeBoxCodeView | null {
         return null;
     }
+
+    public changeFileDownloadLink(identifier: string, newDownloadLink: string | null): boolean {
+        return false;
+    }
     // END - NOT IMPLEMENTED (JUST TO GET RID OF ERRORS FOR NOW)
 
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]): void {

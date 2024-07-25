@@ -5,6 +5,7 @@ import CodeBox, { CodeBoxItemInfo } from "../CodeBox";
 import CodeBoxCodeView from "../CodeBoxCodeView";
 import CodeBoxCodeViewManager from "../CodeBoxCodeViewManager";
 import CodeBoxFile from "../CodeBoxFile";
+import CodeBoxFileManager from "../CodeBoxFileManager";
 import CodeViewButton from "../CodeViewButton";
 import CodeViewEntry from "./CodeViewEntry";
 import FileEntry from "./FileEntry";
@@ -196,6 +197,18 @@ class TabCodeBox extends CodeBox {
         return true;
     }
 
+    public changeFileDownloadLink(identifier: string, newDownloadLink: string | null) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+
+        const fileEntry = this.fileEntries.get(identifier);
+        if (!fileEntry) return false;
+
+        fileEntry.codeBoxFileManager.changeDownloadLink(newDownloadLink);
+        fileEntry.fileButton.setDownloadLink(newDownloadLink);
+
+        return true;
+    }
+
     protected onInit(codeBoxItemInfos : CodeBoxItemInfo[]) : void {
         for (let codeBoxItemInfo of codeBoxItemInfos) {
             if (codeBoxItemInfo.type === "CodeViewInfo" && codeBoxItemInfo.codeViewInfo) {
@@ -230,9 +243,10 @@ class TabCodeBox extends CodeBox {
                 let fileButton = new TabFileButton(identifier, fileInfo.downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
                 fileButton.appendTo(this.tabsContainer);
 
-                const codeBoxFile = new CodeBoxFile(identifier, fileButton, this);
+                const codeBoxFileManager = new CodeBoxFileManager();
+                const codeBoxFile = new CodeBoxFile(identifier, fileInfo.downloadLink, this, codeBoxFileManager);
 
-                this.fileEntries.set(identifier, new FileEntry(codeBoxFile, fileButton));
+                this.fileEntries.set(identifier, new FileEntry(codeBoxFile, codeBoxFileManager, fileButton));
             }
         }
     }
@@ -258,6 +272,7 @@ Todo
 - potom možná přidat i metodu insertBefore
 - reset metoda v code boxu (možná - ještě uvidím, ale asi jo)
 - ještě jsem chtěl metodu na přidávání code views - ale jak to řešit?
+- todo - ještě metodu na měnění download linku
 */
 
 /*
