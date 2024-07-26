@@ -61,7 +61,7 @@ class FoldersManager {
         folderPath = this.getFolderPath(folderPath, usePackage, packageName);
 
         if (folderPath === "") return fileName;
-        return folderPath + fileName;
+        return folderPath + "/" + fileName;
     }
 
     public setPackagesFolderPath(folderPath : string) : void {
@@ -80,7 +80,7 @@ class FoldersManager {
         this.getPackageFolder(packageName, true);
     }
 
-    public addCodeView(fileName : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null, isActive : boolean = false) : void {
+    public addCodeView(fileName : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : void {
         if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);
         if (packageName !== null) packageName = this.normalizePackageName(packageName);
         folderPath = this.getFolderPath(folderPath, usePackage, packageName);
@@ -88,21 +88,11 @@ class FoldersManager {
         const parsedFolderPath = this.parseFolderPath(folderPath);
 
         const folder = this.getFolder(parsedFolderPath, true);
-        if (folder) {
-            const codeViewButton = folder.addCodeView(fileName, codeView, showCodeViewEventSource, this.svgSpritePath, this.codeFileIconName);
-            if (isActive) {
-                codeViewButton.setAsActive();
-            }
-        }
+        folder?.addCodeView(fileName, codeView, showCodeViewEventSource, this.svgSpritePath, this.codeFileIconName);
 
         if (usePackage) {
             const packageFolder = this.getPackageFolder(packageName, true);
-            if (packageFolder) {
-                const codeViewButton = packageFolder.addCodeView(fileName, codeView, showCodeViewEventSource, this.svgSpritePath, this.codeFileIconName);
-                if (isActive) {
-                    codeViewButton.setAsActive();
-                }
-            }
+            packageFolder?.addCodeView(fileName, codeView, showCodeViewEventSource, this.svgSpritePath, this.codeFileIconName);
 
             this.codeViewFolderAndPackageMappings.add(fileName, folderPath, packageName);
         }
@@ -144,9 +134,33 @@ class FoldersManager {
     }
 
     public setCodeViewButtonsAsActiveByIdentifier(identifier : string) : void { // todo - ostatní metody můžu kdyžtak přidat potom
+        identifier = this.normalizeFolderPath(identifier);
+
+        const parsedFolderPath = this.parseFolderPath(identifier);
+        const fileName = parsedFolderPath.pop();
+        if (!fileName) return;
+
+        const folder = this.getFolder(parsedFolderPath);
+        if (!folder) return;
+
+        let codeViewItem = folder.getCodeView(fileName);
+        if (!codeViewItem) return;
+
         this.setNoCodeViewButtonAsActive();
+        codeViewItem.codeViewButton.setAsActive();
+
+        this.activeCodeViewIdentifier = identifier;
+
+        const packageItem = this.codeViewFolderAndPackageMappings.getPackageItemByFileFolderPath(parsedFolderPath.join("/"), fileName);
+        if (packageItem) {
+            const packageFolder = this.getPackageFolder(packageItem.packageName);
+            if (packageFolder) {
+                codeViewItem = packageFolder.getCodeView(fileName);
+                codeViewItem?.codeViewButton.setAsActive();
+            }
+        }
+
         // todo - tady budu pokračovat - ještě nejdřív ale normalizovat i fileName (odstraňovat všechny lomítka)
-            // - a nastavovat activeCodeViewIdentifier - proto to nefungovalo
     }
 
     public addFile(fileName : string, codeBoxFile : CodeBoxFile, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) {

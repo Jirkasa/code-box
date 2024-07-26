@@ -119,7 +119,7 @@ class Folder {
         return folder;
     }
 
-    public addCodeView(name : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, svgSpritePath : string | null = null, buttonIconName : string | null = null) : CodeViewButton { // nebo se bude vracet entry nebo tak něco - ale spíš to code view button
+    public addCodeView(name : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, svgSpritePath : string | null = null, buttonIconName : string | null = null) : CodeViewFolderItem {
         const codeViewButton = new ProjectCodeViewButton(name, showCodeViewEventSource, codeView, svgSpritePath, buttonIconName);
         codeViewButton.appendTo(this.itemsContainer);
         if (this.lastParentOpened && this.collapsible.isOpened()) {
@@ -128,8 +128,9 @@ class Folder {
             codeViewButton.disableTabNavigation();
         }
         
-        this.codeViewItems.set(name, new CodeViewFolderItem(codeView, codeViewButton));
-        return codeViewButton;
+        const item = new CodeViewFolderItem(codeView, codeViewButton);
+        this.codeViewItems.set(name, item);
+        return item;
     }
 
     public getCodeView(name : string) : CodeViewFolderItem | null {
@@ -138,7 +139,7 @@ class Folder {
         return codeViewItem;
     }
 
-    public addFile(name : string, codeBoxFile : CodeBoxFile, svgSpritePath : string | null = null, buttonIconName : string | null = null, buttonDownloadIconName : string | null = null) : FileButton {
+    public addFile(name : string, codeBoxFile : CodeBoxFile, svgSpritePath : string | null = null, buttonIconName : string | null = null, buttonDownloadIconName : string | null = null) : FileFolderItem {
         const fileButton = new ProjectFileButton(name, codeBoxFile.getDownloadLink(), svgSpritePath, buttonIconName, buttonDownloadIconName);
         fileButton.appendTo(this.itemsContainer);
         if (this.lastParentOpened && this.collapsible.isOpened()) {
@@ -147,8 +148,9 @@ class Folder {
             fileButton.disableTabNavigation();
         }
 
-        this.fileItems.set(name, new FileFolderItem(codeBoxFile, fileButton));
-        return fileButton;
+        const item = new FileFolderItem(codeBoxFile, fileButton);
+        this.fileItems.set(name, item);
+        return item;
     }
 
     public getFile(name : string) : FileFolderItem | null {
