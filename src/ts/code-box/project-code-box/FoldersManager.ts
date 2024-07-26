@@ -55,6 +55,7 @@ class FoldersManager {
     }
 
     public getItemIdentifier(fileName : string, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : string {
+        fileName = this.sanitizeFileName(fileName);
         if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);
         if (packageName !== null) packageName = this.normalizePackageName(packageName);
 
@@ -81,6 +82,7 @@ class FoldersManager {
     }
 
     public addCodeView(fileName : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : void {
+        fileName = this.sanitizeFileName(fileName);
         if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);
         if (packageName !== null) packageName = this.normalizePackageName(packageName);
         folderPath = this.getFolderPath(folderPath, usePackage, packageName);
@@ -159,11 +161,10 @@ class FoldersManager {
                 codeViewItem?.codeViewButton.setAsActive();
             }
         }
-
-        // todo - tady budu pokračovat - ještě nejdřív ale normalizovat i fileName (odstraňovat všechny lomítka)
     }
 
     public addFile(fileName : string, codeBoxFile : CodeBoxFile, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) {
+        fileName = this.sanitizeFileName(fileName);
         if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);
         if (packageName !== null) packageName = this.normalizePackageName(packageName);
         folderPath = this.getFolderPath(folderPath, usePackage, packageName);
@@ -263,6 +264,11 @@ class FoldersManager {
             return packageFolderPath.join("/");
         }
         return "";
+    }
+
+    private sanitizeFileName(fileName : string) : string {
+        // remove all slashes
+        return fileName.replace(/\//g, '');
     }
 
     private normalizeFolderPath(folderPath : string) : string {
