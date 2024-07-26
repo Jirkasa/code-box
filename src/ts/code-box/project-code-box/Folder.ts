@@ -76,24 +76,9 @@ class Folder {
         }
 
         if (parentOpened && this.collapsible.isOpened()) {
-            
-            // this.codeViewButtons.forEach(codeViewButton => {
-            //     codeViewButton.enableTabNavigation();
-            // });
-            // this.fileButtons.forEach(fileButton => {
-            //     fileButton.enableTabNavigation();
-            // });
-
             this.codeViewItems.forEach(codeViewItem => codeViewItem.codeViewButton.enableTabNavigation());
             this.fileItems.forEach(fileItem => fileItem.fileButton.enableTabNavigation());
         } else {
-            
-            // this.codeViewButtons.forEach(codeViewButton => {
-            //     codeViewButton.disableTabNavigation();
-            // });
-            // this.fileButtons.forEach(fileButton => {
-            //     fileButton.disableTabNavigation();
-            // });
             this.codeViewItems.forEach(codeViewItem => codeViewItem.codeViewButton.disableTabNavigation());
             this.fileItems.forEach(fileItem => fileItem.fileButton.disableTabNavigation());
         }
@@ -106,6 +91,8 @@ class Folder {
     }
 
     public addFolder(name : string, folder : Folder) : void {
+        if (this.subfolders.has(name)) return;
+
         this.subfolders.set(name, folder);
         this.itemsContainer.appendChild(folder.buttonElement);
         this.itemsContainer.appendChild(folder.itemsContainer);
@@ -119,7 +106,9 @@ class Folder {
         return folder;
     }
 
-    public addCodeView(name : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, svgSpritePath : string | null = null, buttonIconName : string | null = null) : CodeViewFolderItem {
+    public addCodeView(name : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, svgSpritePath : string | null = null, buttonIconName : string | null = null) : CodeViewFolderItem | null { // null to vrací, když už tam code view pod tímto názvem existuje
+        if (this.codeViewItems.has(name)) return null;
+
         const codeViewButton = new ProjectCodeViewButton(name, showCodeViewEventSource, codeView, svgSpritePath, buttonIconName);
         codeViewButton.appendTo(this.itemsContainer);
         if (this.lastParentOpened && this.collapsible.isOpened()) {
@@ -139,7 +128,9 @@ class Folder {
         return codeViewItem;
     }
 
-    public addFile(name : string, codeBoxFile : CodeBoxFile, svgSpritePath : string | null = null, buttonIconName : string | null = null, buttonDownloadIconName : string | null = null) : FileFolderItem {
+    public addFile(name : string, codeBoxFile : CodeBoxFile, svgSpritePath : string | null = null, buttonIconName : string | null = null, buttonDownloadIconName : string | null = null) : FileFolderItem | null {
+        if (this.fileItems.has(name)) return null;
+
         const fileButton = new ProjectFileButton(name, codeBoxFile.getDownloadLink(), svgSpritePath, buttonIconName, buttonDownloadIconName);
         fileButton.appendTo(this.itemsContainer);
         if (this.lastParentOpened && this.collapsible.isOpened()) {

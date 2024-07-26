@@ -130,13 +130,15 @@ class ProjectCodeBox extends CodeBox {
                 let packageName = this.getPackageNameFromDataset(codeViewInfo.dataset);
                 let isActive = codeViewInfo.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined;
 
+                const success = this.foldersManager.addCodeView(fileName, codeViewInfo.codeView, this.showCodeViewEventSource, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+
+                if (!success) continue;
+
                 const identifier = this.foldersManager.getItemIdentifier(fileName, folderPath, packageName !== null, packageName !== "" ? packageName : null);
 
                 const codeBoxCodeViewManager = new CodeBoxCodeViewManager();
                 const codeBoxCodeView = new CodeBoxCodeView(identifier, codeViewInfo.codeView, this, codeBoxCodeViewManager);
                 this.codeViewEntries.set(codeViewInfo.codeView, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager));
-
-                this.foldersManager.addCodeView(fileName, codeViewInfo.codeView, this.showCodeViewEventSource, folderPath, packageName !== null, packageName !== "" ? packageName : null);
 
                 if (isActive) {
                     this.foldersManager.setCodeViewButtonsAsActiveByIdentifier(identifier);
@@ -152,21 +154,17 @@ class ProjectCodeBox extends CodeBox {
 
                 const codeBoxFileManager = new CodeBoxFileManager();
                 const codeBoxFile = new CodeBoxFile(identifier, fileInfo.downloadLink, this, codeBoxFileManager);
-                this.fileEntries.set(codeBoxFile, new FileEntry(codeBoxFileManager));
 
-                this.foldersManager.addFile(fileName, codeBoxFile, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+                const success = this.foldersManager.addFile(fileName, codeBoxFile, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+
+                if (!success) continue;
+
+                this.fileEntries.set(codeBoxFile, new FileEntry(codeBoxFileManager));
             }
         }
     }
 
-    private onShowCodeView(codeViewButton : CodeViewButton, codeView : CodeView) : void {
-        // if (this.activeCodeViewButton) {
-        //     this.activeCodeViewButton.setAsInactive();
-        // }
-
-        // codeViewButton.setAsActive();
-        // this.activeCodeViewButton = codeViewButton;
-
+    private onShowCodeView(codeViewButton : CodeViewButton, codeView : CodeView) : void { // todo - CodeViewButton asi nebudu potřebovat, tak ho sem nepředávat
         this.changeActiveCodeView(codeView);
 
         const codeViewEntry = this.codeViewEntries.get(codeView);
@@ -174,9 +172,6 @@ class ProjectCodeBox extends CodeBox {
         const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
         if (identifier === null) return;
         this.foldersManager.setCodeViewButtonsAsActiveByIdentifier(identifier);
-        // const codeView = this.foldersManager.getCodeViewByIdentifier(identifier);
-
-        
     }
 
     private onPanelToggled() : void {

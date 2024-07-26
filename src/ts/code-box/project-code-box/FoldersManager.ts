@@ -81,7 +81,7 @@ class FoldersManager {
         this.getPackageFolder(packageName, true);
     }
 
-    public addCodeView(fileName : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : void {
+    public addCodeView(fileName : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : boolean {
         fileName = this.sanitizeFileName(fileName);
         if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);
         if (packageName !== null) packageName = this.normalizePackageName(packageName);
@@ -90,14 +90,20 @@ class FoldersManager {
         const parsedFolderPath = this.parseFolderPath(folderPath);
 
         const folder = this.getFolder(parsedFolderPath, true);
-        folder?.addCodeView(fileName, codeView, showCodeViewEventSource, this.svgSpritePath, this.codeFileIconName);
+        if (!folder) return false;
+        if (folder.getCodeView(fileName) !== null) return false;
 
         if (usePackage) {
             const packageFolder = this.getPackageFolder(packageName, true);
-            packageFolder?.addCodeView(fileName, codeView, showCodeViewEventSource, this.svgSpritePath, this.codeFileIconName);
+            if (!packageFolder) return false;
+            if (packageFolder.getCodeView(fileName) !== null) return false;
 
+            packageFolder.addCodeView(fileName, codeView, showCodeViewEventSource, this.svgSpritePath, this.codeFileIconName);
             this.codeViewFolderAndPackageMappings.add(fileName, folderPath, packageName);
         }
+
+        folder.addCodeView(fileName, codeView, showCodeViewEventSource, this.svgSpritePath, this.codeFileIconName);
+        return true;
     }
 
     public getCodeViewByFolderPath(folderPath : string | null, fileName : string) : CodeView | null { // todo - null může být pro root složku
@@ -109,6 +115,43 @@ class FoldersManager {
     }
 
     public getCodeViewByPackage(packageName : string | null, fileName : string) : CodeView | null { // todo - null pro default package
+        return null;
+    }
+
+    public addFile(fileName : string, codeBoxFile : CodeBoxFile, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : boolean {
+        fileName = this.sanitizeFileName(fileName);
+        if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);
+        if (packageName !== null) packageName = this.normalizePackageName(packageName);
+        folderPath = this.getFolderPath(folderPath, usePackage, packageName);
+
+        const parsedFolderPath = this.parseFolderPath(folderPath);
+
+        const folder = this.getFolder(parsedFolderPath, true);
+        if (!folder) return false;
+        if (folder.getFile(fileName) !== null) return false;
+
+        if (usePackage) {
+            const packageFolder = this.getPackageFolder(packageName, true);
+            if (!packageFolder) return false;
+            if (packageFolder.getFile(fileName) !== null) return false;
+            
+            packageFolder.addFile(fileName, codeBoxFile, this.svgSpritePath, this.fileIconName, this.downloadIconName);
+            this.fileFolderAndPackageMappings.add(fileName, folderPath, packageName);
+        }
+
+        folder.addFile(fileName, codeBoxFile, this.svgSpritePath, this.fileIconName, this.downloadIconName);
+        return true;
+    }
+
+    public getFileByFolderPath(folderPath : string | null, fileName : string) : CodeBoxFile | null {
+        return null;
+    }
+
+    public getFileByIdentifier(identifier : string) : CodeBoxFile | null {
+        return null;
+    }
+
+    public getFileByPackage(packageName : string | null, fileName : string) : CodeBoxFile | null {
         return null;
     }
 
@@ -161,37 +204,6 @@ class FoldersManager {
                 codeViewItem?.codeViewButton.setAsActive();
             }
         }
-    }
-
-    public addFile(fileName : string, codeBoxFile : CodeBoxFile, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) {
-        fileName = this.sanitizeFileName(fileName);
-        if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);
-        if (packageName !== null) packageName = this.normalizePackageName(packageName);
-        folderPath = this.getFolderPath(folderPath, usePackage, packageName);
-
-        const parsedFolderPath = this.parseFolderPath(folderPath);
-
-        const folder = this.getFolder(parsedFolderPath, true);
-        folder?.addFile(fileName, codeBoxFile, this.svgSpritePath, this.fileIconName, this.downloadIconName);
-
-        if (usePackage) {
-            const packageFolder = this.getPackageFolder(packageName, true);
-            packageFolder?.addFile(fileName, codeBoxFile, this.svgSpritePath, this.fileIconName, this.downloadIconName);
-
-            this.fileFolderAndPackageMappings.add(fileName, folderPath, packageName);
-        }
-    }
-
-    public getFileByFolderPath(folderPath : string | null, fileName : string) : CodeBoxFile | null {
-        return null;
-    }
-
-    public getFileByIdentifier(identifier : string) : CodeBoxFile | null {
-        return null;
-    }
-
-    public getFileByPackage(packageName : string | null, fileName : string) : CodeBoxFile | null {
-        return null;
     }
 
     public updateTabNavigation(panelOpened : boolean) : void {

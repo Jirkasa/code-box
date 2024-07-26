@@ -250,6 +250,9 @@
     <br>
     <div id="ProjectCodeBoxTest">
         <div data-cb-name="index.js" data-cb-file="./index.js" data-cb-package></div>
+        <div data-cb-name="index.js" data-cb-file="./index.js" data-cb-package></div>
+        <div data-cb-name="index.js" data-cb-file="./index.js"></div>
+        <div data-cb-name="index.js" data-cb-folder="test" data-cb-file="./index.js" data-cb-package></div>
         <pre data-cb-name="something.jsp" data-cb-active data-cb-package data-cb-folder="test/subfolder"><code>&lt;%@ page contentType="text/html" pageEncoding="UTF-8"%&gt;
 &lt;!-- Nadefinování knihovny tagů, kterou chceme používat. --&gt;
 &lt;%@ taglib uri="moje-tagy" prefix="m" %&gt;
@@ -259,6 +262,41 @@
 &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
     &lt;title&gt;Tvorba custom tagu&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;p&gt;Aktuální datum a čas: &lt;m:aktualniDatumACas format="dd/MM/yyyy - HH:mm" /&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <pre data-cb-name="something.jsp" data-cb-active data-cb-package data-cb-folder="test/subfolder"><code>&lt;%@ page contentType="text/html" pageEncoding="UTF-8"%&gt;
+&lt;!-- Nadefinování knihovny tagů, kterou chceme používat. --&gt;
+&lt;%@ taglib uri="moje-tagy" prefix="m" %&gt;
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Tvorba custom tagu - copy&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
     &lt;p&gt;Aktuální datum a čas: &lt;m:aktualniDatumACas format="dd/MM/yyyy - HH:mm" /&gt;&lt;/p&gt;
@@ -313,7 +351,7 @@
     &lt;p&gt;Aktuální datum a čas: &lt;m:aktualniDatumACas format="dd/MM/yyyy - HH:mm" /&gt;&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-<pre data-cb-name="something4.jsp" data-cb-package="io.github.jirkasa"><code>&lt;%@ page contentType="text/html" pageEncoding="UTF-8"%&gt;
+<pre data-cb-name="something4/.jsp" data-cb-package="io.github.jirkasa"><code>&lt;%@ page contentType="text/html" pageEncoding="UTF-8"%&gt;
 &lt;!-- Nadefinování knihovny tagů, kterou chceme používat. --&gt;
 &lt;%@ taglib uri="moje-tagy" prefix="m" %&gt;
 
@@ -498,7 +536,23 @@
     &lt;p&gt;Aktuální datum a čas: &lt;m:aktualniDatumACas format="dd/MM/yyyy - HH:mm" /&gt;&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-<pre data-cb-active data-cb-name="MyName2"><code>&lt;%@ page contentType="text/html" pageEncoding="UTF-8"%&gt;
+    <div data-cb-name="Download File" data-cb-file="./index.js"></div>
+
+    <pre data-cb-active data-cb-name="Name"><code>&lt;%@ page contentType="text/html" pageEncoding="UTF-8"%&gt;
+    &lt;!-- Nadefinování knihovny tagů, kterou chceme používat. 1 - copy --&gt;
+    &lt;%@ taglib uri="moje-tagy" prefix="m" %&gt;
+
+    &lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;title&gt;Tvorba custom tagu&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;p&gt;Aktuální datum a čas: &lt;m:aktualniDatumACas format="dd/MM/yyyy - HH:mm" /&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;</code></pre>
+<pre data-cb-name="MyName2"><code>&lt;%@ page contentType="text/html" pageEncoding="UTF-8"%&gt;
 &lt;!-- Nadefinování knihovny tagů, kterou chceme používat. --&gt;
 &lt;%@ taglib uri="moje-tagy" prefix="m" %&gt;
 
@@ -516,6 +570,7 @@ sdfdf
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 
+            <div data-cb-name="No Download File" data-cb-file></div>
             <div data-cb-name="No Download File" data-cb-file></div>
         </div>
     </div>

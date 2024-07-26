@@ -219,7 +219,17 @@ class TabCodeBox extends CodeBox {
 
                 if (this.codeViews.has(identifier)) {
                     if (!isActive) continue;
-                    this.removeCodeView(identifier);
+                    
+                    const codeView = this.codeViews.get(identifier);
+                    if (codeView) {
+                        const codeViewEntry = this.codeViewEntries.get(codeView);
+                        if (codeViewEntry) {
+                            codeViewEntry.codeViewButton.detach();
+                            codeViewEntry.codeBoxCodeViewManager.unlinkCodeBox();
+                        }
+                        this.codeViews.delete(identifier);
+                        this.codeViewEntries.delete(codeView);
+                    }
                 }
 
                 let codeViewButton = new TabCodeViewButton(identifier, this.showCodeViewEventSource, codeViewInfo.codeView, this.svgSpritePath, this.codeFileIconName);
