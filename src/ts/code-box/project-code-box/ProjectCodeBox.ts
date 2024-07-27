@@ -165,6 +165,8 @@ class ProjectCodeBox extends CodeBox {
                     this.foldersManager.setCodeViewButtonsAsActiveByIdentifier(identifier);
                     if (this.openActiveCodeViewFolderOnInit) {
                         this.foldersManager.openFolder(folderPath || "/", true, false);
+                    }
+                    if (this.openActiveCodeViewPackageOnInit) {
                         this.foldersManager.openPackage(packageName !== "" ? packageName : null, false);
                     }
                 }
@@ -267,8 +269,6 @@ export default ProjectCodeBox;
 /*
 Takže teď:
     - skrývání/odkrývání sekce s balíčky
-    - otevření root složky
-    - automatické otevření složek a balíčků s aktivním code view
     - otevření složky pomocí data-cb-opened
     - plnit options z data atributů
     - vytvářet podsložky když se zavolá addPackage
