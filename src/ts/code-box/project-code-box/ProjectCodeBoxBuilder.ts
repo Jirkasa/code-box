@@ -12,7 +12,7 @@ class ProjectCodeBoxBuilder implements CodeBoxBuilder {
     private packagesHeadingElement : HTMLElement;
     private packagesContainer : HTMLElement;
 
-    constructor(folderStructureHeading : string, packagesHeading : string, svgSpritePath : string | null = null, openButtonIconName : string | null = null) {
+    constructor(svgSpritePath : string | null = null, openButtonIconName : string | null = null) {
         this.panelElement = document.createElement("div");
         this.panelElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL);
 
@@ -31,7 +31,6 @@ class ProjectCodeBoxBuilder implements CodeBoxBuilder {
 
         this.folderStructureHeadingElement = document.createElement("div");
         this.folderStructureHeadingElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_HEADING);
-        this.folderStructureHeadingElement.innerText = folderStructureHeading;
 
         this.folderStructureContainer = document.createElement("div");
         this.folderStructureContainer.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_FOLDER_STRUCTURE_CONTAINER);
@@ -41,7 +40,6 @@ class ProjectCodeBoxBuilder implements CodeBoxBuilder {
 
         this.packagesHeadingElement = document.createElement("div");
         this.packagesHeadingElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_HEADING);
-        this.packagesHeadingElement.innerText = packagesHeading;
 
         this.packagesContainer = document.createElement("div");
         this.packagesContainer.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_PACKAGES_CONTAINER);
