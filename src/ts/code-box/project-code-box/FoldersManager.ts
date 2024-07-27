@@ -192,6 +192,38 @@ class FoldersManager {
         return this.removeCodeViewByIdentifier(identifier);
     }
 
+    public changeCodeViewIdentifier(identifier : string, newIdentifier : string, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>) : boolean {
+        identifier = this.normalizeFolderPath(identifier);
+        newIdentifier = this.normalizeFolderPath(newIdentifier);
+        const isActive = this.activeCodeViewIdentifier === identifier;
+
+        if (isActive) this.setNoCodeViewButtonAsActive();
+
+        if (this.getCodeViewByIdentifier(newIdentifier) !== null) return false;
+
+        const codeView = this.getCodeViewByIdentifier(identifier);
+        if (!codeView) return false;
+
+        let parsedFolderPath = this.parseFolderPath(identifier);
+        let fileName = parsedFolderPath.pop();
+        if (!fileName) return false;
+
+        const packageItem = this.codeViewFolderAndPackageMappings.getPackageItemByFileFolderPath(parsedFolderPath.length > 0 ? parsedFolderPath.join("/") : null, fileName);
+
+        const success = this.removeCodeViewByIdentifier(identifier);
+        if (!success) return false;
+
+        parsedFolderPath = this.parseFolderPath(newIdentifier);
+        fileName = parsedFolderPath.pop();
+        if (!fileName) return false;
+
+        this.addCodeView(fileName, codeView, showCodeViewEventSource, parsedFolderPath.join("/"), packageItem !== null, packageItem ? packageItem.packageName : null);
+        
+        if (isActive) this.setCodeViewButtonsAsActiveByIdentifier(newIdentifier);
+
+        return true;
+    }
+
     public addFile(fileName : string, codeBoxFile : CodeBoxFile, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : boolean {
         fileName = this.sanitizeFileName(fileName);
         if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);

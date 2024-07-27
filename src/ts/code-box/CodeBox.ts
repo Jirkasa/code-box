@@ -52,7 +52,7 @@ type InitializationInfo = {
 
 /** Base class for code boxes. */
 abstract class CodeBox {
-    protected static readonly PROJECT_NOT_INITIALIZED_ERROR = "Code box is not initialized.";
+    protected static readonly CODE_BOX_NOT_INITIALIZED_ERROR = "Code box is not initialized.";
 
     /** Root element of code box. */
     private readonly rootElement : HTMLElement;

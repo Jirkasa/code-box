@@ -48,7 +48,7 @@ class TabCodeBox extends CodeBox {
     }
 
     public getCodeViews() : CodeBoxCodeView[] {
-        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const codeBoxCodeViews = new Array<CodeBoxCodeView>();
         this.codeViewEntries.forEach(entry => codeBoxCodeViews.push(entry.codeBoxCodeView));
@@ -56,7 +56,7 @@ class TabCodeBox extends CodeBox {
     }
 
     public getCodeView(identifier: string) : CodeBoxCodeView | null {
-        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const codeView = this.codeViews.get(identifier);
         if (!codeView) return null;
@@ -68,7 +68,7 @@ class TabCodeBox extends CodeBox {
     }
 
     public removeCodeView(identifier: string) : boolean {
-        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const codeView = this.codeViews.get(identifier);
         if (!codeView) return false;
@@ -90,7 +90,7 @@ class TabCodeBox extends CodeBox {
     }
 
     public changeCodeViewIdentifier(identifier: string, newIdentifier: string) : boolean {
-        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const codeView = this.codeViews.get(identifier);
         if (!codeView) return false;
@@ -109,7 +109,7 @@ class TabCodeBox extends CodeBox {
     }
 
     public setActiveCodeView(identifier: string) : boolean {
-        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const codeView = this.codeViews.get(identifier);
         if (!codeView) return false;
@@ -131,7 +131,7 @@ class TabCodeBox extends CodeBox {
     }
 
     public setNoActiveCodeView() : void {
-        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const activeCodeView = this.getCurrentlyActiveCodeView();
         if (activeCodeView) {
@@ -153,7 +153,7 @@ class TabCodeBox extends CodeBox {
     }
 
     public getFiles() : CodeBoxFile[] {
-        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const codeBoxFiles = new Array<CodeBoxFile>();
         this.fileEntries.forEach(entry => codeBoxFiles.push(entry.codeBoxFile));
@@ -161,7 +161,7 @@ class TabCodeBox extends CodeBox {
     }
 
     public getFile(identifier: string) : CodeBoxFile | null {
-        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const fileEntry = this.fileEntries.get(identifier);
         if (!fileEntry) return null;
@@ -170,7 +170,7 @@ class TabCodeBox extends CodeBox {
     }
 
     public removeFile(identifier: string) : boolean {
-        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const fileEntry = this.fileEntries.get(identifier);
         if (!fileEntry) return false;
@@ -183,7 +183,7 @@ class TabCodeBox extends CodeBox {
     }
 
     public changeFileIdentifier(identifier: string, newIdentifier: string) : boolean {
-        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const fileEntry = this.fileEntries.get(identifier);
         if (!fileEntry) return false;
@@ -198,7 +198,7 @@ class TabCodeBox extends CodeBox {
     }
 
     public changeFileDownloadLink(identifier: string, newDownloadLink: string | null) : boolean {
-        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const fileEntry = this.fileEntries.get(identifier);
         if (!fileEntry) return false;

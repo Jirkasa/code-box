@@ -80,17 +80,17 @@ class ProjectCodeBox extends CodeBox {
     }
 
     // BEGIN - NOT IMPLEMENTED (JUST TO GET RID OF ERRORS FOR NOW)
-    public changeCodeViewIdentifier(identifier: string, newIdentifier: string): boolean {
-        return false
-    }
+    // public changeCodeViewIdentifier(identifier: string, newIdentifier: string): boolean {
+    //     return false
+    // }
 
     public changeFileIdentifier(identifier: string, newIdentifier: string): boolean {
         return false;
     }
 
-    public getCodeView(identifier: string): CodeBoxCodeView | null {
-        return null;
-    }
+    // public getCodeView(identifier: string): CodeBoxCodeView | null {
+    //     return null;
+    // }
 
     // public getCodeViews(): CodeBoxCodeView[] {
     //     return [];
@@ -104,9 +104,9 @@ class ProjectCodeBox extends CodeBox {
         return [];
     }
 
-    public removeCodeView(identifier: string): boolean {
-        return false;
-    }
+    // public removeCodeView(identifier: string): boolean {
+    //     return false;
+    // }
 
     public removeFile(identifier: string): boolean {
         return false;
@@ -130,14 +130,64 @@ class ProjectCodeBox extends CodeBox {
     // END - NOT IMPLEMENTED (JUST TO GET RID OF ERRORS FOR NOW)
 
     public getCodeViews() : CodeBoxCodeView[] {
-        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const codeBoxCodeViews = new Array<CodeBoxCodeView>();
         this.codeViewEntries.forEach(entry => codeBoxCodeViews.push(entry.codeBoxCodeView));
         return codeBoxCodeViews;
     }
 
-    protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]): void {
+    public getCodeView(identifier: string) : CodeBoxCodeView | null {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeView = this.foldersManager.getCodeViewByIdentifier(identifier);
+        if (!codeView) return null;
+
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return null;
+
+        return codeViewEntry.codeBoxCodeView;
+    }
+
+    public removeCodeView(identifier: string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeView = this.foldersManager.getCodeViewByIdentifier(identifier);
+        if (!codeView) return false;
+
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return false;
+
+        // todo - ale ještě musím kdyžtak odstranit aktivní code view aby se nezobrazovalo
+        const success = this.foldersManager.removeCodeViewByIdentifier(identifier);
+        if (!success) return false;
+
+        if (this.getCurrentlyActiveCodeView() === codeView) {
+            this.changeActiveCodeView(null);
+        }
+        codeViewEntry.codeBoxCodeViewManager.unlinkCodeBox();
+
+        this.codeViewEntries.delete(codeView);
+
+        return true;
+    }
+
+    public changeCodeViewIdentifier(identifier: string, newIdentifier: string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const success = this.foldersManager.changeCodeViewIdentifier(identifier, newIdentifier, this.showCodeViewEventSource);
+        if (!success) return false;
+
+        const codeView = this.foldersManager.getCodeViewByIdentifier(newIdentifier);
+        if (!codeView) return false;
+
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        codeViewEntry?.codeBoxCodeViewManager.changeIdentifier(newIdentifier);
+
+        return true;
+    }
+
+    protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]) : void {
         // jenom jeden konfigurační element pro složky bude asi dovolen - uvidím, možná to vadit nebude
         for (let codeBoxItemInfo of codeBoxItemInfos) {
             if (codeBoxItemInfo.type === "HTMLElement" && codeBoxItemInfo.element) {
@@ -342,5 +392,11 @@ class ProjectCodeBox extends CodeBox {
 export default ProjectCodeBox;
 
 /*
+- Teď udělat:
+- dořešit ty metody - ostatní přidám ještě potom
+    - ještě k tomu přesouvání do složek... - co s automaticky generovanými složkami pro packages - když se třeba změní package, tak jak změnit item identifier? - možná předávat volitelný parametr, jestli se má změnit i identifier (složka)?
+        - tohle musím promyslet
+- řazení ve složkách podle abecedy
+
 - todo - podívat se jestli používám všude GlobalConfig.DATA_ATTRIBUTE_PREFIX - narazil jsem na kód, kde jsem to nepoužil
 */
