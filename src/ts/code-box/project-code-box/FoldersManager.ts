@@ -81,6 +81,10 @@ class FoldersManager {
         this.getPackageFolder(packageName, true);
     }
 
+    public hasPackages() : boolean { // vrací jestli má alespoň jednu package folder
+        return this.defaultPackage !== null || this.packages.size > 0;
+    }
+
     public addCodeView(fileName : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : boolean {
         fileName = this.sanitizeFileName(fileName);
         if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);

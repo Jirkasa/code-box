@@ -12,7 +12,6 @@ class ProjectCodeBoxBuilder implements CodeBoxBuilder {
     private packagesHeadingElement : HTMLElement;
     private packagesContainer : HTMLElement;
 
-
     constructor(folderStructureHeading : string, packagesHeading : string, svgSpritePath : string | null = null, openButtonIconName : string | null = null) {
         this.panelElement = document.createElement("div");
         this.panelElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL);
@@ -52,12 +51,24 @@ class ProjectCodeBoxBuilder implements CodeBoxBuilder {
         return this.panelElement;
     }
 
-    /*public getPanelContentElement() : HTMLElement {
+    public getPanelContentElement() : HTMLElement {
         return this.panelContentElement;
-    }*/
+    }
+
+    public getFolderStructureHeadingElement() : HTMLElement {
+        return this.folderStructureHeadingElement;
+    }
 
     public getFolderStructureContainer() : HTMLElement {
         return this.folderStructureContainer;
+    }
+
+    public getHorizontalRule() : HTMLElement {
+        return this.horizontalRule;
+    }
+
+    public getPackagesHeadingElement() : HTMLElement {
+        return this.packagesHeadingElement;
     }
 
     public getPackagesContainer() : HTMLElement {

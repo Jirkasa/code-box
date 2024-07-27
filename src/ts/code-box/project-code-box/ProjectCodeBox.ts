@@ -11,12 +11,14 @@ import CodeViewButton from "../CodeViewButton";
 import CodeViewEntry from "./CodeViewEntry";
 import FileEntry from "./FileEntry";
 import FoldersManager from "./FoldersManager";
+import PackagesSectionToggle from "./PackagesSectionToggle";
 import PanelToggle from "./PanelToggle";
 import ProjectCodeBoxBuilder from "./ProjectCodeBoxBuilder";
 import ProjectCodeBoxOptions from "./ProjectCodeBoxOptions";
 
 class ProjectCodeBox extends CodeBox {
     private panelToggle : PanelToggle;
+    private packagesSectionToggle : PackagesSectionToggle;
     private foldersManager : FoldersManager;
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
     private codeViewEntries = new Map<CodeView, CodeViewEntry>(); // todo - možná spíš podle identifieru?
@@ -34,9 +36,13 @@ class ProjectCodeBox extends CodeBox {
         );
         super(element, options, codeBoxBuilder);
 
-        // todo - ale budu to chtít skrývat (ty packages), takže to potom nějak pořešit (ale ve FoldersManageru už ne, ten toho dělá už dost) - ale tak můžu tam implementovat jen metodu pro získání počtu balíčků
-
         this.panelToggle = new PanelToggle(codeBoxBuilder.getPanelElement(), codeBoxBuilder.getPanelOpenButtonElement(), () => this.onPanelToggled());
+        this.packagesSectionToggle = new PackagesSectionToggle(
+            codeBoxBuilder.getPanelContentElement(),
+            codeBoxBuilder.getHorizontalRule(),
+            codeBoxBuilder.getPackagesHeadingElement(),
+            codeBoxBuilder.getPackagesContainer()
+        );
         this.foldersManager = new FoldersManager(
             codeBoxBuilder.getFolderStructureContainer(),
             codeBoxBuilder.getPackagesContainer(),
@@ -189,6 +195,12 @@ class ProjectCodeBox extends CodeBox {
                 this.fileEntries.set(codeBoxFile, new FileEntry(codeBoxFileManager));
             }
         }
+
+        if (this.foldersManager.hasPackages()) {
+            this.packagesSectionToggle.show();
+        } else {
+            this.packagesSectionToggle.hide();
+        }
     }
 
     private onShowCodeView(codeView : CodeView) : void {
@@ -270,9 +282,7 @@ export default ProjectCodeBox;
 
 /*
 Takže teď:
-    - skrývání/odkrývání sekce s balíčky
     - plnit options z data atributů
-    - vytvářet podsložky když se zavolá addPackage
 
 - todo - podívat se jestli používám všude GlobalConfig.DATA_ATTRIBUTE_PREFIX - narazil jsem na kód, kde jsem to nepoužil
 */
