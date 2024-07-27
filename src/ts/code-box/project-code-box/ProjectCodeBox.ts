@@ -112,17 +112,17 @@ class ProjectCodeBox extends CodeBox {
         return false;
     }
 
-    public setActiveCodeView(identifier: string): boolean {
-        return false;
-    }
+    // public setActiveCodeView(identifier: string): boolean {
+    //     return false;
+    // }
 
-    public setNoActiveCodeView(): void {
+    // public setNoActiveCodeView(): void {
         
-    }
+    // }
 
-    public getActiveCodeView(): CodeBoxCodeView | null {
-        return null;
-    }
+    // public getActiveCodeView(): CodeBoxCodeView | null {
+    //     return null;
+    // }
 
     public changeFileDownloadLink(identifier: string, newDownloadLink: string | null): boolean {
         return false;
@@ -185,6 +185,35 @@ class ProjectCodeBox extends CodeBox {
         codeViewEntry?.codeBoxCodeViewManager.changeIdentifier(newIdentifier);
 
         return true;
+    }
+
+    public setActiveCodeView(identifier: string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeView = this.foldersManager.getCodeViewByIdentifier(identifier);
+        if (!codeView) return false;
+
+        this.foldersManager.setCodeViewButtonsAsActiveByIdentifier(identifier);
+        this.changeActiveCodeView(codeView);
+
+        return true;
+    }
+
+    public setNoActiveCodeView() : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        this.foldersManager.setNoCodeViewButtonAsActive();
+        this.changeActiveCodeView(null);
+    }
+
+    public getActiveCodeView() : CodeBoxCodeView | null {
+        const codeView = this.getCurrentlyActiveCodeView();
+        if (!codeView) return null;
+
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return null;
+
+        return codeViewEntry.codeBoxCodeView;
     }
 
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]) : void {
@@ -396,6 +425,9 @@ export default ProjectCodeBox;
 - dořešit ty metody - ostatní přidám ještě potom
     - ještě k tomu přesouvání do složek... - co s automaticky generovanými složkami pro packages - když se třeba změní package, tak jak změnit item identifier? - možná předávat volitelný parametr, jestli se má změnit i identifier (složka)?
         - tohle musím promyslet
+- ostatní metody
+    - různé podobné věci ale třeba podle balíčků atd.
+    - metoda na otevření/zavření panelu
 - řazení ve složkách podle abecedy
 
 - todo - podívat se jestli používám všude GlobalConfig.DATA_ATTRIBUTE_PREFIX - narazil jsem na kód, kde jsem to nepoužil
