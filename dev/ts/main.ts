@@ -45,5 +45,6 @@ new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement,
         project: "inventory"
     },
     minCodeViewLinesCount: 20,
-    foldersDelimiterForPackages: "."
+    foldersDelimiterForPackages: ".",
+    openPanelOnInit: true
 });

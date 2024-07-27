@@ -1,8 +1,5 @@
 import CSSClasses from "../../CSSClasses";
 
-
-// todo - nezapomenout na tabindexy - ale to spíš dělat nějak ve Folder nebo FoldersManageru
-
 /** Represents collapsible. */
 class Collapsible {
     /** Small delay that is used to trigger CSS animations. */

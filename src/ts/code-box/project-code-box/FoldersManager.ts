@@ -18,6 +18,7 @@ class FoldersManager {
     private codeViewFolderAndPackageMappings = new FolderAndPackageMapping();
     private fileFolderAndPackageMappings = new FolderAndPackageMapping();
     private activeCodeViewIdentifier : string | null = null;
+    private panelOpened : boolean = false;
     // tak tady nadefinovat něco jako package mapping - ale ono je možné umístit do jednoho balíčku dvě tlačítka se stejným textem - to by jít nemělo, takže budu muset zajistit, aby to nešlo
         // takže se podívat na to - jak vyřešit duplicity - a kdyžtak ty metody budou vracet false
 
@@ -34,11 +35,12 @@ class FoldersManager {
     private readonly openCloseAnimationSpeed : number;
     private readonly openCloseAnimationEasingFunction : string;
 
-    constructor(folderStructureContainer : HTMLElement, packagesContainer : HTMLElement, projectName : string, packagesFolderPath : string | null, defaultPackageName : string | null, createFoldersForPackages : boolean, foldersDelimiterForPackages : string | null, openCloseAnimationSpeed : number, openCloseAnimationEasingFunction : string, svgSpritePath : string | null = null, folderArrowIconName : string | null = null, projectIconName : string | null = null, folderIconName : string | null = null, packageIconName : string | null = null, codeFileIconName : string | null = null, fileIconName : string | null = null, downloadIconName : string | null = null) {
+    constructor(folderStructureContainer : HTMLElement, packagesContainer : HTMLElement, projectName : string, packagesFolderPath : string | null, defaultPackageName : string | null, createFoldersForPackages : boolean, foldersDelimiterForPackages : string | null, panelOpened : boolean, openCloseAnimationSpeed : number, openCloseAnimationEasingFunction : string, svgSpritePath : string | null = null, folderArrowIconName : string | null = null, projectIconName : string | null = null, folderIconName : string | null = null, packageIconName : string | null = null, codeFileIconName : string | null = null, fileIconName : string | null = null, downloadIconName : string | null = null) {
         this.packagesContainer = packagesContainer;
         this.packagesFolderPath = packagesFolderPath !== null ? this.parseFolderPath(packagesFolderPath) : [];
         this.createFoldersForPackages = createFoldersForPackages;
         this.foldersDelimiterForPackages = foldersDelimiterForPackages;
+        this.panelOpened = panelOpened;
 
         this.svgSpritePath = svgSpritePath;
         this.folderArrowIconName = folderArrowIconName;
@@ -51,7 +53,7 @@ class FoldersManager {
         this.openCloseAnimationSpeed = openCloseAnimationSpeed;
         this.openCloseAnimationEasingFunction = openCloseAnimationEasingFunction;
 
-        this.rootFolder = new Folder(projectName, openCloseAnimationSpeed, openCloseAnimationEasingFunction, svgSpritePath, folderArrowIconName, projectIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PROJECT_MODIFIER, folderStructureContainer);
+        this.rootFolder = new Folder(projectName, panelOpened, openCloseAnimationSpeed, openCloseAnimationEasingFunction, svgSpritePath, folderArrowIconName, projectIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PROJECT_MODIFIER, folderStructureContainer);
     }
 
     public getItemIdentifier(fileName : string, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : string {
@@ -76,7 +78,7 @@ class FoldersManager {
         this.getFolder(parsedFolderPath, true);
     }
 
-    public addPackage(packageName : string) : void {
+    public addPackage(packageName : string) : void { // todo - ještě kdyžtak vytvářet podsložky pokud se mají vytvářet
         packageName = this.normalizePackageName(packageName);
         this.getPackageFolder(packageName, true);
     }
@@ -116,6 +118,44 @@ class FoldersManager {
 
     public getCodeViewByPackage(packageName : string | null, fileName : string) : CodeView | null { // todo - null pro default package
         return null;
+    }
+
+    public removeCodeViewByIdentifier(identifier : string) : boolean {
+        identifier = this.normalizeFolderPath(identifier);
+
+        const parsedFolderPath = this.parseFolderPath(identifier);
+        if (parsedFolderPath.length === 0) return false;
+        const fileName = parsedFolderPath.pop();
+        if (!fileName) return false;
+
+        const folder = this.getFolder(parsedFolderPath);
+        if (!folder) return false;
+
+        const success =  folder.removeCodeView(fileName);
+        if (!success) return false;
+
+        if (identifier === this.activeCodeViewIdentifier) {
+            this.activeCodeViewIdentifier = null;
+        }
+
+        const packageItem = this.codeViewFolderAndPackageMappings.getPackageItemByFileFolderPath(parsedFolderPath.length > 0 ? parsedFolderPath.join("/") : null, fileName);
+        if (!packageItem) return true;
+
+        const packageFolder = this.getPackageFolder(packageItem.packageName);
+        packageFolder?.removeCodeView(fileName);
+
+        this.codeViewFolderAndPackageMappings.removeByFileFolderPath(parsedFolderPath.length > 0 ? parsedFolderPath.join("/") : null, fileName);
+
+        return true;
+    }
+
+    public removeCodeViewByPackage(packageName : string | null, fileName : string) : boolean {
+        if (packageName !== null) packageName = this.normalizePackageName(packageName);
+        fileName = this.sanitizeFileName(fileName);
+
+        const identifier = this.codeViewFolderAndPackageMappings.getFileFolderPathByPackageItem(packageName, fileName);
+        if (!identifier) return false;
+        return this.removeCodeViewByIdentifier(identifier);
     }
 
     public addFile(fileName : string, codeBoxFile : CodeBoxFile, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : boolean {
@@ -206,7 +246,38 @@ class FoldersManager {
         }
     }
 
+    // todo - zkusit jak bude vypadat ta animace s openParentFolders na true - nevím jak to půjde
+    public openFolder(folderPath : string, openParentFolders : boolean = false, animate : boolean = true) : void {
+        folderPath = this.normalizeFolderPath(folderPath);
+
+        const parsedFolderPath = this.parseFolderPath(folderPath);
+
+        let folder : Folder | null = this.rootFolder;
+
+        for (let folderName of parsedFolderPath) {
+            if (openParentFolders) folder.open(animate);
+            folder = folder.getFolder(folderName);
+            if (!folder) break;
+        }
+
+        if (folder) folder.open(animate);
+    }
+
+    // todo - closeFolder
+
+    public openPackage(packageName : string | null, animate : boolean = true) {
+        if (packageName !== null) packageName = this.normalizePackageName(packageName);
+
+        const packageFolder = this.getPackageFolder(packageName);
+        if (!packageFolder) return;
+
+        packageFolder.open(animate);
+    }
+
+    // todo - closePackage
+
     public updateTabNavigation(panelOpened : boolean) : void {
+        this.panelOpened = panelOpened;
         this.rootFolder.updateTabNavigation(panelOpened);
         if (this.defaultPackage) {
             this.defaultPackage.updateTabNavigation(panelOpened);
@@ -215,13 +286,16 @@ class FoldersManager {
     }
 
     private getFolder(folderPath : string[], createIfNotExist : boolean = false) : Folder | null {
+        let parentOpened = this.panelOpened;
         let folder = this.rootFolder;
         for (let folderName of folderPath) {
+            if (!folder.isOpened()) parentOpened = false;
+
             let subfolder = folder.getFolder(folderName);
 
             if (!subfolder) {
                 if (createIfNotExist) {
-                    subfolder = new Folder(folderName, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.folderIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_FOLDER_MODIFIER);
+                    subfolder = new Folder(folderName, parentOpened, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.folderIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_FOLDER_MODIFIER);
                     folder.addFolder(folderName, subfolder);
                 } else {
                     return null;
@@ -237,7 +311,7 @@ class FoldersManager {
         if (normalizedPackageName === null) {
             if (!this.defaultPackage) {
                 if (createIfNotExist) {
-                    this.defaultPackage = new Folder(this.defaultPackageName, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.packageIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_DEFAULT_PACKAGE_MODIFIER, this.packagesContainer);
+                    this.defaultPackage = new Folder(this.defaultPackageName, this.panelOpened, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.packageIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_DEFAULT_PACKAGE_MODIFIER, this.packagesContainer);
                 } else {
                     return null;
                 }
@@ -249,7 +323,7 @@ class FoldersManager {
 
         if (!packageFolder) {
             if (createIfNotExist) {
-                packageFolder = new Folder(normalizedPackageName, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.packageIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PACKAGE_MODIFIER, this.packagesContainer);
+                packageFolder = new Folder(normalizedPackageName, this.panelOpened, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.packageIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PACKAGE_MODIFIER, this.packagesContainer);
                 this.packages.set(normalizedPackageName, packageFolder);
             } else {
                 return null;

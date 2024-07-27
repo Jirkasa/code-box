@@ -14,22 +14,36 @@ class PanelToggle {
         this.buttonElement.addEventListener("click", () => this.onButtonClick());
     }
 
+    public open() : void {
+        if (this.opened) return;
+
+        this.opened = true;
+        this.panelElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_OPENED_MODIFIER);
+        this.buttonElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_OPEN_BUTTON_OPENED_MODIFIER);
+
+        this.onToggle();
+    }
+
+    public close() : void {
+        if (!this.opened) return;
+
+        this.opened = false;
+        this.panelElement.classList.remove(CSSClasses.PROJECT_CODE_BOX_PANEL_OPENED_MODIFIER);
+        this.buttonElement.classList.remove(CSSClasses.PROJECT_CODE_BOX_PANEL_OPEN_BUTTON_OPENED_MODIFIER);
+
+        this.onToggle();
+    }
+
     public isOpened() : boolean {
         return this.opened;
     }
 
     private onButtonClick() : void {
-        this.opened = !this.opened;
-
         if (this.opened) {
-            this.panelElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_OPENED_MODIFIER);
-            this.buttonElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_OPEN_BUTTON_OPENED_MODIFIER);
+            this.close();
         } else {
-            this.panelElement.classList.remove(CSSClasses.PROJECT_CODE_BOX_PANEL_OPENED_MODIFIER);
-            this.buttonElement.classList.remove(CSSClasses.PROJECT_CODE_BOX_PANEL_OPEN_BUTTON_OPENED_MODIFIER);
+            this.open();
         }
-
-        this.onToggle();
     }
 }
 

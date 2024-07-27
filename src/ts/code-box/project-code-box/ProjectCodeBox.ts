@@ -21,6 +21,9 @@ class ProjectCodeBox extends CodeBox {
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
     private codeViewEntries = new Map<CodeView, CodeViewEntry>(); // todo - možná spíš podle identifieru?
     private fileEntries = new Map<CodeBoxFile, FileEntry>();
+    
+    private readonly openActiveCodeViewFolderOnInit : boolean;
+    private readonly openActiveCodeViewPackageOnInit : boolean;
 
     constructor(element : HTMLElement, options : ProjectCodeBoxOptions = {}, parentCodeBox : ProjectCodeBox | null = null) { // todo - ještě by možná mohlo jít nastavit, jestli dědit od aktuálního stavu code boxu nebo ne
         const codeBoxBuilder = new ProjectCodeBoxBuilder(
@@ -28,10 +31,10 @@ class ProjectCodeBox extends CodeBox {
             options.packagesHeading || GlobalConfig.DEFAULT_PROJECT_PACKAGES_HEADING,
             options.svgSpritePath || null,
             options.svgSpriteIcons ? (options.svgSpriteIcons.panelOpenButton || null) : null
-        ); // todo - na to získávání ikony udělat nějakou helper metodu
+        );
         super(element, options, codeBoxBuilder);
 
-        // todo - ale budu to chtít skrývat (ty packages), takže to potom nějak pořešit (ale ve FoldersManageru už ne, ten toho dělá už dost)
+        // todo - ale budu to chtít skrývat (ty packages), takže to potom nějak pořešit (ale ve FoldersManageru už ne, ten toho dělá už dost) - ale tak můžu tam implementovat jen metodu pro získání počtu balíčků
 
         this.panelToggle = new PanelToggle(codeBoxBuilder.getPanelElement(), codeBoxBuilder.getPanelOpenButtonElement(), () => this.onPanelToggled());
         this.foldersManager = new FoldersManager(
@@ -42,6 +45,7 @@ class ProjectCodeBox extends CodeBox {
             options.defaultPackageName || null,
             options.createFoldersForPackages !== undefined ? options.createFoldersForPackages : GlobalConfig.DEFAULT_CREATE_FOLDERS_FOR_PACKAGES,
             options.foldersDelimiterForPackages || null,
+            this.panelToggle.isOpened(),
             options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED,
             options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION,
             options.svgSpritePath,
@@ -53,8 +57,17 @@ class ProjectCodeBox extends CodeBox {
             this.getIconName(options, "file"),
             this.getIconName(options, "download")
         );
+        if (options.openRootFolderOnInit !== undefined ? options.openRootFolderOnInit : true) { // todo - ale potom pro reset si to budu muset ukládat - dědit se to ale nebude - v dokumentaci bude napsáno, které options se dědí a které ne
+            this.foldersManager.openFolder("/", false, false);
+        }
+        if (options.openPanelOnInit) {
+            this.panelToggle.open();
+        }
 
-        this.showCodeViewEventSource.subscribe((codeViewButton, codeView) => this.onShowCodeView(codeViewButton, codeView));
+        this.openActiveCodeViewFolderOnInit = options.openActiveCodeViewFolderOnInit !== undefined ? options.openActiveCodeViewFolderOnInit : true;
+        this.openActiveCodeViewPackageOnInit = options.openActiveCodeViewPackageOnInit !== undefined ? options.openActiveCodeViewPackageOnInit : true;
+
+        this.showCodeViewEventSource.subscribe((_, codeView) => this.onShowCodeView(codeView));
     }
 
     // BEGIN - NOT IMPLEMENTED (JUST TO GET RID OF ERRORS FOR NOW)
@@ -130,11 +143,19 @@ class ProjectCodeBox extends CodeBox {
                 let packageName = this.getPackageNameFromDataset(codeViewInfo.dataset);
                 let isActive = codeViewInfo.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined;
 
+                const identifier = this.foldersManager.getItemIdentifier(fileName, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+
                 const success = this.foldersManager.addCodeView(fileName, codeViewInfo.codeView, this.showCodeViewEventSource, folderPath, packageName !== null, packageName !== "" ? packageName : null);
 
-                if (!success) continue;
+                if (!success) {
+                    if (!isActive) continue;
 
-                const identifier = this.foldersManager.getItemIdentifier(fileName, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+                    const success = this.foldersManager.removeCodeViewByIdentifier(identifier);
+                    if (!success && packageName !== null) {
+                        this.foldersManager.removeCodeViewByPackage(packageName !== "" ? packageName : null, fileName);
+                    }
+                    this.foldersManager.addCodeView(fileName, codeViewInfo.codeView, this.showCodeViewEventSource, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+                }
 
                 const codeBoxCodeViewManager = new CodeBoxCodeViewManager();
                 const codeBoxCodeView = new CodeBoxCodeView(identifier, codeViewInfo.codeView, this, codeBoxCodeViewManager);
@@ -142,6 +163,10 @@ class ProjectCodeBox extends CodeBox {
 
                 if (isActive) {
                     this.foldersManager.setCodeViewButtonsAsActiveByIdentifier(identifier);
+                    if (this.openActiveCodeViewFolderOnInit) {
+                        this.foldersManager.openFolder(folderPath || "/", true, false);
+                        this.foldersManager.openPackage(packageName !== "" ? packageName : null, false);
+                    }
                 }
             } else if (codeBoxItemInfo.type === "FileInfo" && codeBoxItemInfo.fileInfo) {
                 let fileInfo = codeBoxItemInfo.fileInfo;
@@ -164,7 +189,7 @@ class ProjectCodeBox extends CodeBox {
         }
     }
 
-    private onShowCodeView(codeViewButton : CodeViewButton, codeView : CodeView) : void { // todo - CodeViewButton asi nebudu potřebovat, tak ho sem nepředávat
+    private onShowCodeView(codeView : CodeView) : void {
         this.changeActiveCodeView(codeView);
 
         const codeViewEntry = this.codeViewEntries.get(codeView);
@@ -240,18 +265,13 @@ class ProjectCodeBox extends CodeBox {
 export default ProjectCodeBox;
 
 /*
-Co tady potřebuju dělat:
-    - vzít ty datasety code views a podle toho vytvořit v panelu tlačítka
-        - promyslet jak to bude s balíčky (pro javu se vytvářejí automaticky složky - )
-    - metody pro přidávání dalších code views
-    - dědit od parent code boxu
-        - bude se používat memento
-    - zpracovat konfigurační objekt s folder strukturou
-    - zpracovat command objekty
-        - pro spouštění commandů budou asi i metody, ale nebudou se brát v potaz při dědění
-    - 
-
-Pokud bude mít code view data-cb-folder atribut, tak 
+Takže teď:
+    - skrývání/odkrývání sekce s balíčky
+    - otevření root složky
+    - automatické otevření složek a balíčků s aktivním code view
+    - otevření složky pomocí data-cb-opened
+    - plnit options z data atributů
+    - vytvářet podsložky když se zavolá addPackage
 
 - todo - podívat se jestli používám všude GlobalConfig.DATA_ATTRIBUTE_PREFIX - narazil jsem na kód, kde jsem to nepoužil
 */

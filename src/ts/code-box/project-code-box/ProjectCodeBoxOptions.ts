@@ -21,8 +21,12 @@ type ProjectCodeBoxOptions = {
     foldersDelimiterForPackages ?: string;
     folderAnimationSpeed ?: number;
     folderAnimationEasingFunction ?: string;
-    openActiveCodeViewFolder ?: boolean;
-    openActiveCodeViewPackage ?: boolean;
+    openActiveCodeViewFolderOnInit ?: boolean;
+    openActiveCodeViewPackageOnInit ?: boolean;
+    openRootFolderOnInit ?: boolean; // napsat že to má vliv jen v některých případech, když třeba není žádné code view aktivní (přednost má openActiveCodeViewFolder option)
+    openPanelOnInit ?: boolean;
 } & CodeBoxOptions;
+
+// todo - potom to uklidit a popsat - a zkontrolovat že všechno používám
 
 export default ProjectCodeBoxOptions;

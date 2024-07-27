@@ -24,12 +24,12 @@ class Folder {
     // private codeViewButtons = new Map<string, CodeViewButton>();
     // private fileButtons = new Map<string, FileButton>();
 
-    private lastParentOpened : boolean = false; // todo - a tady to taky okomentovat - není to přímo jakoby parent
+    private lastParentOpened : boolean; // todo - a tady to taky okomentovat - není to přímo jakoby parent
 
     //private opened : boolean = false;
 
     // todo - budu muset předávat, zda je parent otevřený - a budu si muset držet takovou proměnnou
-    constructor(name : string, openCloseAnimationSpeed : number, openCloseAnimationEasingFunction : string, svgSpritePath : string | null = null, arrowIconName : string | null = null, folderIconName : string | null = null, cssModifierClass : string | null = null, parentElement : HTMLElement | null = null) {
+    constructor(name : string, parentOpened : boolean, openCloseAnimationSpeed : number, openCloseAnimationEasingFunction : string, svgSpritePath : string | null = null, arrowIconName : string | null = null, folderIconName : string | null = null, cssModifierClass : string | null = null, parentElement : HTMLElement | null = null) {
         this.buttonElement = document.createElement("button");
         this.buttonElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM);
         if (cssModifierClass) {
@@ -64,11 +64,26 @@ class Folder {
         }
 
         this.collapsible = new Collapsible(this.buttonElement, this.itemsContainer, openCloseAnimationSpeed, openCloseAnimationEasingFunction, () => this.onCollapsibleToggled());
-        this.updateTabNavigation();
+        
+        this.lastParentOpened = parentOpened;
+        this.updateTabNavigation(this.lastParentOpened);
     }
 
-    // pokud se volá open/close metoda, tak je tato metoda volána automaticky (open a close metodu zatím nemám)
-    public updateTabNavigation(parentOpened : boolean = false) : void { // parentOpened není tak úplně parent opened (přejmenovat to - ale na co? - spíš přidám komentář)
+    public open(animate : boolean = true) : void {
+        if (this.collapsible.isOpened()) return;
+        this.collapsible.open(animate);
+    }
+
+    public close(animate : boolean = true) : void {
+        if (!this.collapsible.isOpened()) return;
+        this.collapsible.close(animate);
+    }
+
+    public isOpened() : boolean {
+        return this.collapsible.isOpened();
+    }
+
+    public updateTabNavigation(parentOpened : boolean) : void { // parentOpened není tak úplně parent opened (přejmenovat to - ale na co? - spíš přidám komentář)
         if (parentOpened) {
             this.buttonElement.setAttribute("tabindex", "0");
         } else {
@@ -128,6 +143,17 @@ class Folder {
         return codeViewItem;
     }
 
+    public removeCodeView(name : string) : boolean {
+        // if (!this.codeViewItems.has(name)) return false;
+        const codeViewItem = this.codeViewItems.get(name);
+        if (!codeViewItem) return false;
+
+        codeViewItem.codeViewButton.detach();
+
+        this.codeViewItems.delete(name);
+        return true;
+    }
+
     public addFile(name : string, codeBoxFile : CodeBoxFile, svgSpritePath : string | null = null, buttonIconName : string | null = null, buttonDownloadIconName : string | null = null) : FileFolderItem | null {
         if (this.fileItems.has(name)) return null;
 
@@ -149,6 +175,8 @@ class Folder {
         if (!fileItem) return null;
         return fileItem;
     }
+
+    // todo - removeFile
 
     private onCollapsibleToggled() : void {
         this.updateTabNavigation(this.lastParentOpened);
