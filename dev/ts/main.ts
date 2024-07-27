@@ -1,7 +1,7 @@
 import {CodeView, TabCodeBox, ProjectCodeBox} from "../../src/ts/main";
 
 declare global {
-    interface Window { myCodeBox: TabCodeBox; }
+    interface Window { myCodeBox: ProjectCodeBox; }
 }
 
 const codeView = new CodeView(document.getElementById("CodeViewTest") as HTMLPreElement, {
@@ -28,10 +28,10 @@ const tabCodeBox = new TabCodeBox(document.getElementById("TabCodeBoxTest") as H
         download: "download"
     }
 });
-window.myCodeBox = tabCodeBox;
+// window.myCodeBox = tabCodeBox;
 // tabCodeBox.init();
 
-new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement, {
+const projectCodeBox = new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement, {
     projectName: "test",
     svgSpritePath: "./static/icon-sprite.svg",
     svgSpriteIcons: {
@@ -48,6 +48,7 @@ new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement,
     foldersDelimiterForPackages: ".",
     openPanelOnInit: true
 });
+window.myCodeBox = projectCodeBox;
 
 new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest2") as HTMLElement, {
     svgSpritePath: "./static/icon-sprite.svg",

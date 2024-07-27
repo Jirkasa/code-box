@@ -92,9 +92,9 @@ class ProjectCodeBox extends CodeBox {
         return null;
     }
 
-    public getCodeViews(): CodeBoxCodeView[] {
-        return [];
-    }
+    // public getCodeViews(): CodeBoxCodeView[] {
+    //     return [];
+    // }
 
     public getFile(identifier: string): CodeBoxFile | null {
         return null;
@@ -129,6 +129,14 @@ class ProjectCodeBox extends CodeBox {
     }
     // END - NOT IMPLEMENTED (JUST TO GET RID OF ERRORS FOR NOW)
 
+    public getCodeViews() : CodeBoxCodeView[] {
+        if (!this.isInitialized()) throw new Error(CodeBox.PROJECT_NOT_INITIALIZED_ERROR);
+
+        const codeBoxCodeViews = new Array<CodeBoxCodeView>();
+        this.codeViewEntries.forEach(entry => codeBoxCodeViews.push(entry.codeBoxCodeView));
+        return codeBoxCodeViews;
+    }
+
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]): void {
         // jenom jeden konfigurační element pro složky bude asi dovolen - uvidím, možná to vadit nebude
         for (let codeBoxItemInfo of codeBoxItemInfos) {
@@ -159,9 +167,14 @@ class ProjectCodeBox extends CodeBox {
                 if (!success) {
                     if (!isActive) continue;
 
+                    let activeCodeView = this.foldersManager.getCodeViewByIdentifier(identifier);
                     const success = this.foldersManager.removeCodeViewByIdentifier(identifier);
                     if (!success && packageName !== null) {
+                        activeCodeView = this.foldersManager.getCodeViewByPackage(packageName !== "" ? packageName : null, fileName);
                         this.foldersManager.removeCodeViewByPackage(packageName !== "" ? packageName : null, fileName);
+                    }
+                    if (activeCodeView) {
+                        this.codeViewEntries.delete(activeCodeView);
                     }
                     this.foldersManager.addCodeView(fileName, codeViewInfo.codeView, this.showCodeViewEventSource, folderPath, packageName !== null, packageName !== "" ? packageName : null);
                 }

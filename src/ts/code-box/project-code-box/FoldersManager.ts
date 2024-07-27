@@ -111,15 +111,47 @@ class FoldersManager {
     }
 
     public getCodeViewByFolderPath(folderPath : string | null, fileName : string) : CodeView | null { // todo - null může být pro root složku
-        return null;
+        folderPath = this.normalizeFolderPath(folderPath || "");
+        fileName = this.sanitizeFileName(fileName);
+
+        const parsedFolderPath = this.parseFolderPath(folderPath);
+
+        const folder = this.getFolder(parsedFolderPath);
+        if (!folder) return null;
+
+        const codeViewItem = folder.getCodeView(fileName);
+        if (!codeViewItem) return null;
+
+        return codeViewItem.codeView;
     }
 
     public getCodeViewByIdentifier(identifier : string) : CodeView | null {
-        return null;
+        identifier = this.normalizeFolderPath(identifier);
+
+        const parsedFolderPath = this.parseFolderPath(identifier);
+        const fileName = parsedFolderPath.pop();
+        if (!fileName) return null;
+
+        const folder = this.getFolder(parsedFolderPath);
+        if (!folder) return null;
+
+        const codeViewItem = folder.getCodeView(fileName);
+        if (!codeViewItem) return null;
+
+        return codeViewItem.codeView;
     }
 
     public getCodeViewByPackage(packageName : string | null, fileName : string) : CodeView | null { // todo - null pro default package
-        return null;
+        if (packageName !== null) packageName = this.normalizePackageName(packageName);
+        fileName = this.sanitizeFileName(fileName);
+
+        const packageFolder = this.getPackageFolder(packageName);
+        if (!packageFolder) return null;
+
+        const codeViewItem = packageFolder.getCodeView(fileName);
+        if (!codeViewItem) return null;
+
+        return codeViewItem.codeView;
     }
 
     public removeCodeViewByIdentifier(identifier : string) : boolean {
