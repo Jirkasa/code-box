@@ -230,9 +230,11 @@ class ProjectCodeBox extends CodeBox {
                 const folderNames = [...parentFolderNames, folderName];
                 const folderPath = folderNames.join("/");
 
-                // todo - data-cb-opened
+                this.foldersManager.addFolder(folderPath);
 
-                this.foldersManager.addFolder(folderPath); // todo - potom se tam bude jako volitelný parametr předávat, zda se má složka automaticky otevřít
+                if (child.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Opened"] !== undefined) {
+                    this.foldersManager.openFolder(folderPath, false, false);
+                }
 
                 if (child.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "PackagesFolder"] !== undefined) {
                     this.foldersManager.setPackagesFolderPath(folderPath);

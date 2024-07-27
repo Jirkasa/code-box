@@ -31,4 +31,5 @@ export default CodeViewOptions;
  * data-cb-folders (ul element)
  * data-cb-packages-folder
  * data-cb-commands
+ * data-cb-opened
  */
