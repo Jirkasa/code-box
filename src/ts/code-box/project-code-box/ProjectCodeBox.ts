@@ -271,7 +271,6 @@ export default ProjectCodeBox;
 /*
 Takže teď:
     - skrývání/odkrývání sekce s balíčky
-    - otevření složky pomocí data-cb-opened
     - plnit options z data atributů
     - vytvářet podsložky když se zavolá addPackage
 

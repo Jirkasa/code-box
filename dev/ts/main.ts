@@ -48,3 +48,20 @@ new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement,
     foldersDelimiterForPackages: ".",
     openPanelOnInit: true
 });
+
+new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest2") as HTMLElement, {
+    svgSpritePath: "./static/icon-sprite.svg",
+    svgSpriteIcons: {
+        codeFile: "file",
+        file: "file-2",
+        download: "download",
+        panelOpenButton: "double-arrow-right",
+        folder: "folder",
+        folderArrow: "arrow-right",
+        package: "package",
+        project: "inventory"
+    },
+    projectName: "test",
+    packagesFolderPath: "src/main/java",
+    foldersDelimiterForPackages: "."
+});

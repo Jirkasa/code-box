@@ -19,8 +19,6 @@ class FoldersManager {
     private fileFolderAndPackageMappings = new FolderAndPackageMapping();
     private activeCodeViewIdentifier : string | null = null;
     private panelOpened : boolean = false;
-    // tak tady nadefinovat něco jako package mapping - ale ono je možné umístit do jednoho balíčku dvě tlačítka se stejným textem - to by jít nemělo, takže budu muset zajistit, aby to nešlo
-        // takže se podívat na to - jak vyřešit duplicity - a kdyžtak ty metody budou vracet false
 
     // todo - u složek generovaných pro balíčky se bude muset ukládat, jestli byly vygenerovány nebo ne
 
@@ -307,10 +305,11 @@ class FoldersManager {
         return folder;
     }
 
-    private getPackageFolder(normalizedPackageName : string | null, createIfNotExist : boolean = false) : Folder | null { // todo - při vytváření balíčků ještě vytvářet složky ve složce pro balíčky (bude se předávat v konfiguraci, jestli se to má dělat a podle jakého znaku v názvu balíčku - pokud to bude null, tak se to bude do té složky jen dávat, nebudou se tam složky vytvářet)
+    private getPackageFolder(normalizedPackageName : string | null, createIfNotExist : boolean = false) : Folder | null {
         if (normalizedPackageName === null) {
             if (!this.defaultPackage) {
                 if (createIfNotExist) {
+                    this.getFolder(this.packagesFolderPath, true);
                     this.defaultPackage = new Folder(this.defaultPackageName, this.panelOpened, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.packageIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_DEFAULT_PACKAGE_MODIFIER, this.packagesContainer);
                 } else {
                     return null;
@@ -323,6 +322,17 @@ class FoldersManager {
 
         if (!packageFolder) {
             if (createIfNotExist) {
+                const folderPath = this.packagesFolderPath.slice();
+                if (this.foldersDelimiterForPackages !== null) {
+                    const packageFolderNames = this.getPackageFolderNames(normalizedPackageName);
+                    for (let folderName of packageFolderNames) {
+                        folderPath.push(folderName);
+                    }
+                } else {
+                    folderPath.push(normalizedPackageName);
+                }
+
+                this.getFolder(folderPath, true);
                 packageFolder = new Folder(normalizedPackageName, this.panelOpened, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.packageIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PACKAGE_MODIFIER, this.packagesContainer);
                 this.packages.set(normalizedPackageName, packageFolder);
             } else {
@@ -339,7 +349,7 @@ class FoldersManager {
             if (!this.createFoldersForPackages || normalizedPackageName === null) return this.packagesFolderPath.join("/");
 
             const packageFolderPath = this.packagesFolderPath.slice();
-            if (this.foldersDelimiterForPackages) {
+            if (this.foldersDelimiterForPackages !== null) {
                 for (let folderName of this.getPackageFolderNames(normalizedPackageName)) {
                     packageFolderPath.push(folderName);
                 }
