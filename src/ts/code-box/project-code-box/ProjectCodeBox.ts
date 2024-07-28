@@ -79,56 +79,6 @@ class ProjectCodeBox extends CodeBox {
         this.showCodeViewEventSource.subscribe((_, codeView) => this.onShowCodeView(codeView));
     }
 
-    // BEGIN - NOT IMPLEMENTED (JUST TO GET RID OF ERRORS FOR NOW)
-    // public changeCodeViewIdentifier(identifier: string, newIdentifier: string): boolean {
-    //     return false
-    // }
-
-    public changeFileIdentifier(identifier: string, newIdentifier: string): boolean {
-        return false;
-    }
-
-    // public getCodeView(identifier: string): CodeBoxCodeView | null {
-    //     return null;
-    // }
-
-    // public getCodeViews(): CodeBoxCodeView[] {
-    //     return [];
-    // }
-
-    public getFile(identifier: string): CodeBoxFile | null {
-        return null;
-    }
-
-    public getFiles(): CodeBoxFile[] {
-        return [];
-    }
-
-    // public removeCodeView(identifier: string): boolean {
-    //     return false;
-    // }
-
-    public removeFile(identifier: string): boolean {
-        return false;
-    }
-
-    // public setActiveCodeView(identifier: string): boolean {
-    //     return false;
-    // }
-
-    // public setNoActiveCodeView(): void {
-        
-    // }
-
-    // public getActiveCodeView(): CodeBoxCodeView | null {
-    //     return null;
-    // }
-
-    public changeFileDownloadLink(identifier: string, newDownloadLink: string | null): boolean {
-        return false;
-    }
-    // END - NOT IMPLEMENTED (JUST TO GET RID OF ERRORS FOR NOW)
-
     public getCodeViews() : CodeBoxCodeView[] {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -158,7 +108,6 @@ class ProjectCodeBox extends CodeBox {
         const codeViewEntry = this.codeViewEntries.get(codeView);
         if (!codeViewEntry) return false;
 
-        // todo - ale ještě musím kdyžtak odstranit aktivní code view aby se nezobrazovalo
         const success = this.foldersManager.removeCodeViewByIdentifier(identifier);
         if (!success) return false;
 
@@ -207,6 +156,8 @@ class ProjectCodeBox extends CodeBox {
     }
 
     public getActiveCodeView() : CodeBoxCodeView | null {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         const codeView = this.getCurrentlyActiveCodeView();
         if (!codeView) return null;
 
@@ -214,6 +165,69 @@ class ProjectCodeBox extends CodeBox {
         if (!codeViewEntry) return null;
 
         return codeViewEntry.codeBoxCodeView;
+    }
+
+    public getFiles() : CodeBoxFile[] {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeBoxFiles = new Array<CodeBoxFile>();
+        this.fileEntries.forEach((_, codeBoxFile) => codeBoxFiles.push(codeBoxFile));
+        return codeBoxFiles;
+    }
+
+    public getFile(identifier: string) : CodeBoxFile | null {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.foldersManager.getFileByIdentifier(identifier);
+    }
+
+    public removeFile(identifier: string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeBoxFile = this.foldersManager.getFileByIdentifier(identifier);
+        if (!codeBoxFile) return false;
+
+        const fileEntry = this.fileEntries.get(codeBoxFile);
+        if (!fileEntry) return false;
+
+        const success = this.foldersManager.removeFileByIdentifier(identifier);
+        if (!success) return false;
+
+        fileEntry.codeBoxFileManager.unlinkCodeBox();
+
+        this.fileEntries.delete(codeBoxFile);
+
+        return true;
+    }
+
+    public changeFileIdentifier(identifier: string, newIdentifier: string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const success = this.foldersManager.changeFileIdentifier(identifier, newIdentifier);
+        if (!success) return false;
+
+        const codeBoxFile = this.foldersManager.getFileByIdentifier(newIdentifier);
+        if (!codeBoxFile) return false;
+
+        const fileEntry = this.fileEntries.get(codeBoxFile);
+        fileEntry?.codeBoxFileManager.changeIdentifier(newIdentifier);
+
+        return true;
+    }
+
+    public changeFileDownloadLink(identifier: string, newDownloadLink: string | null) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const success = this.foldersManager.changeFileDownloadLinkByIdentifier(identifier, newDownloadLink);
+        if (!success) return false;
+
+        const codeBoxFile = this.foldersManager.getFileByIdentifier(identifier);
+        if (!codeBoxFile) return false;
+
+        const fileEntry = this.fileEntries.get(codeBoxFile);
+        fileEntry?.codeBoxFileManager.changeDownloadLink(newDownloadLink);
+
+        return true;
     }
 
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]) : void {
@@ -424,7 +438,7 @@ export default ProjectCodeBox;
 - Teď udělat:
 - dořešit ty metody - ostatní přidám ještě potom
     - ještě k tomu přesouvání do složek... - co s automaticky generovanými složkami pro packages - když se třeba změní package, tak jak změnit item identifier? - možná předávat volitelný parametr, jestli se má změnit i identifier (složka)?
-        - tohle musím promyslet
+        - tohle musím promyslet (a hlavně to potom i napsat do dokumentace)
 - ostatní metody
     - různé podobné věci ale třeba podle balíčků atd.
     - metoda na otevření/zavření panelu

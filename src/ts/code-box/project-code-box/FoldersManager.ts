@@ -250,15 +250,137 @@ class FoldersManager {
     }
 
     public getFileByFolderPath(folderPath : string | null, fileName : string) : CodeBoxFile | null {
-        return null;
+        folderPath = this.normalizeFolderPath(folderPath || "");
+        fileName = this.sanitizeFileName(fileName);
+
+        const parsedFolderPath = this.parseFolderPath(folderPath);
+
+        const folder = this.getFolder(parsedFolderPath);
+        if (!folder) return null;
+
+        const fileItem = folder.getFile(fileName);
+        if (!fileItem) return null;
+
+        return fileItem.codeBoxFile;
     }
 
     public getFileByIdentifier(identifier : string) : CodeBoxFile | null {
-        return null;
+        identifier = this.normalizeFolderPath(identifier);
+
+        const parsedFolderPath = this.parseFolderPath(identifier);
+        const fileName = parsedFolderPath.pop();
+        if (!fileName) return null;
+
+        const folder = this.getFolder(parsedFolderPath);
+        if (!folder) return null;
+
+        const fileItem = folder.getFile(fileName);
+        if (!fileItem) return null;
+
+        return fileItem.codeBoxFile;
     }
 
     public getFileByPackage(packageName : string | null, fileName : string) : CodeBoxFile | null {
-        return null;
+        if (packageName !== null) packageName = this.normalizePackageName(packageName);
+        fileName = this.sanitizeFileName(fileName);
+
+        const packageFolder = this.getPackageFolder(packageName);
+        if (!packageFolder) return null;
+
+        const fileItem = packageFolder.getFile(fileName);
+        if (!fileItem) return null;
+
+        return fileItem.codeBoxFile;
+    }
+
+    public removeFileByIdentifier(identifier : string) : boolean {
+        identifier = this.normalizeFolderPath(identifier);
+
+        const parsedFolderPath = this.parseFolderPath(identifier);
+        if (parsedFolderPath.length === 0) return false;
+        const fileName = parsedFolderPath.pop();
+        if (!fileName) return false;
+
+        const folder = this.getFolder(parsedFolderPath);
+        if (!folder) return false;
+
+        const success = folder.removeFile(fileName);
+        if (!success) return false;
+
+        const packageItem = this.fileFolderAndPackageMappings.getPackageItemByFileFolderPath(parsedFolderPath.length > 0 ? parsedFolderPath.join("/") : null, fileName);
+        if (!packageItem) return true;
+
+        const packageFolder = this.getPackageFolder(packageItem.packageName);
+        packageFolder?.removeFile(fileName);
+
+        this.fileFolderAndPackageMappings.removeByFileFolderPath(parsedFolderPath.length > 0 ? parsedFolderPath.join("/") : null, fileName);
+
+        return true;
+    }
+
+    public removeFileByPackage(packageName : string | null, fileName : string) : boolean {
+        if (packageName !== null) packageName = this.normalizePackageName(packageName);
+        fileName = this.sanitizeFileName(fileName);
+
+        const identifier = this.fileFolderAndPackageMappings.getFileFolderPathByPackageItem(packageName, fileName);
+        if (!identifier) return false;
+        return this.removeFileByIdentifier(identifier);
+    }
+
+    public changeFileIdentifier(identifier : string, newIdentifier : string) : boolean {
+        identifier = this.normalizeFolderPath(identifier);
+        newIdentifier = this.normalizeFolderPath(newIdentifier);
+
+        if (this.getFileByIdentifier(newIdentifier) !== null) return false;
+
+        const codeBoxFile = this.getFileByIdentifier(identifier);
+        if (!codeBoxFile) return false;
+
+        let parsedFolderPath = this.parseFolderPath(identifier);
+        let fileName = parsedFolderPath.pop();
+        if (!fileName) return false;
+
+        const packageItem = this.fileFolderAndPackageMappings.getPackageItemByFileFolderPath(parsedFolderPath.length > 0 ? parsedFolderPath.join("/") : null, fileName);
+
+        const success = this.removeFileByIdentifier(identifier);
+        if (!success) return false;
+
+        parsedFolderPath = this.parseFolderPath(newIdentifier);
+        fileName = parsedFolderPath.pop();
+        if (!fileName) return false;
+
+        this.addFile(fileName, codeBoxFile, parsedFolderPath.join("/"), packageItem !== null, packageItem ? packageItem.packageName : null);
+
+        return true;
+    }
+
+    public changeFileDownloadLinkByIdentifier(identifier : string, newDownloadLink : string | null) : boolean {
+        identifier = this.normalizeFolderPath(identifier);
+
+        const parsedFolderPath = this.parseFolderPath(identifier);
+        const fileName = parsedFolderPath.pop();
+        if (!fileName) return false;
+
+        const folder = this.getFolder(parsedFolderPath);
+        if (!folder) return false;
+
+        let fileItem = folder.getFile(fileName);
+        if (!fileItem) return false;
+
+        fileItem.fileButton.setDownloadLink(newDownloadLink);
+
+        const packageItem = this.fileFolderAndPackageMappings.getPackageItemByFileFolderPath(parsedFolderPath.length > 0 ? parsedFolderPath.join("/") : null, fileName);
+        if (!packageItem) return true;
+
+        const packageFolder = this.getPackageFolder(packageItem.packageName);
+        if (!packageFolder) return true;
+
+        fileItem = packageFolder.getFile(packageItem.fileName);
+        if (!fileItem) return true;
+
+        fileItem.fileButton.setDownloadLink(newDownloadLink);
+
+        return true;
     }
 
     public setNoCodeViewButtonAsActive() : void {

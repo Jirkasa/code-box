@@ -143,6 +143,8 @@ class TabCodeBox extends CodeBox {
     }
 
     public getActiveCodeView() : CodeBoxCodeView | null {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         const codeView = this.getCurrentlyActiveCodeView();
         if (!codeView) return null;
 
@@ -190,6 +192,7 @@ class TabCodeBox extends CodeBox {
         if (this.fileEntries.has(newIdentifier)) return false;
 
         fileEntry.fileButton.setText(newIdentifier);
+        fileEntry.codeBoxFileManager.changeIdentifier(newIdentifier);
 
         this.fileEntries.delete(identifier);
         this.fileEntries.set(newIdentifier, fileEntry);

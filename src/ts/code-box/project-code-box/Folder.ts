@@ -144,7 +144,6 @@ class Folder {
     }
 
     public removeCodeView(name : string) : boolean {
-        // if (!this.codeViewItems.has(name)) return false;
         const codeViewItem = this.codeViewItems.get(name);
         if (!codeViewItem) return false;
 
@@ -176,7 +175,15 @@ class Folder {
         return fileItem;
     }
 
-    // todo - removeFile
+    public removeFile(name : string) : boolean {
+        const fileItem = this.fileItems.get(name);
+        if (!fileItem) return false;
+
+        fileItem.fileButton.detach();
+
+        this.fileItems.delete(name);
+        return true;
+    }
 
     private onCollapsibleToggled() : void {
         this.updateTabNavigation(this.lastParentOpened);

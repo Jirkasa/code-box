@@ -11,6 +11,7 @@ class CodeBoxFile {
         this.downloadLink = downloadLink;
         this.codeBox = codeBox;
 
+        manager.onIdentifierChange = newIdentifier => this.onIdentifierChange(newIdentifier);
         manager.onDownloadLinkChange = newDownloadLink => this.onDownloadLinkChange(newDownloadLink);
         manager.onUnlinkCodeBox = () => this.onUnlinkCodeBox();
     }
@@ -23,8 +24,6 @@ class CodeBoxFile {
     public changeIdentifier(newIdentifier : string) : boolean {
         if (!this.codeBox) return false;
         return this.codeBox.changeFileIdentifier(this.identifier, newIdentifier);
-        // if (success) this.identifier = newIdentifier; // todo - toto není potřeba, ale ověřit to
-        // return success;
     }
 
     // todo - možná reset
@@ -41,6 +40,10 @@ class CodeBoxFile {
     public setDownloadLink(downloadLink : string | null) : void {
         if (!this.codeBox) return;
         this.codeBox.changeFileDownloadLink(this.identifier, downloadLink);
+    }
+
+    private onIdentifierChange(newIdentifier : string) : void {
+        this.identifier = newIdentifier;
     }
 
     private onDownloadLinkChange(newDownloadLink : string | null) : void {
