@@ -442,7 +442,19 @@ export default ProjectCodeBox;
 - ostatní metody
     - různé podobné věci ale třeba podle balíčků atd.
     - metoda na otevření/zavření panelu
-- řazení ve složkách podle abecedy
 
 - todo - podívat se jestli používám všude GlobalConfig.DATA_ATTRIBUTE_PREFIX - narazil jsem na kód, kde jsem to nepoužil
+*/
+
+/*
+Takže jak to bude s mazáním code views a files v balíčcích?
+Potřebuju si ujasnit:
+    - jak to bude s mazáním balíčků (Package folders)
+        - taky se tady bude ukládat, jestli byl package vygenerován automaticky
+            - kdyžtak pokud by se metoda addPackage volala již pro existující package, tak by se to přepsalo
+            - to je blbost - tak to dělat nebudu - to by bylo dost matoucí - nejdřív si tady nadefinuju ty další metody, které tady budu chtít implementovat a potom uvidím
+                - třeba při mazání balíčků se může nastavit, jestli se mají smazat prázdné složky, jestli se má vymazat její obsah, atp.. - musím to promyslet
+                    - bude to lepší než si pamatovat jestli se něco vytvořilo automaticky (to by bylo pro uživatele stejně matoucí a brali by to za chybu)
+    - jak to bude s mazáním vygenerovaných složek pro balíčky
+        - asi bude nejlepší, když se u každé složky bude ukládat, zda byla vytvořena automaticky pro balíček - to by asi bylo nejlepší
 */

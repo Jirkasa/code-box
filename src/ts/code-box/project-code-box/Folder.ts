@@ -21,14 +21,9 @@ class Folder {
     private subfolders = new Map<string, Folder>();
     private codeViewItems = new Map<string, CodeViewFolderItem>();
     private fileItems = new Map<string, FileFolderItem>();
-    // private codeViewButtons = new Map<string, CodeViewButton>();
-    // private fileButtons = new Map<string, FileButton>();
 
     private lastParentOpened : boolean; // todo - a tady to taky okomentovat - není to přímo jakoby parent
 
-    //private opened : boolean = false;
-
-    // todo - budu muset předávat, zda je parent otevřený - a budu si muset držet takovou proměnnou
     constructor(name : string, parentOpened : boolean, openCloseAnimationSpeed : number, openCloseAnimationEasingFunction : string, svgSpritePath : string | null = null, arrowIconName : string | null = null, folderIconName : string | null = null, cssModifierClass : string | null = null, parentElement : HTMLElement | null = null) {
         this.buttonElement = document.createElement("button");
         this.buttonElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM);
@@ -109,10 +104,10 @@ class Folder {
         if (this.subfolders.has(name)) return;
 
         this.subfolders.set(name, folder);
-        this.itemsContainer.appendChild(folder.buttonElement);
-        this.itemsContainer.appendChild(folder.itemsContainer);
 
         folder.updateTabNavigation(this.lastParentOpened && this.collapsible.isOpened());
+
+        this.sortItems();
     }
 
     public getFolder(folderName : string) : Folder | null {
@@ -125,7 +120,6 @@ class Folder {
         if (this.codeViewItems.has(name)) return null;
 
         const codeViewButton = new ProjectCodeViewButton(name, showCodeViewEventSource, codeView, svgSpritePath, buttonIconName);
-        codeViewButton.appendTo(this.itemsContainer);
         if (this.lastParentOpened && this.collapsible.isOpened()) {
             codeViewButton.enableTabNavigation();
         } else {
@@ -134,6 +128,9 @@ class Folder {
         
         const item = new CodeViewFolderItem(codeView, codeViewButton);
         this.codeViewItems.set(name, item);
+
+        this.sortItems();
+
         return item;
     }
 
@@ -157,7 +154,6 @@ class Folder {
         if (this.fileItems.has(name)) return null;
 
         const fileButton = new ProjectFileButton(name, codeBoxFile.getDownloadLink(), svgSpritePath, buttonIconName, buttonDownloadIconName);
-        fileButton.appendTo(this.itemsContainer);
         if (this.lastParentOpened && this.collapsible.isOpened()) {
             fileButton.enableTabNavigation();
         } else {
@@ -166,6 +162,9 @@ class Folder {
 
         const item = new FileFolderItem(codeBoxFile, fileButton);
         this.fileItems.set(name, item);
+
+        this.sortItems();
+
         return item;
     }
 
@@ -187,6 +186,29 @@ class Folder {
 
     private onCollapsibleToggled() : void {
         this.updateTabNavigation(this.lastParentOpened);
+    }
+
+    private sortItems() : void {
+        const folders = Array.from(this.subfolders);
+        folders.sort((folder1, folder2) => folder1[0] > folder2[0] ? 1 : -1);
+
+        const items = new Array<[string, CodeViewFolderItem | FileFolderItem]>();
+        this.codeViewItems.forEach((item, name) => items.push([name, item]));
+        this.fileItems.forEach((item, name) => items.push([name, item]));
+        items.sort((item1, item2) => item1[0] > item2[0] ? 1 : -1);
+
+        for (let folder of folders) {
+            this.itemsContainer.appendChild(folder[1].buttonElement);
+            this.itemsContainer.appendChild(folder[1].itemsContainer);
+        }
+
+        for (let item of items) {
+            if (item[1] instanceof CodeViewFolderItem) {
+                item[1].codeViewButton.appendTo(this.itemsContainer);
+            } else if (item[1] instanceof FileFolderItem) {
+                item[1].fileButton.appendTo(this.itemsContainer);
+            }
+        }
     }
 }
 
