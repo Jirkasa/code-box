@@ -20,7 +20,7 @@ class FoldersManager {
     private activeCodeViewIdentifier : string | null = null;
     private panelOpened : boolean = false;
 
-    // todo - u složek generovaných pro balíčky se bude muset ukládat, jestli byly vygenerovány nebo ne
+    // todo - u složek generovaných pro balíčky se bude muset ukládat, jestli byly vygenerovány nebo ne - ne, tak to dělat nakonec nebude
 
     private readonly svgSpritePath : string | null;
     private readonly folderArrowIconName : string | null;

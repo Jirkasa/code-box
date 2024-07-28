@@ -458,3 +458,54 @@ Potřebuju si ujasnit:
     - jak to bude s mazáním vygenerovaných složek pro balíčky
         - asi bude nejlepší, když se u každé složky bude ukládat, zda byla vytvořena automaticky pro balíček - to by asi bylo nejlepší
 */
+
+/*
+Takže metody:
+    Code Views:
+        getCodeViews
+        getCodeView
+        removeCodeView
+        changeCodeViewIdentifier
+        setActiveCodeView
+        setNoActiveCodeView
+        getActiveCodeView
+        --------
+        getCodeViewPackage - získá název balíčku, do kterého code view patří
+            - propojím s CodeBoxCodeView
+        getCodeViewByPackage
+        getCodeViewByFolderPath
+    Files:
+        getFiles
+        getFile
+        removeFile
+        changeFileIdentifier
+        changeFileDownloadLink
+        --------
+        getFilePackage - získá název balíčku, do kterého file patří
+            - propojím s CodeBoxFile
+        getFileByPackage
+        getFileByFolderPath
+    Složky:
+        addFolder - přidá novou složku
+        removeFolder - smaže složku (a podsložky) - a asi i jejich obsah
+        openFolder - volitelný parametr: openParentFolders
+        closeFolder - volitelný parametr: closeChildFolders
+        isFolderOpened - zjistí, jestli je složka otevřená
+    Balíčky:
+        addPackage - jen přidá balíček - to by asi neměl být problém
+        removePackage - odstraní balíček a odstraní z něj code views a files (pokud nebudou mít nastavenou složku mimo složku pro balíčky?) - defaultní balíček samozřejmě smazat nepůjde
+        openPackage - otevře balíček
+        closePackage - zavře balíček
+        isPackageOpened - zjistí, jestli je balíček otevřený
+    Další:
+        setProjectName
+        openPanel
+        closePanel
+        isPanelOpened
+    Další u kterých nevím jestli dělat i verze na změnění:
+        getPackagesFolderPath
+        getFoldersDelimiterForPackages
+
+    - složka pro balíčky se asi nebude dát změnit, takže folders konfigurační elementy kdyžtak dovolit jen v root ProjectCodeBoxu
+        - ale to ještě nevím, ono to možná vadit nebude - uvidím jak se ty věci ohledně balíčků budou dědit
+*/
