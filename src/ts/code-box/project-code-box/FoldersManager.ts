@@ -2,10 +2,10 @@ import CSSClasses from "../../CSSClasses";
 import GlobalConfig from "../../GlobalConfig";
 import { CodeView } from "../../main";
 import EventSourcePoint from "../../utils/EventSourcePoint";
-import CodeBoxFile from "../CodeBoxFile";
 import CodeViewButton from "../CodeViewButton";
 import Folder from "./Folder";
 import FolderAndPackageMapping from "./FolderAndPackageMapping";
+import ProjectCodeBoxFile from "./ProjectCodeBoxFile";
 
 class FoldersManager {
     private packagesContainer : HTMLElement;
@@ -76,9 +76,49 @@ class FoldersManager {
         this.getFolder(parsedFolderPath, true);
     }
 
+    public folderExists(folderPath : string) : boolean {
+        folderPath = this.normalizeFolderPath(folderPath);
+        
+        const parsedFolderPath = this.parseFolderPath(folderPath);
+
+        const folder = this.getFolder(parsedFolderPath);
+        if (!folder) return false;
+
+        return true;
+    }
+
+    public isFolderOpened(folderPath : string) : boolean { // todo - napsat, že to vrací false, i když složka neexistuje
+        folderPath = this.normalizeFolderPath(folderPath);
+        
+        const parsedFolderPath = this.parseFolderPath(folderPath);
+
+        const folder = this.getFolder(parsedFolderPath);
+        if (!folder) return false;
+
+        return folder.isOpened();
+    }
+
     public addPackage(packageName : string) : void { // todo - ještě kdyžtak vytvářet podsložky pokud se mají vytvářet
         packageName = this.normalizePackageName(packageName);
         this.getPackageFolder(packageName, true);
+    }
+
+    public packageExists(packageName : string) : boolean {
+        packageName = this.normalizePackageName(packageName);
+
+        const packageFolder = this.getPackageFolder(packageName);
+        if (!packageFolder) return false;
+
+        return true;
+    }
+
+    public isPackageFolderOpened(packageName : string | null) : boolean { // todo - napsat, že to vrací false, i když složka pro package neexistuje
+        if (packageName !== null) packageName = this.normalizePackageName(packageName);
+
+        const packageFolder = this.getPackageFolder(packageName);
+        if (!packageFolder) return false;
+
+        return packageFolder.isOpened();
     }
 
     public hasPackages() : boolean { // vrací jestli má alespoň jednu package folder
@@ -224,7 +264,20 @@ class FoldersManager {
         return true;
     }
 
-    public addFile(fileName : string, codeBoxFile : CodeBoxFile, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : boolean {
+    public getCodeViewPackage(identifier : string) : string | null | undefined {
+        identifier = this.normalizeFolderPath(identifier);
+
+        const parsedFolderPath = this.parseFolderPath(identifier);
+        const fileName = parsedFolderPath.pop();
+        if (!fileName) return undefined;
+
+        const packageItem = this.codeViewFolderAndPackageMappings.getPackageItemByFileFolderPath(parsedFolderPath.join("/"), fileName);
+        if (!packageItem) return undefined;
+
+        return packageItem.packageName;
+    }
+
+    public addFile(fileName : string, codeBoxFile : ProjectCodeBoxFile, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : boolean {
         fileName = this.sanitizeFileName(fileName);
         if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);
         if (packageName !== null) packageName = this.normalizePackageName(packageName);
@@ -249,7 +302,7 @@ class FoldersManager {
         return true;
     }
 
-    public getFileByFolderPath(folderPath : string | null, fileName : string) : CodeBoxFile | null {
+    public getFileByFolderPath(folderPath : string | null, fileName : string) : ProjectCodeBoxFile | null {
         folderPath = this.normalizeFolderPath(folderPath || "");
         fileName = this.sanitizeFileName(fileName);
 
@@ -264,7 +317,7 @@ class FoldersManager {
         return fileItem.codeBoxFile;
     }
 
-    public getFileByIdentifier(identifier : string) : CodeBoxFile | null {
+    public getFileByIdentifier(identifier : string) : ProjectCodeBoxFile | null {
         identifier = this.normalizeFolderPath(identifier);
 
         const parsedFolderPath = this.parseFolderPath(identifier);
@@ -280,7 +333,7 @@ class FoldersManager {
         return fileItem.codeBoxFile;
     }
 
-    public getFileByPackage(packageName : string | null, fileName : string) : CodeBoxFile | null {
+    public getFileByPackage(packageName : string | null, fileName : string) : ProjectCodeBoxFile | null {
         if (packageName !== null) packageName = this.normalizePackageName(packageName);
         fileName = this.sanitizeFileName(fileName);
 
@@ -316,6 +369,19 @@ class FoldersManager {
         this.fileFolderAndPackageMappings.removeByFileFolderPath(parsedFolderPath.length > 0 ? parsedFolderPath.join("/") : null, fileName);
 
         return true;
+    }
+
+    public getFilePackage(identifier : string) : string | null | undefined {
+        identifier = this.normalizeFolderPath(identifier);
+
+        const parsedFolderPath = this.parseFolderPath(identifier);
+        const fileName = parsedFolderPath.pop();
+        if (!fileName) return undefined;
+
+        const packageItem = this.fileFolderAndPackageMappings.getPackageItemByFileFolderPath(parsedFolderPath.join("/"), fileName);
+        if (!packageItem) return undefined;
+
+        return packageItem.packageName;
     }
 
     public removeFileByPackage(packageName : string | null, fileName : string) : boolean {
@@ -434,7 +500,7 @@ class FoldersManager {
         }
     }
 
-    // todo - zkusit jak bude vypadat ta animace s openParentFolders na true - nevím jak to půjde
+    // todo - zkusit jak bude vypadat ta animace s openParentFolders na true - nevím jak to půjde - není to úplně ono, ale hrabat se v tom nebudu
     public openFolder(folderPath : string, openParentFolders : boolean = false, animate : boolean = true) : void {
         folderPath = this.normalizeFolderPath(folderPath);
 
@@ -451,9 +517,22 @@ class FoldersManager {
         if (folder) folder.open(animate);
     }
 
-    // todo - closeFolder
+    public closeFolder(folderPath : string, closeChildFolders : boolean = false, animate : boolean = true) : void {
+        folderPath = this.normalizeFolderPath(folderPath);
 
-    public openPackage(packageName : string | null, animate : boolean = true) {
+        const parsedFolderPath = this.parseFolderPath(folderPath);
+
+        const folder = this.getFolder(parsedFolderPath);
+        if (!folder) return;
+
+        if (closeChildFolders) {
+            this.closeFolderAndSubfolders(folder);
+        } else {
+            folder.close(animate);
+        }
+    }
+
+    public openPackage(packageName : string | null, animate : boolean = true) : void {
         if (packageName !== null) packageName = this.normalizePackageName(packageName);
 
         const packageFolder = this.getPackageFolder(packageName);
@@ -462,7 +541,14 @@ class FoldersManager {
         packageFolder.open(animate);
     }
 
-    // todo - closePackage
+    public closePackage(packageName : string | null, animate : boolean = true) : void {
+        if (packageName !== null) packageName = this.normalizePackageName(packageName);
+
+        const packageFolder = this.getPackageFolder(packageName);
+        if (!packageFolder) return;
+
+        packageFolder.close(animate);
+    }
 
     public updateTabNavigation(panelOpened : boolean) : void {
         this.panelOpened = panelOpened;
@@ -471,6 +557,14 @@ class FoldersManager {
             this.defaultPackage.updateTabNavigation(panelOpened);
         }
         this.packages.forEach(packageFolder => packageFolder.updateTabNavigation(panelOpened));
+    }
+
+    private closeFolderAndSubfolders(folder : Folder, animate : boolean = true) {
+        folder.close(animate);
+
+        for (let subfolder of folder.getFolders()) {
+            this.closeFolderAndSubfolders(subfolder, animate);
+        }
     }
 
     private getFolder(folderPath : string[], createIfNotExist : boolean = false) : Folder | null {

@@ -1,12 +1,12 @@
 import CodeBox from "./CodeBox";
 import CodeBoxFileManager from "./CodeBoxFileManager";
 
-class CodeBoxFile {
-    private identifier : string;
-    private downloadLink : string | null;
-    private codeBox : CodeBox | null;
+class CodeBoxFile<T extends CodeBox = CodeBox> {
+    protected identifier : string;
+    protected downloadLink : string | null;
+    protected codeBox : T | null;
 
-    constructor(identifier : string, downloadLink : string | null, codeBox : CodeBox, manager : CodeBoxFileManager) {
+    constructor(identifier : string, downloadLink : string | null, codeBox : T, manager : CodeBoxFileManager) {
         this.identifier = identifier;
         this.downloadLink = downloadLink;
         this.codeBox = codeBox;

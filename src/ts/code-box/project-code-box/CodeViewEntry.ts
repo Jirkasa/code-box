@@ -1,11 +1,11 @@
-import CodeBoxCodeView from "../CodeBoxCodeView";
 import CodeBoxCodeViewManager from "../CodeBoxCodeViewManager";
+import ProjectCodeBoxCodeView from "./ProjectCodeBoxCodeView";
 
 class CodeViewEntry {
-    public readonly codeBoxCodeView : CodeBoxCodeView;
+    public readonly codeBoxCodeView : ProjectCodeBoxCodeView;
     public readonly codeBoxCodeViewManager : CodeBoxCodeViewManager;
     
-    constructor(codeBoxCodeView : CodeBoxCodeView, codeBoxCodeViewManager : CodeBoxCodeViewManager) {
+    constructor(codeBoxCodeView : ProjectCodeBoxCodeView, codeBoxCodeViewManager : CodeBoxCodeViewManager) {
         this.codeBoxCodeView = codeBoxCodeView;
         this.codeBoxCodeViewManager = codeBoxCodeViewManager;
     }

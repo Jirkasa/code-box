@@ -3,9 +3,7 @@ import GlobalConfig from "../../GlobalConfig";
 import { CodeView } from "../../main";
 import EventSourcePoint from "../../utils/EventSourcePoint";
 import CodeBox, { CodeBoxItemInfo } from "../CodeBox";
-import CodeBoxCodeView from "../CodeBoxCodeView";
 import CodeBoxCodeViewManager from "../CodeBoxCodeViewManager";
-import CodeBoxFile from "../CodeBoxFile";
 import CodeBoxFileManager from "../CodeBoxFileManager";
 import CodeViewButton from "../CodeViewButton";
 import CodeViewEntry from "./CodeViewEntry";
@@ -14,6 +12,8 @@ import FoldersManager from "./FoldersManager";
 import PackagesSectionToggle from "./PackagesSectionToggle";
 import PanelToggle from "./PanelToggle";
 import ProjectCodeBoxBuilder from "./ProjectCodeBoxBuilder";
+import ProjectCodeBoxCodeView from "./ProjectCodeBoxCodeView";
+import ProjectCodeBoxFile from "./ProjectCodeBoxFile";
 import ProjectCodeBoxOptions from "./ProjectCodeBoxOptions";
 
 class ProjectCodeBox extends CodeBox {
@@ -22,7 +22,7 @@ class ProjectCodeBox extends CodeBox {
     private foldersManager : FoldersManager;
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
     private codeViewEntries = new Map<CodeView, CodeViewEntry>(); // todo - možná spíš podle identifieru?
-    private fileEntries = new Map<CodeBoxFile, FileEntry>();
+    private fileEntries = new Map<ProjectCodeBoxFile, FileEntry>();
     
     private readonly openActiveCodeViewFolderOnInit : boolean;
     private readonly openActiveCodeViewPackageOnInit : boolean;
@@ -79,15 +79,15 @@ class ProjectCodeBox extends CodeBox {
         this.showCodeViewEventSource.subscribe((_, codeView) => this.onShowCodeView(codeView));
     }
 
-    public getCodeViews() : CodeBoxCodeView[] {
+    public getCodeViews() : ProjectCodeBoxCodeView[] {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
-        const codeBoxCodeViews = new Array<CodeBoxCodeView>();
+        const codeBoxCodeViews = new Array<ProjectCodeBoxCodeView>();
         this.codeViewEntries.forEach(entry => codeBoxCodeViews.push(entry.codeBoxCodeView));
         return codeBoxCodeViews;
     }
 
-    public getCodeView(identifier: string) : CodeBoxCodeView | null {
+    public getCodeView(identifier: string) : ProjectCodeBoxCodeView | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const codeView = this.foldersManager.getCodeViewByIdentifier(identifier);
@@ -136,6 +136,10 @@ class ProjectCodeBox extends CodeBox {
         return true;
     }
 
+    public getCodeViewPackage(identifier : string) : string | null | undefined { // undefined znamená, že code view nemá balíček
+        return this.foldersManager.getCodeViewPackage(identifier);
+    }
+
     public setActiveCodeView(identifier: string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -155,7 +159,7 @@ class ProjectCodeBox extends CodeBox {
         this.changeActiveCodeView(null);
     }
 
-    public getActiveCodeView() : CodeBoxCodeView | null {
+    public getActiveCodeView() : ProjectCodeBoxCodeView | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const codeView = this.getCurrentlyActiveCodeView();
@@ -167,15 +171,15 @@ class ProjectCodeBox extends CodeBox {
         return codeViewEntry.codeBoxCodeView;
     }
 
-    public getFiles() : CodeBoxFile[] {
+    public getFiles() : ProjectCodeBoxFile[] {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
-        const codeBoxFiles = new Array<CodeBoxFile>();
+        const codeBoxFiles = new Array<ProjectCodeBoxFile>();
         this.fileEntries.forEach((_, codeBoxFile) => codeBoxFiles.push(codeBoxFile));
         return codeBoxFiles;
     }
 
-    public getFile(identifier: string) : CodeBoxFile | null {
+    public getFile(identifier: string) : ProjectCodeBoxFile | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.getFileByIdentifier(identifier);
@@ -230,6 +234,62 @@ class ProjectCodeBox extends CodeBox {
         return true;
     }
 
+    public getFilePackage(identifier : string) : string | null | undefined {
+        return this.foldersManager.getFilePackage(identifier);
+    }
+
+    public addFolder(folderPath : string) : void {
+        this.foldersManager.addFolder(folderPath);
+    }
+
+    public openFolder(folderPath : string, openParentFolders : boolean = false, animate : boolean = true) : void {
+        this.foldersManager.openFolder(folderPath, openParentFolders, animate);
+    }
+
+    public closeFolder(folderPath : string, closeChildFolders : boolean = false, animate : boolean = true) : void {
+        this.foldersManager.closeFolder(folderPath, closeChildFolders, animate);
+    }
+
+    public folderExists(folderPath : string) : boolean {
+        return this.foldersManager.folderExists(folderPath);
+    }
+
+    public isFolderOpened(folderPath : string) : boolean {
+        return this.foldersManager.isFolderOpened(folderPath);
+    }
+
+    public addPackage(name : string) : void {
+        this.foldersManager.addPackage(name);
+    }
+
+    public openPackage(packageName : string | null, animate : boolean = true) : void { // null pro defaultní package
+        this.foldersManager.openPackage(packageName, animate);
+    }
+
+    public closePackage(packageName : string | null, animate : boolean = true) : void { // null pro defaultní package
+        this.foldersManager.closePackage(packageName, animate);
+    }
+
+    public packageExists(packageName : string) : boolean {
+        return this.foldersManager.packageExists(packageName);
+    }
+
+    public isPackageOpened(packageName : string | null) : boolean { // null pro defaultní package
+        return this.foldersManager.isPackageFolderOpened(packageName);
+    }
+
+    public openPanel() : void {
+        this.panelToggle.open();
+    }
+
+    public closePanel() : void {
+        this.panelToggle.close();
+    }
+
+    public isPanelOpened() : boolean {
+        return this.panelToggle.isOpened();
+    }
+
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]) : void {
         // jenom jeden konfigurační element pro složky bude asi dovolen - uvidím, možná to vadit nebude
         for (let codeBoxItemInfo of codeBoxItemInfos) {
@@ -273,7 +333,7 @@ class ProjectCodeBox extends CodeBox {
                 }
 
                 const codeBoxCodeViewManager = new CodeBoxCodeViewManager();
-                const codeBoxCodeView = new CodeBoxCodeView(identifier, codeViewInfo.codeView, this, codeBoxCodeViewManager);
+                const codeBoxCodeView = new ProjectCodeBoxCodeView(identifier, codeViewInfo.codeView, this, codeBoxCodeViewManager);
                 this.codeViewEntries.set(codeViewInfo.codeView, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager));
 
                 if (isActive) {
@@ -295,7 +355,7 @@ class ProjectCodeBox extends CodeBox {
                 const identifier = this.foldersManager.getItemIdentifier(fileName, folderPath, packageName !== null, packageName !== "" ? packageName : null);
 
                 const codeBoxFileManager = new CodeBoxFileManager();
-                const codeBoxFile = new CodeBoxFile(identifier, fileInfo.downloadLink, this, codeBoxFileManager);
+                const codeBoxFile = new ProjectCodeBoxFile(identifier, fileInfo.downloadLink, this, codeBoxFileManager);
 
                 const success = this.foldersManager.addFile(fileName, codeBoxFile, folderPath, packageName !== null, packageName !== "" ? packageName : null);
 
@@ -462,49 +522,62 @@ Potřebuju si ujasnit:
 /*
 Takže metody:
     Code Views:
-        getCodeViews
-        getCodeView
-        removeCodeView
-        changeCodeViewIdentifier
-        setActiveCodeView
-        setNoActiveCodeView
-        getActiveCodeView
+        X - getCodeViews
+        X - getCodeView
+        X - removeCodeView
+        X - changeCodeViewIdentifier
+        X - setActiveCodeView
+        X - setNoActiveCodeView
+        X - getActiveCodeView
         --------
-        getCodeViewPackage - získá název balíčku, do kterého code view patří
+        X - getCodeViewPackage - získá název balíčku, do kterého code view patří
             - propojím s CodeBoxCodeView
         getCodeViewByPackage
         getCodeViewByFolderPath
     Files:
-        getFiles
-        getFile
-        removeFile
-        changeFileIdentifier
-        changeFileDownloadLink
+        X - getFiles
+        X - getFile
+        X - removeFile
+        X - changeFileIdentifier
+        X - changeFileDownloadLink
         --------
-        getFilePackage - získá název balíčku, do kterého file patří
+        X - getFilePackage - získá název balíčku, do kterého file patří
             - propojím s CodeBoxFile
         getFileByPackage
         getFileByFolderPath
     Složky:
-        addFolder - přidá novou složku
+        X - addFolder - přidá novou složku
         removeFolder - smaže složku (a podsložky) - a asi i jejich obsah
-        openFolder - volitelný parametr: openParentFolders
-        closeFolder - volitelný parametr: closeChildFolders
-        isFolderOpened - zjistí, jestli je složka otevřená
+        renameFolder - přejmenuje složku - (tady se budou měnit identifiery - bude to složitější)
+        X - openFolder - volitelný parametr: openParentFolders
+        X - closeFolder - volitelný parametr: closeChildFolders
+        X - folderExists - zjistí, jestli složka existuje
+        X - isFolderOpened - zjistí, jestli je složka otevřená
     Balíčky:
-        addPackage - jen přidá balíček - to by asi neměl být problém
+        X - addPackage - jen přidá balíček - to by asi neměl být problém
         removePackage - odstraní balíček a odstraní z něj code views a files (pokud nebudou mít nastavenou složku mimo složku pro balíčky?) - defaultní balíček samozřejmě smazat nepůjde
-        openPackage - otevře balíček
-        closePackage - zavře balíček
-        isPackageOpened - zjistí, jestli je balíček otevřený
+        renamePackage - přejmenuje balíček
+        X - openPackage - otevře balíček
+        X - closePackage - zavře balíček
+        X - packageExists - zjistí, jestli balíček existuje
+        X - isPackageOpened - zjistí, jestli je balíček otevřený
     Další:
         setProjectName
-        openPanel
-        closePanel
-        isPanelOpened
+        X - openPanel
+        X - closePanel
+        X - isPanelOpened
     Další u kterých nevím jestli dělat i verze na změnění:
         getPackagesFolderPath
         getFoldersDelimiterForPackages
+
+    CodeBoxCodeView a CodeBoxFile
+        - přidat metody (možná):
+            getFolderPath
+            getName
+
+    Dál bych měl potom přidat metody pro přidávání nových code views nebo files
+        - to jsem ale ještě úplně nepromyslel - tady v tom případě by se to ale muselo při přidávání klonovat (a napsat to taky do dokumentace)
+            - tady ty metody by byly definované v CodeBox třídě, protože bych to chtěl pro všechny code boxy
 
     - složka pro balíčky se asi nebude dát změnit, takže folders konfigurační elementy kdyžtak dovolit jen v root ProjectCodeBoxu
         - ale to ještě nevím, ono to možná vadit nebude - uvidím jak se ty věci ohledně balíčků budou dědit

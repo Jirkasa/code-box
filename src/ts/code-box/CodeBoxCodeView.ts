@@ -3,12 +3,12 @@ import { CodeView } from "../main";
 import CodeBox from "./CodeBox";
 import CodeBoxCodeViewManager from "./CodeBoxCodeViewManager";
 
-class CodeBoxCodeView {
-    private identifier : string;
-    private codeView : CodeView;
-    private codeBox : CodeBox | null;
+class CodeBoxCodeView<T extends CodeBox = CodeBox> {
+    protected identifier : string;
+    protected codeView : CodeView;
+    protected codeBox : T | null;
 
-    constructor(identifier : string, codeView : CodeView, codeBox : CodeBox, manager : CodeBoxCodeViewManager) {
+    constructor(identifier : string, codeView : CodeView, codeBox : T, manager : CodeBoxCodeViewManager) {
         this.identifier = identifier;
         this.codeView = codeView;
         this.codeBox = codeBox;

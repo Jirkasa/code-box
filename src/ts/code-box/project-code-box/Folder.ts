@@ -2,12 +2,11 @@ import CSSClasses from "../../CSSClasses";
 import { CodeView } from "../../main";
 import EventSourcePoint from "../../utils/EventSourcePoint";
 import SVGIconElementCreator from "../../utils/SVGIconElementCreator";
-import CodeBoxFile from "../CodeBoxFile";
 import CodeViewButton from "../CodeViewButton";
-import FileButton from "../FileButton";
 import CodeViewFolderItem from "./CodeViewFolderItem";
 import Collapsible from "./Collapsible";
 import FileFolderItem from "./FileFolderItem";
+import ProjectCodeBoxFile from "./ProjectCodeBoxFile";
 import ProjectCodeViewButton from "./ProjectCodeViewButton";
 import ProjectFileButton from "./ProjectFileButton";
 
@@ -116,6 +115,14 @@ class Folder {
         return folder;
     }
 
+    public getFolders() : Folder[] {
+        const folders = new Array<Folder>();
+
+        this.subfolders.forEach(folder => folders.push(folder));
+
+        return folders;
+    }
+
     public addCodeView(name : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, svgSpritePath : string | null = null, buttonIconName : string | null = null) : CodeViewFolderItem | null { // null to vrací, když už tam code view pod tímto názvem existuje
         if (this.codeViewItems.has(name)) return null;
 
@@ -150,7 +157,7 @@ class Folder {
         return true;
     }
 
-    public addFile(name : string, codeBoxFile : CodeBoxFile, svgSpritePath : string | null = null, buttonIconName : string | null = null, buttonDownloadIconName : string | null = null) : FileFolderItem | null {
+    public addFile(name : string, codeBoxFile : ProjectCodeBoxFile, svgSpritePath : string | null = null, buttonIconName : string | null = null, buttonDownloadIconName : string | null = null) : FileFolderItem | null {
         if (this.fileItems.has(name)) return null;
 
         const fileButton = new ProjectFileButton(name, codeBoxFile.getDownloadLink(), svgSpritePath, buttonIconName, buttonDownloadIconName);

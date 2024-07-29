@@ -281,8 +281,8 @@ export default TabCodeBox;
 
 /*
 Todo
-- reordrování
-- potom možná přidat i metodu insertBefore
+- reordrování - toto tam určitě nějak implementovat
+- potom možná přidat i metodu insertBefore - asi taky
 - reset metoda v code boxu (možná - ještě uvidím, ale asi jo)
 - ještě jsem chtěl metodu na přidávání code views - ale jak to řešit?
 - todo - ještě metodu na měnění download linku
