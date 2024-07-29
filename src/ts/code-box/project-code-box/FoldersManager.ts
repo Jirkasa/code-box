@@ -33,7 +33,7 @@ class FoldersManager {
     private readonly openCloseAnimationSpeed : number;
     private readonly openCloseAnimationEasingFunction : string;
 
-    constructor(folderStructureContainer : HTMLElement, packagesContainer : HTMLElement, projectName : string, packagesFolderPath : string | null, defaultPackageName : string | null, createFoldersForPackages : boolean, foldersDelimiterForPackages : string | null, panelOpened : boolean, openCloseAnimationSpeed : number, openCloseAnimationEasingFunction : string, svgSpritePath : string | null = null, folderArrowIconName : string | null = null, projectIconName : string | null = null, folderIconName : string | null = null, packageIconName : string | null = null, codeFileIconName : string | null = null, fileIconName : string | null = null, downloadIconName : string | null = null) {
+    constructor(folderStructureContainer : HTMLElement, packagesContainer : HTMLElement, rootFolderName : string, packagesFolderPath : string | null, defaultPackageName : string | null, createFoldersForPackages : boolean, foldersDelimiterForPackages : string | null, panelOpened : boolean, openCloseAnimationSpeed : number, openCloseAnimationEasingFunction : string, svgSpritePath : string | null = null, folderArrowIconName : string | null = null, projectIconName : string | null = null, folderIconName : string | null = null, packageIconName : string | null = null, codeFileIconName : string | null = null, fileIconName : string | null = null, downloadIconName : string | null = null) {
         this.packagesContainer = packagesContainer;
         this.packagesFolderPath = packagesFolderPath !== null ? this.parseFolderPath(packagesFolderPath) : [];
         this.createFoldersForPackages = createFoldersForPackages;
@@ -51,7 +51,7 @@ class FoldersManager {
         this.openCloseAnimationSpeed = openCloseAnimationSpeed;
         this.openCloseAnimationEasingFunction = openCloseAnimationEasingFunction;
 
-        this.rootFolder = new Folder(projectName, panelOpened, openCloseAnimationSpeed, openCloseAnimationEasingFunction, svgSpritePath, folderArrowIconName, projectIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PROJECT_MODIFIER, folderStructureContainer);
+        this.rootFolder = new Folder(rootFolderName, panelOpened, openCloseAnimationSpeed, openCloseAnimationEasingFunction, svgSpritePath, folderArrowIconName, projectIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PROJECT_MODIFIER, folderStructureContainer);
     }
 
     public getItemIdentifier(fileName : string, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : string {
@@ -68,6 +68,10 @@ class FoldersManager {
     public setPackagesFolderPath(folderPath : string) : void {
         folderPath = this.normalizeFolderPath(folderPath);
         this.packagesFolderPath = this.parseFolderPath(folderPath);
+    }
+
+    public setRootFolderName(name : string) : void {
+        this.rootFolder.setName(name);
     }
 
     public addFolder(folderPath : string) : void {

@@ -23,6 +23,7 @@ class ProjectCodeBox extends CodeBox {
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
     private codeViewEntries = new Map<CodeView, CodeViewEntry>(); // todo - možná spíš podle identifieru?
     private fileEntries = new Map<ProjectCodeBoxFile, FileEntry>();
+    private projectName : string;
     
     private readonly openActiveCodeViewFolderOnInit : boolean;
     private readonly openActiveCodeViewPackageOnInit : boolean;
@@ -35,6 +36,8 @@ class ProjectCodeBox extends CodeBox {
         super(element, options, codeBoxBuilder);
 
         this.fillProjectCodeBoxOptionsFromDataset(options, element.dataset);
+
+        this.projectName = options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME;
 
         codeBoxBuilder.getFolderStructureHeadingElement().innerText = options.folderStructureHeading || GlobalConfig.DEFAULT_PROJECT_FOLDER_STRUCTURE_HEADING;
         codeBoxBuilder.getPackagesHeadingElement().innerText = options.packagesHeading || GlobalConfig.DEFAULT_PROJECT_PACKAGES_HEADING;
@@ -49,7 +52,7 @@ class ProjectCodeBox extends CodeBox {
         this.foldersManager = new FoldersManager(
             codeBoxBuilder.getFolderStructureContainer(),
             codeBoxBuilder.getPackagesContainer(),
-            options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME,
+            this.projectName,
             options.packagesFolderPath || null,
             options.defaultPackageName || null,
             options.createFoldersForPackages !== undefined ? options.createFoldersForPackages : GlobalConfig.DEFAULT_CREATE_FOLDERS_FOR_PACKAGES,
@@ -336,6 +339,15 @@ class ProjectCodeBox extends CodeBox {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.isPackageFolderOpened(packageName);
+    }
+
+    public getProjectName() : string {
+        return this.projectName;
+    }
+
+    public setProjectName(newName : string) : void {
+        this.projectName = newName;
+        this.foldersManager.setRootFolderName(this.projectName);
     }
 
     public openPanel() : void {
@@ -628,7 +640,8 @@ Takže metody:
         X - packageExists - zjistí, jestli balíček existuje
         X - isPackageOpened - zjistí, jestli je balíček otevřený
     Další:
-        setProjectName
+        X - getProjectName
+        X - setProjectName
         X - openPanel
         X - closePanel
         X - isPanelOpened
@@ -639,7 +652,7 @@ Takže metody:
     CodeBoxCodeView a CodeBoxFile
         - přidat metody (možná):
             getFolderPath
-            getName
+            getFileName
 
     Dál bych měl potom přidat metody pro přidávání nových code views nebo files
         - to jsem ale ještě úplně nepromyslel - tady v tom případě by se to ale muselo při přidávání klonovat (a napsat to taky do dokumentace)

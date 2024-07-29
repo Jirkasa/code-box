@@ -14,6 +14,7 @@ import ProjectFileButton from "./ProjectFileButton";
 
 class Folder {
     protected buttonElement : HTMLButtonElement;
+    private buttonTextElement : HTMLElement;
     private itemsContainer : HTMLElement;
     private collapsible : Collapsible;
 
@@ -44,10 +45,10 @@ class Folder {
         }
         this.buttonElement.appendChild(folderIcon);
 
-        const buttonText = document.createElement("div");
-        buttonText.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_TEXT);
-        buttonText.innerText = name;
-        this.buttonElement.appendChild(buttonText);
+        this.buttonTextElement = document.createElement("div");
+        this.buttonTextElement.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_TEXT);
+        this.buttonTextElement.innerText = name;
+        this.buttonElement.appendChild(this.buttonTextElement);
 
         this.itemsContainer = document.createElement("div");
         this.itemsContainer.classList.add(CSSClasses.PROJECT_CODE_BOX_PANEL_COLLAPSIBLE);
@@ -61,6 +62,10 @@ class Folder {
         
         this.lastParentOpened = parentOpened;
         this.updateTabNavigation(this.lastParentOpened);
+    }
+
+    public setName(name : string) {
+        this.buttonTextElement.innerText = name;
     }
 
     public open(animate : boolean = true) : void {
