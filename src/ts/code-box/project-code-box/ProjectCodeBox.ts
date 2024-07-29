@@ -651,8 +651,8 @@ Takže metody:
 
     CodeBoxCodeView a CodeBoxFile
         - přidat metody (možná):
-            getFolderPath
-            getFileName
+            X - getFolderPath
+            X - getFileName
 
     Dál bych měl potom přidat metody pro přidávání nových code views nebo files
         - to jsem ale ještě úplně nepromyslel - tady v tom případě by se to ale muselo při přidávání klonovat (a napsat to taky do dokumentace)
