@@ -99,6 +99,30 @@ class ProjectCodeBox extends CodeBox {
         return codeViewEntry.codeBoxCodeView;
     }
 
+    public getCodeViewByFolderPath(folderPath : string, fileName : string) : ProjectCodeBoxCodeView | null {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeView = this.foldersManager.getCodeViewByFolderPath(folderPath, fileName);
+        if (!codeView) return null;
+
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return null;
+
+        return codeViewEntry.codeBoxCodeView;
+    }
+
+    public getCodeViewByPackage(packageName : string | null, fileName : string) : ProjectCodeBoxCodeView | null { // null pro defaultní package
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeView = this.foldersManager.getCodeViewByPackage(packageName, fileName);
+        if (!codeView) return null;
+
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return null;
+
+        return codeViewEntry.codeBoxCodeView;
+    }
+
     public removeCodeView(identifier: string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -137,6 +161,8 @@ class ProjectCodeBox extends CodeBox {
     }
 
     public getCodeViewPackage(identifier : string) : string | null | undefined { // undefined znamená, že code view nemá balíček
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         return this.foldersManager.getCodeViewPackage(identifier);
     }
 
@@ -183,6 +209,18 @@ class ProjectCodeBox extends CodeBox {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.getFileByIdentifier(identifier);
+    }
+
+    public getFileByFolderPath(folderPath : string, fileName : string) : ProjectCodeBoxFile | null {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.foldersManager.getFileByFolderPath(folderPath, fileName);
+    }
+
+    public getFileByPackage(packageName : string | null, fileName : string) : ProjectCodeBoxFile | null { // null pro defaultní package
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.foldersManager.getFileByPackage(packageName, fileName);
     }
 
     public removeFile(identifier: string) : boolean {
@@ -235,58 +273,86 @@ class ProjectCodeBox extends CodeBox {
     }
 
     public getFilePackage(identifier : string) : string | null | undefined {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         return this.foldersManager.getFilePackage(identifier);
     }
 
     public addFolder(folderPath : string) : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         this.foldersManager.addFolder(folderPath);
     }
 
     public openFolder(folderPath : string, openParentFolders : boolean = false, animate : boolean = true) : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         this.foldersManager.openFolder(folderPath, openParentFolders, animate);
     }
 
     public closeFolder(folderPath : string, closeChildFolders : boolean = false, animate : boolean = true) : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         this.foldersManager.closeFolder(folderPath, closeChildFolders, animate);
     }
 
     public folderExists(folderPath : string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         return this.foldersManager.folderExists(folderPath);
     }
 
     public isFolderOpened(folderPath : string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         return this.foldersManager.isFolderOpened(folderPath);
     }
 
     public addPackage(name : string) : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         this.foldersManager.addPackage(name);
     }
 
     public openPackage(packageName : string | null, animate : boolean = true) : void { // null pro defaultní package
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         this.foldersManager.openPackage(packageName, animate);
     }
 
     public closePackage(packageName : string | null, animate : boolean = true) : void { // null pro defaultní package
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         this.foldersManager.closePackage(packageName, animate);
     }
 
     public packageExists(packageName : string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         return this.foldersManager.packageExists(packageName);
     }
 
     public isPackageOpened(packageName : string | null) : boolean { // null pro defaultní package
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         return this.foldersManager.isPackageFolderOpened(packageName);
     }
 
     public openPanel() : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         this.panelToggle.open();
     }
 
     public closePanel() : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         this.panelToggle.close();
     }
 
     public isPanelOpened() : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         return this.panelToggle.isOpened();
     }
 
@@ -532,8 +598,8 @@ Takže metody:
         --------
         X - getCodeViewPackage - získá název balíčku, do kterého code view patří
             - propojím s CodeBoxCodeView
-        getCodeViewByPackage
-        getCodeViewByFolderPath
+        X - getCodeViewByFolderPath
+        X - getCodeViewByPackage
     Files:
         X - getFiles
         X - getFile
@@ -543,8 +609,8 @@ Takže metody:
         --------
         X - getFilePackage - získá název balíčku, do kterého file patří
             - propojím s CodeBoxFile
-        getFileByPackage
-        getFileByFolderPath
+        X - getFileByFolderPath
+        X - getFileByPackage
     Složky:
         X - addFolder - přidá novou složku
         removeFolder - smaže složku (a podsložky) - a asi i jejich obsah
