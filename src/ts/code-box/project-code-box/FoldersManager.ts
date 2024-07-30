@@ -65,6 +65,10 @@ class FoldersManager {
         return folderPath + "/" + fileName;
     }
 
+    public getNormalizedFolderPath(folderPath : string) : string {
+        return this.normalizeFolderPath(folderPath);
+    }
+
     public setPackagesFolderPath(folderPath : string) : void {
         folderPath = this.normalizeFolderPath(folderPath);
         this.packagesFolderPath = this.parseFolderPath(folderPath);
@@ -78,6 +82,115 @@ class FoldersManager {
         folderPath = this.normalizeFolderPath(folderPath);
         const parsedFolderPath = this.parseFolderPath(folderPath);
         this.getFolder(parsedFolderPath, true);
+    }
+
+    public renameFolder(folderPath : string, newName : string) : string | null { // vrací to novou cestu pro složku
+        folderPath = this.normalizeFolderPath(folderPath);
+        newName = this.sanitizeFolderName(newName);
+
+        const parsedFolderPath = this.parseFolderPath(folderPath);
+        const oldName = parsedFolderPath.pop();
+        if (oldName === undefined) return null;
+
+        const parentFolder = this.getFolder(parsedFolderPath);
+        if (!parentFolder) return null;
+
+        const success = parentFolder.renameFolder(oldName, newName);
+        if (!success) return null;
+
+        parsedFolderPath.push(newName);
+        const oldFolderPath = folderPath;
+        const newFolderPath = parsedFolderPath.join("/");
+        const packagesFolderPath = this.packagesFolderPath.join("/");
+
+        if (oldFolderPath === packagesFolderPath) {
+            this.packagesFolderPath = this.parseFolderPath(newFolderPath);
+        }
+
+        if (this.createFoldersForPackages) {
+            if (oldFolderPath.startsWith(packagesFolderPath + "/")) {
+                const packagesFolderNames = oldFolderPath.replace(packagesFolderPath + "/", "").split("/");
+                const index = packagesFolderNames.length-1;
+    
+                const changes = new Array<{oldName: string, newName: string}>;
+                this.packages.forEach((packageFolder, packageName) => {
+                    let parsedPackageName : string[];
+
+                    if (this.foldersDelimiterForPackages !== null) {
+                        parsedPackageName = packageName.split(this.foldersDelimiterForPackages);
+                    } else {
+                        parsedPackageName = [packageName];
+                    }
+
+                    if (parsedPackageName.length-1 < index) return;
+                    if (parsedPackageName[index] !== oldName) return;
+
+                    parsedPackageName[index] = newName;
+
+                    let newPackageName : string;
+                    if (this.foldersDelimiterForPackages !== null) {
+                        newPackageName = parsedPackageName.join(this.foldersDelimiterForPackages);
+                    } else {
+                        newPackageName = parsedPackageName[0];
+                    }
+
+                    changes.push({oldName: packageName, newName: newPackageName});
+
+                    for (let codeViewName of packageFolder.getCodeViewNamesInFolderAndSubfolders()) {
+                        const fileFolderPath = this.codeViewFolderAndPackageMappings.getFileFolderPathByPackageItem(packageName, codeViewName);
+                        if (fileFolderPath === null) continue;
+
+                        const parsedFileFolderPath = fileFolderPath.split("/");
+                        parsedFileFolderPath.pop();
+
+                        this.codeViewFolderAndPackageMappings.removeByPackageItem(packageName, codeViewName);
+                        this.codeViewFolderAndPackageMappings.add(codeViewName, parsedFileFolderPath.length > 0 ? parsedFileFolderPath.join("/") : null, newPackageName);
+                    }
+
+                    for (let fileName of packageFolder.getFileNamesInFolderAndSubfolders()) {
+                        const fileFolderPath = this.fileFolderAndPackageMappings.getFileFolderPathByPackageItem(packageName, fileName);
+                        if (fileFolderPath === null) continue;
+
+                        const parsedFileFolderPath = fileFolderPath.split("/");
+                        parsedFileFolderPath.pop();
+
+                        this.fileFolderAndPackageMappings.removeByPackageItem(packageName, fileName);
+                        this.fileFolderAndPackageMappings.add(fileName, parsedFileFolderPath.length > 0 ? parsedFileFolderPath.join("/") : null, newPackageName);
+                    }
+                });
+
+                for (let change of changes) {
+                    const packageFolder = this.packages.get(change.oldName);
+                    if (!packageFolder) continue;
+
+                    packageFolder.setName(change.newName);
+                    this.packages.delete(change.oldName);
+                    this.packages.set(change.newName, packageFolder);
+                }
+            }
+        }
+
+        const folder = parentFolder.getFolder(newName);
+        if (!folder) return newFolderPath;
+
+        for (let codeViewName of folder.getCodeViewNamesInFolderAndSubfolders()) {
+
+            const packageItem = this.codeViewFolderAndPackageMappings.getPackageItemByFileFolderPath(oldFolderPath, codeViewName);
+            if (!packageItem) continue;
+
+            this.codeViewFolderAndPackageMappings.removeByFileFolderPath(oldFolderPath, codeViewName);
+            this.codeViewFolderAndPackageMappings.add(codeViewName, newFolderPath, packageItem.packageName);
+        }
+
+        for (let fileName of folder.getFileNamesInFolderAndSubfolders()) {
+            const packageItem = this.fileFolderAndPackageMappings.getPackageItemByFileFolderPath(oldFolderPath, fileName);
+            if (!packageItem) continue;
+
+            this.fileFolderAndPackageMappings.removeByFileFolderPath(oldFolderPath, fileName);
+            this.fileFolderAndPackageMappings.add(fileName, newFolderPath, packageItem.packageName);
+        }
+
+        return newFolderPath;
     }
 
     public folderExists(folderPath : string) : boolean {
@@ -198,6 +311,23 @@ class FoldersManager {
         return codeViewItem.codeView;
     }
 
+    public getCodeViewsInFolder(folderPath : string | null, traverseSubfolders : boolean = false) : CodeView[] {
+        folderPath = this.normalizeFolderPath(folderPath || "");
+
+        const parsedFolderPath = this.parseFolderPath(folderPath);
+
+        const folder = this.getFolder(parsedFolderPath);
+        
+        const codeViews = new Array<CodeView>();
+        if (!folder) return codeViews;
+
+        for (let codeViewItem of folder.getCodeViews(traverseSubfolders)) {
+            codeViews.push(codeViewItem.codeView);
+        }
+
+        return codeViews;
+    }
+
     public removeCodeViewByIdentifier(identifier : string) : boolean {
         identifier = this.normalizeFolderPath(identifier);
 
@@ -236,7 +366,7 @@ class FoldersManager {
         return this.removeCodeViewByIdentifier(identifier);
     }
 
-    public changeCodeViewIdentifier(identifier : string, newIdentifier : string, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>) : boolean {
+    public changeCodeViewIdentifier(identifier : string, newIdentifier : string, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>) : boolean { // připsat že balíček se nemění - i do ProjectCodeBoxu, protože přes něj to uživatelé budou používat
         identifier = this.normalizeFolderPath(identifier);
         newIdentifier = this.normalizeFolderPath(newIdentifier);
         const isActive = this.activeCodeViewIdentifier === identifier;
@@ -348,6 +478,23 @@ class FoldersManager {
         if (!fileItem) return null;
 
         return fileItem.codeBoxFile;
+    }
+
+    public getFilesInFolder(folderPath : string | null, traverseSubfolders : boolean = false) : ProjectCodeBoxFile[] {
+        folderPath = this.normalizeFolderPath(folderPath || "");
+
+        const parsedFolderPath = this.parseFolderPath(folderPath);
+
+        const folder = this.getFolder(parsedFolderPath);
+
+        const codeBoxFiles = new Array<ProjectCodeBoxFile>();
+        if (!folder) return codeBoxFiles;
+
+        for (let fileItem of folder.getFiles(traverseSubfolders)) {
+            codeBoxFiles.push(fileItem.codeBoxFile);
+        }
+
+        return codeBoxFiles;
     }
 
     public removeFileByIdentifier(identifier : string) : boolean {
@@ -653,6 +800,11 @@ class FoldersManager {
     private sanitizeFileName(fileName : string) : string {
         // remove all slashes
         return fileName.replace(/\//g, '');
+    }
+
+    private sanitizeFolderName(folderName : string) : string {
+        // remove all slashes
+        return folderName.replace(/\//g, '');
     }
 
     private normalizeFolderPath(folderPath : string) : string {

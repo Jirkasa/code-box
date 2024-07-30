@@ -287,6 +287,41 @@ class ProjectCodeBox extends CodeBox {
         this.foldersManager.addFolder(folderPath);
     }
 
+    public renameFolder(folderPath : string, newName : string) : boolean {
+        const newFolderPath = this.foldersManager.renameFolder(folderPath, newName);
+        if (newFolderPath === null) return false;
+
+        folderPath = this.foldersManager.getNormalizedFolderPath(folderPath);
+        
+        const codeViews = this.foldersManager.getCodeViewsInFolder(newFolderPath, true);
+        for (let codeView of codeViews) {
+            const codeViewEntry = this.codeViewEntries.get(codeView);
+            if (!codeViewEntry) continue;
+
+            const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
+            if (identifier === null) continue;
+
+            const newIdentifier = identifier.replace(folderPath, newFolderPath);
+
+            codeViewEntry.codeBoxCodeViewManager.changeIdentifier(newIdentifier);
+        }
+
+        const codeBoxFiles = this.foldersManager.getFilesInFolder(newFolderPath, true);
+        for (let codeBoxFile of codeBoxFiles) {
+            const fileEntry = this.fileEntries.get(codeBoxFile);
+            if (!fileEntry) continue;
+
+            const identifier = codeBoxFile.getIdentifier();
+            if (identifier === null) continue;
+
+            const newIdentifier = identifier.replace(folderPath, newFolderPath);
+
+            fileEntry.codeBoxFileManager.changeIdentifier(newIdentifier);
+        }
+
+        return true;
+    }
+
     public openFolder(folderPath : string, openParentFolders : boolean = false, animate : boolean = true) : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -595,9 +630,31 @@ Potřebuju si ujasnit:
                     - bude to lepší než si pamatovat jestli se něco vytvořilo automaticky (to by bylo pro uživatele stejně matoucí a brali by to za chybu)
     - jak to bude s mazáním vygenerovaných složek pro balíčky
         - asi bude nejlepší, když se u každé složky bude ukládat, zda byla vytvořena automaticky pro balíček - to by asi bylo nejlepší
+
+Ono by možná šlo zařídit i to, aby když se přidá nová složka, vytvořil se i nový balíček. - ale....
+
+Takže potřebuju si to ujasnit:
+    - Při mazání balíčku:
+        - odstranit i složky, které podle něj byly vytvořeny (ne tak docela)
+            - prostě všechny složky, které se nějak vezmou podle aktuálního nastavení
+        - odstraní se i obsah složek atp...
+    - Při přejmenování balíčku:
+        - přejmenují se i příslušné složky
+    - Při smazání složky(složek):
+        - najdou se balíčky, které podle nich jakoby byly vytvořené a smažou se
+    - Při přejmenování složky:
+        - přejmenují se i balíčky, podle nich jakoby vytvořené
+
+    Takže když to shrnu, složky se vytváří při přidávání balíčku
+    Při přidávání složky se ale naopak balíčky nevytváří, i když se přidává ve složce pro balíčky
+        - tak nějak prostě - to by mohlo jít, ono to stejně uživatelé budou používat hlavně pro jazyky jako je Java, a tam budou vědět jak to funguje a tak...
 */
 
 /*
+TODO - ještě seřazování složek balíčků nemám hotové
+TODO - changeIdentifier nemusí ještě fungovat tak jak má. Při přejmenování se může změnit i balíček. - to asi ještě nedělám - jen měním mapping myslím - takže předělat tak, aby se změnil i balíček - i když chci to tak?
+TODO - a ještě metoda na přemístění code view - teď mám jen na přejmenování
+
 Takže metody:
     Code Views:
         X - getCodeViews
@@ -612,6 +669,9 @@ Takže metody:
             - propojím s CodeBoxCodeView
         X - getCodeViewByFolderPath
         X - getCodeViewByPackage
+        -----------
+        getCodeViewsByFolderPath (volitelný parametr: childFolders nebo tak něco)
+        getCodeViewsByPackage
     Files:
         X - getFiles
         X - getFile
@@ -623,10 +683,13 @@ Takže metody:
             - propojím s CodeBoxFile
         X - getFileByFolderPath
         X - getFileByPackage
+        ------------
+        getFilesByFolderPath (volitelný parametr: childFolders nebo tak něco)
+        getFilesByPackage
     Složky:
         X - addFolder - přidá novou složku
         removeFolder - smaže složku (a podsložky) - a asi i jejich obsah
-        renameFolder - přejmenuje složku - (tady se budou měnit identifiery - bude to složitější)
+        X - renameFolder - přejmenuje složku - (tady se budou měnit identifiery - bude to složitější)
         X - openFolder - volitelný parametr: openParentFolders
         X - closeFolder - volitelný parametr: closeChildFolders
         X - folderExists - zjistí, jestli složka existuje
@@ -648,6 +711,8 @@ Takže metody:
     Další u kterých nevím jestli dělat i verze na změnění:
         getPackagesFolderPath
         getFoldersDelimiterForPackages
+    - ještě nějaké píčoviny pro měnění balíčku pro code view a files - a tam se bude muset předávat, jestli se má změnit i složka - jestli se to má automaticky vygenerovat - no prostě kurva víš jak
+        - a taky složky... - i když, to jde přes identifier, tak uvidím
 
     CodeBoxCodeView a CodeBoxFile
         - přidat metody (možná):

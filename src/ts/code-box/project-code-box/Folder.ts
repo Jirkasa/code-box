@@ -128,6 +128,19 @@ class Folder {
         return folders;
     }
 
+    public renameFolder(folderName : string, newFolderName : string) : boolean {
+        if (this.subfolders.has(newFolderName)) return false;
+
+        const folder = this.subfolders.get(folderName);
+        if (!folder) return false;
+
+        folder.setName(newFolderName);
+        this.subfolders.delete(folderName);
+        this.subfolders.set(newFolderName, folder);
+
+        return true;
+    }
+
     public addCodeView(name : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, svgSpritePath : string | null = null, buttonIconName : string | null = null) : CodeViewFolderItem | null { // null to vrací, když už tam code view pod tímto názvem existuje
         if (this.codeViewItems.has(name)) return null;
 
@@ -151,6 +164,38 @@ class Folder {
         if (!codeViewItem) return null;
         return codeViewItem;
     }
+
+    public getCodeViews(traverseSubfolders : boolean = false) : CodeViewFolderItem[] {
+        const codeViewItems = new Array<CodeViewFolderItem>();
+
+        this.codeViewItems.forEach(codeViewItem => codeViewItems.push(codeViewItem));
+
+        if (traverseSubfolders) {
+            this.subfolders.forEach(subfolder => {
+                for (let codeViewItem of subfolder.getCodeViews(true)) {
+                    codeViewItems.push(codeViewItem);
+                }
+            });
+        }
+
+        return codeViewItems;
+    }
+
+    // public getCodeViewNames(traverseSubfolders : boolean = false) : string[] {
+    //     const codeViewNames = new Array<string>();
+
+    //     this.codeViewItems.forEach((_, name) => codeViewNames.push(name));
+
+    //     if (traverseSubfolders) {
+    //         this.subfolders.forEach(subfolder => {
+    //             for (let name of subfolder.getCodeViewNames(true)) {
+    //                 codeViewNames.push(name);
+    //             }
+    //         });
+    //     }
+
+    //     return codeViewNames;
+    // }
 
     public removeCodeView(name : string) : boolean {
         const codeViewItem = this.codeViewItems.get(name);
@@ -186,6 +231,22 @@ class Folder {
         return fileItem;
     }
 
+    public getFiles(traverseSubfolders : boolean = false) : FileFolderItem[] {
+        const fileItems = new Array<FileFolderItem>();
+
+        this.fileItems.forEach(fileItem => fileItems.push(fileItem));
+
+        if (traverseSubfolders) {
+            this.subfolders.forEach(subfolder => {
+                for (let fileItem of subfolder.getFiles(true)) {
+                    fileItems.push(fileItem);
+                }
+            });
+        }
+
+        return fileItems;
+    }
+
     public removeFile(name : string) : boolean {
         const fileItem = this.fileItems.get(name);
         if (!fileItem) return false;
@@ -194,6 +255,34 @@ class Folder {
 
         this.fileItems.delete(name);
         return true;
+    }
+
+    public getCodeViewNamesInFolderAndSubfolders() : string[] { // pro subfolders to vrací i s takovou cestou - nějak to sem napsat do komentáře
+        const codeViewNames = new Array<string>();
+
+        this.codeViewItems.forEach((_, name) => codeViewNames.push(name));
+
+        this.subfolders.forEach((subfolder, subfolderName) => {
+            for (let name of subfolder.getCodeViewNamesInFolderAndSubfolders()) {
+                codeViewNames.push(subfolderName + "/" + name);
+            }
+        });
+
+        return codeViewNames;
+    }
+
+    public getFileNamesInFolderAndSubfolders() : string[] {
+        const fileNames = new Array<string>();
+
+        this.fileItems.forEach((_, name) => fileNames.push(name));
+
+        this.subfolders.forEach((subfolder, subfolderName) => {
+            for (let name of subfolder.getFileNamesInFolderAndSubfolders()) {
+                fileNames.push(subfolderName + "/" + name);
+            }
+        });
+
+        return fileNames;
     }
 
     private onCollapsibleToggled() : void {
