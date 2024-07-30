@@ -156,6 +156,10 @@ class Folder {
         return true;
     }
 
+    public getFoldersCount() : number {
+        return this.subfolders.size;
+    }
+
     public addCodeView(name : string, codeView : CodeView, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, svgSpritePath : string | null = null, buttonIconName : string | null = null) : CodeViewFolderItem | null { // null to vrací, když už tam code view pod tímto názvem existuje
         if (this.codeViewItems.has(name)) return null;
 
@@ -222,6 +226,10 @@ class Folder {
         return true;
     }
 
+    public getCodeViewsCount() : number {
+        return this.codeViewItems.size;
+    }
+
     public addFile(name : string, codeBoxFile : ProjectCodeBoxFile, svgSpritePath : string | null = null, buttonIconName : string | null = null, buttonDownloadIconName : string | null = null) : FileFolderItem | null {
         if (this.fileItems.has(name)) return null;
 
@@ -270,6 +278,10 @@ class Folder {
 
         this.fileItems.delete(name);
         return true;
+    }
+
+    public getFilesCount() : number {
+        return this.fileItems.size;
     }
 
     public getCodeViewNamesInFolderAndSubfolders() : string[] { // pro subfolders to vrací i s takovou cestou - nějak to sem napsat do komentáře

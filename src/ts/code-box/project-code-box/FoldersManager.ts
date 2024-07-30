@@ -13,7 +13,7 @@ class FoldersManager {
     private packages = new Map<string, Folder>();
     private defaultPackage : Folder | null = null;
     private packagesFolderPath : string[];
-    private createFoldersForPackages : boolean;
+    private createFoldersForPackages : boolean; // todo - kdyžtak potom nastavit jako readonly - a ty ostatní věci taky, uvidím
     private foldersDelimiterForPackages : string | null;
     private codeViewFolderAndPackageMappings = new FolderAndPackageMapping();
     private fileFolderAndPackageMappings = new FolderAndPackageMapping();
@@ -52,6 +52,10 @@ class FoldersManager {
         this.openCloseAnimationEasingFunction = openCloseAnimationEasingFunction;
 
         this.rootFolder = new Folder(rootFolderName, panelOpened, openCloseAnimationSpeed, openCloseAnimationEasingFunction, svgSpritePath, folderArrowIconName, projectIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PROJECT_MODIFIER, folderStructureContainer);
+    }
+
+    public isCreateFoldersForPackagesEnabled() : boolean {
+        return this.createFoldersForPackages;
     }
 
     public getItemIdentifier(fileName : string, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : string {
@@ -373,9 +377,70 @@ class FoldersManager {
         return folder.isOpened();
     }
 
-    public addPackage(packageName : string) : void { // todo - ještě kdyžtak vytvářet podsložky pokud se mají vytvářet
+    public addPackage(packageName : string) : void { // todo - ještě kdyžtak vytvářet podsložky pokud se mají vytvářet - a nevytvářejí se? - myslím že už jo
         packageName = this.normalizePackageName(packageName);
         this.getPackageFolder(packageName, true);
+    }
+
+    public removePackage(packageName : string) : boolean {
+        packageName = this.normalizePackageName(packageName);
+
+        const packageFolder = this.getPackageFolder(packageName);
+        if (!packageFolder) return false;
+
+        for (let codeViewName of packageFolder.getCodeViewNamesInFolderAndSubfolders()) {
+            this.codeViewFolderAndPackageMappings.removeByPackageItem(packageName, codeViewName);
+        }
+        for (let fileName of packageFolder.getFileNamesInFolderAndSubfolders()) {
+            this.fileFolderAndPackageMappings.removeByPackageItem(packageName, fileName);
+        }
+
+        packageFolder.detach();
+        this.packages.delete(packageName);
+        return true;
+    }
+
+    public getFolderPathToRemovePackage(packageName : string) : string | null { // null, pokud package neexistuje, nebo je vyplé generování packagů
+        if (!this.createFoldersForPackages) return null;
+        if (!this.packages.has(packageName)) return null;
+
+        // const packagesFolderPath = this.packagesFolderPath.join("/");
+
+        let parsedPackageName : string[];
+        if (this.foldersDelimiterForPackages !== null) {
+            parsedPackageName = packageName.split(this.foldersDelimiterForPackages);
+        } else {
+            parsedPackageName = [packageName];
+        }
+
+        // const packageFolderPath = packagesFolderPath !== "" ? packagesFolderPath + "/" + parsedPackageName.join("/") : parsedPackageName.join("/");
+
+        const packageFolderPath = [];
+        for (let folderName of this.packagesFolderPath) {
+            packageFolderPath.push(folderName);
+        }
+        for (let folderName of parsedPackageName) {
+            packageFolderPath.push(folderName);
+        }
+
+        let folderPath = packageFolderPath.join("/");
+
+        packageFolderPath.pop();
+        while (packageFolderPath.length > this.packagesFolderPath.length) {
+            const folder = this.getFolder(packageFolderPath);
+            if (!folder) break;
+            if (folder.getCodeViewsCount() > 0 || folder.getFilesCount() > 0 || folder.getFoldersCount() > 1) break;
+
+            folderPath = packageFolderPath.join("/");
+            packageFolderPath.pop();
+        }
+
+        return folderPath;
+
+        // takže teď to procházet odzadu a:
+            // - vytvářet vždy folderPath
+                // vzít tu folderPath a zjistit, jestli obsahuje i nějaké další itemy než jen podsložku
+                    // - vždy se vezme alespoň ta nejdelší cesta, ať už tam jsou i nějaké další code views a files nebo ne - taky napsat do dokumentace - pokud tam mají ještě nějaké další věci, které ale s balíčkem nejsou spjaty, tak se taky vymažou - a napsat, že když je removeFolders false, tak se smaže jen balíček, ale všechno ostatní se ponechá tak jak je
     }
 
     public packageExists(packageName : string) : boolean {

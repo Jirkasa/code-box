@@ -288,6 +288,8 @@ class ProjectCodeBox extends CodeBox {
     }
 
     public removeFolder(folderPath : string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         const codeViews = this.foldersManager.getCodeViewsInFolder(folderPath, true);
         const codeBoxFiles = this.foldersManager.getFilesInFolder(folderPath, true);
 
@@ -324,6 +326,8 @@ class ProjectCodeBox extends CodeBox {
     }
 
     public renameFolder(folderPath : string, newName : string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         const newFolderPath = this.foldersManager.renameFolder(folderPath, newName);
         if (newFolderPath === null) return false;
 
@@ -387,6 +391,20 @@ class ProjectCodeBox extends CodeBox {
 
         this.foldersManager.addPackage(name);
     }
+
+    public removePackage(name : string, removeFolders : boolean = true) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+        
+        if (this.foldersManager.isCreateFoldersForPackagesEnabled() && removeFolders) {
+            const packageFolderPath = this.foldersManager.getFolderPathToRemovePackage(name);
+            if (packageFolderPath === null) return false;
+            return this.removeFolder(packageFolderPath);
+        } else {
+            return this.foldersManager.removePackage(name);
+        }
+    }
+
+    // todo - u renamePackage zase můžu volat renameFolder - i když ne tak docela... - ale asi to zavolám postupně no - uvidím, nechci zase zbytečně vytvářet nějakou další metodu
 
     public openPackage(packageName : string | null, animate : boolean = true) : void { // null pro defaultní package
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
@@ -769,4 +787,7 @@ Takže metody:
 
     - složka pro balíčky se asi nebude dát změnit, takže folders konfigurační elementy kdyžtak dovolit jen v root ProjectCodeBoxu
         - ale to ještě nevím, ono to možná vadit nebude - uvidím jak se ty věci ohledně balíčků budou dědit
+
+    - až ty metody dokončím, tak FoldersManager okomentovat - pořádně - ať je hned vidět co to dělá (i detaily popsat)
+        - a taky ty metody v ProjectCodeBox třídě pořádně popsat
 */
