@@ -287,6 +287,42 @@ class ProjectCodeBox extends CodeBox {
         this.foldersManager.addFolder(folderPath);
     }
 
+    public removeFolder(folderPath : string) : boolean {
+        const codeViews = this.foldersManager.getCodeViewsInFolder(folderPath, true);
+        const codeBoxFiles = this.foldersManager.getFilesInFolder(folderPath, true);
+
+        const success = this.foldersManager.removeFolder(folderPath);
+        if (!success) return false;
+
+        const activeCodeView = this.getCurrentlyActiveCodeView();
+
+        for (let codeView of codeViews) {
+            if (codeView === activeCodeView) {
+                this.changeActiveCodeView(null);
+            }
+
+            const codeViewEntry = this.codeViewEntries.get(codeView);
+            if (!codeViewEntry) continue;            
+
+            codeViewEntry.codeBoxCodeViewManager.unlinkCodeBox();
+            this.codeViewEntries.delete(codeView);
+        }
+
+        for (let codeBoxFile of codeBoxFiles) {
+            const fileEntry = this.fileEntries.get(codeBoxFile);
+            if (!fileEntry) continue;
+
+            fileEntry.codeBoxFileManager.unlinkCodeBox();
+            this.fileEntries.delete(codeBoxFile);
+        }
+
+        if (!this.foldersManager.hasPackages()) {
+            this.packagesSectionToggle.hide();
+        }
+
+        return true;
+    }
+
     public renameFolder(folderPath : string, newName : string) : boolean {
         const newFolderPath = this.foldersManager.renameFolder(folderPath, newName);
         if (newFolderPath === null) return false;
@@ -688,8 +724,12 @@ Takže metody:
         getFilesByPackage
     Složky:
         X - addFolder - přidá novou složku
-        removeFolder - smaže složku (a podsložky) - a asi i jejich obsah
+        X - removeFolder - smaže složku (a podsložky) - a asi i jejich obsah
+            - mělo by to odstraňovat packages?
+                - asi by mělo - protože to se potom mezi těma složkama a packagem zruší vztah a vypadalo by to blbě
+                    - samozřejmě se to bude dít jen, když bude nastaveno, že se pro ty packages vytváří složka
         X - renameFolder - přejmenuje složku - (tady se budou měnit identifiery - bude to složitější)
+
         X - openFolder - volitelný parametr: openParentFolders
         X - closeFolder - volitelný parametr: closeChildFolders
         X - folderExists - zjistí, jestli složka existuje
@@ -697,6 +737,7 @@ Takže metody:
     Balíčky:
         X - addPackage - jen přidá balíček - to by asi neměl být problém
         removePackage - odstraní balíček a odstraní z něj code views a files (pokud nebudou mít nastavenou složku mimo složku pro balíčky?) - defaultní balíček samozřejmě smazat nepůjde
+            - odstraní se i složky? - možná na to vytvořit parametr (a volal bych removeFolder)
         renamePackage - přejmenuje balíček
         X - openPackage - otevře balíček
         X - closePackage - zavře balíček
@@ -713,11 +754,14 @@ Takže metody:
         getFoldersDelimiterForPackages
     - ještě nějaké píčoviny pro měnění balíčku pro code view a files - a tam se bude muset předávat, jestli se má změnit i složka - jestli se to má automaticky vygenerovat - no prostě kurva víš jak
         - a taky složky... - i když, to jde přes identifier, tak uvidím
+            - ale mohl bych to přidat do ProjectCodeBoxCodeView
 
     CodeBoxCodeView a CodeBoxFile
         - přidat metody (možná):
             X - getFolderPath
             X - getFileName
+
+    Todo - podívat se kde skrývat defaultní package - ve třídě FoldersManager
 
     Dál bych měl potom přidat metody pro přidávání nových code views nebo files
         - to jsem ale ještě úplně nepromyslel - tady v tom případě by se to ale muselo při přidávání klonovat (a napsat to taky do dokumentace)

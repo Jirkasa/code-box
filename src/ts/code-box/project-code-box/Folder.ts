@@ -64,6 +64,11 @@ class Folder {
         this.updateTabNavigation(this.lastParentOpened);
     }
 
+    public detach() : void {
+        this.buttonElement.remove();
+        this.itemsContainer.remove();
+    }
+
     public setName(name : string) {
         this.buttonTextElement.innerText = name;
     }
@@ -126,6 +131,16 @@ class Folder {
         this.subfolders.forEach(folder => folders.push(folder));
 
         return folders;
+    }
+
+    public removeFolder(folderName : string) : boolean {
+        const folder = this.subfolders.get(folderName);
+        if (!folder) return false;
+
+        folder.detach();
+
+        this.subfolders.delete(folderName);
+        return true;
     }
 
     public renameFolder(folderName : string, newFolderName : string) : boolean {
