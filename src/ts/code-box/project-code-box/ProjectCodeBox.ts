@@ -876,50 +876,16 @@ export default ProjectCodeBox;
 
 /*
 - Teď udělat:
-- dořešit ty metody - ostatní přidám ještě potom
-    - ještě k tomu přesouvání do složek... - co s automaticky generovanými složkami pro packages - když se třeba změní package, tak jak změnit item identifier? - možná předávat volitelný parametr, jestli se má změnit i identifier (složka)?
-        - tohle musím promyslet (a hlavně to potom i napsat do dokumentace)
+X - dořešit ty metody - ostatní přidám ještě potom
 - ostatní metody
     - různé podobné věci ale třeba podle balíčků atd.
-    - metoda na otevření/zavření panelu
 
 - todo - podívat se jestli používám všude GlobalConfig.DATA_ATTRIBUTE_PREFIX - narazil jsem na kód, kde jsem to nepoužil
 */
 
 /*
-Takže jak to bude s mazáním code views a files v balíčcích?
-Potřebuju si ujasnit:
-    - jak to bude s mazáním balíčků (Package folders)
-        - taky se tady bude ukládat, jestli byl package vygenerován automaticky
-            - kdyžtak pokud by se metoda addPackage volala již pro existující package, tak by se to přepsalo
-            - to je blbost - tak to dělat nebudu - to by bylo dost matoucí - nejdřív si tady nadefinuju ty další metody, které tady budu chtít implementovat a potom uvidím
-                - třeba při mazání balíčků se může nastavit, jestli se mají smazat prázdné složky, jestli se má vymazat její obsah, atp.. - musím to promyslet
-                    - bude to lepší než si pamatovat jestli se něco vytvořilo automaticky (to by bylo pro uživatele stejně matoucí a brali by to za chybu)
-    - jak to bude s mazáním vygenerovaných složek pro balíčky
-        - asi bude nejlepší, když se u každé složky bude ukládat, zda byla vytvořena automaticky pro balíček - to by asi bylo nejlepší
-
-Ono by možná šlo zařídit i to, aby když se přidá nová složka, vytvořil se i nový balíček. - ale....
-
-Takže potřebuju si to ujasnit:
-    - Při mazání balíčku:
-        - odstranit i složky, které podle něj byly vytvořeny (ne tak docela)
-            - prostě všechny složky, které se nějak vezmou podle aktuálního nastavení
-        - odstraní se i obsah složek atp...
-    - Při přejmenování balíčku:
-        - přejmenují se i příslušné složky
-    - Při smazání složky(složek):
-        - najdou se balíčky, které podle nich jakoby byly vytvořené a smažou se
-    - Při přejmenování složky:
-        - přejmenují se i balíčky, podle nich jakoby vytvořené
-
-    Takže když to shrnu, složky se vytváří při přidávání balíčku
-    Při přidávání složky se ale naopak balíčky nevytváří, i když se přidává ve složce pro balíčky
-        - tak nějak prostě - to by mohlo jít, ono to stejně uživatelé budou používat hlavně pro jazyky jako je Java, a tam budou vědět jak to funguje a tak...
-*/
-
-/*
 TODO - ještě seřazování složek balíčků nemám hotové
-TODO - changeIdentifier nemusí ještě fungovat tak jak má. Při přejmenování se může změnit i balíček. - to asi ještě nedělám - jen měním mapping myslím - takže předělat tak, aby se změnil i balíček - i když chci to tak?
+X - TODO - changeIdentifier nemusí ještě fungovat tak jak má. Při přejmenování se může změnit i balíček. - to asi ještě nedělám - jen měním mapping myslím - takže předělat tak, aby se změnil i balíček - i když chci to tak? - nechci
 TODO - a ještě metoda na přemístění code view - teď mám jen na přejmenování
 
 Takže metody:
@@ -933,7 +899,7 @@ Takže metody:
         X - getActiveCodeView
         --------
         X - getCodeViewPackage - získá název balíčku, do kterého code view patří
-            - propojím s CodeBoxCodeView
+            X - propojím s CodeBoxCodeView
         X - getCodeViewByFolderPath
         X - getCodeViewByPackage
         -----------
@@ -949,7 +915,7 @@ Takže metody:
         X - changeFileDownloadLink
         --------
         X - getFilePackage - získá název balíčku, do kterého file patří
-            - propojím s CodeBoxFile
+            X - propojím s CodeBoxFile
         X - getFileByFolderPath
         X - getFileByPackage
         ------------
