@@ -412,8 +412,35 @@ class FoldersManager {
         return true;
     }
 
+    public getPackageFolderPath(packageName : string | null) : string | null {
+        if (packageName === null) return this.packagesFolderPath.join("/");
+        packageName = this.normalizePackageName(packageName);
+        
+        if (!this.packageExists(packageName)) return null;
+        if (!this.createFoldersForPackages) return this.packagesFolderPath.join("/");
+
+        let parsedPackageName : string[];
+        if (this.foldersDelimiterForPackages !== null) {
+            parsedPackageName = packageName.split(this.foldersDelimiterForPackages);
+        } else {
+            parsedPackageName = [packageName];
+        }
+
+        const packageFolderPath = [];
+        for (let folderName of this.packagesFolderPath) {
+            packageFolderPath.push(folderName);
+        }
+        for (let folderName of parsedPackageName) {
+            packageFolderPath.push(folderName);
+        }
+
+        return packageFolderPath.join("/");
+    }
+
     public getFolderPathToRemovePackage(packageName : string) : string | null { // null, pokud není možné složku odstranit - existuje třeba podbalíček a ještě v některých dalších případech
         if (!this.createFoldersForPackages) return null;
+
+        packageName = this.normalizePackageName(packageName);
 
         const packageFolder = this.getPackageFolder(packageName);
         if (!packageFolder) return null;
@@ -686,6 +713,24 @@ class FoldersManager {
         return packageItem.packageName;
     }
 
+    public removeCodeViewPackage(identifier : string) : boolean {
+        identifier = this.normalizeFolderPath(identifier);
+
+        const parsedFolderPath = this.parseFolderPath(identifier);
+        const fileName = parsedFolderPath.pop();
+        if (!fileName) return false;
+
+        const packageItem = this.codeViewFolderAndPackageMappings.getPackageItemByFileFolderPath(parsedFolderPath.join("/"), fileName);
+        if (!packageItem) return false;
+
+        const packageFolder = this.getPackageFolder(packageItem.packageName);
+        if (!packageFolder) return false;
+
+        packageFolder.removeCodeView(fileName);
+        this.codeViewFolderAndPackageMappings.removeByPackageItem(packageItem.packageName, fileName);
+        return true;
+    }
+
     public addFile(fileName : string, codeBoxFile : ProjectCodeBoxFile, folderPath : string | null, usePackage : boolean = false, packageName : string | null = null) : boolean {
         fileName = this.sanitizeFileName(fileName);
         if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);
@@ -823,6 +868,24 @@ class FoldersManager {
         if (!packageItem) return undefined;
 
         return packageItem.packageName;
+    }
+
+    public removeFilePackage(identifier : string) : boolean {
+        identifier = this.normalizeFolderPath(identifier);
+
+        const parsedFolderPath = this.parseFolderPath(identifier);
+        const fileName = parsedFolderPath.pop();
+        if (!fileName) return false;
+
+        const packageItem = this.fileFolderAndPackageMappings.getPackageItemByFileFolderPath(parsedFolderPath.join("/"), fileName);
+        if (!packageItem) return false;
+
+        const packageFolder = this.getPackageFolder(packageItem.packageName);
+        if (!packageFolder) return false;
+
+        packageFolder.removeFile(fileName);
+        this.fileFolderAndPackageMappings.removeByPackageItem(packageItem.packageName, fileName);
+        return true;
     }
 
     public removeFileByPackage(packageName : string | null, fileName : string) : boolean {

@@ -190,9 +190,19 @@ class ProjectCodeBox extends CodeBox {
             this.foldersManager.removeCodeViewByIdentifier(identifier);
         }
 
+        if (codeView === this.getCurrentlyActiveCodeView()) {
+            this.foldersManager.setCodeViewButtonsAsActiveByIdentifier(newIdentifier);
+        }
+
         codeViewEntry.codeBoxCodeViewManager.changeIdentifier(newIdentifier);
 
         return true;
+    }
+
+    public removeCodeViewPackage(identifier : string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.foldersManager.removeCodeViewPackage(identifier);
     }
 
     public getCodeViewPackage(identifier : string) : string | null | undefined { // undefined znamená, že code view nemá balíček
@@ -322,6 +332,12 @@ class ProjectCodeBox extends CodeBox {
         fileEntry.codeBoxFileManager.changeIdentifier(newIdentifier);
 
         return true;
+    }
+
+    public removeFilePackage(identifier : string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.foldersManager.removeFilePackage(identifier);
     }
 
     public changeFileDownloadLink(identifier: string, newDownloadLink: string | null) : boolean {
@@ -529,24 +545,35 @@ class ProjectCodeBox extends CodeBox {
 
     }
 
-    // public renamePackage(name : string, newName : string) : boolean {
-    //     if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+    public renamePackage(name : string, newName : string) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
-    //     // budu muset implementovat metodu pro získání cesty pro přejmenování balíčku
-    //         // a v případě negenerování složek jen metodu, která balíček přejmenuje
-    //     // ne, ono se můžou přidat i nové složky, takže tady tou cestou to nepůjde - budu na to muset vytvořit novou metodu
+        if (!this.foldersManager.packageExists(name)) return false;
+        if (this.foldersManager.packageExists(newName)) return false;
 
-    //     /*
-    //     - na začátku se zeptat, jestli takový balíček jix neexistuje
-    //     - Budu muset získat tu cestu pro odstranění balíčku. - ale trochu jiná varianta - to checkování budu provádět i na poslední složku cesty - tím to nesmažu, když 
-    //         - budu tu metodu muset předělat, provádět ten check i na poslední složku ale porovnávat to s obsahem package složky
-    //     - vezmu všechny code views a files co jsou v té složce pro balíček a jsou v balíčku
-    //         - a to udělám takto: vezmu to všechno z té složky ale potom musím to vzít ještě jednou z balíčku, a kontrolovat, jestli to tam je (to co jsem vzal z toho balíčku) - protože v tom balíčku můžou být i jiné code views a files
-    //     - vytvářet cestu pro nový balíček nemusím, protože, znovu přidám ty code views a files
-    //     */
-    // }
+        const codeViews = this.foldersManager.getCodeViewsInPackage(name);
+        const codeBoxFiles = this.foldersManager.getFilesInPackage(name);
 
-    // todo - u renamePackage zase můžu volat renameFolder - i když ne tak docela... - ale asi to zavolám postupně no - uvidím, nechci zase zbytečně vytvářet nějakou další metodu
+        const packageFolderPath = this.foldersManager.getPackageFolderPath(name);
+
+        this.foldersManager.addPackage(newName);
+        if (this.foldersManager.isPackageFolderOpened(name)) {
+            this.foldersManager.openPackage(newName, false);
+        }
+
+        for (let codeView of codeViews) {
+            const codeViewEntry = this.codeViewEntries.get(codeView);
+            if (!codeViewEntry) continue;
+            codeViewEntry.codeBoxCodeView.changePackage(newName, codeViewEntry.codeBoxCodeView.getFolderPath() !== packageFolderPath);
+        }
+        for (let codeBoxFile of codeBoxFiles) {
+            codeBoxFile.changePackage(newName, codeBoxFile.getFolderPath() !== packageFolderPath);
+        }
+
+        this.removePackage(name, true);
+
+        return true;
+    }
 
     public openPackage(packageName : string | null, animate : boolean = true) : void { // null pro defaultní package
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
@@ -868,8 +895,8 @@ Takže metody:
         -----------
         getCodeViewsByFolderPath (volitelný parametr: childFolders nebo tak něco)
         getCodeViewsByPackage
-        changeCodeViewPackage
-        removeCodeViewPackage
+        X - changeCodeViewPackage
+        X - removeCodeViewPackage
     Files:
         X - getFiles
         X - getFile
@@ -884,8 +911,8 @@ Takže metody:
         ------------
         getFilesByFolderPath (volitelný parametr: childFolders nebo tak něco)
         getFilesByPackage
-        changeFilePackage
-        removeFilePackage
+        X - changeFilePackage
+        X - removeFilePackage
     Složky:
         X - addFolder - přidá novou složku
         X - removeFolder - smaže složku (a podsložky) - a asi i jejich obsah
@@ -902,7 +929,7 @@ Takže metody:
         X - addPackage - jen přidá balíček - to by asi neměl být problém
         X - removePackage - odstraní balíček a odstraní z něj code views a files (pokud nebudou mít nastavenou složku mimo složku pro balíčky?) - defaultní balíček samozřejmě smazat nepůjde
             - odstraní se i složky? - možná na to vytvořit parametr (a volal bych removeFolder)
-        renamePackage - přejmenuje balíček
+        X - renamePackage - přejmenuje balíček
         X - openPackage - otevře balíček
         X - closePackage - zavře balíček
         X - packageExists - zjistí, jestli balíček existuje
@@ -916,15 +943,15 @@ Takže metody:
     Další u kterých nevím jestli dělat i verze na změnění:
         getPackagesFolderPath
         getFoldersDelimiterForPackages
-    - ještě nějaké píčoviny pro měnění balíčku pro code view a files - a tam se bude muset předávat, jestli se má změnit i složka - jestli se to má automaticky vygenerovat - no prostě kurva víš jak
-        - a taky složky... - i když, to jde přes identifier, tak uvidím
-            - ale mohl bych to přidat do ProjectCodeBoxCodeView
+    X - ještě nějaké píčoviny pro měnění balíčku pro code view a files - a tam se bude muset předávat, jestli se má změnit i složka - jestli se to má automaticky vygenerovat - no prostě kurva víš jak
+        X - a taky složky... - i když, to jde přes identifier, tak uvidím
+            X - ale mohl bych to přidat do ProjectCodeBoxCodeView
 
     CodeBoxCodeView a CodeBoxFile
-        - přidat metody (možná):
+        X - přidat metody (možná):
             X - getFolderPath
             X - getFileName
-            - ještě na změnu - to stejné, ale na změnu
+            X - ještě na změnu - to stejné, ale na změnu
 
     Todo - podívat se kde skrývat defaultní package - ve třídě FoldersManager
 
