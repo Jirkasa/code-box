@@ -392,44 +392,8 @@ class ProjectCodeBox extends CodeBox {
         this.foldersManager.addPackage(name);
     }
 
-    // todo - spíš takto: ONLY_PACKAGE | FOLDERS | FILES - nějak tak? - ještě to přejmenovat - spíš ne, přejmenovat parametr na removePackageFoldersAndContents - to bude nejlepší
-    // a ještě jeden parametr: removeAllCodeViewsAndFiles
-    public removePackage(name : string, removePackageFoldersAndContents : boolean = true, removeAllCodeViewsAndFiles : boolean = false) : boolean { // todo - nebo brát to removeFolders jako že se mají smazat soubory?
+    public removePackage(name : string, removePackageFoldersAndContents : boolean = true, removeAllCodeViewsAndFiles : boolean = false) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
-
-        // if (this.foldersManager.isCreateFoldersForPackagesEnabled() && removePackageFoldersAndContents) {
-        //     const packageFolderPath = this.foldersManager.getFolderPathToRemovePackage(name);
-        //     // todo - předávat tam jestli se má všechno smazat - tady jsem skončil
-        //     if (packageFolderPath === null) return this.foldersManager.removePackage(name, removeAllCodeViewsAndFiles); // todo - jo, ale kdyžtak odstranit ty code views a files co tam jsou
-        //     return this.removeFolder(packageFolderPath);
-        // } else {
-        //     if (removeAllCodeViewsAndFiles) {
-        //         let codeViews = this.foldersManager.getCodeViewsInPackage(name);
-        //         let codeBoxFiles = this.foldersManager.getFilesInPackage(name);
-
-        //         const success = this.foldersManager.removePackage(name, true);
-        //         if (!success) return false;
-
-        //         for (let codeView of codeViews) {
-        //             const codeViewEntry = this.codeViewEntries.get(codeView);
-        //             codeViewEntry?.codeBoxCodeViewManager.unlinkCodeBox();
-        //             this.codeViewEntries.delete(codeView);
-        //         }
-        //         for (let codeBoxFile of codeBoxFiles) {
-        //             const fileEntry = this.fileEntries.get(codeBoxFile);
-        //             fileEntry?.codeBoxFileManager.unlinkCodeBox();
-        //             this.fileEntries.delete(codeBoxFile);
-        //         }
-
-        //         return true;
-        //     } else {
-        //         return this.foldersManager.removePackage(name);
-        //     }
-
-        // }
-
-
-        // ------------------------------------------
 
         const activeCodeView = this.getCurrentlyActiveCodeView();
 
@@ -498,53 +462,6 @@ class ProjectCodeBox extends CodeBox {
                 return this.foldersManager.removePackage(name);
             }
         }
-
-
-        // ------------------------------------------
-
-        // let packageFolderPath : string | null = null;
-        // if (this.foldersManager.isCreateFoldersForPackagesEnabled() && removePackageFoldersAndContents) {
-        //     packageFolderPath = this.foldersManager.getFolderPathToRemovePackage(name);
-        // }
-
-        // let packageRemoved = false;
-
-        // if (removeAllCodeViewsAndFiles) {
-        //     const codeViews = this.foldersManager.getCodeViewsInPackage(name);
-        //     const codeBoxFiles = this.foldersManager.getFilesInPackage(name);
-
-        //     const success = this.foldersManager.removePackage(name, true);
-        //     if (!success) return false;
-
-        //     for (let codeView of codeViews) {
-        //         const codeViewEntry = this.codeViewEntries.get(codeView);
-        //         codeViewEntry?.codeBoxCodeViewManager.unlinkCodeBox();
-        //         this.codeViewEntries.delete(codeView);
-        //     }
-        //     for (let codeBoxFile of codeBoxFiles) {
-        //         const fileEntry = this.fileEntries.get(codeBoxFile);
-        //         fileEntry?.codeBoxFileManager.unlinkCodeBox();
-        //         this.fileEntries.delete(codeBoxFile);
-        //     }
-
-        //     // return true;
-        //     packageRemoved = true;
-        // } else {
-        //     packageRemoved = this.foldersManager.removePackage(name);
-        // }
-
-        // if (!packageRemoved) return false;
-
-        // if (this.foldersManager.isCreateFoldersForPackagesEnabled() && removePackageFoldersAndContents) {
-        //     if (packageFolderPath !== null) {
-        //         return this.removeFolder(packageFolderPath);
-        //     } else if (!removeAllCodeViewsAndFiles) {
-        //         const codeViews = 
-        //         // odstranit code views a files ve složce, které mají jako balíček nastavený...
-        //     }
-        // }
-
-        // return true;
 
     }
 
