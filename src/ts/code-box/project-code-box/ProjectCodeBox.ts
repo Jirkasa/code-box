@@ -90,6 +90,38 @@ class ProjectCodeBox extends CodeBox {
         return codeBoxCodeViews;
     }
 
+    public getCodeViewsByFolderPath(folderPath : string, includeSubfolders : boolean = false) : ProjectCodeBoxCodeView[] {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeViews = this.foldersManager.getCodeViewsInFolder(folderPath, includeSubfolders);
+
+        const codeBoxCodeViews = new Array<ProjectCodeBoxCodeView>();
+
+        for (let codeView of codeViews) {
+            const codeViewEntry = this.codeViewEntries.get(codeView);
+            if (!codeViewEntry) continue;
+            codeBoxCodeViews.push(codeViewEntry.codeBoxCodeView);
+        }
+
+        return codeBoxCodeViews;
+    }
+
+    public getCodeViewsByPackage(packageName : string | null) : ProjectCodeBoxCodeView[] {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeViews = this.foldersManager.getCodeViewsInPackage(packageName);
+
+        const codeBoxCodeViews = new Array<ProjectCodeBoxCodeView>();
+
+        for (let codeView of codeViews) {
+            const codeViewEntry = this.codeViewEntries.get(codeView);
+            if (!codeViewEntry) continue;
+            codeBoxCodeViews.push(codeViewEntry.codeBoxCodeView);
+        }
+
+        return codeBoxCodeViews;
+    }
+
     public getCodeView(identifier: string) : ProjectCodeBoxCodeView | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -248,6 +280,18 @@ class ProjectCodeBox extends CodeBox {
         const codeBoxFiles = new Array<ProjectCodeBoxFile>();
         this.fileEntries.forEach((_, codeBoxFile) => codeBoxFiles.push(codeBoxFile));
         return codeBoxFiles;
+    }
+
+    public getFilesByFolderPath(folderPath : string, includeSubfolders : boolean = false) : ProjectCodeBoxFile[] {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.foldersManager.getFilesInFolder(folderPath, includeSubfolders);
+    }
+
+    public getFilesByPackage(packageName : string | null) : ProjectCodeBoxFile[] {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.foldersManager.getFilesInPackage(packageName);
     }
 
     public getFile(identifier: string) : ProjectCodeBoxFile | null {
@@ -893,8 +937,8 @@ Takže metody:
         X - getCodeViewByFolderPath
         X - getCodeViewByPackage
         -----------
-        getCodeViewsByFolderPath (volitelný parametr: childFolders nebo tak něco)
-        getCodeViewsByPackage
+        X - getCodeViewsByFolderPath (volitelný parametr: childFolders nebo tak něco)
+        X - getCodeViewsByPackage
         X - changeCodeViewPackage
         X - removeCodeViewPackage
     Files:
@@ -909,8 +953,8 @@ Takže metody:
         X - getFileByFolderPath
         X - getFileByPackage
         ------------
-        getFilesByFolderPath (volitelný parametr: childFolders nebo tak něco)
-        getFilesByPackage
+        X - getFilesByFolderPath (volitelný parametr: childFolders nebo tak něco)
+        X - getFilesByPackage
         X - changeFilePackage
         X - removeFilePackage
     Složky:
