@@ -8,7 +8,7 @@ class CodeBoxCodeView<T extends CodeBox = CodeBox> {
     protected codeView : CodeView;
     protected codeBox : T | null;
 
-    constructor(identifier : string, codeView : CodeView, codeBox : T, manager : CodeBoxCodeViewManager) {
+    constructor(identifier : string, codeView : CodeView, codeBox : T, manager : CodeBoxCodeViewManager) { // todo - CodeView má myslím ještě nějaké readonly public properties, tak se na ně kdyžtak podívat
         this.identifier = identifier;
         this.codeView = codeView;
         this.codeBox = codeBox;

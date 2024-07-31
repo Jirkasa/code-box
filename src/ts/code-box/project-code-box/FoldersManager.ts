@@ -450,6 +450,8 @@ class FoldersManager {
             || folder.getFoldersCount() > 0
         ) return null;
 
+        folderPath = packageFolderPath.join("/");
+
         packageFolderPath.pop();
         while (packageFolderPath.length > this.packagesFolderPath.length) {
             folder = this.getFolder(packageFolderPath);
@@ -459,6 +461,8 @@ class FoldersManager {
             folderPath = packageFolderPath.join("/");
             packageFolderPath.pop();
         }
+
+
 
         return folderPath;
 

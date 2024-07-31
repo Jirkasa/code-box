@@ -163,6 +163,38 @@ class ProjectCodeBox extends CodeBox {
         return true;
     }
 
+    public changeCodeViewPackage(identifier : string, packageName : string | null, keepFolderPath : boolean) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeView = this.foldersManager.getCodeViewByIdentifier(identifier);
+        if (!codeView) return false;
+
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return false;
+
+        let fileName = codeViewEntry.codeBoxCodeView.getFileName() || GlobalConfig.DEFAULT_CODE_VIEW_BUTTON_TEXT;
+        let folderPath = keepFolderPath ? codeViewEntry.codeBoxCodeView.getFolderPath() : null;
+        const newIdentifier = this.foldersManager.getItemIdentifier(fileName, folderPath, true, packageName !== "" ? packageName : null);
+
+        if (codeViewEntry.codeBoxCodeView.getIdentifier() !== newIdentifier && this.foldersManager.getCodeViewByIdentifier(newIdentifier) !== null) return false;
+        if (this.foldersManager.getCodeViewByPackage(packageName, fileName) !== null) return false;
+
+        if (codeViewEntry.codeBoxCodeView.getIdentifier() === newIdentifier) {
+            this.foldersManager.removeCodeViewByIdentifier(identifier);
+        }
+
+        let success = this.foldersManager.addCodeView(fileName, codeView, this.showCodeViewEventSource, folderPath, true, packageName !== "" ? packageName : null);
+        if (!success) return false;
+
+        if (codeViewEntry.codeBoxCodeView.getIdentifier() !== newIdentifier) {
+            this.foldersManager.removeCodeViewByIdentifier(identifier);
+        }
+
+        codeViewEntry.codeBoxCodeViewManager.changeIdentifier(newIdentifier);
+
+        return true;
+    }
+
     public getCodeViewPackage(identifier : string) : string | null | undefined { // undefined znamená, že code view nemá balíček
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -256,6 +288,38 @@ class ProjectCodeBox extends CodeBox {
 
         const fileEntry = this.fileEntries.get(codeBoxFile);
         fileEntry?.codeBoxFileManager.changeIdentifier(newIdentifier);
+
+        return true;
+    }
+
+    public changeFilePackage(identifier : string, packageName : string | null, keepFolderPath : boolean) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeBoxFile = this.foldersManager.getFileByIdentifier(identifier);
+        if (!codeBoxFile) return false;
+
+        const fileEntry = this.fileEntries.get(codeBoxFile);
+        if (!fileEntry) return false;
+
+        let fileName = codeBoxFile.getFileName() || GlobalConfig.DEFAULT_FILE_BUTTON_TEXT;
+        let folderPath = keepFolderPath ? codeBoxFile.getFolderPath() : null;
+        const newIdentifier = this.foldersManager.getItemIdentifier(fileName, folderPath, true, packageName !== "" ? packageName : null);
+
+        if (codeBoxFile.getIdentifier() !== newIdentifier && this.foldersManager.getFileByIdentifier(newIdentifier) !== null) return false;
+        if (this.foldersManager.getFileByPackage(packageName, fileName) !== null) return false;
+
+        if (codeBoxFile.getIdentifier() === newIdentifier) {
+            this.foldersManager.removeFileByIdentifier(identifier);
+        }
+
+        let success = this.foldersManager.addFile(fileName, codeBoxFile, folderPath, true, packageName !== "" ? packageName : null);
+        if (!success) return false;
+
+        if (codeBoxFile.getIdentifier() !== newIdentifier) {
+            this.foldersManager.removeFileByIdentifier(identifier);
+        }
+
+        fileEntry.codeBoxFileManager.changeIdentifier(newIdentifier);
 
         return true;
     }
@@ -804,6 +868,8 @@ Takže metody:
         -----------
         getCodeViewsByFolderPath (volitelný parametr: childFolders nebo tak něco)
         getCodeViewsByPackage
+        changeCodeViewPackage
+        removeCodeViewPackage
     Files:
         X - getFiles
         X - getFile
@@ -818,6 +884,8 @@ Takže metody:
         ------------
         getFilesByFolderPath (volitelný parametr: childFolders nebo tak něco)
         getFilesByPackage
+        changeFilePackage
+        removeFilePackage
     Složky:
         X - addFolder - přidá novou složku
         X - removeFolder - smaže složku (a podsložky) - a asi i jejich obsah
@@ -856,6 +924,7 @@ Takže metody:
         - přidat metody (možná):
             X - getFolderPath
             X - getFileName
+            - ještě na změnu - to stejné, ale na změnu
 
     Todo - podívat se kde skrývat defaultní package - ve třídě FoldersManager
 
