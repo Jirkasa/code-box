@@ -20,8 +20,6 @@ class FoldersManager {
     private activeCodeViewIdentifier : string | null = null;
     private panelOpened : boolean = false;
 
-    // todo - u složek generovaných pro balíčky se bude muset ukládat, jestli byly vygenerovány nebo ne - ne, tak to dělat nakonec nebude
-
     private readonly svgSpritePath : string | null;
     private readonly folderArrowIconName : string | null;
     private readonly folderIconName : string | null;
@@ -415,7 +413,7 @@ class FoldersManager {
     public getPackageFolderPath(packageName : string | null) : string | null {
         if (packageName === null) return this.packagesFolderPath.join("/");
         packageName = this.normalizePackageName(packageName);
-        
+
         if (!this.packageExists(packageName)) return null;
         if (!this.createFoldersForPackages) return this.packagesFolderPath.join("/");
 
@@ -654,6 +652,13 @@ class FoldersManager {
         const packageFolder = this.getPackageFolder(packageItem.packageName);
         packageFolder?.removeCodeView(fileName);
 
+        if (packageFolder && packageFolder === this.defaultPackage) {
+            if (packageFolder.getCodeViewsCount() === 0 && packageFolder.getFilesCount() === 0) {
+                packageFolder.detach();
+                this.defaultPackage = null;
+            }
+        }
+
         this.codeViewFolderAndPackageMappings.removeByFileFolderPath(parsedFolderPath.length > 0 ? parsedFolderPath.join("/") : null, fileName);
 
         return true;
@@ -728,6 +733,14 @@ class FoldersManager {
 
         packageFolder.removeCodeView(fileName);
         this.codeViewFolderAndPackageMappings.removeByPackageItem(packageItem.packageName, fileName);
+
+        if (packageFolder === this.defaultPackage) {
+            if (packageFolder.getCodeViewsCount() === 0 && packageFolder.getFilesCount() === 0) {
+                packageFolder.detach();
+                this.defaultPackage = null;
+            }
+        }
+
         return true;
     }
 
@@ -854,6 +867,13 @@ class FoldersManager {
 
         this.fileFolderAndPackageMappings.removeByFileFolderPath(parsedFolderPath.length > 0 ? parsedFolderPath.join("/") : null, fileName);
 
+        if (packageFolder && packageFolder === this.defaultPackage) {
+            if (packageFolder.getCodeViewsCount() === 0 && packageFolder.getFilesCount() === 0) {
+                packageFolder.detach();
+                this.defaultPackage = null;
+            }
+        }
+
         return true;
     }
 
@@ -885,6 +905,14 @@ class FoldersManager {
 
         packageFolder.removeFile(fileName);
         this.fileFolderAndPackageMappings.removeByPackageItem(packageItem.packageName, fileName);
+
+        if (packageFolder === this.defaultPackage) {
+            if (packageFolder.getCodeViewsCount() === 0 && packageFolder.getFilesCount() === 0) {
+                packageFolder.detach();
+                this.defaultPackage = null;
+            }
+        }
+
         return true;
     }
 

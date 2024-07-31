@@ -963,7 +963,7 @@ Takže metody:
             X - getFileName
             X - ještě na změnu - to stejné, ale na změnu
 
-    Todo - podívat se kde skrývat defaultní package - ve třídě FoldersManager
+    X - Todo - podívat se kde skrývat defaultní package - ve třídě FoldersManager
 
     Dál bych měl potom přidat metody pro přidávání nových code views nebo files
         - to jsem ale ještě úplně nepromyslel - tady v tom případě by se to ale muselo při přidávání klonovat (a napsat to taky do dokumentace)
@@ -974,4 +974,6 @@ Takže metody:
 
     - až ty metody dokončím, tak FoldersManager okomentovat - pořádně - ať je hned vidět co to dělá (i detaily popsat)
         - a taky ty metody v ProjectCodeBox třídě pořádně popsat
+
+    - napsat testy na tady ty věci můžu
 */
