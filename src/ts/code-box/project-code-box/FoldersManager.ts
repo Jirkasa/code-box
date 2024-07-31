@@ -382,17 +382,29 @@ class FoldersManager {
         this.getPackageFolder(packageName, true);
     }
 
-    public removePackage(packageName : string) : boolean {
+    public removePackage(packageName : string, deleteCodeViewsAndFiles : boolean = false) : boolean {
         packageName = this.normalizePackageName(packageName);
 
         const packageFolder = this.getPackageFolder(packageName);
         if (!packageFolder) return false;
 
         for (let codeViewName of packageFolder.getCodeViewNamesInFolderAndSubfolders()) {
-            this.codeViewFolderAndPackageMappings.removeByPackageItem(packageName, codeViewName);
+            if (deleteCodeViewsAndFiles) {
+                const identifier = this.codeViewFolderAndPackageMappings.getFileFolderPathByPackageItem(packageName, codeViewName);
+                if (identifier === null) continue;
+                this.removeCodeViewByIdentifier(identifier);
+            } else {
+                this.codeViewFolderAndPackageMappings.removeByPackageItem(packageName, codeViewName);
+            }
         }
         for (let fileName of packageFolder.getFileNamesInFolderAndSubfolders()) {
-            this.fileFolderAndPackageMappings.removeByPackageItem(packageName, fileName);
+            if (deleteCodeViewsAndFiles) {
+                const identifier = this.fileFolderAndPackageMappings.getFileFolderPathByPackageItem(packageName, fileName);
+                if (identifier === null) continue;
+                this.removeFileByIdentifier(identifier);
+            } else {
+                this.fileFolderAndPackageMappings.removeByPackageItem(packageName, fileName);
+            }
         }
 
         packageFolder.detach();
@@ -400,9 +412,12 @@ class FoldersManager {
         return true;
     }
 
-    public getFolderPathToRemovePackage(packageName : string) : string | null { // null, pokud package neexistuje, nebo je vyplé generování packagů
+    public getFolderPathToRemovePackage(packageName : string) : string | null { // null, pokud není možné složku odstranit - existuje třeba podbalíček a ještě v některých dalších případech
         if (!this.createFoldersForPackages) return null;
-        if (!this.packages.has(packageName)) return null;
+
+        const packageFolder = this.getPackageFolder(packageName);
+        if (!packageFolder) return null;
+        // if (!this.packages.has(packageName)) return null;
 
         // const packagesFolderPath = this.packagesFolderPath.join("/");
 
@@ -423,11 +438,21 @@ class FoldersManager {
             packageFolderPath.push(folderName);
         }
 
-        let folderPath = packageFolderPath.join("/");
+        // let folderPath = packageFolderPath.join("/");
+        let folderPath : string | null = null;
+        let folder = this.getFolder(packageFolderPath);
+        if (!folder) return null;
+        // packageFolderPath.pop();
+
+        if (
+            folder.getCodeViewsCount() > packageFolder.getCodeViewsCount()
+            || folder.getFilesCount() > packageFolder.getFilesCount()
+            || folder.getFoldersCount() > 0
+        ) return null;
 
         packageFolderPath.pop();
         while (packageFolderPath.length > this.packagesFolderPath.length) {
-            const folder = this.getFolder(packageFolderPath);
+            folder = this.getFolder(packageFolderPath);
             if (!folder) break;
             if (folder.getCodeViewsCount() > 0 || folder.getFilesCount() > 0 || folder.getFoldersCount() > 1) break;
 
@@ -442,6 +467,14 @@ class FoldersManager {
                 // vzít tu folderPath a zjistit, jestli obsahuje i nějaké další itemy než jen podsložku
                     // - vždy se vezme alespoň ta nejdelší cesta, ať už tam jsou i nějaké další code views a files nebo ne - taky napsat do dokumentace - pokud tam mají ještě nějaké další věci, které ale s balíčkem nejsou spjaty, tak se taky vymažou - a napsat, že když je removeFolders false, tak se smaže jen balíček, ale všechno ostatní se ponechá tak jak je
     }
+
+    // public getFolderPathToRenamePackage(packageName : string, newPackageName : string) : string | null { // ne - tohle nepůjde
+    //     if (!this.createFoldersForPackages) return null;
+    //     if (!this.packages.has(packageName)) return null;
+    //     if (this.packages.has(newPackageName)) return null;
+
+    //     return null;
+    // }
 
     public packageExists(packageName : string) : boolean {
         packageName = this.normalizePackageName(packageName);
@@ -545,6 +578,21 @@ class FoldersManager {
         if (!folder) return codeViews;
 
         for (let codeViewItem of folder.getCodeViews(traverseSubfolders)) {
+            codeViews.push(codeViewItem.codeView);
+        }
+
+        return codeViews;
+    }
+
+    public getCodeViewsInPackage(packageName : string | null) : CodeView[] {
+        if (packageName !== null) packageName = this.normalizePackageName(packageName);
+
+        const packageFolder = this.getPackageFolder(packageName);
+
+        const codeViews = new Array<CodeView>();
+        if (!packageFolder) return codeViews;
+
+        for (let codeViewItem of packageFolder.getCodeViews()) {
             codeViews.push(codeViewItem.codeView);
         }
 
@@ -714,6 +762,21 @@ class FoldersManager {
         if (!folder) return codeBoxFiles;
 
         for (let fileItem of folder.getFiles(traverseSubfolders)) {
+            codeBoxFiles.push(fileItem.codeBoxFile);
+        }
+
+        return codeBoxFiles;
+    }
+
+    public getFilesInPackage(packageName : string | null) : ProjectCodeBoxFile[] {
+        if (packageName !== null) packageName = this.normalizePackageName(packageName);
+
+        const packageFolder = this.getPackageFolder(packageName);
+
+        const codeBoxFiles = new Array<ProjectCodeBoxFile>();
+        if (!packageFolder) return codeBoxFiles;
+
+        for (let fileItem of packageFolder.getFiles()) {
             codeBoxFiles.push(fileItem.codeBoxFile);
         }
 

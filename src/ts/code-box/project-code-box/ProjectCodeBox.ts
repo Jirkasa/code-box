@@ -392,17 +392,178 @@ class ProjectCodeBox extends CodeBox {
         this.foldersManager.addPackage(name);
     }
 
-    public removePackage(name : string, removeFolders : boolean = true) : boolean {
+    // todo - spíš takto: ONLY_PACKAGE | FOLDERS | FILES - nějak tak? - ještě to přejmenovat - spíš ne, přejmenovat parametr na removePackageFoldersAndContents - to bude nejlepší
+    // a ještě jeden parametr: removeAllCodeViewsAndFiles
+    public removePackage(name : string, removePackageFoldersAndContents : boolean = true, removeAllCodeViewsAndFiles : boolean = false) : boolean { // todo - nebo brát to removeFolders jako že se mají smazat soubory?
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
-        
-        if (this.foldersManager.isCreateFoldersForPackagesEnabled() && removeFolders) {
+
+        // if (this.foldersManager.isCreateFoldersForPackagesEnabled() && removePackageFoldersAndContents) {
+        //     const packageFolderPath = this.foldersManager.getFolderPathToRemovePackage(name);
+        //     // todo - předávat tam jestli se má všechno smazat - tady jsem skončil
+        //     if (packageFolderPath === null) return this.foldersManager.removePackage(name, removeAllCodeViewsAndFiles); // todo - jo, ale kdyžtak odstranit ty code views a files co tam jsou
+        //     return this.removeFolder(packageFolderPath);
+        // } else {
+        //     if (removeAllCodeViewsAndFiles) {
+        //         let codeViews = this.foldersManager.getCodeViewsInPackage(name);
+        //         let codeBoxFiles = this.foldersManager.getFilesInPackage(name);
+
+        //         const success = this.foldersManager.removePackage(name, true);
+        //         if (!success) return false;
+
+        //         for (let codeView of codeViews) {
+        //             const codeViewEntry = this.codeViewEntries.get(codeView);
+        //             codeViewEntry?.codeBoxCodeViewManager.unlinkCodeBox();
+        //             this.codeViewEntries.delete(codeView);
+        //         }
+        //         for (let codeBoxFile of codeBoxFiles) {
+        //             const fileEntry = this.fileEntries.get(codeBoxFile);
+        //             fileEntry?.codeBoxFileManager.unlinkCodeBox();
+        //             this.fileEntries.delete(codeBoxFile);
+        //         }
+
+        //         return true;
+        //     } else {
+        //         return this.foldersManager.removePackage(name);
+        //     }
+
+        // }
+
+
+        // ------------------------------------------
+
+        const activeCodeView = this.getCurrentlyActiveCodeView();
+
+        if (this.foldersManager.isCreateFoldersForPackagesEnabled() && removePackageFoldersAndContents) {
             const packageFolderPath = this.foldersManager.getFolderPathToRemovePackage(name);
-            if (packageFolderPath === null) return false;
-            return this.removeFolder(packageFolderPath);
+            if (packageFolderPath !== null) {
+                if (removeAllCodeViewsAndFiles) {
+                    const success = this.foldersManager.removePackage(name, true);
+                    if (!success) return false;
+                }
+                return this.removeFolder(packageFolderPath);
+            } else {
+                const codeViews = this.foldersManager.getCodeViewsInPackage(name);
+                const codeBoxFiles = this.foldersManager.getFilesInPackage(name);
+
+                for (let codeView of codeViews) {
+                    const codeViewEntry = this.codeViewEntries.get(codeView);
+                    if (!codeViewEntry) continue;
+                    const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
+                    if (identifier === null) continue;
+                    this.foldersManager.removeCodeViewByIdentifier(identifier);
+                    codeViewEntry.codeBoxCodeViewManager.unlinkCodeBox();
+                    this.codeViewEntries.delete(codeView);
+
+                    if (codeView === activeCodeView) {
+                        this.changeActiveCodeView(null);
+                    }
+                }
+                for (let codeBoxFile of codeBoxFiles) {
+                    const fileEntry = this.fileEntries.get(codeBoxFile);
+                    if (!fileEntry) continue;
+                    const identifier = codeBoxFile.getIdentifier();
+                    if (identifier === null) continue;
+                    this.foldersManager.removeFileByIdentifier(identifier);
+                    fileEntry.codeBoxFileManager.unlinkCodeBox();
+                    this.fileEntries.delete(codeBoxFile);
+                }
+
+                return this.foldersManager.removePackage(name, removeAllCodeViewsAndFiles);
+            }
         } else {
-            return this.foldersManager.removePackage(name);
+            if (removeAllCodeViewsAndFiles) {
+                let codeViews = this.foldersManager.getCodeViewsInPackage(name);
+                let codeBoxFiles = this.foldersManager.getFilesInPackage(name);
+
+                const success = this.foldersManager.removePackage(name, true);
+                if (!success) return false;
+
+                for (let codeView of codeViews) {
+                    const codeViewEntry = this.codeViewEntries.get(codeView);
+                    codeViewEntry?.codeBoxCodeViewManager.unlinkCodeBox();
+                    this.codeViewEntries.delete(codeView);
+
+                    if (codeView === activeCodeView) {
+                        this.changeActiveCodeView(null);
+                    }
+                }
+                for (let codeBoxFile of codeBoxFiles) {
+                    const fileEntry = this.fileEntries.get(codeBoxFile);
+                    fileEntry?.codeBoxFileManager.unlinkCodeBox();
+                    this.fileEntries.delete(codeBoxFile);
+                }
+
+                return true;
+            } else {
+                return this.foldersManager.removePackage(name);
+            }
         }
+
+
+        // ------------------------------------------
+
+        // let packageFolderPath : string | null = null;
+        // if (this.foldersManager.isCreateFoldersForPackagesEnabled() && removePackageFoldersAndContents) {
+        //     packageFolderPath = this.foldersManager.getFolderPathToRemovePackage(name);
+        // }
+
+        // let packageRemoved = false;
+
+        // if (removeAllCodeViewsAndFiles) {
+        //     const codeViews = this.foldersManager.getCodeViewsInPackage(name);
+        //     const codeBoxFiles = this.foldersManager.getFilesInPackage(name);
+
+        //     const success = this.foldersManager.removePackage(name, true);
+        //     if (!success) return false;
+
+        //     for (let codeView of codeViews) {
+        //         const codeViewEntry = this.codeViewEntries.get(codeView);
+        //         codeViewEntry?.codeBoxCodeViewManager.unlinkCodeBox();
+        //         this.codeViewEntries.delete(codeView);
+        //     }
+        //     for (let codeBoxFile of codeBoxFiles) {
+        //         const fileEntry = this.fileEntries.get(codeBoxFile);
+        //         fileEntry?.codeBoxFileManager.unlinkCodeBox();
+        //         this.fileEntries.delete(codeBoxFile);
+        //     }
+
+        //     // return true;
+        //     packageRemoved = true;
+        // } else {
+        //     packageRemoved = this.foldersManager.removePackage(name);
+        // }
+
+        // if (!packageRemoved) return false;
+
+        // if (this.foldersManager.isCreateFoldersForPackagesEnabled() && removePackageFoldersAndContents) {
+        //     if (packageFolderPath !== null) {
+        //         return this.removeFolder(packageFolderPath);
+        //     } else if (!removeAllCodeViewsAndFiles) {
+        //         const codeViews = 
+        //         // odstranit code views a files ve složce, které mají jako balíček nastavený...
+        //     }
+        // }
+
+        // return true;
+
     }
+
+    // public renamePackage(name : string, newName : string) : boolean {
+    //     if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+    //     // budu muset implementovat metodu pro získání cesty pro přejmenování balíčku
+    //         // a v případě negenerování složek jen metodu, která balíček přejmenuje
+    //     // ne, ono se můžou přidat i nové složky, takže tady tou cestou to nepůjde - budu na to muset vytvořit novou metodu
+
+    //     /*
+    //     - na začátku se zeptat, jestli takový balíček jix neexistuje
+    //     - Budu muset získat tu cestu pro odstranění balíčku. - ale trochu jiná varianta - to checkování budu provádět i na poslední složku cesty - tím to nesmažu, když 
+    //         - budu tu metodu muset předělat, provádět ten check i na poslední složku ale porovnávat to s obsahem package složky
+    //     - vezmu všechny code views a files co jsou v té složce pro balíček a jsou v balíčku
+    //         - a to udělám takto: vezmu to všechno z té složky ale potom musím to vzít ještě jednou z balíčku, a kontrolovat, jestli to tam je (to co jsem vzal z toho balíčku) - protože v tom balíčku můžou být i jiné code views a files
+    //     - vytvářet cestu pro nový balíček nemusím, protože, znovu přidám ty code views a files
+    //     */
+    // }
 
     // todo - u renamePackage zase můžu volat renameFolder - i když ne tak docela... - ale asi to zavolám postupně no - uvidím, nechci zase zbytečně vytvářet nějakou další metodu
 
@@ -754,7 +915,7 @@ Takže metody:
         X - isFolderOpened - zjistí, jestli je složka otevřená
     Balíčky:
         X - addPackage - jen přidá balíček - to by asi neměl být problém
-        removePackage - odstraní balíček a odstraní z něj code views a files (pokud nebudou mít nastavenou složku mimo složku pro balíčky?) - defaultní balíček samozřejmě smazat nepůjde
+        X - removePackage - odstraní balíček a odstraní z něj code views a files (pokud nebudou mít nastavenou složku mimo složku pro balíčky?) - defaultní balíček samozřejmě smazat nepůjde
             - odstraní se i složky? - možná na to vytvořit parametr (a volal bych removeFolder)
         renamePackage - přejmenuje balíček
         X - openPackage - otevře balíček
