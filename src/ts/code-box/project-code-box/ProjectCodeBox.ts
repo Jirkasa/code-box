@@ -884,7 +884,7 @@ X - dořešit ty metody - ostatní přidám ještě potom
 */
 
 /*
-TODO - ještě seřazování složek balíčků nemám hotové
+X - TODO - ještě seřazování složek balíčků nemám hotové
 X - TODO - changeIdentifier nemusí ještě fungovat tak jak má. Při přejmenování se může změnit i balíček. - to asi ještě nedělám - jen měním mapping myslím - takže předělat tak, aby se změnil i balíček - i když chci to tak? - nechci
 TODO - a ještě metoda na přemístění code view - teď mám jen na přejmenování
 

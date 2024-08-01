@@ -64,6 +64,11 @@ class Folder {
         this.updateTabNavigation(this.lastParentOpened);
     }
 
+    public appendTo(container : HTMLElement) : void {
+        container.appendChild(this.buttonElement);
+        container.appendChild(this.itemsContainer);
+    }
+
     public detach() : void {
         this.buttonElement.remove();
         this.itemsContainer.remove();

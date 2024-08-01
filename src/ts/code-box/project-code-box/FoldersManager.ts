@@ -298,6 +298,8 @@ class FoldersManager {
                     this.packages.delete(change.oldName);
                     this.packages.set(change.newName, packageFolder);
                 }
+
+                this.sortPackageFolders();
             }
         }
 
@@ -375,7 +377,7 @@ class FoldersManager {
         return folder.isOpened();
     }
 
-    public addPackage(packageName : string) : void { // todo - ještě kdyžtak vytvářet podsložky pokud se mají vytvářet - a nevytvářejí se? - myslím že už jo
+    public addPackage(packageName : string) : void {
         packageName = this.normalizePackageName(packageName);
         this.getPackageFolder(packageName, true);
     }
@@ -1099,6 +1101,19 @@ class FoldersManager {
         }
     }
 
+    private sortPackageFolders() : void {
+        if (this.defaultPackage) {
+            this.defaultPackage.appendTo(this.packagesContainer);
+        }
+
+        const packageFolders = Array.from(this.packages);
+        packageFolders.sort((folder1, folder2) => folder1[0] > folder2[0] ? 1 : -1);
+
+        for (let folder of packageFolders) {
+            folder[1].appendTo(this.packagesContainer);
+        }
+    }
+
     private getFolder(folderPath : string[], createIfNotExist : boolean = false) : Folder | null {
         let parentOpened = this.panelOpened;
         let folder = this.rootFolder;
@@ -1127,6 +1142,7 @@ class FoldersManager {
                 if (createIfNotExist) {
                     this.getFolder(this.packagesFolderPath, true);
                     this.defaultPackage = new Folder(this.defaultPackageName, this.panelOpened, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.packageIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_DEFAULT_PACKAGE_MODIFIER, this.packagesContainer);
+                    this.sortPackageFolders();
                 } else {
                     return null;
                 }
@@ -1151,6 +1167,7 @@ class FoldersManager {
                 this.getFolder(folderPath, true);
                 packageFolder = new Folder(normalizedPackageName, this.panelOpened, this.openCloseAnimationSpeed, this.openCloseAnimationEasingFunction, this.svgSpritePath, this.folderArrowIconName, this.packageIconName, CSSClasses.PROJECT_CODE_BOX_PANEL_ITEM_PACKAGE_MODIFIER, this.packagesContainer);
                 this.packages.set(normalizedPackageName, packageFolder);
+                this.sortPackageFolders();
             } else {
                 return null;
             }
