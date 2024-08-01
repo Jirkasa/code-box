@@ -930,7 +930,9 @@ Můžu případně přidat ještě tyto metody, ale ty už nejsou tak důležit�
 - kdyžtak ještě další
 
 - složka pro balíčky se asi nebude dát změnit, takže folders konfigurační elementy kdyžtak dovolit jen v root ProjectCodeBoxu
-        - ale to ještě nevím, ono to možná vadit nebude - uvidím jak se ty věci ohledně balíčků budou dědit
+
+- ozkoušet, co se stane, když jako identifier do některých metod předám prázdný řetězec - obecně to celé projít a nějak to zajistit
+    - obecně všude zařídit, aby se nedal předat prázdný řetězec
 
 - až ty metody dokončím, tak FoldersManager okomentovat - pořádně - ať je hned vidět co to dělá (i detaily popsat)
         - a taky ty metody v ProjectCodeBox třídě pořádně popsat

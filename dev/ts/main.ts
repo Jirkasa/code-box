@@ -46,7 +46,8 @@ const projectCodeBox = new ProjectCodeBox(document.getElementById("ProjectCodeBo
     },
     minCodeViewLinesCount: 20,
     foldersDelimiterForPackages: ".",
-    openPanelOnInit: true
+    openPanelOnInit: true,
+    createFoldersForPackages: false
 });
 window.myCodeBox = projectCodeBox;
 
