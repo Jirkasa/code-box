@@ -311,11 +311,13 @@ class FoldersManager {
      * Renames folder. This can also change (rename) folder for packages and rename packages.
      * @param folderPath Path to folder that should be renamed.
      * @param newName New name for folder.
-     * @returns Path to renamed folder.
+     * @returns Path to renamed folder or null if renaming wasn't successfull.
      */
     public renameFolder(folderPath : string, newName : string) : string | null {
         folderPath = this.normalizeFolderPath(folderPath);
         newName = this.sanitizeFolderName(newName);
+
+        if (newName === "") return null;
 
         const parsedFolderPath = this.parseFolderPath(folderPath);
         const oldName = parsedFolderPath.pop();
@@ -505,6 +507,7 @@ class FoldersManager {
      */
     public addPackage(packageName : string) : void {
         packageName = this.normalizePackageName(packageName);
+        if (packageName === "") return;
         this.getPackageFolder(packageName, true);
     }
 
@@ -516,6 +519,7 @@ class FoldersManager {
      */
     public removePackage(packageName : string, deleteCodeViewsAndFiles : boolean = false) : boolean {
         packageName = this.normalizePackageName(packageName);
+        if (packageName === "") return false;
 
         const packageFolder = this.getPackageFolder(packageName);
         if (!packageFolder) return false;
@@ -585,6 +589,8 @@ class FoldersManager {
 
         packageName = this.normalizePackageName(packageName);
 
+        if (packageName === "") return null;
+
         const packageFolder = this.getPackageFolder(packageName);
         if (!packageFolder) return null;
 
@@ -635,6 +641,8 @@ class FoldersManager {
     public packageExists(packageName : string) : boolean {
         packageName = this.normalizePackageName(packageName);
 
+        if (packageName === "") return false;
+
         const packageFolder = this.getPackageFolder(packageName);
         if (!packageFolder) return false;
 
@@ -648,6 +656,8 @@ class FoldersManager {
      */
     public isPackageFolderOpened(packageName : string | null) : boolean {
         if (packageName !== null) packageName = this.normalizePackageName(packageName);
+
+        if (packageName === "") return false;
 
         const packageFolder = this.getPackageFolder(packageName);
         if (!packageFolder) return false;
@@ -678,6 +688,9 @@ class FoldersManager {
         if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);
         if (packageName !== null) packageName = this.normalizePackageName(packageName);
         folderPath = this.getFolderPath(folderPath, usePackage, packageName);
+
+        if (fileName === "") return false;
+        if (usePackage && packageName === "") return false;
 
         const parsedFolderPath = this.parseFolderPath(folderPath);
 
@@ -871,6 +884,8 @@ class FoldersManager {
         newIdentifier = this.normalizeFolderPath(newIdentifier);
         const isActive = this.activeCodeViewIdentifier === identifier;
 
+        if (newIdentifier === "") return false;
+
         if (this.getCodeViewByIdentifier(newIdentifier) !== null) return false;
 
         const codeView = this.getCodeViewByIdentifier(identifier);
@@ -961,6 +976,9 @@ class FoldersManager {
         if (folderPath !== null) folderPath = this.normalizeFolderPath(folderPath);
         if (packageName !== null) packageName = this.normalizePackageName(packageName);
         folderPath = this.getFolderPath(folderPath, usePackage, packageName);
+
+        if (fileName === "") return false;
+        if (usePackage && packageName === "") return false;
 
         const parsedFolderPath = this.parseFolderPath(folderPath);
 
@@ -1147,6 +1165,8 @@ class FoldersManager {
     public changeFileIdentifier(identifier : string, newIdentifier : string) : boolean {
         identifier = this.normalizeFolderPath(identifier);
         newIdentifier = this.normalizeFolderPath(newIdentifier);
+
+        if (newIdentifier === "") return false;
 
         if (this.getFileByIdentifier(newIdentifier) !== null) return false;
 

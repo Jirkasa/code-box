@@ -933,6 +933,7 @@ Můžu případně přidat ještě tyto metody, ale ty už nejsou tak důležit�
 
 - ozkoušet, co se stane, když jako identifier do některých metod předám prázdný řetězec - obecně to celé projít a nějak to zajistit
     - obecně všude zařídit, aby se nedal předat prázdný řetězec
+        - ve třídě FoldersManager jsem to už udělal
 
 - až ty metody dokončím, tak FoldersManager okomentovat - pořádně - ať je hned vidět co to dělá (i detaily popsat)
         - a taky ty metody v ProjectCodeBox třídě pořádně popsat
