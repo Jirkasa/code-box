@@ -676,7 +676,7 @@ class ProjectCodeBox extends CodeBox {
             if (codeBoxItemInfo.type === "HTMLElement" && codeBoxItemInfo.element) {
                 const element = codeBoxItemInfo.element;
 
-                if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Folders"] !== undefined) {
+                if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Folders"] !== undefined) { // todo - tohle se bude dát použít jen pro kořenový code box
                     this.createFolderStructure(element);
                 } else if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Commands"] !== undefined) {
                     // todo
@@ -875,105 +875,24 @@ class ProjectCodeBox extends CodeBox {
 export default ProjectCodeBox;
 
 /*
-- Teď udělat:
-X - dořešit ty metody - ostatní přidám ještě potom
-- ostatní metody
-    - různé podobné věci ale třeba podle balíčků atd.
-
 - todo - podívat se jestli používám všude GlobalConfig.DATA_ATTRIBUTE_PREFIX - narazil jsem na kód, kde jsem to nepoužil
 */
 
 /*
-X - TODO - ještě seřazování složek balíčků nemám hotové
-X - TODO - changeIdentifier nemusí ještě fungovat tak jak má. Při přejmenování se může změnit i balíček. - to asi ještě nedělám - jen měním mapping myslím - takže předělat tak, aby se změnil i balíček - i když chci to tak? - nechci
-TODO - a ještě metoda na přemístění code view - teď mám jen na přejmenování
+Můžu případně přidat ještě tyto metody, ale ty už nejsou tak důležité, a nevím jestli je tam vůbec přidávat:
+- getPackagesFolderPath
+- getFoldersDelimiterForPackages
+- kdyžtak ještě další
 
-Takže metody:
-    Code Views:
-        X - getCodeViews
-        X - getCodeView
-        X - removeCodeView
-        X - changeCodeViewIdentifier
-        X - setActiveCodeView
-        X - setNoActiveCodeView
-        X - getActiveCodeView
-        --------
-        X - getCodeViewPackage - získá název balíčku, do kterého code view patří
-            X - propojím s CodeBoxCodeView
-        X - getCodeViewByFolderPath
-        X - getCodeViewByPackage
-        -----------
-        X - getCodeViewsByFolderPath (volitelný parametr: childFolders nebo tak něco)
-        X - getCodeViewsByPackage
-        X - changeCodeViewPackage
-        X - removeCodeViewPackage
-    Files:
-        X - getFiles
-        X - getFile
-        X - removeFile
-        X - changeFileIdentifier
-        X - changeFileDownloadLink
-        --------
-        X - getFilePackage - získá název balíčku, do kterého file patří
-            X - propojím s CodeBoxFile
-        X - getFileByFolderPath
-        X - getFileByPackage
-        ------------
-        X - getFilesByFolderPath (volitelný parametr: childFolders nebo tak něco)
-        X - getFilesByPackage
-        X - changeFilePackage
-        X - removeFilePackage
-    Složky:
-        X - addFolder - přidá novou složku
-        X - removeFolder - smaže složku (a podsložky) - a asi i jejich obsah
-            - mělo by to odstraňovat packages?
-                - asi by mělo - protože to se potom mezi těma složkama a packagem zruší vztah a vypadalo by to blbě
-                    - samozřejmě se to bude dít jen, když bude nastaveno, že se pro ty packages vytváří složka
-        X - renameFolder - přejmenuje složku - (tady se budou měnit identifiery - bude to složitější)
-
-        X - openFolder - volitelný parametr: openParentFolders
-        X - closeFolder - volitelný parametr: closeChildFolders
-        X - folderExists - zjistí, jestli složka existuje
-        X - isFolderOpened - zjistí, jestli je složka otevřená
-    Balíčky:
-        X - addPackage - jen přidá balíček - to by asi neměl být problém
-        X - removePackage - odstraní balíček a odstraní z něj code views a files (pokud nebudou mít nastavenou složku mimo složku pro balíčky?) - defaultní balíček samozřejmě smazat nepůjde
-            - odstraní se i složky? - možná na to vytvořit parametr (a volal bych removeFolder)
-        X - renamePackage - přejmenuje balíček
-        X - openPackage - otevře balíček
-        X - closePackage - zavře balíček
-        X - packageExists - zjistí, jestli balíček existuje
-        X - isPackageOpened - zjistí, jestli je balíček otevřený
-    Další:
-        X - getProjectName
-        X - setProjectName
-        X - openPanel
-        X - closePanel
-        X - isPanelOpened
-    Další u kterých nevím jestli dělat i verze na změnění:
-        getPackagesFolderPath
-        getFoldersDelimiterForPackages
-    X - ještě nějaké píčoviny pro měnění balíčku pro code view a files - a tam se bude muset předávat, jestli se má změnit i složka - jestli se to má automaticky vygenerovat - no prostě kurva víš jak
-        X - a taky složky... - i když, to jde přes identifier, tak uvidím
-            X - ale mohl bych to přidat do ProjectCodeBoxCodeView
-
-    CodeBoxCodeView a CodeBoxFile
-        X - přidat metody (možná):
-            X - getFolderPath
-            X - getFileName
-            X - ještě na změnu - to stejné, ale na změnu
-
-    X - Todo - podívat se kde skrývat defaultní package - ve třídě FoldersManager
-
-    Dál bych měl potom přidat metody pro přidávání nových code views nebo files
+Dál bych měl potom přidat metody pro přidávání nových code views nebo files
         - to jsem ale ještě úplně nepromyslel - tady v tom případě by se to ale muselo při přidávání klonovat (a napsat to taky do dokumentace)
             - tady ty metody by byly definované v CodeBox třídě, protože bych to chtěl pro všechny code boxy
 
-    - složka pro balíčky se asi nebude dát změnit, takže folders konfigurační elementy kdyžtak dovolit jen v root ProjectCodeBoxu
+- složka pro balíčky se asi nebude dát změnit, takže folders konfigurační elementy kdyžtak dovolit jen v root ProjectCodeBoxu
         - ale to ještě nevím, ono to možná vadit nebude - uvidím jak se ty věci ohledně balíčků budou dědit
 
-    - až ty metody dokončím, tak FoldersManager okomentovat - pořádně - ať je hned vidět co to dělá (i detaily popsat)
+- až ty metody dokončím, tak FoldersManager okomentovat - pořádně - ať je hned vidět co to dělá (i detaily popsat)
         - a taky ty metody v ProjectCodeBox třídě pořádně popsat
 
-    - napsat testy na tady ty věci můžu
+- napsat testy na tady ty věci můžu (hlavně na metody, které jsou složitější - na ty jednoduché ani moc nemusím)
 */
