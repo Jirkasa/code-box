@@ -277,6 +277,14 @@ abstract class CodeBox {
     }
 
     /**
+     * Adds new code view to code box (copy of passed code view is made).
+     * @param identifier Identifier under which the code view should be added to code box.
+     * @param codeView Code view.
+     * @returns Indicates whether file has been successfully added.
+     */
+    public abstract addCodeView(identifier : string, codeView : CodeView) : boolean;
+
+    /**
      * Returns all code views of code box.
      * @returns Code views.
      */
@@ -321,6 +329,14 @@ abstract class CodeBox {
      * @returns Active code view or null if no code view is set as active.
      */
     public abstract getActiveCodeView() : CodeBoxCodeView | null;
+
+    /**
+     * Adds new file to code box.
+     * @param identifier Identifier under which the file should be added to code box.
+     * @param downloadLink Download link (or null if file should not be downloadable).
+     * @returns Indicates whether file has been successfully added.
+     */
+    public abstract addFile(identifier : string, downloadLink : string | null) : boolean;
 
     /**
      * Returns all files of code box.

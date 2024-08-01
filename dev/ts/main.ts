@@ -50,6 +50,10 @@ const projectCodeBox = new ProjectCodeBox(document.getElementById("ProjectCodeBo
 });
 window.myCodeBox = projectCodeBox;
 
+// setTimeout(() => {
+//     projectCodeBox.addCodeView("test/2.jsp", codeView);
+// }, 1000);
+
 new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest2") as HTMLElement, {
     svgSpritePath: "./static/icon-sprite.svg",
     svgSpriteIcons: {

@@ -47,6 +47,25 @@ class TabCodeBox extends CodeBox {
         }
     }
 
+    public addCodeView(identifier: string, codeView: CodeView) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        if (this.codeViews.has(identifier)) return false;
+
+        const codeViewCopy = codeView.clone();
+
+        let codeViewButton = new TabCodeViewButton(identifier, this.showCodeViewEventSource, codeViewCopy, this.svgSpritePath, this.codeFileIconName);
+        codeViewButton.appendTo(this.tabsContainer);
+
+        const codeBoxCodeViewManager = new CodeBoxCodeViewManager();
+        const codeBoxCodeView = new CodeBoxCodeView(identifier, codeViewCopy, this, codeBoxCodeViewManager);
+
+        this.codeViews.set(identifier, codeViewCopy);
+        this.codeViewEntries.set(codeViewCopy, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager, codeViewButton));
+
+        return true;
+    }
+
     public getCodeViews() : CodeBoxCodeView[] {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -152,6 +171,21 @@ class TabCodeBox extends CodeBox {
         if (!codeViewEntry) return null;
 
         return codeViewEntry.codeBoxCodeView;
+    }
+
+    public addFile(identifier: string, downloadLink: string | null = null) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        if (this.fileEntries.has(identifier)) return false;
+
+        let fileButton = new TabFileButton(identifier, downloadLink, this.svgSpritePath, this.fileIconName, this.downloadIconName);
+        fileButton.appendTo(this.tabsContainer);
+
+        const codeBoxFileManager = new CodeBoxFileManager();
+        const codeBoxFile = new CodeBoxFile(identifier, downloadLink, this, codeBoxFileManager);
+
+        this.fileEntries.set(identifier, new FileEntry(codeBoxFile, codeBoxFileManager, fileButton));
+        return true;
     }
 
     public getFiles() : CodeBoxFile[] {

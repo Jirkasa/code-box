@@ -82,6 +82,29 @@ class ProjectCodeBox extends CodeBox {
         this.showCodeViewEventSource.subscribe((_, codeView) => this.onShowCodeView(codeView));
     }
 
+    public addCodeView(identifier: string, codeView: CodeView) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        if (this.foldersManager.getCodeViewByIdentifier(identifier) !== null) return false;
+
+        const parsedFolderPath = identifier.split("/");
+        const fileName = parsedFolderPath.pop();
+        if (fileName === undefined) return false;
+
+        const codeViewCopy = codeView.clone();
+        
+        const success = this.foldersManager.addCodeView(fileName, codeViewCopy, this.showCodeViewEventSource, parsedFolderPath.join("/"));
+        if (!success) return false;
+
+        identifier = this.foldersManager.getItemIdentifier(fileName, parsedFolderPath.join("/"));
+
+        const codeBoxCodeViewManager = new CodeBoxCodeViewManager();
+        const codeBoxCodeView = new ProjectCodeBoxCodeView(identifier, codeViewCopy, this, codeBoxCodeViewManager);
+        this.codeViewEntries.set(codeViewCopy, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager));
+
+        return true;
+    }
+
     public getCodeViews() : ProjectCodeBoxCodeView[] {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -272,6 +295,28 @@ class ProjectCodeBox extends CodeBox {
         if (!codeViewEntry) return null;
 
         return codeViewEntry.codeBoxCodeView;
+    }
+
+    public addFile(identifier: string, downloadLink: string | null = null) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        if (this.foldersManager.getFileByIdentifier(identifier) !== null) return false;
+
+        const parsedFolderPath = identifier.split("/");
+        const fileName = parsedFolderPath.pop();
+        if (fileName === undefined) return false;
+
+        const codeBoxFileManager = new CodeBoxFileManager();
+        const codeBoxFile = new ProjectCodeBoxFile(identifier, downloadLink, this, codeBoxFileManager);
+
+        const success = this.foldersManager.addFile(fileName, codeBoxFile, parsedFolderPath.join("/"));
+        if (!success) return false;
+
+        identifier = this.foldersManager.getItemIdentifier(fileName, parsedFolderPath.join("/"));
+
+        this.fileEntries.set(codeBoxFile, new FileEntry(codeBoxFileManager));
+
+        return true;
     }
 
     public getFiles() : ProjectCodeBoxFile[] {
@@ -883,10 +928,6 @@ Můžu případně přidat ještě tyto metody, ale ty už nejsou tak důležit�
 - getPackagesFolderPath
 - getFoldersDelimiterForPackages
 - kdyžtak ještě další
-
-Dál bych měl potom přidat metody pro přidávání nových code views nebo files
-        - to jsem ale ještě úplně nepromyslel - tady v tom případě by se to ale muselo při přidávání klonovat (a napsat to taky do dokumentace)
-            - tady ty metody by byly definované v CodeBox třídě, protože bych to chtěl pro všechny code boxy
 
 - složka pro balíčky se asi nebude dát změnit, takže folders konfigurační elementy kdyžtak dovolit jen v root ProjectCodeBoxu
         - ale to ještě nevím, ono to možná vadit nebude - uvidím jak se ty věci ohledně balíčků budou dědit
