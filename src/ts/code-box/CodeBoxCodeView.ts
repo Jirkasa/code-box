@@ -8,10 +8,18 @@ class CodeBoxCodeView<T extends CodeBox = CodeBox> {
     protected codeView : CodeView;
     protected codeBox : T | null;
 
+    public readonly lineHeight : number;
+    public readonly lineHeightUnit : string;
+    public readonly linesCount : number;
+
     constructor(identifier : string, codeView : CodeView, codeBox : T, manager : CodeBoxCodeViewManager) { // todo - CodeView má myslím ještě nějaké readonly public properties, tak se na ně kdyžtak podívat
         this.identifier = identifier;
         this.codeView = codeView;
         this.codeBox = codeBox;
+
+        this.lineHeight = codeView.lineHeight;
+        this.lineHeightUnit = codeView.lineHeightUnit;
+        this.linesCount = codeView.linesCount;
 
         manager.onIdentifierChange = newIdentifier => this.onIdentifierChange(newIdentifier);
         manager.onUnlinkCodeBox = () => this.onUnlinkCodeBox();

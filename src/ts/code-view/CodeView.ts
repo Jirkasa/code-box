@@ -3,6 +3,9 @@ import CSSClasses from "../CSSClasses";
 import GlobalConfig from "../GlobalConfig";
 import HighlightBox from "./HighlightBox";
 import { createCodeViewOptionsCopy, deleteEmptyStringFromArray } from "../utils/utils";
+import HighlightBoxEntry from "./HighlightBoxEntry";
+import HighlightBoxManager from "./HighlightBoxManager";
+import EventSourcePoint from "../utils/EventSourcePoint";
 
 class CodeView { // todo - ještě přidat přesouvání do elementu, skrývání, atd..
     private initialOptions : CodeViewOptions;
@@ -12,7 +15,8 @@ class CodeView { // todo - ještě přidat přesouvání do elementu, skrýván�
     private lineNumberElements : HTMLElement[];
     private preElement : HTMLPreElement;
     private lineNumberElementsVisible : boolean;
-    private highlightBoxes = new Array<HighlightBox>();
+    private highlightBoxEntries = new Array<HighlightBoxEntry>();
+    private removeHighlightBoxEventSource = new EventSourcePoint<HighlightBox, HighlightBox>();
     public readonly lineHeight : number;
     public readonly lineHeightUnit : string;
     public readonly linesCount : number;
@@ -65,6 +69,8 @@ class CodeView { // todo - ještě přidat přesouvání do elementu, skrýván�
             this.lineNumberElements = this.fillLineNumbers(this.gutterElement, true);
         }
 
+        this.removeHighlightBoxEventSource.subscribe((_, highlightBox) => this.onRemoveHighlightBox(highlightBox));
+
         this.reset();
     }
 
@@ -103,8 +109,9 @@ class CodeView { // todo - ještě přidat přesouvání do elementu, skrýván�
     }
 
     public addHighlight(start : number, end : number = start) : HighlightBox {
-        const highlightBox = new HighlightBox(this.containerElement, start, end, this);
-        this.highlightBoxes.push(highlightBox);
+        const highlightBoxManager = new HighlightBoxManager();
+        const highlightBox = new HighlightBox(this.containerElement, start, end, this, this.removeHighlightBoxEventSource, highlightBoxManager);
+        this.highlightBoxEntries.push(new HighlightBoxEntry(highlightBox, highlightBoxManager));
         return highlightBox;
     }
 
@@ -112,14 +119,15 @@ class CodeView { // todo - ještě přidat přesouvání do elementu, skrýván�
         if (start === null) start = 1;
         if (end === null) end = this.linesCount;
         
-        for (let i = 0; i < this.highlightBoxes.length; i++) {
-            const highlightBox = this.highlightBoxes[i];
+        for (let i = 0; i < this.highlightBoxEntries.length; i++) {
+            const entry = this.highlightBoxEntries[i];
             if (
-                highlightBox.getStart() <= end
-                && highlightBox.getEnd() >= start
+                entry.highlightBox.getStart() <= end
+                && entry.highlightBox.getEnd() >= start
             ) {
-                highlightBox.detach();
-                this.highlightBoxes.splice(i, 1);
+                entry.highlightBoxManager.detach();
+                entry.highlightBoxManager.unlinkCodeView();
+                this.highlightBoxEntries.splice(i, 1);
                 i--;
             }
         }
@@ -131,12 +139,12 @@ class CodeView { // todo - ještě přidat přesouvání do elementu, skrýván�
 
         const highlightBoxes = new Array<HighlightBox>();
 
-        for (let highlightBox of this.highlightBoxes) {
+        for (let entry of this.highlightBoxEntries) {
             if (
-                highlightBox.getStart() <= end
-                && highlightBox.getEnd() >= start
+                entry.highlightBox.getStart() <= end
+                && entry.highlightBox.getEnd() >= start
             ) {
-                highlightBoxes.push(highlightBox);
+                highlightBoxes.push(entry.highlightBox);
             }
         }
 
@@ -171,6 +179,18 @@ class CodeView { // todo - ještě přidat přesouvání do elementu, skrýván�
 
     public areLineNumbersVisible() : boolean {
         return this.lineNumberElementsVisible;
+    }
+
+    private onRemoveHighlightBox(highlightBox : HighlightBox) : void {
+        for (let i = 0; i < this.highlightBoxEntries.length; i++) {
+            const entry = this.highlightBoxEntries[i];
+            if (entry.highlightBox !== highlightBox) continue;
+
+            entry.highlightBoxManager.detach();
+            entry.highlightBoxManager.unlinkCodeView();
+            this.highlightBoxEntries.splice(i, 1);
+            break;
+        }
     }
 
     private initHighlights(highlightString : string) : void {
@@ -259,7 +279,3 @@ class CodeView { // todo - ještě přidat přesouvání do elementu, skrýván�
 }
 
 export default CodeView;
-
-/**
- * - javascript nastavení bude mít přednost před data atributy - ne, naopak to v mém případě dává větší smysl - uživatel tak bude mít možnost změnit nějakou věc pro jednu ukázku bez zasažení do js
- */
