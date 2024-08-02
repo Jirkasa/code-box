@@ -38,3 +38,27 @@ Co mi ještě zbývá:
 - dědění
 - projekt složka bude vždy otevřená (ale půjde zavřít nějakým atributem)
  */
+
+
+
+/*
+KOMENTÁŘE Z CODE BOX TŘÍDY
+
+todo - ještě teda budu muset nějak zajistit resetování
+        - možná
+     - 
+ */
+
+/**
+    - aby uživatel nemusel kdyžtak inicializovat code boxy a code views ručně, tak by na to mohla být nějaká speciální třída, kde by se předal selektor
+        - CodeViewInitializer
+        - TabCodeBoxInitializer
+        - ProjectCodeBoxInitializer
+            - je to ale hromadné, takže nějaký trochu jiný název
+    
+    - Pluginy (uvidím jak to s pluginama nakonec bude):
+        - v options by byla vlastnost plugin
+            - předával by se tam new PluginInitializer<MyPlugin>()
+                - přičemž CodeView by mělo tohle jako typ:
+                    plugins : PluginInitializer<extends CodeViewPlugin>[] - něco takového
+ */
