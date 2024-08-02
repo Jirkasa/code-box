@@ -925,6 +925,12 @@ class ProjectCodeBox extends CodeBox {
         if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "OpenPanelOnInit"] !== undefined) {
             options.openPanelOnInit = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "OpenPanelOnInit"] === "true";
         }
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "OpenPanelButtonAriaLabel"] !== undefined) {
+            options.openPanelButtonAriaLabel = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "OpenPanelButtonAriaLabel"];
+        }
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ClosePanelButtonAriaLabel"] !== undefined) {
+            options.closePanelButtonAriaLabel = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ClosePanelButtonAriaLabel"];
+        }
     }
 }
 
