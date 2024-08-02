@@ -1,10 +1,18 @@
 import { CodeView } from "../../main";
 import CodeViewButton from "../CodeViewButton";
 
+/** Represents code view folder item. */
 class CodeViewFolderItem {
-    public readonly codeView : CodeView; // todo - nevím jestli readonly
+    /** Code view. */
+    public readonly codeView : CodeView;
+    /** Code view button. */
     public readonly codeViewButton : CodeViewButton;
 
+    /**
+     * Creates new code view folder item.
+     * @param codeView Code view.
+     * @param codeViewButton Code view button.
+     */
     constructor(codeView : CodeView, codeViewButton : CodeViewButton) {
         this.codeView = codeView;
         this.codeViewButton = codeViewButton;

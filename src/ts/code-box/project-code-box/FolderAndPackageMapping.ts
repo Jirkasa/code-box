@@ -1,12 +1,24 @@
+/** Info about package side of mapping. */
 type PackageItem = {
+    /** Package name. */
     packageName : string | null,
+    /** File name. */
     fileName: string
 }
 
+/** Maps packages and folder paths for code views and files. */
 class FolderAndPackageMapping {
+    /** Packages stored by file folder paths. */
     private folderPathsToPackages = new Map<string, PackageItem>();
-    private packages = new Map<string | null, Map<string, string>>(); // obsahuje mapy podle názvů balíčků - tyto mapy obsahují folderPath+fileName podle názvu souboru
+    /** File folder paths stored by packages (Contains maps by package names. These maps store folder path + file name by file name.). */
+    private packages = new Map<string | null, Map<string, string>>();
 
+    /**
+     * Adds new mapping.
+     * @param fileName File name.
+     * @param folderPath Folder path (null can be used for root folder).
+     * @param packageName Package name (null for default package).
+     */
     public add(fileName : string, folderPath : string | null, packageName : string | null) {
         const fileFolderPath = folderPath ? (folderPath + "/" + fileName) : fileName;
         
@@ -20,6 +32,12 @@ class FolderAndPackageMapping {
         fileNames.set(fileName, fileFolderPath);
     }
 
+    /**
+     * Returns file folder path based on passed package name and file name.
+     * @param packageName Package name (null for default package).
+     * @param fileName File name.
+     * @returns File folder path (folder path + file name).
+     */
     public getFileFolderPathByPackageItem(packageName : string | null, fileName : string) : string | null {
         const fileNames = this.packages.get(packageName);
         if (!fileNames) return null;
@@ -29,6 +47,12 @@ class FolderAndPackageMapping {
         return fileFolderPath;
     }
 
+    /**
+     * Returns package item based on passed folder path and file name.
+     * @param folderPath Folder path (null can be used for root folder).
+     * @param fileName File name.
+     * @returns Package item (info about package side of mappping: package name and file name).
+     */
     public getPackageItemByFileFolderPath(folderPath : string | null, fileName : string) : PackageItem | null {
         const fileFolderPath = folderPath ? (folderPath + "/" + fileName) : fileName;
 
@@ -40,6 +64,12 @@ class FolderAndPackageMapping {
         };
     }
 
+    /**
+     * Removes mapping based on passed folder path and file name.
+     * @param folderPath Folder path (null can be used for root folder).
+     * @param fileName File name.
+     * @returns Indicates whether mapping was successfully removed.
+     */
     public removeByFileFolderPath(folderPath : string | null, fileName : string) : boolean {
         const fileFolderPath = folderPath ? (folderPath + "/" + fileName) : fileName;
 
@@ -58,6 +88,12 @@ class FolderAndPackageMapping {
         return true;
     }
 
+    /**
+     * Removes mapping based on passed package name and file name.
+     * @param packageName Package name (null for default package).
+     * @param fileName File name.
+     * @returns Indicates whether mapping was successfully removed.
+     */
     public removeByPackageItem(packageName : string | null, fileName : string) : boolean {
         const fileNames = this.packages.get(packageName);
         if (!fileNames) return false;

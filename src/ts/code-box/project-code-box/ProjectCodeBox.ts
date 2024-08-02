@@ -942,4 +942,6 @@ Můžu případně přidat ještě tyto metody, ale ty už nejsou tak důležit�
         - a taky ty metody v ProjectCodeBox třídě pořádně popsat
 
 - napsat testy na tady ty věci můžu (hlavně na metody, které jsou složitější - na ty jednoduché ani moc nemusím)
+
+- upravit importy
 */

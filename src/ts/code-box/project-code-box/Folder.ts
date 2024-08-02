@@ -10,9 +10,7 @@ import ProjectCodeBoxFile from "./ProjectCodeBoxFile";
 import ProjectCodeViewButton from "./ProjectCodeViewButton";
 import ProjectFileButton from "./ProjectFileButton";
 
-/**
- * Represents folder in project code box panel.
- */
+/** Represents folder in project code box panel. */
 class Folder {
     /** Folder button element. */
     protected buttonElement : HTMLButtonElement;
