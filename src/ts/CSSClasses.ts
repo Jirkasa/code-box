@@ -1,3 +1,4 @@
+/** Stores all CSS classes used in code. */
 class CSSClasses {
     // CODE VIEW
     public static readonly CODE_VIEW = "cb-code-view";

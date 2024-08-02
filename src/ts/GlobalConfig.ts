@@ -1,7 +1,12 @@
+/** Global config of library. */
 const GlobalConfig = {
+    /** Data attribute prefix used for all data attributes of library. */
     DATA_ATTRIBUTE_PREFIX: "cb",
+    /** Margin for lazy initialization of code boxes. */
     LAZY_INITIALIZATION_MARGIN: "100px",
+    /** Default line height value for code view. */
     DEFAULT_LINE_HEIGHT: 2,
+    /** Default line height unit for code view. */
     DEFAULT_LINE_HEIGHT_UNIT: "rem",
     DEFAULT_NO_CODE_VIEW_SELECTED_ELEMENT_HEIGHT: "50rem",
     DEFAULT_NO_CODE_VIEW_SELECTED_TEXT: "No code view selected",
@@ -19,3 +24,5 @@ const GlobalConfig = {
 }
 
 export default GlobalConfig;
+
+// todo - okomentovat ty další hodnoty
