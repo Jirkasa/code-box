@@ -9,7 +9,7 @@ class Collapsible {
     private buttonElement : HTMLButtonElement;
     /** Collapsible element. */
     private collapsibleElement : HTMLElement;
-    /** Open/close animation speed. */
+    /** Open/close animation speed in miliseconds. */
     private animationSpeed : number;
     /** CSS easing function for open/close animation. */
     private animationEasingFunction : string;
@@ -30,7 +30,7 @@ class Collapsible {
      * Creates new collapsible.
      * @param buttonElement Button element.
      * @param collapsibleElement Collapsible element.
-     * @param animationSpeed Open/close animation speed.
+     * @param animationSpeed Open/close animation speed in miliseconds.
      * @param animationEasingFunction CSS easing function for open/close animation.
      * @param onToggle Function to be called when collapsible is opened/closed.
      */

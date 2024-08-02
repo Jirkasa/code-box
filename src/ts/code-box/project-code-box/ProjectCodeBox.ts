@@ -935,6 +935,8 @@ Můžu případně přidat ještě tyto metody, ale ty už nejsou tak důležit�
     - obecně všude zařídit, aby se nedal předat prázdný řetězec
         - ve třídě FoldersManager jsem to už udělal
 
+- aria atributy nastavovat - o tom se ale budu muset dozvědět víc informací
+
 - až ty metody dokončím, tak FoldersManager okomentovat - pořádně - ať je hned vidět co to dělá (i detaily popsat)
         - a taky ty metody v ProjectCodeBox třídě pořádně popsat
 
