@@ -33,7 +33,7 @@ interface CodeBoxBuilder {
     getNoCodeViewCSSHiddenClass() : string;
 
     /**
-     * 
+     * Assembles elements of code box.
      * @param rootElement Root element of code box.
      * @param codeViewContainer Container for active code view.
      * @param noCodeViewSelectedElement Element, that is displayed when no active code view is set.

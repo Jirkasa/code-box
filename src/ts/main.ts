@@ -51,7 +51,7 @@ todo - ještě teda budu muset nějak zajistit resetování
         - CodeViewInitializer
         - TabCodeBoxInitializer
         - ProjectCodeBoxInitializer
-            - je to ale hromadné, takže nějaký trochu jiný název
+            - je to ale hromadné, takže nějaký trochu jiný název (třeba CodeViewsInitializer...)
     
     - Pluginy (uvidím jak to s pluginama nakonec bude):
         - v options by byla vlastnost plugin
@@ -59,3 +59,10 @@ todo - ještě teda budu muset nějak zajistit resetování
                 - přičemž CodeView by mělo tohle jako typ:
                     plugins : PluginInitializer<extends CodeViewPlugin>[] - něco takového
  */
+
+/*
+Ok, dostal jsem se do bodu, kdy můžu začít přemýšlet nad děděním.
+    - nesmím zapomínat na to, že private metody jsou v podstatě public u instancí stejného typu uvnitř třídy
+
+    - kde začít?
+*/
