@@ -25,6 +25,8 @@ type ProjectCodeBoxOptions = {
     openActiveCodeViewPackageOnInit ?: boolean;
     openRootFolderOnInit ?: boolean; // napsat že to má vliv jen v některých případech, když třeba není žádné code view aktivní (přednost má openActiveCodeViewFolder option)
     openPanelOnInit ?: boolean;
+    openPanelButtonAriaLabel ?: string;
+    closePanelButtonAriaLabel ?: string;
 } & CodeBoxOptions;
 
 // todo - potom to uklidit a popsat - a zkontrolovat že všechno používám

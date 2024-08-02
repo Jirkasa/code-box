@@ -164,6 +164,15 @@ class Folder {
             subfolder.updateTabNavigation(allParentOpened && this.collapsible.isOpened());
         });
 
+        // update also aria attributes
+        if (allParentOpened && this.collapsible.isOpened()) {
+            this.buttonElement.setAttribute("aria-expanded", "true");
+            this.itemsContainer.setAttribute("aria-hidden", "false");
+        } else {
+            this.buttonElement.setAttribute("aria-expanded", "false");
+            this.itemsContainer.setAttribute("aria-hidden", "true");
+        }
+
         this.lastAllParentOpened = allParentOpened;
     }
 

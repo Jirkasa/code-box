@@ -421,7 +421,9 @@ abstract class CodeBox {
      */
     private showNoCodeViewSelectedMessage() : void {
         this.noCodeViewSelectedElement.classList.remove(this.noCodeViewSelectedCSSHiddenClass);
+        this.noCodeViewSelectedElement.setAttribute("aria-hidden", "false");
         this.codeViewContainer.classList.add(this.codeViewContainerCSSHiddenClass);
+        this.codeViewContainer.setAttribute("aria-hidden", "true");
     }
 
     /**
@@ -429,7 +431,9 @@ abstract class CodeBox {
      */
     private hideNoCodeViewSelectedMessage() : void {
         this.noCodeViewSelectedElement.classList.add(this.noCodeViewSelectedCSSHiddenClass);
+        this.noCodeViewSelectedElement.setAttribute("aria-hidden", "true");
         this.codeViewContainer.classList.remove(this.codeViewContainerCSSHiddenClass);
+        this.codeViewContainer.setAttribute("aria-hidden", "false");
     }
 
     /**

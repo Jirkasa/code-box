@@ -42,7 +42,13 @@ class ProjectCodeBox extends CodeBox {
         codeBoxBuilder.getFolderStructureHeadingElement().innerText = options.folderStructureHeading || GlobalConfig.DEFAULT_PROJECT_FOLDER_STRUCTURE_HEADING;
         codeBoxBuilder.getPackagesHeadingElement().innerText = options.packagesHeading || GlobalConfig.DEFAULT_PROJECT_PACKAGES_HEADING;
 
-        this.panelToggle = new PanelToggle(codeBoxBuilder.getPanelElement(), codeBoxBuilder.getPanelOpenButtonElement(), () => this.onPanelToggled());
+        this.panelToggle = new PanelToggle(
+            codeBoxBuilder.getPanelElement(),
+            codeBoxBuilder.getPanelOpenButtonElement(),
+            codeBoxBuilder.getPanelContentElement(),
+            options.openPanelButtonAriaLabel || GlobalConfig.DEFAULT_OPEN_PANEL_BUTTON_ARIA_LABEL,
+            options.closePanelButtonAriaLabel || GlobalConfig.DEFAULT_CLOSE_PANEL_BUTTON_ARIA_LABEL,
+            () => this.onPanelToggled());
         this.packagesSectionToggle = new PackagesSectionToggle(
             codeBoxBuilder.getPanelContentElement(),
             codeBoxBuilder.getHorizontalRule(),

@@ -98,6 +98,7 @@ class CodeView { // todo - ještě přidat přesouvání do elementu, skrýván�
 
     public clone() : CodeView {
         const preElementCopy = this.preElement.cloneNode(true) as HTMLPreElement;
+        preElementCopy.removeAttribute("id");
         return new CodeView(preElementCopy, this.initialOptions);
     }
 

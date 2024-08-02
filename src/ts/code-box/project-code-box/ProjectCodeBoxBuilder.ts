@@ -117,11 +117,11 @@ class ProjectCodeBoxBuilder implements CodeBoxBuilder {
 
         this.panelElement.appendChild(this.panelContentElement);
 
-        rootElement.appendChild(panelContainer);
-
         rootElement.appendChild(codeViewContainer);
 
         rootElement.appendChild(noCodeViewSelectedElement);
+        
+        rootElement.appendChild(panelContainer);
 
         this.panelContentElement.appendChild(this.folderStructureHeadingElement);
         this.panelContentElement.appendChild(this.folderStructureContainer);
