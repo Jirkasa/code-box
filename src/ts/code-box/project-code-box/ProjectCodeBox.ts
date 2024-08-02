@@ -95,7 +95,7 @@ class ProjectCodeBox extends CodeBox {
 
         const parsedFolderPath = identifier.split("/");
         const fileName = parsedFolderPath.pop();
-        if (fileName === undefined) return false;
+        if (fileName === undefined || fileName.trim() === "") return false;
 
         const codeViewCopy = codeView.clone();
         
@@ -227,6 +227,8 @@ class ProjectCodeBox extends CodeBox {
     public changeCodeViewPackage(identifier : string, packageName : string | null, keepFolderPath : boolean) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
+        if (packageName !== null && packageName.trim() === "") return false;
+
         const codeView = this.foldersManager.getCodeViewByIdentifier(identifier);
         if (!codeView) return false;
 
@@ -310,7 +312,7 @@ class ProjectCodeBox extends CodeBox {
 
         const parsedFolderPath = identifier.split("/");
         const fileName = parsedFolderPath.pop();
-        if (fileName === undefined) return false;
+        if (fileName === undefined || fileName.trim() === "") return false;
 
         const codeBoxFileManager = new CodeBoxFileManager();
         const codeBoxFile = new ProjectCodeBoxFile(identifier, downloadLink, this, codeBoxFileManager);
@@ -399,6 +401,8 @@ class ProjectCodeBox extends CodeBox {
 
     public changeFilePackage(identifier : string, packageName : string | null, keepFolderPath : boolean) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        if (packageName !== null && packageName.trim() === "") return false;
 
         const codeBoxFile = this.foldersManager.getFileByIdentifier(identifier);
         if (!codeBoxFile) return false;
@@ -651,7 +655,8 @@ class ProjectCodeBox extends CodeBox {
 
         const packageFolderPath = this.foldersManager.getPackageFolderPath(name);
 
-        this.foldersManager.addPackage(newName);
+        const success = this.foldersManager.addPackage(newName);
+        if (!success) return false;
         if (this.foldersManager.isPackageFolderOpened(name)) {
             this.foldersManager.openPackage(newName, false);
         }
@@ -722,7 +727,7 @@ class ProjectCodeBox extends CodeBox {
     }
 
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]) : void {
-        // jenom jeden konfigurační element pro složky bude asi dovolen - uvidím, možná to vadit nebude
+        // jenom jeden konfigurační element pro složky bude asi dovolen - uvidím, možná to vadit nebude - jak se zdá, tak bude
         for (let codeBoxItemInfo of codeBoxItemInfos) {
             if (codeBoxItemInfo.type === "HTMLElement" && codeBoxItemInfo.element) {
                 const element = codeBoxItemInfo.element;
@@ -926,22 +931,12 @@ class ProjectCodeBox extends CodeBox {
 export default ProjectCodeBox;
 
 /*
-- todo - podívat se jestli používám všude GlobalConfig.DATA_ATTRIBUTE_PREFIX - narazil jsem na kód, kde jsem to nepoužil
-*/
-
-/*
 Můžu případně přidat ještě tyto metody, ale ty už nejsou tak důležité, a nevím jestli je tam vůbec přidávat:
 - getPackagesFolderPath
 - getFoldersDelimiterForPackages
 - kdyžtak ještě další
 
 - složka pro balíčky se asi nebude dát změnit, takže folders konfigurační elementy kdyžtak dovolit jen v root ProjectCodeBoxu
-
-- ozkoušet, co se stane, když jako identifier do některých metod předám prázdný řetězec - obecně to celé projít a nějak to zajistit
-    - obecně všude zařídit, aby se nedal předat prázdný řetězec
-        - ve třídě FoldersManager jsem to už udělal
-
-- aria atributy nastavovat - o tom se ale budu muset dozvědět víc informací
 
 - až ty metody dokončím, tak FoldersManager okomentovat - pořádně - ať je hned vidět co to dělá (i detaily popsat)
         - a taky ty metody v ProjectCodeBox třídě pořádně popsat

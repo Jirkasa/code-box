@@ -504,11 +504,13 @@ class FoldersManager {
     /**
      * Adds new package (if generation of folders for packages is enabled, folders might also be created).
      * @param packageName Package name.
+     * @returns Indicates whether package could be added. Only returns false if package could not be created because of bad package name, otherwise it always returns true (if the package already exists, it also returns true).
      */
-    public addPackage(packageName : string) : void {
+    public addPackage(packageName : string) : boolean {
         packageName = this.normalizePackageName(packageName);
-        if (packageName === "") return;
+        if (packageName === "") return false;
         this.getPackageFolder(packageName, true);
+        return true;
     }
 
     /**
@@ -1587,7 +1589,7 @@ class FoldersManager {
      */
     private sanitizeFileName(fileName : string) : string {
         // remove all slashes
-        return fileName.replace(/\//g, '');
+        return fileName.trim().replace(/\//g, '');
     }
 
     /**
@@ -1597,7 +1599,7 @@ class FoldersManager {
      */
     private sanitizeFolderName(folderName : string) : string {
         // remove all slashes
-        return folderName.replace(/\//g, '');
+        return folderName.trim().replace(/\//g, '');
     }
 
     /**
@@ -1606,6 +1608,8 @@ class FoldersManager {
      * @returns Normalized folder path.
      */
     private normalizeFolderPath(folderPath : string) : string {
+        folderPath = folderPath.trim();
+
         // remove starting and ending slashes
         folderPath = folderPath.replace(/^\/+|\/+$/g, '');
         
@@ -1622,10 +1626,15 @@ class FoldersManager {
      */
     private normalizePackageName(packageName : string) : string {
         const delimiter = this.foldersDelimiterForPackages;
-        if (delimiter === null) return packageName;
+        if (!this.createFoldersForPackages || delimiter === null) return packageName.trim();
         
         const startEndRegex = new RegExp(`^\\${delimiter}+|\\${delimiter}+$`, 'g');
         const multipleSeparatorRegex = new RegExp(`\\${delimiter}+`, 'g');
+
+        packageName = packageName.trim();
+
+        // remove all spaces
+        packageName = packageName.replace(/\s+/g, '');
         
         // remove starting and ending delimiter characters
         packageName = packageName.replace(startEndRegex, '');
