@@ -1,4 +1,3 @@
-import CSSClasses from "../../CSSClasses";
 import GlobalConfig from "../../GlobalConfig";
 import { CodeView } from "../../main";
 import EventSourcePoint from "../../utils/EventSourcePoint";
@@ -17,9 +16,17 @@ import ProjectCodeBoxFile from "./ProjectCodeBoxFile";
 import ProjectCodeBoxOptions from "./ProjectCodeBoxOptions";
 
 class ProjectCodeBox extends CodeBox {
+    private static readonly COMMAND_RENAME_PROJECT = "rename project";
+    private static readonly COMMAND_SET_ACTIVE_CODE_VIEW = "set active code view";
+
     private panelToggle : PanelToggle;
     private packagesSectionToggle : PackagesSectionToggle;
     private foldersManager : FoldersManager;
+
+    private readonly parentCodeBox : ProjectCodeBox | null;
+    // private commandElements : Array<HTMLElement> | null = new Array<HTMLElement>();
+    private commands : Array<any> | null;
+
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
     private codeViewEntries = new Map<CodeView, CodeViewEntry>(); // todo - možná spíš podle identifieru?
     private fileEntries = new Map<ProjectCodeBoxFile, FileEntry>();
@@ -29,13 +36,117 @@ class ProjectCodeBox extends CodeBox {
     private readonly openActiveCodeViewPackageOnInit : boolean;
 
     constructor(element : HTMLElement, options : ProjectCodeBoxOptions = {}, parentCodeBox : ProjectCodeBox | null = null) { // todo - ještě by možná mohlo jít nastavit, jestli dědit od aktuálního stavu code boxu nebo ne
+        const commandElements = element.querySelectorAll(`script[data-${GlobalConfig.DATA_ATTRIBUTE_PREFIX}-commands]`);
+        const commands = new Array<any>();
+
+        commandElements.forEach(commandElement => {
+            if (commandElement.textContent === null) return;
+            try {
+                const commandsList = JSON.parse(commandElement.textContent);
+                if (!(commandsList instanceof Array)) return;
+                for (let command of commandsList) {
+                    commands.push(command);
+                }
+            } catch {
+                return;
+            }
+        });
+
+        let activeCodeViewIdentifier : string | null = null;
+
+        for (let command of commands) {
+            if (typeof command !== "object") continue;
+            if (command.command !== ProjectCodeBox.COMMAND_SET_ACTIVE_CODE_VIEW) continue;
+            if (typeof command.identifier !== "string") continue;
+
+            activeCodeViewIdentifier = command.identifier;
+        }
+
         const codeBoxBuilder = new ProjectCodeBoxBuilder(
             options.svgSpritePath || null,
             options.svgSpriteIcons ? (options.svgSpriteIcons.panelOpenButton || null) : null
         );
-        super(element, options, codeBoxBuilder);
+
+        const foldersManager = new FoldersManager(
+            codeBoxBuilder.getFolderStructureContainer(),
+            codeBoxBuilder.getPackagesContainer(),
+            options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME,
+            options.packagesFolderPath || null,
+            options.defaultPackageName || null,
+            options.createFoldersForPackages !== undefined ? options.createFoldersForPackages : GlobalConfig.DEFAULT_CREATE_FOLDERS_FOR_PACKAGES,
+            options.foldersDelimiterForPackages || null,
+            false,
+            options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED,
+            options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION,
+            options.svgSpritePath,
+            ProjectCodeBox.getIconName(options, "folderArrow"),
+            ProjectCodeBox.getIconName(options, "project"),
+            ProjectCodeBox.getIconName(options, "folder"),
+            ProjectCodeBox.getIconName(options, "package"),
+            ProjectCodeBox.getIconName(options, "codeFile"),
+            ProjectCodeBox.getIconName(options, "file"),
+            ProjectCodeBox.getIconName(options, "download")
+        );
+
+        let lazyInitPlaceholderElementHeight : string | null = null;
+        
+        let isLazyInitializationEnabled = options.lazyInit !== undefined ? options.lazyInit : true;
+        if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LazyInit"] !== undefined) {
+            isLazyInitializationEnabled = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LazyInit"] === "true";
+        }
+
+        if (activeCodeViewIdentifier !== null && isLazyInitializationEnabled) {
+            activeCodeViewIdentifier === foldersManager.getNormalizedFolderPath(activeCodeViewIdentifier);
+
+            // - takže identifikátor mám, teď co s ním?
+                // získat všechny pre elementy v code boxu a podívat se, jestli tam tady to code view není
+                    // pokud tam není, zeptat se parent code boxu
+            
+            let minLinesCount : number | null = options.minCodeViewLinesCount || null;
+            if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "MinCodeViewLinesCount"] !== undefined) {
+                minLinesCount = Number.parseInt(element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "MinCodeViewLinesCount"] || "");
+                if (Number.isNaN(minLinesCount)) {
+                    throw new Error("Min code view lines count option must be a number.");
+                }
+            }
+            
+            for (let i = 0; i < element.children.length; i++) {
+                const child = element.children[i];
+
+                if (!(child instanceof HTMLPreElement)) continue;
+
+                let folderPath = ProjectCodeBox.getFolderPathFromDataset(child.dataset);
+                let fileName = ProjectCodeBox.getNameFromDataset(child.dataset) || GlobalConfig.DEFAULT_CODE_VIEW_BUTTON_TEXT;
+                let packageName = ProjectCodeBox.getPackageNameFromDataset(child.dataset);
+
+                const identifier = foldersManager.getItemIdentifier(fileName, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+
+                if (identifier === activeCodeViewIdentifier) {
+                    const codeElement = CodeBox.getCodeElement(child);
+                    if (!codeElement) continue;
+                    let linesCount = CodeBox.getLinesCount(codeElement);
+                    if (minLinesCount !== null && linesCount < minLinesCount) {
+                        linesCount = minLinesCount;
+                    }
+                    const height = linesCount * CodeBox.getCodeViewLineHeight(child, options.defaultCodeViewOptions || {});
+                    lazyInitPlaceholderElementHeight = `${height}${CodeBox.getCodeViewLineHeightUnit(child, options.defaultCodeViewOptions || {})}`;
+                    break;
+                }
+            }
+
+            if (lazyInitPlaceholderElementHeight === null && parentCodeBox) {
+                lazyInitPlaceholderElementHeight = parentCodeBox.getHeightForLazyInitPlaceholderElement(activeCodeViewIdentifier, minLinesCount);
+                // todo - pokusit se to získat z parent code boxu
+                    // tady je ale problém, že ty pre elementy v neinicializovaném ale vytvořeném code boxu již nejsou, takže budu muset přidat asi metodu do třídy CodeBox
+            }
+        }
+        
+        super(element, options, codeBoxBuilder, lazyInitPlaceholderElementHeight);
 
         this.fillProjectCodeBoxOptionsFromDataset(options, element.dataset);
+        
+        this.commands = commands;
+        this.parentCodeBox = parentCodeBox;
 
         this.projectName = options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME;
 
@@ -55,26 +166,27 @@ class ProjectCodeBox extends CodeBox {
             codeBoxBuilder.getPackagesHeadingElement(),
             codeBoxBuilder.getPackagesContainer()
         );
-        this.foldersManager = new FoldersManager(
-            codeBoxBuilder.getFolderStructureContainer(),
-            codeBoxBuilder.getPackagesContainer(),
-            this.projectName,
-            options.packagesFolderPath || null,
-            options.defaultPackageName || null,
-            options.createFoldersForPackages !== undefined ? options.createFoldersForPackages : GlobalConfig.DEFAULT_CREATE_FOLDERS_FOR_PACKAGES,
-            options.foldersDelimiterForPackages || null,
-            this.panelToggle.isOpened(),
-            options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED,
-            options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION,
-            options.svgSpritePath,
-            this.getIconName(options, "folderArrow"),
-            this.getIconName(options, "project"),
-            this.getIconName(options, "folder"),
-            this.getIconName(options, "package"),
-            this.getIconName(options, "codeFile"),
-            this.getIconName(options, "file"),
-            this.getIconName(options, "download")
-        );
+        // this.foldersManager = new FoldersManager(
+        //     codeBoxBuilder.getFolderStructureContainer(),
+        //     codeBoxBuilder.getPackagesContainer(),
+        //     this.projectName,
+        //     options.packagesFolderPath || null,
+        //     options.defaultPackageName || null,
+        //     options.createFoldersForPackages !== undefined ? options.createFoldersForPackages : GlobalConfig.DEFAULT_CREATE_FOLDERS_FOR_PACKAGES,
+        //     options.foldersDelimiterForPackages || null,
+        //     this.panelToggle.isOpened(),
+        //     options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED,
+        //     options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION,
+        //     options.svgSpritePath,
+        //     ProjectCodeBox.getIconName(options, "folderArrow"),
+        //     ProjectCodeBox.getIconName(options, "project"),
+        //     ProjectCodeBox.getIconName(options, "folder"),
+        //     ProjectCodeBox.getIconName(options, "package"),
+        //     ProjectCodeBox.getIconName(options, "codeFile"),
+        //     ProjectCodeBox.getIconName(options, "file"),
+        //     ProjectCodeBox.getIconName(options, "download")
+        // );
+        this.foldersManager = foldersManager;
         if (options.openRootFolderOnInit !== undefined ? options.openRootFolderOnInit : true) { // todo - ale potom pro reset si to budu muset ukládat - dědit se to ale nebude - v dokumentaci bude napsáno, které options se dědí a které ne
             this.foldersManager.openFolder("/", false, false);
         }
@@ -700,10 +812,14 @@ class ProjectCodeBox extends CodeBox {
     }
 
     public getProjectName() : string {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         return this.projectName;
     }
 
     public setProjectName(newName : string) : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
         this.projectName = newName;
         this.foldersManager.setRootFolderName(this.projectName);
     }
@@ -727,15 +843,18 @@ class ProjectCodeBox extends CodeBox {
     }
 
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]) : void {
+        console.log("initializing");
         // jenom jeden konfigurační element pro složky bude asi dovolen - uvidím, možná to vadit nebude - jak se zdá, tak bude
+        
         for (let codeBoxItemInfo of codeBoxItemInfos) {
             if (codeBoxItemInfo.type === "HTMLElement" && codeBoxItemInfo.element) {
                 const element = codeBoxItemInfo.element;
 
                 if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Folders"] !== undefined) { // todo - tohle se bude dát použít jen pro kořenový code box
                     this.createFolderStructure(element);
-                } else if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Commands"] !== undefined) {
-                    // todo
+                } else if (element.tagName === "SCRIPT" && element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Commands"] !== undefined) {
+                    // todo - takže command elementy se tady vůbec nebudou získávat - dělá se to přímo v konstruktoru
+                    // this.commandElements.push(element);
                 }
             }
         }
@@ -744,9 +863,9 @@ class ProjectCodeBox extends CodeBox {
             if (codeBoxItemInfo.type === "CodeViewInfo" && codeBoxItemInfo.codeViewInfo) {
                 let codeViewInfo = codeBoxItemInfo.codeViewInfo;
 
-                let folderPath = this.getFolderPathFromDataset(codeViewInfo.dataset);
-                let fileName = this.getNameFromDataset(codeViewInfo.dataset) || GlobalConfig.DEFAULT_CODE_VIEW_BUTTON_TEXT;
-                let packageName = this.getPackageNameFromDataset(codeViewInfo.dataset);
+                let folderPath = ProjectCodeBox.getFolderPathFromDataset(codeViewInfo.dataset);
+                let fileName = ProjectCodeBox.getNameFromDataset(codeViewInfo.dataset) || GlobalConfig.DEFAULT_CODE_VIEW_BUTTON_TEXT;
+                let packageName = ProjectCodeBox.getPackageNameFromDataset(codeViewInfo.dataset);
                 let isActive = codeViewInfo.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined;
 
                 const identifier = this.foldersManager.getItemIdentifier(fileName, folderPath, packageName !== null, packageName !== "" ? packageName : null);
@@ -784,9 +903,9 @@ class ProjectCodeBox extends CodeBox {
             } else if (codeBoxItemInfo.type === "FileInfo" && codeBoxItemInfo.fileInfo) {
                 let fileInfo = codeBoxItemInfo.fileInfo;
 
-                let folderPath = this.getFolderPathFromDataset(fileInfo.dataset);
-                let fileName = this.getNameFromDataset(fileInfo.dataset) || GlobalConfig.DEFAULT_FILE_BUTTON_TEXT;
-                let packageName = this.getPackageNameFromDataset(fileInfo.dataset);
+                let folderPath = ProjectCodeBox.getFolderPathFromDataset(fileInfo.dataset);
+                let fileName = ProjectCodeBox.getNameFromDataset(fileInfo.dataset) || GlobalConfig.DEFAULT_FILE_BUTTON_TEXT;
+                let packageName = ProjectCodeBox.getPackageNameFromDataset(fileInfo.dataset);
 
                 const identifier = this.foldersManager.getItemIdentifier(fileName, folderPath, packageName !== null, packageName !== "" ? packageName : null);
 
@@ -806,6 +925,12 @@ class ProjectCodeBox extends CodeBox {
         } else {
             this.packagesSectionToggle.hide();
         }
+    }
+
+    protected onAfterInit() : void {
+        if (this.commands === null) return;
+        this.processCommands(this.commands);
+        this.commands = null;
     }
 
     private onShowCodeView(codeView : CodeView) : void {
@@ -853,9 +978,9 @@ class ProjectCodeBox extends CodeBox {
                     this.foldersManager.openFolder(folderPath, false, false);
                 }
 
-                if (child.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "PackagesFolder"] !== undefined) {
-                    this.foldersManager.setPackagesFolderPath(folderPath);
-                }
+                // if (child.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "PackagesFolder"] !== undefined) {
+                //     this.foldersManager.setPackagesFolderPath(folderPath);
+                // }
 
                 if (childElement) {
                     this.createFolderStructure(childElement, folderNames);
@@ -864,20 +989,71 @@ class ProjectCodeBox extends CodeBox {
         }
     }
 
-    private getFolderPathFromDataset(dataset : DOMStringMap) : string | null {
+    // private processCommands(commandsElement : HTMLElement) : void {
+    //     if (commandsElement.textContent === null) return;
+    //     let commands : Array<any>;
+
+    //     try {
+    //         const data = JSON.parse(commandsElement.textContent);
+    //         if (!(data instanceof Array)) return;
+    //         commands = data;
+    //     } catch {
+    //         return;
+    //     }
+
+    //     for (let command of commands) {
+    //         if (typeof command !== "object") continue;
+            
+    //         switch (command.command) {
+    //             case ProjectCodeBox.COMMAND_RENAME_PROJECT:
+    //                 if (typeof command.name !== "string") continue;
+    //                 this.setProjectName(command.name);
+    //                 break;
+    //             case ProjectCodeBox.COMMAND_SET_ACTIVE_CODE_VIEW:
+    //                 if (typeof command.identifier !== "string") continue;
+    //                 this.setActiveCodeView(command.identifier);
+    //         }
+    //     }
+    // }
+
+    private processCommands(commands : Array<any>) : void {
+        for (let command of commands) {
+            if (typeof command !== "object") continue;
+            
+            switch (command.command) {
+                case ProjectCodeBox.COMMAND_RENAME_PROJECT:
+                    if (typeof command.name !== "string") continue;
+                    this.setProjectName(command.name);
+                    break;
+                case ProjectCodeBox.COMMAND_SET_ACTIVE_CODE_VIEW:
+                    if (typeof command.identifier !== "string") continue;
+                    this.setActiveCodeView(command.identifier);
+            }
+        }
+    }
+
+    private getHeightForLazyInitPlaceholderElement(codeViewIdentifier : string, minLinesCount : number | null) : string | null {
+        // if (this.isInitialized()) {
+        //     const codeView = this
+        // }
+        // todo - ono to code view může být smazáno, takže to nějak brát z mementa
+        return null;
+    }
+
+    private static getFolderPathFromDataset(dataset : DOMStringMap) : string | null {
         return dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Folder"] || null;
     }
 
-    private getNameFromDataset(dataset : DOMStringMap) : string | null {
+    private static getNameFromDataset(dataset : DOMStringMap) : string | null {
         return dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Name"] || null;
     }
 
-    private getPackageNameFromDataset(dataset : DOMStringMap) : string | null {
+    private static getPackageNameFromDataset(dataset : DOMStringMap) : string | null {
         const packageName = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Package"];
         return packageName !== undefined ? packageName : null;
     }
 
-    private getIconName(options : ProjectCodeBoxOptions, iconName : "codeFile" | "file" | "download" | "panelOpenButton" | "folderArrow" | "project" | "folder" | "package") : string | null {
+    private static getIconName(options : ProjectCodeBoxOptions, iconName : "codeFile" | "file" | "download" | "panelOpenButton" | "folderArrow" | "project" | "folder" | "package") : string | null {
         if (!options.svgSpriteIcons) return null;
         return options.svgSpriteIcons[iconName] || null;
     }

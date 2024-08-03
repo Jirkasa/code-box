@@ -74,8 +74,6 @@ abstract class CodeBox {
 
     /** Indicates whether code box is initialized. */
     private initialized : boolean  = false;
-    /** Number of code view lines count that is going to be displayed when code box is initialized. */
-    protected initialCodeViewLinesCount : number | null = null;
     /** Initialization data that is passed to subclasses on initialization. */
     private initializationData : InitializationInfo[] | null;
     /** Placeholder element for lazy initialization. */
@@ -86,8 +84,9 @@ abstract class CodeBox {
      * @param element Code box root element.
      * @param options Code box options.
      * @param codeBoxBuilder Code box builder that should be used to build code box.
+     * @param customLazyInitPlaceholderElementHeight Custom height value for lazy initialization placeholder element (this can be useful in some situation, when for example new code view is set right after initialization).
      */
-    constructor(element : HTMLElement, options : CodeBoxOptions, codeBoxBuilder : CodeBoxBuilder) {
+    constructor(element : HTMLElement, options : CodeBoxOptions, codeBoxBuilder : CodeBoxBuilder, customLazyInitPlaceholderElementHeight : string | null = null) {
         this.rootElement = element;
 
         this.fillOptionsFromDataset(options, element.dataset);
@@ -106,7 +105,7 @@ abstract class CodeBox {
 
             if (!(child instanceof HTMLElement)) continue;
             if (child instanceof HTMLPreElement) {
-                const codeElement = this.getCodeElement(child);
+                const codeElement = CodeBox.getCodeElement(child);
                 if (!codeElement) continue;
                 if (child.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] !== undefined) {
                     if (activePreElement) {
@@ -141,6 +140,7 @@ abstract class CodeBox {
         if (options.implicitActive && !activePreElement && preElements.length > 0) {
             const preElement = preElements[0];
             preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Active"] = "true";
+            activePreElement = preElement;
         }
 
         // build code box elements
@@ -163,25 +163,29 @@ abstract class CodeBox {
             this.lazyInitPlaceholderElement = document.createElement("div");
 
             // set height of placeholder element
-            if (activePreElement) {
-                const codeElement = this.getCodeElement(activePreElement);
-                if (codeElement) {
-                    this.initialCodeViewLinesCount = this.getLinesCount(codeElement);
-                    let linesCount;
-                    if (this.minCodeViewLinesCount !== null && this.minCodeViewLinesCount >= this.initialCodeViewLinesCount) {
-                        linesCount = this.minCodeViewLinesCount;
+            if (customLazyInitPlaceholderElementHeight === null) {
+                if (activePreElement) {
+                    const codeElement = CodeBox.getCodeElement(activePreElement);
+                    if (codeElement) {
+                        const initialCodeViewLinesCount = CodeBox.getLinesCount(codeElement);
+                        let linesCount;
+                        if (this.minCodeViewLinesCount !== null && this.minCodeViewLinesCount >= initialCodeViewLinesCount) {
+                            linesCount = this.minCodeViewLinesCount;
+                        } else {
+                            linesCount = initialCodeViewLinesCount;
+                        }
+                        const height = linesCount * CodeBox.getCodeViewLineHeight(activePreElement, options.defaultCodeViewOptions || {});
+                        this.lazyInitPlaceholderElement.style.height = `${height}${CodeBox.getCodeViewLineHeightUnit(activePreElement, options.defaultCodeViewOptions || {})}`;
                     } else {
-                        linesCount = this.initialCodeViewLinesCount;
+                        // just to be sure
+                        this.init();
+                        return;
                     }
-                    const height = linesCount * this.getCodeViewLineHeight(activePreElement, options.defaultCodeViewOptions || {});
-                    this.lazyInitPlaceholderElement.style.height = `${height}${this.getCodeViewLineHeightUnit(activePreElement, options.defaultCodeViewOptions || {})}`;
                 } else {
-                    // just to be sure
-                    this.init();
-                    return;
+                    this.lazyInitPlaceholderElement.style.height = options.noCodeViewSelectedElementHeight || GlobalConfig.DEFAULT_NO_CODE_VIEW_SELECTED_ELEMENT_HEIGHT;
                 }
             } else {
-                this.lazyInitPlaceholderElement.style.height = options.noCodeViewSelectedElementHeight || GlobalConfig.DEFAULT_NO_CODE_VIEW_SELECTED_ELEMENT_HEIGHT;
+                this.lazyInitPlaceholderElement.style.height = customLazyInitPlaceholderElementHeight;
             }
 
             // display placeholder element instead of code box element for initialization
@@ -266,6 +270,8 @@ abstract class CodeBox {
         this.defaultCodeViewOptions = null;
 
         this.initialized = true;
+
+        this.onAfterInit();
     }
 
     /**
@@ -381,6 +387,11 @@ abstract class CodeBox {
     protected abstract onInit(codeBoxItemInfos : CodeBoxItemInfo[]) : void;
 
     /**
+     * Called right after initialization. Can be implemented in subclasses.
+     */
+    protected onAfterInit() : void {}
+
+    /**
      * Changes active code view displayed in code box.
      * @param codeView Code view that should be displayed in code box or null if no code view should be displayed.
      */
@@ -449,7 +460,7 @@ abstract class CodeBox {
      * @param codeElement Code element.
      * @returns Number of lines count in code element.
      */
-    private getLinesCount(codeElement : HTMLElement) : number {
+    protected static getLinesCount(codeElement : HTMLElement) : number {
         if (codeElement.textContent === null) return 0;
         return codeElement.textContent.split('\n').length;
     }
@@ -485,7 +496,7 @@ abstract class CodeBox {
      * @param preElement Pre element.
      * @returns Code element.
      */
-    private getCodeElement(preElement : HTMLPreElement) : HTMLElement | null {
+    protected static getCodeElement(preElement : HTMLPreElement) : HTMLElement | null {
         const children = Array.from(preElement.children);
         for (let child of children) {
             if (child.tagName === "CODE" && child instanceof HTMLElement) {
@@ -501,7 +512,7 @@ abstract class CodeBox {
      * @param defaultCodeViewOptions Default code view options.
      * @returns Code view line height.
      */
-    private getCodeViewLineHeight(preElement : HTMLPreElement, defaultCodeViewOptions : CodeViewOptions) : number {
+    protected static getCodeViewLineHeight(preElement : HTMLPreElement, defaultCodeViewOptions : CodeViewOptions) : number {
         if (preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeight"] !== undefined) {
             const lineHeight = Number.parseFloat(preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeight"] || "");
             if (Number.isNaN(lineHeight)) return GlobalConfig.DEFAULT_LINE_HEIGHT;
@@ -519,7 +530,7 @@ abstract class CodeBox {
      * @param defaultCodeViewOptions Default code view options.
      * @returns Code view line height unit.
      */
-    private getCodeViewLineHeightUnit(preElement : HTMLPreElement, defaultCodeViewOptions : CodeViewOptions) : string {
+    protected static getCodeViewLineHeightUnit(preElement : HTMLPreElement, defaultCodeViewOptions : CodeViewOptions) : string {
         if (preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeightUnit"] !== undefined) {
             return preElement.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LineHeightUnit"] || GlobalConfig.DEFAULT_LINE_HEIGHT_UNIT;
         } else if (defaultCodeViewOptions.lineHeightUnit !== undefined) {

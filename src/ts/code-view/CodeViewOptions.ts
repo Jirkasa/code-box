@@ -29,6 +29,10 @@ export default CodeViewOptions;
  * Konfigurační element se složkami:
  * data-cb-folders (ul element)
  * data-cb-packages-folder
- * data-cb-commands
  * data-cb-opened
+ */
+
+/**
+ * Element s příkazy:
+ * data-cb-commands
  */

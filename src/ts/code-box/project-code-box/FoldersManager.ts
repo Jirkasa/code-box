@@ -144,15 +144,6 @@ class FoldersManager {
     }
 
     /**
-     * Sets folder path for packages.
-     * @param folderPath FolderPath.
-     */
-    public setPackagesFolderPath(folderPath : string) : void {
-        folderPath = this.normalizeFolderPath(folderPath);
-        this.packagesFolderPath = this.parseFolderPath(folderPath);
-    }
-
-    /**
      * Sets name of root (project) folder.
      * @param name Name.
      */
