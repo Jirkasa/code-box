@@ -2,9 +2,12 @@ import CSSClasses from "../../CSSClasses";
 import GlobalConfig from "../../GlobalConfig";
 import { CodeView } from "../../main";
 import EventSourcePoint from "../../utils/EventSourcePoint";
+import TreeNode from "../../utils/TreeNode";
 import CodeViewButton from "../CodeViewButton";
 import Folder from "./Folder";
 import FolderAndPackageMapping from "./FolderAndPackageMapping";
+import FolderInfo from "./FolderInfo";
+import PackageInfo from "./PackageInfo";
 import ProjectCodeBoxFile from "./ProjectCodeBoxFile";
 
 /** Manages folders and its contents in project code box. */
@@ -490,6 +493,28 @@ class FoldersManager {
         if (!folder) return false;
 
         return folder.isOpened();
+    }
+
+    /**
+     * Returns subfolder names of folder.
+     * @param folderPath Path to folder.
+     * @returns Names of subfolders.
+     */
+    public getSubfolderNames(folderPath : string) : string[] | null {
+        folderPath = this.normalizeFolderPath(folderPath);
+
+        const parsedFolderPath = this.parseFolderPath(folderPath);
+
+        const folder = this.getFolder(parsedFolderPath);
+        if (!folder) return null;
+
+        const folderNames = new Array<string>();
+
+        for (let subfolder of folder.getFolders()) {
+            folderNames.push(subfolder.getName());
+        }
+
+        return folderNames;
     }
 
     /**
@@ -1409,6 +1434,60 @@ class FoldersManager {
             this.defaultPackage.updateTabNavigation(panelOpened);
         }
         this.packages.forEach(packageFolder => packageFolder.updateTabNavigation(panelOpened));
+    }
+
+    /**
+     * Returns folder structure.
+     * @returns Folder structure.
+     */
+    public getFolderStructure() : TreeNode<FolderInfo>[] {
+        return this.rootFolder.getFolderStructure().children;
+    }
+
+    /**
+     * Returns package names.
+     * @returns Package names.
+     */
+    public getPackageNames() : string[] {
+        const packageNames = new Array<string>();
+
+        this.packages.forEach((_, packageName) => packageNames.push(packageName));
+
+        return packageNames;
+    }
+
+    /**
+     * Returns package infos.
+     * @returns Package infos.
+     */
+    public getPackageInfos() : PackageInfo[] {
+        const packageInfos = new Array<PackageInfo>();
+
+        this.packages.forEach((packageFolder, packageName) => {
+            packageInfos.push({
+                name: packageName,
+                opened: packageFolder.isOpened()
+            });
+        });
+
+        return packageInfos;
+    }
+
+    /**
+     * Returns path to folder used for packages.
+     * @returns Folder path for packages.
+     */
+    public getPackagesFolderPath() : string {
+        return this.packagesFolderPath.join("/");
+    }
+
+    /**
+     * Sets new folder path for packages. (This method should be called only when folders manager is empty, otherwise problems may occur.)
+     * @param newPackagesFolderPath New folder path for packages.
+     */
+    public setPackagesFolderPath(newPackagesFolderPath : string) : void {
+        newPackagesFolderPath = this.normalizeFolderPath(newPackagesFolderPath);
+        this.packagesFolderPath = this.parseFolderPath(newPackagesFolderPath);
     }
 
     /**

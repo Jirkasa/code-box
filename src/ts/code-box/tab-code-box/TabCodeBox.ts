@@ -6,6 +6,7 @@ import CodeBoxCodeView from "../CodeBoxCodeView";
 import CodeBoxCodeViewManager from "../CodeBoxCodeViewManager";
 import CodeBoxFile from "../CodeBoxFile";
 import CodeBoxFileManager from "../CodeBoxFileManager";
+import CodeBoxMemento, { CodeViewMementoEntry, FileMementoEntry } from "../CodeBoxMemento";
 import CodeViewButton from "../CodeViewButton";
 import CodeViewEntry from "./CodeViewEntry";
 import FileEntry from "./FileEntry";
@@ -106,6 +107,23 @@ class TabCodeBox extends CodeBox {
         this.codeViewEntries.delete(codeView);
 
         return true;
+    }
+
+    public removeAllCodeViews() : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        this.codeViews.forEach(codeView => {
+            const codeViewEntry = this.codeViewEntries.get(codeView);
+            if (!codeViewEntry) return;
+
+            codeViewEntry.codeViewButton.detach();
+            codeViewEntry.codeBoxCodeViewManager.unlinkCodeBox();
+        });
+
+        this.codeViews.clear();
+        this.codeViewEntries.clear();
+
+        this.setNoActiveCodeView();
     }
 
     public changeCodeViewIdentifier(identifier: string, newIdentifier: string) : boolean {
@@ -218,6 +236,16 @@ class TabCodeBox extends CodeBox {
         return true;
     }
 
+    public removeAllFiles() : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        this.fileEntries.forEach(fileEntry => {
+            fileEntry.fileButton.detach();
+        });
+
+        this.fileEntries.clear();
+    }
+
     public changeFileIdentifier(identifier: string, newIdentifier: string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -244,6 +272,39 @@ class TabCodeBox extends CodeBox {
         fileEntry.fileButton.setDownloadLink(newDownloadLink);
 
         return true;
+    }
+
+    public createMemento() : CodeBoxMemento {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeViewMementoEntries = new Array<CodeViewMementoEntry>();
+        const fileMementoEntries = new Array<FileMementoEntry>();
+
+        this.codeViewEntries.forEach((codeViewEntry, codeView) => {
+            const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
+            if (identifier === null) return;
+            codeViewMementoEntries.push({
+                codeView: codeView,
+                codeViewMemento: codeView.createMemento(),
+                identifier: identifier
+            });
+        });
+        this.fileEntries.forEach(fileEntry => {
+            const identifier = fileEntry.codeBoxFile.getIdentifier();
+            if (identifier === null) return;
+            fileMementoEntries.push({
+                downloadLink: fileEntry.codeBoxFile.getDownloadLink(),
+                identifier: identifier
+            });
+        });
+
+        return new CodeBoxMemento(this, codeViewMementoEntries, fileMementoEntries, this.getCurrentlyActiveCodeView());
+    }
+
+    public applyMemento(memento: CodeBoxMemento) : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+        
+        memento.apply(this);
     }
 
     protected onInit(codeBoxItemInfos : CodeBoxItemInfo[]) : void {

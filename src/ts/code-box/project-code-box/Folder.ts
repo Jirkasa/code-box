@@ -2,10 +2,12 @@ import CSSClasses from "../../CSSClasses";
 import { CodeView } from "../../main";
 import EventSourcePoint from "../../utils/EventSourcePoint";
 import SVGIconElementCreator from "../../utils/SVGIconElementCreator";
+import TreeNode from "../../utils/TreeNode";
 import CodeViewButton from "../CodeViewButton";
 import CodeViewFolderItem from "./CodeViewFolderItem";
 import Collapsible from "./Collapsible";
 import FileFolderItem from "./FileFolderItem";
+import FolderInfo from "./FolderInfo";
 import ProjectCodeBoxFile from "./ProjectCodeBoxFile";
 import ProjectCodeViewButton from "./ProjectCodeViewButton";
 import ProjectFileButton from "./ProjectFileButton";
@@ -20,7 +22,9 @@ class Folder {
     private itemsContainer : HTMLElement;
     /** Collapsible functionality. */
     private collapsible : Collapsible;
-
+    
+    /** Name of folder. */
+    private name : string;
     /** Subfolders stored by name. */
     private subfolders = new Map<string, Folder>();
     /** Code view items stored by name. */
@@ -82,6 +86,8 @@ class Folder {
             parentElement.appendChild(this.itemsContainer);
         }
 
+        this.name = name;
+
         this.collapsible = new Collapsible(this.buttonElement, this.itemsContainer, openCloseAnimationSpeed, openCloseAnimationEasingFunction, () => this.onCollapsibleToggled());
         
         this.lastAllParentOpened = allParentsOpened;
@@ -106,10 +112,19 @@ class Folder {
     }
 
     /**
+     * Returns name of folder.
+     * @returns Name of folder.
+     */
+    public getName() : string {
+        return this.name;
+    }
+
+    /**
      * Sets name of folder.
      * @param name Name.
      */
     public setName(name : string) {
+        this.name = name;
         this.buttonTextElement.innerText = name;
     }
 
@@ -452,6 +467,24 @@ class Folder {
         });
 
         return fileNames;
+    }
+
+    /**
+     * Returns folder structure of folder.
+     * @returns Folder structure.
+     */
+    public getFolderStructure() : TreeNode<FolderInfo> {
+        const folderInfo = {
+            name: this.name,
+            opened: this.isOpened()
+        }
+        const node = new TreeNode<FolderInfo>(folderInfo);
+        
+        this.subfolders.forEach(subfolder => {
+            node.children.push(subfolder.getFolderStructure());
+        });
+
+        return node;
     }
 
     /**

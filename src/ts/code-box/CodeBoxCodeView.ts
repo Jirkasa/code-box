@@ -1,3 +1,4 @@
+import CodeViewMemento from "../code-view/CodeViewMemento";
 import HighlightBox from "../code-view/HighlightBox";
 import { CodeView } from "../main";
 import CodeBox from "./CodeBox";
@@ -47,6 +48,14 @@ class CodeBoxCodeView<T extends CodeBox = CodeBox> {
 
     public reset() : void {
         this.codeView.reset();
+    }
+
+    public createMemento() : CodeViewMemento {
+        return this.codeView.createMemento();
+    }
+
+    public applyMemento(memento : CodeViewMemento) : void {
+        this.codeView.applyMemento(memento);
     }
 
     public clone() : CodeView {

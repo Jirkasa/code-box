@@ -4,6 +4,7 @@ import EventSourcePoint from "../../utils/EventSourcePoint";
 import CodeBox, { CodeBoxItemInfo } from "../CodeBox";
 import CodeBoxCodeViewManager from "../CodeBoxCodeViewManager";
 import CodeBoxFileManager from "../CodeBoxFileManager";
+import CodeBoxMemento, { CodeViewMementoEntry, FileMementoEntry } from "../CodeBoxMemento";
 import CodeViewButton from "../CodeViewButton";
 import CodeViewEntry from "./CodeViewEntry";
 import FileEntry from "./FileEntry";
@@ -13,6 +14,7 @@ import PanelToggle from "./PanelToggle";
 import ProjectCodeBoxBuilder from "./ProjectCodeBoxBuilder";
 import ProjectCodeBoxCodeView from "./ProjectCodeBoxCodeView";
 import ProjectCodeBoxFile from "./ProjectCodeBoxFile";
+import ProjectCodeBoxMemento, { ProjectCodeBoxCodeViewMementoEntry, ProjectCodeBoxFileMementoEntry } from "./ProjectCodeBoxMemento";
 import ProjectCodeBoxOptions from "./ProjectCodeBoxOptions";
 
 class ProjectCodeBox extends CodeBox {
@@ -321,6 +323,21 @@ class ProjectCodeBox extends CodeBox {
         return true;
     }
 
+    public removeAllCodeViews() : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const identifiers = new Array<string>();
+        this.codeViewEntries.forEach(codeViewEntry => {
+            const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
+            if (identifier === null) return;
+            identifiers.push(identifier);
+        });
+
+        for (let identifier of identifiers) {
+            this.removeCodeView(identifier);
+        }
+    }
+
     public changeCodeViewIdentifier(identifier: string, newIdentifier: string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -494,6 +511,21 @@ class ProjectCodeBox extends CodeBox {
         this.fileEntries.delete(codeBoxFile);
 
         return true;
+    }
+
+    public removeAllFiles() : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const identifiers = new Array<string>();
+        this.fileEntries.forEach((_, codeBoxFile) => {
+            const identifier = codeBoxFile.getIdentifier();
+            if (identifier === null) return;
+            identifiers.push(identifier);
+        });
+
+        for (let identifier of identifiers) {
+            this.removeFile(identifier);
+        }
     }
 
     public changeFileIdentifier(identifier: string, newIdentifier: string) : boolean {
@@ -677,6 +709,12 @@ class ProjectCodeBox extends CodeBox {
         return this.foldersManager.isFolderOpened(folderPath);
     }
 
+    public getSubfolderNames(folderPath : string) : string[] | null {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.foldersManager.getSubfolderNames(folderPath);
+    }
+
     public addPackage(name : string) : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -811,6 +849,37 @@ class ProjectCodeBox extends CodeBox {
         return this.foldersManager.isPackageFolderOpened(packageName);
     }
 
+    public getPackages() : string[] {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.foldersManager.getPackageNames();
+    }
+
+    public getPackagesFolderPath() : string {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.foldersManager.getPackagesFolderPath();
+    }
+
+    public changePackagesFolderPathAndRemoveAll(newPackagesFolderPath : string) : void { // todo - napsat, že pro změnu složky pro balíčky se musí smazat všechen obsah
+        this.removeAllCodeViews();
+        this.removeAllFiles();
+
+        const folderNames = this.getSubfolderNames("/");
+        if (folderNames) {
+            for (let folderName of folderNames) {
+                this.removeFolder(folderName);
+            }
+        }
+
+        const packageNames = this.getPackages();
+        for (let packageName of packageNames) {
+            this.removePackage(packageName, false, false);
+        }
+
+        this.foldersManager.setPackagesFolderPath(newPackagesFolderPath);
+    }
+
     public getProjectName() : string {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -840,6 +909,51 @@ class ProjectCodeBox extends CodeBox {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.panelToggle.isOpened();
+    }
+
+    public createMemento() : CodeBoxMemento {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeViewMementoEntries = new Array<ProjectCodeBoxCodeViewMementoEntry>();
+        const fileMementoEntries = new Array<ProjectCodeBoxFileMementoEntry>();
+
+        this.codeViewEntries.forEach((codeViewEntry, codeView) => {
+            const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
+            if (identifier === null) return;
+            codeViewMementoEntries.push({
+                codeView: codeView,
+                codeViewMemento: codeView.createMemento(),
+                identifier: identifier,
+                package: codeViewEntry.codeBoxCodeView.getPackage()
+            });
+        });
+        this.fileEntries.forEach((_, codeBoxFile) => {
+            const identifier = codeBoxFile.getIdentifier();
+            if (identifier === null) return;
+            fileMementoEntries.push({
+                downloadLink: codeBoxFile.getDownloadLink(),
+                identifier: identifier,
+                package: codeBoxFile.getPackage()
+            });
+        });
+
+        return new ProjectCodeBoxMemento(
+            this,
+            codeViewMementoEntries,
+            fileMementoEntries,
+            this.getCurrentlyActiveCodeView(),
+            this.foldersManager.getFolderStructure(),
+            this.foldersManager.getPackageInfos(),
+            this.foldersManager.getPackagesFolderPath(),
+            this.getProjectName(),
+            this.isPanelOpened()
+        );
+    }
+
+    public applyMemento(memento: CodeBoxMemento) : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        memento.apply(this);
     }
 
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]) : void {

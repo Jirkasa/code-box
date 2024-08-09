@@ -29,11 +29,20 @@ Ta knihovna by měla být teda rozšiřitelná
 
 - ještě by se hodil code box, který by se dal ovládat jen přes kód - někdo by to třeba někde využil
 
+- u initializer komponent bude možnost získat code box podle id
+
+- přidat něco jako onInit listener - možnost přidat funkci, která se zavolá po inicializaci code boxu
+    - ale to nevím, ještě uvidím
+
 Co mi ještě zbývá:
 - extendnutí pomocí atributu (ale to až potom, protože to se netýká přímo ProjectCodeBoxu, ale spíš nějaké komponenty, která je bude inicializovat)
 - název file elementu by měl jít nastavit přes data-cb-name nebo uvnitř elementu - asi spíš uvnitř elementu, ale mohl bych tam nechat možnost nastavit to i přes to (mělo by to přednost)
 - container s příkazy
 - dědění
+
+
+- pluginy se asi nebudou předávat jako options, ale budou se moci přidávat nebo odebírat pomocí metod
+    - plugin třídy budou mít metody, které se budou volat v různých situacích: init, reset (nevím jak to bude u mementa - ale asi se předtím taky všechno nejdřív nějak resetuje? - takže by se ta metoda mohla taky volat?), a další - nebo lepší - mohlo by existovat PluginMemento - dalo by se tam třeba nějak vytvořit? - uvidím
  */
 
 

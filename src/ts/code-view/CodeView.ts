@@ -6,6 +6,7 @@ import { createCodeViewOptionsCopy, deleteEmptyStringFromArray } from "../utils/
 import HighlightBoxEntry from "./HighlightBoxEntry";
 import HighlightBoxManager from "./HighlightBoxManager";
 import EventSourcePoint from "../utils/EventSourcePoint";
+import CodeViewMemento from "./CodeViewMemento";
 
 class CodeView { // todo - ještě přidat přesouvání do elementu, skrývání, atd..
     private initialOptions : CodeViewOptions;
@@ -92,6 +93,14 @@ class CodeView { // todo - ještě přidat přesouvání do elementu, skrýván�
         if (this.initialOptions.cssClasses !== undefined) {
             this.rootElement.classList.add(...this.initialOptions.cssClasses);
         }
+    }
+
+    public createMemento() : CodeViewMemento {
+        return new CodeViewMemento(this);
+    }
+
+    public applyMemento(memento : CodeViewMemento) : void {
+        memento.apply(this);
     }
 
     public appendTo(element : HTMLElement) : void {

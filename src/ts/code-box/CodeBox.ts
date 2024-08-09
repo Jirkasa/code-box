@@ -6,6 +6,7 @@ import ViewportIntersectionObserver from "../utils/ViewportIntersectionObserver"
 import CodeBoxBuilder from "./CodeBoxBuilder";
 import CodeBoxCodeView from "./CodeBoxCodeView";
 import CodeBoxFile from "./CodeBoxFile";
+import CodeBoxMemento from "./CodeBoxMemento";
 import CodeBoxOptions from "./CodeBoxOptions";
 
 /** Informations about code view. */
@@ -311,6 +312,11 @@ abstract class CodeBox {
     public abstract removeCodeView(identifier : string) : boolean;
 
     /**
+     * Removes all code views from code box.
+     */
+    public abstract removeAllCodeViews() : void;
+
+    /**
      * Changes identifier of code view in code box.
      * @param identifier Identifier of code view whose identifier should be changed.
      * @param newIdentifier New identifier.
@@ -365,6 +371,11 @@ abstract class CodeBox {
     public abstract removeFile(identifier : string) : boolean;
 
     /**
+     * Removes all files from code box.
+     */
+    public abstract removeAllFiles() : void;
+
+    /**
      * Changes identifier of file in code box.
      * @param identifier Indentifier of file whose identifier should be changed.
      * @param newIdentifier New identifier.
@@ -379,6 +390,17 @@ abstract class CodeBox {
      * @returns Indicates whether file was found and its link has been successfully changed.
      */
     public abstract changeFileDownloadLink(identifier : string, newDownloadLink : string | null) : boolean;
+
+    /**
+     * Creates memento.
+     */
+    public abstract createMemento() : CodeBoxMemento;
+
+    /**
+     * Applies memento.
+     * @param memento Memento.
+     */
+    public abstract applyMemento(memento : CodeBoxMemento) : void;
 
     /**
      * Called on initialization.
