@@ -14,11 +14,11 @@ type ProjectCodeBoxOptions = {
     };
     folderStructureHeading ?: string;
     packagesHeading ?: string;
-    projectName ?: string;
-    packagesFolderPath ?: string; // bude se dát přepsat přes ty konfigurační elementy
+    projectName ?: string; // neaplikuje se, pokud je parent code box (bere se z parenta)
+    packagesFolderPath ?: string; // bude se dát přepsat přes ty konfigurační elementy // neaplikuje se, pokud je parent code box
     defaultPackageName ?: string;
-    createFoldersForPackages ?: boolean;
-    foldersDelimiterForPackages ?: string;
+    createFoldersForPackages ?: boolean; // neaplikuje se, pokud je parent code box
+    foldersDelimiterForPackages ?: string; // neaplikuje se, pokud je parent code box
     folderAnimationSpeed ?: number;
     folderAnimationEasingFunction ?: string;
     openActiveCodeViewFolderOnInit ?: boolean;

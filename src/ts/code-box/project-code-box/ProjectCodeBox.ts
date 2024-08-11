@@ -1,10 +1,11 @@
+import CodeViewOptions from "../../code-view/CodeViewOptions";
 import GlobalConfig from "../../GlobalConfig";
 import { CodeView } from "../../main";
 import EventSourcePoint from "../../utils/EventSourcePoint";
 import CodeBox, { CodeBoxItemInfo } from "../CodeBox";
 import CodeBoxCodeViewManager from "../CodeBoxCodeViewManager";
 import CodeBoxFileManager from "../CodeBoxFileManager";
-import CodeBoxMemento, { CodeViewMementoEntry, FileMementoEntry } from "../CodeBoxMemento";
+import CodeBoxMemento from "../CodeBoxMemento";
 import CodeViewButton from "../CodeViewButton";
 import CodeViewEntry from "./CodeViewEntry";
 import FileEntry from "./FileEntry";
@@ -19,6 +20,7 @@ import ProjectCodeBoxOptions from "./ProjectCodeBoxOptions";
 
 class ProjectCodeBox extends CodeBox {
     private static readonly COMMAND_RENAME_PROJECT = "rename project";
+    private static readonly COMMAND_RENAME_FOLDER = "rename folder";
     private static readonly COMMAND_SET_ACTIVE_CODE_VIEW = "set active code view";
 
     private panelToggle : PanelToggle;
@@ -26,11 +28,12 @@ class ProjectCodeBox extends CodeBox {
     private foldersManager : FoldersManager;
 
     private readonly parentCodeBox : ProjectCodeBox | null;
-    // private commandElements : Array<HTMLElement> | null = new Array<HTMLElement>();
     private commands : Array<any> | null;
+    private initialMemento : ProjectCodeBoxMemento | null = null;
+    private initialPackagesFolderPath : string | null; // tady tu věc jen nastavit podle horních code boxů - to znamená, že se to nebude brát jako packages folder, ale tady ta vlastnost se nastaví... (je to vlastně tady ta složka po inicializaci)
 
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
-    private codeViewEntries = new Map<CodeView, CodeViewEntry>(); // todo - možná spíš podle identifieru?
+    private codeViewEntries = new Map<CodeView, CodeViewEntry>();
     private fileEntries = new Map<ProjectCodeBoxFile, FileEntry>();
     private projectName : string;
     
@@ -54,32 +57,60 @@ class ProjectCodeBox extends CodeBox {
             }
         });
 
-        let activeCodeViewIdentifier : string | null = null;
-
-        for (let command of commands) {
-            if (typeof command !== "object") continue;
-            if (command.command !== ProjectCodeBox.COMMAND_SET_ACTIVE_CODE_VIEW) continue;
-            if (typeof command.identifier !== "string") continue;
-
-            activeCodeViewIdentifier = command.identifier;
-        }
-
         const codeBoxBuilder = new ProjectCodeBoxBuilder(
             options.svgSpritePath || null,
             options.svgSpriteIcons ? (options.svgSpriteIcons.panelOpenButton || null) : null
         );
 
+        let projectName : string;
+        let packagesFolderPath : string | null;
+        let createFoldersForPackages : boolean;
+        let foldersDelimiterForPackages : string | null;
+        if (parentCodeBox) {
+            projectName = parentCodeBox.projectName;
+            packagesFolderPath = parentCodeBox.initialPackagesFolderPath;
+            createFoldersForPackages = parentCodeBox.foldersManager.isCreateFoldersForPackagesEnabled();
+            foldersDelimiterForPackages = parentCodeBox.foldersManager.getFoldersDelimiterForPackages();
+        } else {
+            projectName = options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME;
+            if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ProjectName"] !== undefined) {
+                options.projectName = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ProjectName"] || GlobalConfig.DEFAULT_PROJECT_NAME;
+            }
+            packagesFolderPath = options.packagesFolderPath || null;
+            if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "PackagesFolderPath"] !== undefined) {
+                packagesFolderPath = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "PackagesFolderPath"] || null;
+            }
+            createFoldersForPackages = options.createFoldersForPackages !== undefined ? options.createFoldersForPackages : GlobalConfig.DEFAULT_CREATE_FOLDERS_FOR_PACKAGES;
+            if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "CreateFoldersForPackages"] !== undefined) {
+                createFoldersForPackages = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "CreateFoldersForPackages"] === "true";
+            }
+            foldersDelimiterForPackages = options.foldersDelimiterForPackages || null;
+            if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "FoldersDelimiterForPackages"] !== undefined) {
+                foldersDelimiterForPackages = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "FoldersDelimiterForPackages"] || null;
+            }
+        }
+
+        let folderAnimationSpeed = options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED;
+        if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "FolderAnimationSpeed"] !== undefined) {
+            const speed = Number.parseFloat(element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "FolderAnimationSpeed"] || "");
+            if (!Number.isNaN(speed)) folderAnimationSpeed = speed;
+        }
+        let folderAnimationEasingFunction = options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION;
+        if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "FolderAnimationEasingFunction"] !== undefined) {
+            folderAnimationEasingFunction = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "FolderAnimationEasingFunction"] || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION;
+        }
+
         const foldersManager = new FoldersManager(
             codeBoxBuilder.getFolderStructureContainer(),
             codeBoxBuilder.getPackagesContainer(),
-            options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME,
-            options.packagesFolderPath || null,
+            projectName,
+            packagesFolderPath,
             options.defaultPackageName || null,
-            options.createFoldersForPackages !== undefined ? options.createFoldersForPackages : GlobalConfig.DEFAULT_CREATE_FOLDERS_FOR_PACKAGES,
-            options.foldersDelimiterForPackages || null,
+            createFoldersForPackages,
+            foldersDelimiterForPackages,
             false,
-            options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED,
-            options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION,
+            folderAnimationSpeed,
+            folderAnimationEasingFunction,
             options.svgSpritePath,
             ProjectCodeBox.getIconName(options, "folderArrow"),
             ProjectCodeBox.getIconName(options, "project"),
@@ -91,6 +122,49 @@ class ProjectCodeBox extends CodeBox {
         );
 
         let lazyInitPlaceholderElementHeight : string | null = null;
+
+        let activeCodeViewIdentifier : string | null = null;
+
+        let initialPackagesFolderPath : string | null;
+        if (parentCodeBox) {
+            initialPackagesFolderPath = parentCodeBox.initialPackagesFolderPath;
+        } else {
+            initialPackagesFolderPath = options.packagesFolderPath || null;
+            if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "PackagesFolderPath"] !== undefined) {
+                initialPackagesFolderPath = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "PackagesFolderPath"] || null;
+            }
+        }
+        if (initialPackagesFolderPath !== null) {
+            initialPackagesFolderPath = foldersManager.getNormalizedFolderPath(initialPackagesFolderPath);
+            if (initialPackagesFolderPath === "") {
+                initialPackagesFolderPath = null;
+            }
+        }
+
+        for (let command of commands) {
+            if (typeof command !== "object") continue;
+            if (command.command === ProjectCodeBox.COMMAND_SET_ACTIVE_CODE_VIEW) {
+                if (typeof command.identifier !== "string") continue;
+                activeCodeViewIdentifier = command.identifier;
+            } else if (command.command === ProjectCodeBox.COMMAND_RENAME_FOLDER && initialPackagesFolderPath !== null) {
+                if (typeof command.folderPath !== "string") continue;
+                if (typeof command.newName !== "string") continue;
+
+                const oldFolderPath = foldersManager.getNormalizedFolderPath(command.folderPath);
+                const newFolderName = foldersManager.getSanitizedFolderName(command.newName);
+
+                if ((initialPackagesFolderPath + "/").startsWith(oldFolderPath + "/")) {
+                    const parsedFolderPath = oldFolderPath.split("/");
+                    if (parsedFolderPath[0] === "") continue;
+                    parsedFolderPath.pop();
+                    parsedFolderPath.push(newFolderName);
+    
+                    const newFolderPath = parsedFolderPath.join("/");
+
+                    initialPackagesFolderPath = initialPackagesFolderPath.replace(oldFolderPath, newFolderPath);
+                }
+            }
+        }
         
         let isLazyInitializationEnabled = options.lazyInit !== undefined ? options.lazyInit : true;
         if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LazyInit"] !== undefined) {
@@ -99,10 +173,6 @@ class ProjectCodeBox extends CodeBox {
 
         if (activeCodeViewIdentifier !== null && isLazyInitializationEnabled) {
             activeCodeViewIdentifier === foldersManager.getNormalizedFolderPath(activeCodeViewIdentifier);
-
-            // - takže identifikátor mám, teď co s ním?
-                // získat všechny pre elementy v code boxu a podívat se, jestli tam tady to code view není
-                    // pokud tam není, zeptat se parent code boxu
             
             let minLinesCount : number | null = options.minCodeViewLinesCount || null;
             if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "MinCodeViewLinesCount"] !== undefined) {
@@ -137,9 +207,7 @@ class ProjectCodeBox extends CodeBox {
             }
 
             if (lazyInitPlaceholderElementHeight === null && parentCodeBox) {
-                lazyInitPlaceholderElementHeight = parentCodeBox.getHeightForLazyInitPlaceholderElement(activeCodeViewIdentifier, minLinesCount);
-                // todo - pokusit se to získat z parent code boxu
-                    // tady je ale problém, že ty pre elementy v neinicializovaném ale vytvořeném code boxu již nejsou, takže budu muset přidat asi metodu do třídy CodeBox
+                lazyInitPlaceholderElementHeight = parentCodeBox.getHeightForLazyInitPlaceholderElement(activeCodeViewIdentifier, minLinesCount, options.defaultCodeViewOptions || {});
             }
         }
         
@@ -150,7 +218,8 @@ class ProjectCodeBox extends CodeBox {
         this.commands = commands;
         this.parentCodeBox = parentCodeBox;
 
-        this.projectName = options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME;
+        this.initialPackagesFolderPath = initialPackagesFolderPath;
+        this.projectName = projectName;
 
         codeBoxBuilder.getFolderStructureHeadingElement().innerText = options.folderStructureHeading || GlobalConfig.DEFAULT_PROJECT_FOLDER_STRUCTURE_HEADING;
         codeBoxBuilder.getPackagesHeadingElement().innerText = options.packagesHeading || GlobalConfig.DEFAULT_PROJECT_PACKAGES_HEADING;
@@ -388,6 +457,12 @@ class ProjectCodeBox extends CodeBox {
 
         codeViewEntry.codeBoxCodeViewManager.changeIdentifier(newIdentifier);
 
+        if (this.foldersManager.hasPackages()) {
+            this.packagesSectionToggle.show();
+        } else {
+            this.packagesSectionToggle.hide();
+        }
+
         return true;
     }
 
@@ -574,6 +649,12 @@ class ProjectCodeBox extends CodeBox {
 
         fileEntry.codeBoxFileManager.changeIdentifier(newIdentifier);
 
+        if (this.foldersManager.hasPackages()) {
+            this.packagesSectionToggle.show();
+        } else {
+            this.packagesSectionToggle.hide();
+        }
+
         return true;
     }
 
@@ -719,6 +800,12 @@ class ProjectCodeBox extends CodeBox {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         this.foldersManager.addPackage(name);
+
+        if (this.foldersManager.hasPackages()) {
+            this.packagesSectionToggle.show();
+        } else {
+            this.packagesSectionToggle.hide();
+        }
     }
 
     public removePackage(name : string, removePackageFoldersAndContents : boolean = true, removeAllCodeViewsAndFiles : boolean = false) : boolean {
@@ -733,7 +820,17 @@ class ProjectCodeBox extends CodeBox {
                     const success = this.foldersManager.removePackage(name, true);
                     if (!success) return false;
                 }
-                return this.removeFolder(packageFolderPath);
+                const success = this.removeFolder(packageFolderPath);
+
+                if (success) {
+                    if (this.foldersManager.hasPackages()) {
+                        this.packagesSectionToggle.show();
+                    } else {
+                        this.packagesSectionToggle.hide();
+                    }
+                }
+
+                return success;
             } else {
                 const codeViews = this.foldersManager.getCodeViewsInPackage(name);
                 const codeBoxFiles = this.foldersManager.getFilesInPackage(name);
@@ -761,7 +858,17 @@ class ProjectCodeBox extends CodeBox {
                     this.fileEntries.delete(codeBoxFile);
                 }
 
-                return this.foldersManager.removePackage(name, removeAllCodeViewsAndFiles);
+                const success = this.foldersManager.removePackage(name, removeAllCodeViewsAndFiles);
+
+                if (success) {
+                    if (this.foldersManager.hasPackages()) {
+                        this.packagesSectionToggle.show();
+                    } else {
+                        this.packagesSectionToggle.hide();
+                    }
+                }
+
+                return success;
             }
         } else {
             if (removeAllCodeViewsAndFiles) {
@@ -786,9 +893,25 @@ class ProjectCodeBox extends CodeBox {
                     this.fileEntries.delete(codeBoxFile);
                 }
 
+                if (this.foldersManager.hasPackages()) {
+                    this.packagesSectionToggle.show();
+                } else {
+                    this.packagesSectionToggle.hide();
+                }
+
                 return true;
             } else {
-                return this.foldersManager.removePackage(name);
+                const success =  this.foldersManager.removePackage(name);
+
+                if (success) {
+                    if (this.foldersManager.hasPackages()) {
+                        this.packagesSectionToggle.show();
+                    } else {
+                        this.packagesSectionToggle.hide();
+                    }
+                }
+
+                return success;
             }
         }
 
@@ -911,43 +1034,17 @@ class ProjectCodeBox extends CodeBox {
         return this.panelToggle.isOpened();
     }
 
-    public createMemento() : CodeBoxMemento {
+    public reset() : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
-        const codeViewMementoEntries = new Array<ProjectCodeBoxCodeViewMementoEntry>();
-        const fileMementoEntries = new Array<ProjectCodeBoxFileMementoEntry>();
+        if (!this.initialMemento) return;
+        this.applyMemento(this.initialMemento);
+    }
 
-        this.codeViewEntries.forEach((codeViewEntry, codeView) => {
-            const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
-            if (identifier === null) return;
-            codeViewMementoEntries.push({
-                codeView: codeView,
-                codeViewMemento: codeView.createMemento(),
-                identifier: identifier,
-                package: codeViewEntry.codeBoxCodeView.getPackage()
-            });
-        });
-        this.fileEntries.forEach((_, codeBoxFile) => {
-            const identifier = codeBoxFile.getIdentifier();
-            if (identifier === null) return;
-            fileMementoEntries.push({
-                downloadLink: codeBoxFile.getDownloadLink(),
-                identifier: identifier,
-                package: codeBoxFile.getPackage()
-            });
-        });
+    public createMemento() : CodeBoxMemento { // todo - vytvořit createProjectCodeBoxMemento - díky tomu tohle může vracet jen CodeBoxMemento
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
-        return new ProjectCodeBoxMemento(
-            this,
-            codeViewMementoEntries,
-            fileMementoEntries,
-            this.getCurrentlyActiveCodeView(),
-            this.foldersManager.getFolderStructure(),
-            this.foldersManager.getPackageInfos(),
-            this.foldersManager.getPackagesFolderPath(),
-            this.getProjectName(),
-            this.isPanelOpened()
-        );
+        return this.createProjectCodeBoxMemento();
     }
 
     public applyMemento(memento: CodeBoxMemento) : void {
@@ -1007,12 +1104,12 @@ class ProjectCodeBox extends CodeBox {
 
                 if (isActive) {
                     this.foldersManager.setCodeViewButtonsAsActiveByIdentifier(identifier);
-                    if (this.openActiveCodeViewFolderOnInit) {
-                        this.foldersManager.openFolder(folderPath || "/", true, false);
-                    }
-                    if (this.openActiveCodeViewPackageOnInit) {
-                        this.foldersManager.openPackage(packageName !== "" ? packageName : null, false);
-                    }
+                    // if (this.openActiveCodeViewFolderOnInit) {
+                    //     this.foldersManager.openFolder(folderPath || "/", true, false);
+                    // }
+                    // if (this.openActiveCodeViewPackageOnInit) {
+                    //     this.foldersManager.openPackage(packageName !== "" ? packageName : null, false);
+                    // }
                 }
             } else if (codeBoxItemInfo.type === "FileInfo" && codeBoxItemInfo.fileInfo) {
                 let fileInfo = codeBoxItemInfo.fileInfo;
@@ -1042,9 +1139,75 @@ class ProjectCodeBox extends CodeBox {
     }
 
     protected onAfterInit() : void {
+        if (this.parentCodeBox) {
+            if (!this.parentCodeBox.isInitialized()) {
+                this.parentCodeBox.init();
+            }
+
+            if (this.parentCodeBox.initialMemento) {
+                this.parentCodeBox.initialMemento.applyToInherit(this);
+            }
+        }
+
         if (this.commands === null) return;
         this.processCommands(this.commands);
         this.commands = null;
+
+        const activeCodeView = this.getCurrentlyActiveCodeView();
+        if (activeCodeView) {
+            const codeViewEntry = this.codeViewEntries.get(activeCodeView);
+            if (codeViewEntry) {
+                if (this.openActiveCodeViewFolderOnInit) {
+                    const folderPath = (codeViewEntry.codeBoxCodeView.getIdentifier() || "").split("/");
+                    folderPath.pop();
+                    this.foldersManager.openFolder(folderPath.join("/"), true, false);
+                }
+                const packageName = codeViewEntry.codeBoxCodeView.getPackage();
+                if (this.openActiveCodeViewPackageOnInit && packageName !== undefined) {
+                    this.foldersManager.openPackage(packageName, false);
+                }
+            }
+        }
+
+        this.initialPackagesFolderPath = this.foldersManager.getPackagesFolderPath(); // měl by to být už nastaveno, ale když to tu nechám, nic nezkazím
+        this.initialMemento = this.createProjectCodeBoxMemento();
+    }
+
+    private createProjectCodeBoxMemento() : ProjectCodeBoxMemento {
+        const codeViewMementoEntries = new Array<ProjectCodeBoxCodeViewMementoEntry>();
+        const fileMementoEntries = new Array<ProjectCodeBoxFileMementoEntry>();
+
+        this.codeViewEntries.forEach((codeViewEntry, codeView) => {
+            const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
+            if (identifier === null) return;
+            codeViewMementoEntries.push({
+                codeView: codeView,
+                codeViewMemento: codeView.createMemento(),
+                identifier: identifier,
+                package: codeViewEntry.codeBoxCodeView.getPackage()
+            });
+        });
+        this.fileEntries.forEach((_, codeBoxFile) => {
+            const identifier = codeBoxFile.getIdentifier();
+            if (identifier === null) return;
+            fileMementoEntries.push({
+                downloadLink: codeBoxFile.getDownloadLink(),
+                identifier: identifier,
+                package: codeBoxFile.getPackage()
+            });
+        });
+
+        return new ProjectCodeBoxMemento(
+            this,
+            codeViewMementoEntries,
+            fileMementoEntries,
+            this.getCurrentlyActiveCodeView(),
+            this.foldersManager.getFolderStructure(),
+            this.foldersManager.getPackageInfos(),
+            this.foldersManager.getPackagesFolderPath(),
+            this.getProjectName(),
+            this.isPanelOpened()
+        );
     }
 
     private onShowCodeView(codeView : CodeView) : void {
@@ -1139,19 +1302,51 @@ class ProjectCodeBox extends CodeBox {
                     if (typeof command.name !== "string") continue;
                     this.setProjectName(command.name);
                     break;
+                case ProjectCodeBox.COMMAND_RENAME_FOLDER:
+                    if (typeof command.folderPath !== "string") continue;
+                    if (typeof command.newName !== "string") continue;
+                    this.renameFolder(command.folderPath, command.newName);
+                    break;
                 case ProjectCodeBox.COMMAND_SET_ACTIVE_CODE_VIEW:
                     if (typeof command.identifier !== "string") continue;
                     this.setActiveCodeView(command.identifier);
+                    break;
             }
         }
     }
 
-    private getHeightForLazyInitPlaceholderElement(codeViewIdentifier : string, minLinesCount : number | null) : string | null {
-        // if (this.isInitialized()) {
-        //     const codeView = this
-        // }
-        // todo - ono to code view může být smazáno, takže to nějak brát z mementa
-        return null;
+    private getHeightForLazyInitPlaceholderElement(codeViewIdentifier : string, minLinesCount : number | null, defaultCodeViewOptions : CodeViewOptions) : string | null {
+        if (this.isInitialized()) {
+            return this.initialMemento ? this.initialMemento.getCodeViewHeightByIdentifier(codeViewIdentifier, minLinesCount) : null;
+        } else {
+            const preElements = this.getPreElementsBeforeInitialization();
+            if (preElements === null) return null;
+
+            for (let preElement of preElements) {
+                let folderPath = ProjectCodeBox.getFolderPathFromDataset(preElement.dataset);
+                let fileName = ProjectCodeBox.getNameFromDataset(preElement.dataset) || GlobalConfig.DEFAULT_CODE_VIEW_BUTTON_TEXT;
+                let packageName = ProjectCodeBox.getPackageNameFromDataset(preElement.dataset);
+
+                const identifier = this.foldersManager.getItemIdentifier(fileName, folderPath, packageName !== null, packageName !== "" ? packageName : null);
+
+                if (identifier === codeViewIdentifier) {
+                    const codeElement = CodeBox.getCodeElement(preElement);
+                    if (!codeElement) continue;
+                    let linesCount = CodeBox.getLinesCount(codeElement);
+                    if (minLinesCount !== null && linesCount < minLinesCount) {
+                        linesCount = minLinesCount;
+                    }
+                    const height = linesCount * CodeBox.getCodeViewLineHeight(preElement, defaultCodeViewOptions);
+                    return `${height}${CodeBox.getCodeViewLineHeightUnit(preElement, defaultCodeViewOptions)}`;
+                }
+            }
+
+            if (this.parentCodeBox) {
+                return this.parentCodeBox.getHeightForLazyInitPlaceholderElement(codeViewIdentifier, minLinesCount, defaultCodeViewOptions);
+            }
+
+            return null;
+        }
     }
 
     private static getFolderPathFromDataset(dataset : DOMStringMap) : string | null {

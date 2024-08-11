@@ -24,6 +24,8 @@ class TabCodeBox extends CodeBox {
     private tabsContainer : HTMLElement;
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
 
+    private initialMemento : CodeBoxMemento | null = null;
+
     private codeViews = new Map<string, CodeView>();
     private codeViewEntries = new Map<CodeView, CodeViewEntry>();
     private fileEntries = new Map<string, FileEntry>();
@@ -274,6 +276,13 @@ class TabCodeBox extends CodeBox {
         return true;
     }
 
+    public reset() : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        if (!this.initialMemento) return;
+        this.applyMemento(this.initialMemento);
+    }
+
     public createMemento() : CodeBoxMemento {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -357,6 +366,10 @@ class TabCodeBox extends CodeBox {
                 this.fileEntries.set(identifier, new FileEntry(codeBoxFile, codeBoxFileManager, fileButton));
             }
         }
+    }
+
+    protected onAfterInit() : void {
+        this.initialMemento = this.createMemento();
     }
 
     private onShowCodeView(codeViewButton : CodeViewButton, codeView : CodeView) : void {

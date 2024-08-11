@@ -1,7 +1,7 @@
 import {CodeView, TabCodeBox, ProjectCodeBox} from "../../src/ts/main";
 
 declare global {
-    interface Window { myCodeBox: ProjectCodeBox; }
+    interface Window { myCodeBox: ProjectCodeBox; myTabCodeBox: TabCodeBox }
 }
 
 const codeView = new CodeView(document.getElementById("CodeViewTest") as HTMLPreElement, {
@@ -28,6 +28,7 @@ const tabCodeBox = new TabCodeBox(document.getElementById("TabCodeBoxTest") as H
         download: "download"
     }
 });
+window.myTabCodeBox = tabCodeBox;
 // window.myCodeBox = tabCodeBox;
 // tabCodeBox.init();
 
@@ -70,5 +71,6 @@ new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest2") as HTMLElement
     },
     projectName: "test",
     packagesFolderPath: "src/main/java",
-    foldersDelimiterForPackages: "."
-});
+    foldersDelimiterForPackages: ".",
+    minCodeViewLinesCount: 20
+}, projectCodeBox);

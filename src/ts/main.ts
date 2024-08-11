@@ -40,11 +40,12 @@ Co mi ještě zbývá:
 - container s příkazy
 - dědění
 
+pořadí u TabCodeBoxu dořešit (v mementu a taky tam musím přidat metodu na změnu pořadí)
+
 
 - pluginy se asi nebudou předávat jako options, ale budou se moci přidávat nebo odebírat pomocí metod
     - plugin třídy budou mít metody, které se budou volat v různých situacích: init, reset (nevím jak to bude u mementa - ale asi se předtím taky všechno nejdřív nějak resetuje? - takže by se ta metoda mohla taky volat?), a další - nebo lepší - mohlo by existovat PluginMemento - dalo by se tam třeba nějak vytvořit? - uvidím
  */
-
 
 
 /*
@@ -86,9 +87,6 @@ Ok, dostal jsem se do bodu, kdy můžu začít přemýšlet nad děděním.
                                         - dělá se to před konstruktorem, takže tam budou
     - potom pozor na packages folder, protože ta se může časem změnit, když se ta složka přejmenuje
 
-    Ok, potřebuju teda nějak pořešit to memento.
-        - 
-
 Příkazy:
     - možná spíš vytvořit jen atribut data-cb-command="příkaz"
     - to by možná bylo lepší - ale nevím jestli to tak dělat
@@ -98,7 +96,9 @@ Příkazy:
 
     - data-cb-command-add-folder
     - data-cb-command-remove-folder
-    - data-cb-command-rename-folder
+    - data-cb-command-rename-folder (toto je nebezpečné - protože já potřebuju získávat packages folder...)
+        - folderPath
+        - newName
     - data-cb-command-open-folder (openParentFolders)
     - data-cb-command-close-folder (closeChildFolders)
 

@@ -43,7 +43,6 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
 
         super.apply(codeBox);
         if (!(codeBox instanceof ProjectCodeBox)) return;
-        // todo - ještě je tam vlastnost createFoldersForPackages a foldersDelimiterForPackages - co s tím? - nic - ono by se to teď stejně mělo brát podle složky, takže tohle vůbec nepřichází do hry - vytvoří se to všude stejně - na tomto nastavení nezáleží
 
         for (let node of this.folderStructure) {
             this.createFolders(codeBox, node);
@@ -67,11 +66,72 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
         }
     }
 
-    private createFolders(codeBox : ProjectCodeBox, node : TreeNode<FolderInfo>, parentFolderNames : string[] = []) {
+    // napsat že highlights u code views se nedědí
+    /*
+    A taky se nedědí:
+        - jestli je otevřený panel
+        - otevření složek
+        - packages folder path to nenastavuje
+        - packages zůstavají i při přepsání code view (pokud se nenastavil balíček nový)
+    */
+    public applyToInherit(codeBox : ProjectCodeBox) : void { // napsat že se má volat po připravení code boxu ke zdědění z parent code boxu
+        for (let codeViewEntry of this.projectCodeBoxCodeViewEntries) {
+            const codeBoxCodeView = codeBox.getCodeView(codeViewEntry.identifier);
+
+            if (!codeBoxCodeView) {
+                let codeView = codeViewEntry.codeView.clone();
+                codeView.applyMemento(codeViewEntry.codeViewMemento);
+                codeView.removeHighlights();
+                codeBox.addCodeView(codeViewEntry.identifier, codeView);
+            }
+
+            if (codeViewEntry.package === undefined) continue;
+            if (codeBoxCodeView && codeBoxCodeView.getPackage() !== undefined) continue;
+
+            codeBox.changeCodeViewPackage(codeViewEntry.identifier, codeViewEntry.package, true);
+        }
+
+        for (let fileEntry of this.projectCodeBoxFileEntries) {
+            const codeBoxFile = codeBox.getFile(fileEntry.identifier);
+
+            if (!codeBoxFile) {
+                codeBox.addFile(fileEntry.identifier, fileEntry.downloadLink);
+            }
+            
+            if (fileEntry.package === undefined) continue;
+            if (codeBoxFile && codeBoxFile.getPackage() !== undefined) continue;
+
+            codeBox.changeFilePackage(fileEntry.identifier, fileEntry.package, true);
+        }
+
+        for (let node of this.folderStructure) {
+            this.createFolders(codeBox, node, [], false);
+        }
+        this.createPackages(codeBox, false);
+
+        codeBox.setProjectName(this.projectName);
+    }
+
+    public getCodeViewHeightByIdentifier(identifier : string, minLinesCount : number | null) : string | null {
+        for (let codeViewEntry of this.projectCodeBoxCodeViewEntries) {
+            if (codeViewEntry.identifier !== identifier) continue;
+
+            const codeView = codeViewEntry.codeView;
+
+            let linesCount = codeView.linesCount;
+            if (minLinesCount !== null && linesCount < minLinesCount) {
+                linesCount = minLinesCount;
+            }
+            return `${linesCount * codeView.lineHeight}${codeView.lineHeightUnit}`;
+        }
+        return null;
+    }
+
+    private createFolders(codeBox : ProjectCodeBox, node : TreeNode<FolderInfo>, parentFolderNames : string[] = [], openFolders : boolean = true) {
         if (node.children.length === 0) {
             const folderPath = parentFolderNames.join("/") + "/" + node.value.name;
             codeBox.addFolder(folderPath);
-            if (node.value.opened) {
+            if (openFolders && node.value.opened) {
                 codeBox.openFolder(folderPath, false, false);
             }
             return;
@@ -79,20 +139,20 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
 
         for (let child of node.children) {
             parentFolderNames.push(node.value.name);
-            this.createFolders(codeBox, child, parentFolderNames);
+            this.createFolders(codeBox, child, parentFolderNames, openFolders);
             parentFolderNames.pop();
         }
 
-        if (node.value.opened) {
+        if (openFolders && node.value.opened) {
             const folderPath = parentFolderNames.join("/") + "/" + node.value.name;
             codeBox.openFolder(folderPath, false, false);
         }
     }
 
-    private createPackages(codeBox : ProjectCodeBox) {
+    private createPackages(codeBox : ProjectCodeBox, openPackages : boolean = true) {
         for (let packageInfo of this.packages) {
             codeBox.addPackage(packageInfo.name);
-            if (packageInfo.opened) {
+            if (openPackages && packageInfo.opened) {
                 codeBox.openPackage(packageInfo.name, false);
             }
         }
@@ -100,11 +160,3 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
 }
 
 export default ProjectCodeBoxMemento;
-
-/**
- * Nové abstraktní metody pro CodeBox:
- * reset() - resetne to do stavu po inicializaci
- *  - nebudu to asi potřebovat pro TabCodeBox - takže jen pro ProjectCodeBox? - v TabCodeBoxu to nedává až takový smysl
- * createMemento()
- * applyMemento() - přidám type guard - když to bude instance ProjectCodeBoxMemento, tak udělám něco navíc
- */

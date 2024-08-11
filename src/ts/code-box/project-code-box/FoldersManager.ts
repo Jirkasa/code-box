@@ -119,6 +119,14 @@ class FoldersManager {
     }
 
     /**
+     * Returns delimiter based on which are created folders for packages.
+     * @returns Delimiter based on which are created folders for packages (if null, only single folder for package is created).
+     */
+    public getFoldersDelimiterForPackages() : string | null {
+        return this.foldersDelimiterForPackages;
+    }
+
+    /**
      * Returns identifier based on passed parameters.
      * @param fileName File name.
      * @param folderPath Folder path.
@@ -144,6 +152,15 @@ class FoldersManager {
      */
     public getNormalizedFolderPath(folderPath : string) : string {
         return this.normalizeFolderPath(folderPath);
+    }
+
+    /**
+     * Returns sanitized folder name.
+     * @param folderName Folder name.
+     * @returns Sanitized folder name.
+     */
+    public getSanitizedFolderName(folderName : string) : string {
+        return this.sanitizeFolderName(folderName);
     }
 
     /**

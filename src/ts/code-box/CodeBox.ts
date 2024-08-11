@@ -392,6 +392,11 @@ abstract class CodeBox {
     public abstract changeFileDownloadLink(identifier : string, newDownloadLink : string | null) : boolean;
 
     /**
+     * Resets code box to its post-initialization state.
+     */
+    public abstract reset() : void;
+
+    /**
      * Creates memento.
      */
     public abstract createMemento() : CodeBoxMemento;
@@ -447,6 +452,23 @@ abstract class CodeBox {
      */
     protected getCurrentlyActiveCodeView() : CodeView | null {
         return this.activeCodeView;
+    }
+
+    /**
+     * Can be used to get pre elements before initialization of code box.
+     * @returns Pre elements or null if code box is already initialized.
+     */
+    protected getPreElementsBeforeInitialization() : HTMLPreElement[] | null {
+        if (!this.initializationData) return null;
+
+        const preElements = new Array<HTMLPreElement>();
+        for (let initializationInfo of this.initializationData) {
+            if (initializationInfo.type === "PreElement" && initializationInfo.preElement) {
+                preElements.push(initializationInfo.preElement);
+            }
+        }
+
+        return preElements;
     }
 
     /**
