@@ -20,8 +20,32 @@ import ProjectCodeBoxOptions from "./ProjectCodeBoxOptions";
 
 class ProjectCodeBox extends CodeBox {
     private static readonly COMMAND_RENAME_PROJECT = "rename project";
+    private static readonly COMMAND_ADD_FOLDER = "add folder";
+    private static readonly COMMAND_REMOVE_FOLDER = "remove folder";
     private static readonly COMMAND_RENAME_FOLDER = "rename folder";
+    private static readonly COMMAND_OPEN_FOLDER = "open folder";
+    private static readonly COMMAND_CLOSE_FOLDER = "close folder";
+    private static readonly COMMAND_ADD_PACKAGE ="add package";
+    private static readonly COMMAND_REMOVE_PACKAGE = "remove package";
+    private static readonly COMMAND_RENAME_PACKAGE = "rename package";
+    private static readonly COMMAND_OPEN_PACKAGE = "open package";
+    private static readonly COMMAND_CLOSE_PACKAGE = "close package";
+    private static readonly COMMAND_REMOVE_CODE_VIEW = "remove code view";
+    private static readonly COMMAND_RENAME_CODE_VIEW = "rename code view";
+    private static readonly COMMAND_MOVE_CODE_VIEW_TO_FOLDER = "move code view to folder";
+    private static readonly COMMAND_CHANGE_CODE_VIEW_PACKAGE = "change code view package";
+    private static readonly COMMAND_REMOVE_CODE_VIEW_PACKAGE = "remove code view package";
+    private static readonly COMMAND_REMOVE_ALL_CODE_VIEWS = "remove all code views";
+    private static readonly COMMAND_ADD_CODE_VIEW_HIGHLIGHT = "add code view highlight";
+    private static readonly COMMAND_REMOVE_CODE_VIEW_HIGHLIGHT = "remove code view highlight";
     private static readonly COMMAND_SET_ACTIVE_CODE_VIEW = "set active code view";
+    private static readonly COMMAND_SET_NO_ACTIVE_CODE_VIEW = "set no active code view";
+    private static readonly COMMAND_REMOVE_FILE = "remove file";
+    private static readonly COMMAND_RENAME_FILE = "rename file";
+    private static readonly COMMAND_MOVE_FILE_TO_FOLDER = "move file to folder";
+    private static readonly COMMAND_CHANGE_FILE_PACKAGE = "change file package";
+    private static readonly COMMAND_REMOVE_FILE_PACKAGE = "remove file package";
+    private static readonly COMMAND_REMOVE_ALL_FILES = "remove all files";
 
     private panelToggle : PanelToggle;
     private packagesSectionToggle : PackagesSectionToggle;
@@ -1266,53 +1290,272 @@ class ProjectCodeBox extends CodeBox {
         }
     }
 
-    // private processCommands(commandsElement : HTMLElement) : void {
-    //     if (commandsElement.textContent === null) return;
-    //     let commands : Array<any>;
-
-    //     try {
-    //         const data = JSON.parse(commandsElement.textContent);
-    //         if (!(data instanceof Array)) return;
-    //         commands = data;
-    //     } catch {
-    //         return;
-    //     }
-
-    //     for (let command of commands) {
-    //         if (typeof command !== "object") continue;
-            
-    //         switch (command.command) {
-    //             case ProjectCodeBox.COMMAND_RENAME_PROJECT:
-    //                 if (typeof command.name !== "string") continue;
-    //                 this.setProjectName(command.name);
-    //                 break;
-    //             case ProjectCodeBox.COMMAND_SET_ACTIVE_CODE_VIEW:
-    //                 if (typeof command.identifier !== "string") continue;
-    //                 this.setActiveCodeView(command.identifier);
-    //         }
-    //     }
-    // }
-
     private processCommands(commands : Array<any>) : void {
         for (let command of commands) {
             if (typeof command !== "object") continue;
             
             switch (command.command) {
                 case ProjectCodeBox.COMMAND_RENAME_PROJECT:
-                    if (typeof command.name !== "string") continue;
-                    this.setProjectName(command.name);
+                    this.processRenameProjectCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_ADD_FOLDER:
+                    this.processAddFolderCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_REMOVE_FOLDER:
+                    this.processRemoveFolderCommand(command);
                     break;
                 case ProjectCodeBox.COMMAND_RENAME_FOLDER:
-                    if (typeof command.folderPath !== "string") continue;
-                    if (typeof command.newName !== "string") continue;
-                    this.renameFolder(command.folderPath, command.newName);
+                    this.processRenameFolderCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_OPEN_FOLDER:
+                    this.processOpenFolderCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_CLOSE_FOLDER:
+                    this.processCloseFolderCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_ADD_PACKAGE:
+                    this.processAddPackageCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_REMOVE_PACKAGE:
+                    this.processRemovePackageCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_RENAME_PACKAGE:
+                    this.processRenamePackageCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_OPEN_PACKAGE:
+                    this.processOpenPackageCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_CLOSE_PACKAGE:
+                    this.processClosePackageCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_REMOVE_CODE_VIEW:
+                    this.processRemoveCodeViewCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_RENAME_CODE_VIEW:
+                    this.processRenameCodeViewCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_MOVE_CODE_VIEW_TO_FOLDER:
+                    this.processMoveCodeViewToFolderCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_CHANGE_CODE_VIEW_PACKAGE:
+                    this.processChangeCodeViewPackageCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_REMOVE_CODE_VIEW_PACKAGE:
+                    this.processRemoveCodeViewPackageCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_REMOVE_ALL_CODE_VIEWS:
+                    this.removeAllCodeViews();
+                    break;
+                case ProjectCodeBox.COMMAND_ADD_CODE_VIEW_HIGHLIGHT:
+                    this.processAddCodeViewHighlightCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_REMOVE_CODE_VIEW_HIGHLIGHT:
+                    this.processRemoveCodeViewHighlightCommand(command);
                     break;
                 case ProjectCodeBox.COMMAND_SET_ACTIVE_CODE_VIEW:
-                    if (typeof command.identifier !== "string") continue;
-                    this.setActiveCodeView(command.identifier);
+                    this.processSetActiveCodeViewCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_SET_NO_ACTIVE_CODE_VIEW:
+                    this.setNoActiveCodeView();
+                    break;
+                case ProjectCodeBox.COMMAND_REMOVE_FILE:
+                    this.processRemoveFileCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_RENAME_FILE:
+                    this.processRenameFileCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_MOVE_FILE_TO_FOLDER:
+                    this.processMoveFileToFolderCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_CHANGE_FILE_PACKAGE:
+                    this.processChangeFilePackageCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_REMOVE_FILE_PACKAGE:
+                    this.processRemoveFilePackageCommand(command);
+                    break;
+                case ProjectCodeBox.COMMAND_REMOVE_ALL_FILES:
+                    this.removeAllFiles();
                     break;
             }
         }
+    }
+
+    private processRenameProjectCommand(command : any) : void {
+        if (typeof command.name !== "string") return;
+        this.setProjectName(command.name);
+    }
+
+    private processAddFolderCommand(command : any) : void {
+        if (typeof command.folderPath !== "string") return;
+        this.addFolder(command.folderPath);
+    }
+
+    private processRemoveFolderCommand(command : any) : void {
+        if (typeof command.folderPath !== "string") return;
+        this.removeFolder(command.folderPath);
+    }
+
+    private processRenameFolderCommand(command : any) : void {
+        if (typeof command.folderPath !== "string") return;
+        if (typeof command.newName !== "string") return;
+        this.renameFolder(command.folderPath, command.newName);
+    }
+
+    private processOpenFolderCommand(command : any) : void {
+        if (typeof command.folderPath !== "string") return;
+        if ((typeof command.openParentFolders !== "undefined") && (typeof command.openParentFolders !== "boolean")) return;
+        let openParentFolders = command.openParentFolders === undefined ? false : command.openParentFolders;
+        this.openFolder(command.folderPath, openParentFolders, false);
+    }
+
+    private processCloseFolderCommand(command : any) : void {
+        if (typeof command.folderPath !== "string") return;
+        if ((typeof command.closeChildFolders !== "undefined") && (typeof command.closeChildFolders !== "boolean")) return;
+        let closeChildFolders = command.closeChildFolders === undefined ? false : command.closeChildFolders;
+        this.closeFolder(command.folderPath, closeChildFolders);
+    }
+
+    private processAddPackageCommand(command : any) : void {
+        if (typeof command.name !== "string") return;
+        this.addPackage(command.name);
+    }
+
+    private processRemovePackageCommand(command : any) : void {
+        if (typeof command.name !== "string") return;
+        if ((typeof command.removePackageFoldersAndContents !== "undefined") && (typeof command.removePackageFoldersAndContents !== "boolean")) return;
+        if ((typeof command.removeAllCodeViewsAndFiles !== "undefined") && (typeof command.removeAllCodeViewsAndFiles !== "boolean")) return;
+        let removePackageFoldersAndContents = command.removePackageFoldersAndContents === undefined ? true : command.removePackageFoldersAndContents;
+        let removeAllCodeViewsAndFiles = command.removeAllCodeViewsAndFiles === undefined ? false : command.removeAllCodeViewsAndFiles;
+        this.removePackage(command.name, removePackageFoldersAndContents, removeAllCodeViewsAndFiles);
+    }
+
+    private processRenamePackageCommand(command : any) : void {
+        if (typeof command.name !== "string") return;
+        if (typeof command.newName !== "string") return;
+        this.renamePackage(command.name, command.newName);
+    }
+
+    private processOpenPackageCommand(command : any) : void {
+        if ((typeof command.name !== "string") && command.name !== null && (typeof command.name !== "undefined")) return;
+        let name = (typeof command.name === "undefined") ? null : command.name;
+        this.openPackage(name, false);
+    }
+
+    private processClosePackageCommand(command : any) : void {
+        if ((typeof command.name !== "string") && command.name !== null && (typeof command.name !== "undefined")) return;
+        let name = (typeof command.name === "undefined") ? null : command.name;
+        this.closePackage(name, false);
+    }
+
+    private processRemoveCodeViewCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        this.removeCodeView(command.identifier);
+    }
+
+    private processRenameCodeViewCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        if (typeof command.newName !== "string") return;
+        const codeView = this.foldersManager.getCodeViewByIdentifier(command.identifier);
+        if (!codeView) return;
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return;
+        codeViewEntry.codeBoxCodeView.changeFileName(command.newName);
+    }
+
+    private processMoveCodeViewToFolderCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        if (typeof command.folderPath !== "string") return;
+        const codeView = this.foldersManager.getCodeViewByIdentifier(command.identifier);
+        if (!codeView) return;
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return;
+        codeViewEntry.codeBoxCodeView.moveToFolder(command.folderPath);
+    }
+
+    private processChangeCodeViewPackageCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        if (typeof command.keepFolderPath !== "boolean") return;
+        if ((typeof command.packageName !== "string") && command.packageName !== null && (typeof command.packageName !== "undefined")) return;
+        let packageName = (typeof command.packageName === "undefined") ? null : command.packageName;
+        this.changeCodeViewPackage(command.identifier, packageName, command.keepFolderPath);
+    }
+
+    private processRemoveCodeViewPackageCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        this.removeCodeViewPackage(command.identifier);
+    }
+
+    private processAddCodeViewHighlightCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        if (typeof command.start !== "number") return;
+        if ((typeof command.end !== "number") && command.end !== undefined) return;
+        const codeView = this.foldersManager.getCodeViewByIdentifier(command.identifier);
+        if (!codeView) return;
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return;
+        if (command.end !== undefined) {
+            codeViewEntry.codeBoxCodeView.addHighlight(command.start, command.end);
+        } else {
+            codeViewEntry.codeBoxCodeView.addHighlight(command.start);
+        }
+    }
+
+    private processRemoveCodeViewHighlightCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        if ((typeof command.start !== "number") && command.start !== undefined) return;
+        if ((typeof command.end !== "number") && command.end !== undefined) return;
+
+        const codeView = this.foldersManager.getCodeViewByIdentifier(command.identifier);
+        if (!codeView) return;
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return;
+
+        if (command.start !== undefined && command.end !== undefined) {
+            codeViewEntry.codeBoxCodeView.removeHighlights(command.start, command.end);
+        } else if (command.start !== undefined) {
+            codeViewEntry.codeBoxCodeView.removeHighlights(command.start);
+        } else {
+            codeViewEntry.codeBoxCodeView.removeHighlights();
+        }
+    }
+
+    private processSetActiveCodeViewCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        this.setActiveCodeView(command.identifier);
+    }
+
+    private processRemoveFileCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        this.removeFile(command.identifier);
+    }
+
+    private processRenameFileCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        if (typeof command.newName !== "string") return;
+        const codeBoxFile = this.foldersManager.getFileByIdentifier(command.identifier);
+        if (!codeBoxFile) return;
+        codeBoxFile.changeFileName(command.newName);
+    }
+
+    private processMoveFileToFolderCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        if (typeof command.folderPath !== "string") return;
+        const codeBoxFile = this.foldersManager.getFileByIdentifier(command.identifier);
+        if (!codeBoxFile) return;
+        codeBoxFile.moveToFolder(command.folderPath);
+    }
+
+    private processChangeFilePackageCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        if (typeof command.keepFolderPath !== "boolean") return;
+        if ((typeof command.packageName !== "string") && command.packageName !== null && (typeof command.packageName !== "undefined")) return;
+        let packageName = (typeof command.packageName === "undefined") ? null : command.packageName;
+        this.changeFilePackage(command.identifier, packageName, command.keepFolderPath);
+    }
+
+    private processRemoveFilePackageCommand(command : any) : void {
+        if (typeof command.identifier !== "string") return;
+        this.removeFilePackage(command.identifier);
     }
 
     private getHeightForLazyInitPlaceholderElement(codeViewIdentifier : string, minLinesCount : number | null, defaultCodeViewOptions : CodeViewOptions) : string | null {

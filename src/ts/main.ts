@@ -94,37 +94,77 @@ Příkazy:
     X - data-cb-command-rename-project
         - name
 
-    - data-cb-command-add-folder
-    - data-cb-command-remove-folder
-    - data-cb-command-rename-folder (toto je nebezpečné - protože já potřebuju získávat packages folder...)
+    X - data-cb-command-add-folder
+        - folderPath
+    X - data-cb-command-remove-folder
+        - folderPath
+    X - data-cb-command-rename-folder (toto je nebezpečné - protože já potřebuju získávat packages folder...)
         - folderPath
         - newName
-    - data-cb-command-open-folder (openParentFolders)
-    - data-cb-command-close-folder (closeChildFolders)
+    X - data-cb-command-open-folder (openParentFolders)
+        - folderPath
+        - openParentFolders (volitelné)
+    X - data-cb-command-close-folder (closeChildFolders)
+        - folderPath
+        - closeChildFolders (volitelné)
 
-    - data-cb-command-add-package
-    - data-cb-command-remove-package
-    - data-cb-command-rename-package
-    - data-cb-command-open-package
-    - data-cb-command-close-package
+    X - data-cb-command-add-package
+        - name
+    X - data-cb-command-remove-package
+        - name
+        - removePackageFoldersAndContents (volitelné)
+        - removeAllCodeViewsAndFiles (volitelné)
+    X - data-cb-command-rename-package
+        - name
+        - newName
+    X - data-cb-command-open-package
+        - name
+    X - data-cb-command-close-package
+        - name (volitelné) - null a undefined pro default package
 
-    - data-cb-command-remove-code-view
-    - data-cb-command-rename-code-view
-    - data-cb-command-move-code-view-to-folder
-    - data-cb-command-change-code-view-package
-    - data-cb-command-remove-code-view-package
+    X - data-cb-command-remove-code-view
+        - identifier
+    X - data-cb-command-rename-code-view
+        - identifier
+        - newName
+    X - data-cb-command-move-code-view-to-folder
+        - identifier
+        - folderPath
+    X - data-cb-command-change-code-view-package
+        - identifier
+        - packageName - null a undefined pro default package
+        - keepFolderPath (povinné!)
+    X - data-cb-command-remove-code-view-package
+        - identifier
+    X - data-cb-command-remove-all-code-views
 
-    - data-cb-command-add-code-view-highlight
-    - data-cb-command-remove-code-view-highlight
+    X - data-cb-command-add-code-view-highlight
+        - identifier
+        - start
+        - end (nepovinné)
+    X - data-cb-command-remove-code-view-highlight
+        - identifier
+        - start (nepovinné)
+        - end (nepovinné)
     X - data-cb-command-set-active-code-view
         - identifier
-    - data-cb-command-set-no-active-code-view
+    X - data-cb-command-set-no-active-code-view
 
-    - data-cb-command-remove-file
-    - data-cb-command-rename-file
-    - data-cb-command-move-file-to-folder
-    - data-cb-command-change-file-package
-    - data-cb-command-remove-file-package
+    X - data-cb-command-remove-file
+        - identifier
+    X - data-cb-command-rename-file
+        - identifier
+        - newName
+    X - data-cb-command-move-file-to-folder
+        - identifier
+        - folderPath
+    X - data-cb-command-change-file-package
+        - identifier
+        - packageName - null a undefined pro default package
+        - keepFolderPath (povinné!)
+    X - data-cb-command-remove-file-package
+        - identifier
+    X - data-cb-command-remove-all-files
 
     Tak ne, udělám to přes script, který se nebude spouštět, ale bude obsahovat json data:
     <script data-cb-commands type="application/json">[...]</script>
