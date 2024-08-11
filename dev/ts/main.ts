@@ -57,7 +57,7 @@ window.myCodeBox = projectCodeBox;
 //     projectCodeBox.addCodeView("test/2.jsp", codeView);
 // }, 1000);
 
-new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest2") as HTMLElement, {
+const codeBox2 = new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest2") as HTMLElement, {
     svgSpritePath: "./static/icon-sprite.svg",
     svgSpriteIcons: {
         codeFile: "file",
@@ -74,3 +74,17 @@ new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest2") as HTMLElement
     foldersDelimiterForPackages: ".",
     minCodeViewLinesCount: 20
 }, projectCodeBox);
+
+new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest3") as HTMLElement, {
+    svgSpritePath: "./static/icon-sprite.svg",
+    svgSpriteIcons: {
+        codeFile: "file",
+        file: "file-2",
+        download: "download",
+        panelOpenButton: "double-arrow-right",
+        folder: "folder",
+        folderArrow: "arrow-right",
+        package: "package",
+        project: "inventory"
+    }
+}, codeBox2);

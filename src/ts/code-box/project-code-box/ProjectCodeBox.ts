@@ -261,28 +261,8 @@ class ProjectCodeBox extends CodeBox {
             codeBoxBuilder.getPackagesHeadingElement(),
             codeBoxBuilder.getPackagesContainer()
         );
-        // this.foldersManager = new FoldersManager(
-        //     codeBoxBuilder.getFolderStructureContainer(),
-        //     codeBoxBuilder.getPackagesContainer(),
-        //     this.projectName,
-        //     options.packagesFolderPath || null,
-        //     options.defaultPackageName || null,
-        //     options.createFoldersForPackages !== undefined ? options.createFoldersForPackages : GlobalConfig.DEFAULT_CREATE_FOLDERS_FOR_PACKAGES,
-        //     options.foldersDelimiterForPackages || null,
-        //     this.panelToggle.isOpened(),
-        //     options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED,
-        //     options.folderAnimationEasingFunction || GlobalConfig.DEFAULT_FOLDER_ANIMATION_EASING_FUNCTION,
-        //     options.svgSpritePath,
-        //     ProjectCodeBox.getIconName(options, "folderArrow"),
-        //     ProjectCodeBox.getIconName(options, "project"),
-        //     ProjectCodeBox.getIconName(options, "folder"),
-        //     ProjectCodeBox.getIconName(options, "package"),
-        //     ProjectCodeBox.getIconName(options, "codeFile"),
-        //     ProjectCodeBox.getIconName(options, "file"),
-        //     ProjectCodeBox.getIconName(options, "download")
-        // );
         this.foldersManager = foldersManager;
-        if (options.openRootFolderOnInit !== undefined ? options.openRootFolderOnInit : true) { // todo - ale potom pro reset si to budu muset ukládat - dědit se to ale nebude - v dokumentaci bude napsáno, které options se dědí a které ne
+        if (options.openRootFolderOnInit !== undefined ? options.openRootFolderOnInit : true) {
             this.foldersManager.openFolder("/", false, false);
         }
         if (options.openPanelOnInit) {
@@ -1065,7 +1045,7 @@ class ProjectCodeBox extends CodeBox {
         this.applyMemento(this.initialMemento);
     }
 
-    public createMemento() : CodeBoxMemento { // todo - vytvořit createProjectCodeBoxMemento - díky tomu tohle může vracet jen CodeBoxMemento
+    public createMemento() : CodeBoxMemento {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.createProjectCodeBoxMemento();
@@ -1079,7 +1059,6 @@ class ProjectCodeBox extends CodeBox {
 
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]) : void {
         console.log("initializing");
-        // jenom jeden konfigurační element pro složky bude asi dovolen - uvidím, možná to vadit nebude - jak se zdá, tak bude
         
         for (let codeBoxItemInfo of codeBoxItemInfos) {
             if (codeBoxItemInfo.type === "HTMLElement" && codeBoxItemInfo.element) {
@@ -1087,9 +1066,6 @@ class ProjectCodeBox extends CodeBox {
 
                 if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Folders"] !== undefined) { // todo - tohle se bude dát použít jen pro kořenový code box
                     this.createFolderStructure(element);
-                } else if (element.tagName === "SCRIPT" && element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Commands"] !== undefined) {
-                    // todo - takže command elementy se tady vůbec nebudou získávat - dělá se to přímo v konstruktoru
-                    // this.commandElements.push(element);
                 }
             }
         }
@@ -1128,12 +1104,6 @@ class ProjectCodeBox extends CodeBox {
 
                 if (isActive) {
                     this.foldersManager.setCodeViewButtonsAsActiveByIdentifier(identifier);
-                    // if (this.openActiveCodeViewFolderOnInit) {
-                    //     this.foldersManager.openFolder(folderPath || "/", true, false);
-                    // }
-                    // if (this.openActiveCodeViewPackageOnInit) {
-                    //     this.foldersManager.openPackage(packageName !== "" ? packageName : null, false);
-                    // }
                 }
             } else if (codeBoxItemInfo.type === "FileInfo" && codeBoxItemInfo.fileInfo) {
                 let fileInfo = codeBoxItemInfo.fileInfo;
@@ -1193,7 +1163,6 @@ class ProjectCodeBox extends CodeBox {
             }
         }
 
-        this.initialPackagesFolderPath = this.foldersManager.getPackagesFolderPath(); // měl by to být už nastaveno, ale když to tu nechám, nic nezkazím
         this.initialMemento = this.createProjectCodeBoxMemento();
     }
 
@@ -1230,7 +1199,8 @@ class ProjectCodeBox extends CodeBox {
             this.foldersManager.getPackageInfos(),
             this.foldersManager.getPackagesFolderPath(),
             this.getProjectName(),
-            this.isPanelOpened()
+            this.isPanelOpened(),
+            this.isFolderOpened("/")
         );
     }
 
@@ -1278,10 +1248,6 @@ class ProjectCodeBox extends CodeBox {
                 if (child.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Opened"] !== undefined) {
                     this.foldersManager.openFolder(folderPath, false, false);
                 }
-
-                // if (child.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "PackagesFolder"] !== undefined) {
-                //     this.foldersManager.setPackagesFolderPath(folderPath);
-                // }
 
                 if (childElement) {
                     this.createFolderStructure(childElement, folderNames);
@@ -1663,19 +1629,3 @@ class ProjectCodeBox extends CodeBox {
 }
 
 export default ProjectCodeBox;
-
-/*
-Můžu případně přidat ještě tyto metody, ale ty už nejsou tak důležité, a nevím jestli je tam vůbec přidávat:
-- getPackagesFolderPath
-- getFoldersDelimiterForPackages
-- kdyžtak ještě další
-
-- složka pro balíčky se asi nebude dát změnit, takže folders konfigurační elementy kdyžtak dovolit jen v root ProjectCodeBoxu
-
-- až ty metody dokončím, tak FoldersManager okomentovat - pořádně - ať je hned vidět co to dělá (i detaily popsat)
-        - a taky ty metody v ProjectCodeBox třídě pořádně popsat
-
-- napsat testy na tady ty věci můžu (hlavně na metody, které jsou složitější - na ty jednoduché ani moc nemusím)
-
-- upravit importy
-*/

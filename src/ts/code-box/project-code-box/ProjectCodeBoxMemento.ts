@@ -22,8 +22,9 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
     private projectName : string;
     private isPanelOpened : boolean;
     private packagesFolderPath : string;
+    private isRootFolderOpened : boolean;
     
-    constructor(creator : ProjectCodeBox, codeViewEntries : ProjectCodeBoxCodeViewMementoEntry[], fileEntries : ProjectCodeBoxFileMementoEntry[], activeCodeView : CodeView | null, folderStructure : TreeNode<FolderInfo>[], packages : PackageInfo[], packagesFolderPath : string, projectName : string, isPanelOpened : boolean) {
+    constructor(creator : ProjectCodeBox, codeViewEntries : ProjectCodeBoxCodeViewMementoEntry[], fileEntries : ProjectCodeBoxFileMementoEntry[], activeCodeView : CodeView | null, folderStructure : TreeNode<FolderInfo>[], packages : PackageInfo[], packagesFolderPath : string, projectName : string, isPanelOpened : boolean, isRootFolderOpened : boolean) {
         super(creator, codeViewEntries, fileEntries, activeCodeView);
 
         this.projectCodeBoxCodeViewEntries = codeViewEntries;
@@ -33,6 +34,7 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
         this.projectName = projectName;
         this.isPanelOpened = isPanelOpened;
         this.packagesFolderPath = packagesFolderPath;
+        this.isRootFolderOpened = isRootFolderOpened;
     }
 
     public apply(codeBox : CodeBox) : void {
@@ -48,6 +50,12 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
             this.createFolders(codeBox, node);
         }
         this.createPackages(codeBox);
+        
+        if (this.isRootFolderOpened) {
+            codeBox.openFolder("/", false, false);
+        } else {
+            codeBox.closeFolder("/", false, false);
+        }
 
         codeBox.setProjectName(this.projectName);
         if (this.isPanelOpened) {

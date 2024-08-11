@@ -178,3 +178,9 @@ Příkazy:
     - teď mě napadá, jestli neudělat tímto způsobem i folder structure konfigurační element - asi ne, to by se ne moc komfortně používalo
         - ale zase nevím jestli to použití konfiguračních elementů je ideální
 */
+
+/*
+ProjectCodeBox poznámky:
+- napsat testy na tady ty věci můžu (hlavně na metody, které jsou složitější - na ty jednoduché ani moc nemusím)
+- upravit importy
+*/
