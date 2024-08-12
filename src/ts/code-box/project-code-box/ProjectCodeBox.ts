@@ -18,6 +18,7 @@ import ProjectCodeBoxFile from "./ProjectCodeBoxFile";
 import ProjectCodeBoxMemento, { ProjectCodeBoxCodeViewMementoEntry, ProjectCodeBoxFileMementoEntry } from "./ProjectCodeBoxMemento";
 import ProjectCodeBoxOptions from "./ProjectCodeBoxOptions";
 
+/** Project code box. */
 class ProjectCodeBox extends CodeBox {
     private static readonly COMMAND_RENAME_PROJECT = "rename project";
     private static readonly COMMAND_ADD_FOLDER = "add folder";
@@ -47,27 +48,47 @@ class ProjectCodeBox extends CodeBox {
     private static readonly COMMAND_REMOVE_FILE_PACKAGE = "remove file package";
     private static readonly COMMAND_REMOVE_ALL_FILES = "remove all files";
 
+    /** Manages opening/closing of panel. */
     private panelToggle : PanelToggle;
+    /** Manages visibility of packages section. */
     private packagesSectionToggle : PackagesSectionToggle;
+    /** Manages folders and its contents (and package folders). */
     private foldersManager : FoldersManager;
 
+    /** Reference to parent code box. */
     private readonly parentCodeBox : ProjectCodeBox | null;
+    /** Command objects that are processed after initialization of code box. */
     private commands : Array<any> | null;
+    /** Memento created after initialization of code box. */
     private initialMemento : ProjectCodeBoxMemento | null = null;
-    private initialPackagesFolderPath : string | null; // tady tu věc jen nastavit podle horních code boxů - to znamená, že se to nebude brát jako packages folder, ale tady ta vlastnost se nastaví... (je to vlastně tady ta složka po inicializaci)
+    /** Stores folder path for packages that was (or will be) set after initialization of code box. */
+    private initialPackagesFolderPath : string | null;
 
+    /** Event source to set active code view of code box. */
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
+    /** Code view entries stored by code view. */
     private codeViewEntries = new Map<CodeView, CodeViewEntry>();
+    /** File entries stored by code box files. */
     private fileEntries = new Map<ProjectCodeBoxFile, FileEntry>();
+    /** Project name. */
     private projectName : string;
     
+    /** Determines whether active code view folder should be opened on initialization. */
     private readonly openActiveCodeViewFolderOnInit : boolean;
+    /** Determines whether active code view package should be opened on initialization. */
     private readonly openActiveCodeViewPackageOnInit : boolean;
 
-    constructor(element : HTMLElement, options : ProjectCodeBoxOptions = {}, parentCodeBox : ProjectCodeBox | null = null) { // todo - ještě by možná mohlo jít nastavit, jestli dědit od aktuálního stavu code boxu nebo ne
+    /**
+     * Creates new project code box.
+     * @param element Code box root element.
+     * @param options Code box options.
+     * @param parentCodeBox Parent code box or null if code box does not have parent code box.
+     */
+    constructor(element : HTMLElement, options : ProjectCodeBoxOptions = {}, parentCodeBox : ProjectCodeBox | null = null) {
         const commandElements = element.querySelectorAll(`script[data-${GlobalConfig.DATA_ATTRIBUTE_PREFIX}-commands]`);
         const commands = new Array<any>();
 
+        // get defined commands
         commandElements.forEach(commandElement => {
             if (commandElement.textContent === null) return;
             try {
@@ -86,6 +107,7 @@ class ProjectCodeBox extends CodeBox {
             options.svgSpriteIcons ? (options.svgSpriteIcons.panelOpenButton || null) : null
         );
 
+        // get values for FoldersManager based on options
         let projectName : string;
         let packagesFolderPath : string | null;
         let createFoldersForPackages : boolean;
@@ -113,7 +135,6 @@ class ProjectCodeBox extends CodeBox {
                 foldersDelimiterForPackages = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "FoldersDelimiterForPackages"] || null;
             }
         }
-
         let folderAnimationSpeed = options.folderAnimationSpeed !== undefined ? options.folderAnimationSpeed : GlobalConfig.DEFAULT_FOLDER_ANIMATION_SPEED;
         if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "FolderAnimationSpeed"] !== undefined) {
             const speed = Number.parseFloat(element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "FolderAnimationSpeed"] || "");
@@ -145,10 +166,10 @@ class ProjectCodeBox extends CodeBox {
             ProjectCodeBox.getIconName(options, "download")
         );
 
-        let lazyInitPlaceholderElementHeight : string | null = null;
-
+        // active code view identifier based on commands
         let activeCodeViewIdentifier : string | null = null;
 
+        // determine initial folder path for packages
         let initialPackagesFolderPath : string | null;
         if (parentCodeBox) {
             initialPackagesFolderPath = parentCodeBox.initialPackagesFolderPath;
@@ -165,6 +186,7 @@ class ProjectCodeBox extends CodeBox {
             }
         }
 
+        // based on commands: get active code view identifier and potentionally change initial folder path for packages
         for (let command of commands) {
             if (typeof command !== "object") continue;
             if (command.command === ProjectCodeBox.COMMAND_SET_ACTIVE_CODE_VIEW) {
@@ -190,14 +212,20 @@ class ProjectCodeBox extends CodeBox {
             }
         }
         
+        // check whether lazy initialization is enabled
         let isLazyInitializationEnabled = options.lazyInit !== undefined ? options.lazyInit : true;
         if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LazyInit"] !== undefined) {
             isLazyInitializationEnabled = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "LazyInit"] === "true";
         }
 
+        let lazyInitPlaceholderElementHeight : string | null = null;
+
+        // if active code view is set based on command and lazy initialization is enabled,
+        // get height for lazy initialization placeholder element
         if (activeCodeViewIdentifier !== null && isLazyInitializationEnabled) {
             activeCodeViewIdentifier === foldersManager.getNormalizedFolderPath(activeCodeViewIdentifier);
             
+            // get min lines count
             let minLinesCount : number | null = options.minCodeViewLinesCount || null;
             if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "MinCodeViewLinesCount"] !== undefined) {
                 minLinesCount = Number.parseInt(element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "MinCodeViewLinesCount"] || "");
@@ -206,6 +234,7 @@ class ProjectCodeBox extends CodeBox {
                 }
             }
             
+            // try to get element height based on pre elements in code box
             for (let i = 0; i < element.children.length; i++) {
                 const child = element.children[i];
 
@@ -230,6 +259,7 @@ class ProjectCodeBox extends CodeBox {
                 }
             }
 
+            // if element height could not be calculated based on pre element in code box, try to get from parent code box
             if (lazyInitPlaceholderElementHeight === null && parentCodeBox) {
                 lazyInitPlaceholderElementHeight = parentCodeBox.getHeightForLazyInitPlaceholderElement(activeCodeViewIdentifier, minLinesCount, options.defaultCodeViewOptions || {});
             }
@@ -241,7 +271,6 @@ class ProjectCodeBox extends CodeBox {
         
         this.commands = commands;
         this.parentCodeBox = parentCodeBox;
-
         this.initialPackagesFolderPath = initialPackagesFolderPath;
         this.projectName = projectName;
 
@@ -262,6 +291,7 @@ class ProjectCodeBox extends CodeBox {
             codeBoxBuilder.getPackagesContainer()
         );
         this.foldersManager = foldersManager;
+
         if (options.openRootFolderOnInit !== undefined ? options.openRootFolderOnInit : true) {
             this.foldersManager.openFolder("/", false, false);
         }
@@ -306,6 +336,12 @@ class ProjectCodeBox extends CodeBox {
         return codeBoxCodeViews;
     }
 
+    /**
+     * Returns code views in folder.
+     * @param folderPath Folder path.
+     * @param includeSubfolders Determines whether code views in subfolders should also be included.
+     * @returns Code views.
+     */
     public getCodeViewsByFolderPath(folderPath : string, includeSubfolders : boolean = false) : ProjectCodeBoxCodeView[] {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -322,6 +358,11 @@ class ProjectCodeBox extends CodeBox {
         return codeBoxCodeViews;
     }
 
+    /**
+     * Returns code views in package.
+     * @param packageName Package name (null for default package).
+     * @returns Code views.
+     */
     public getCodeViewsByPackage(packageName : string | null) : ProjectCodeBoxCodeView[] {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -350,6 +391,12 @@ class ProjectCodeBox extends CodeBox {
         return codeViewEntry.codeBoxCodeView;
     }
 
+    /**
+     * Returns code view based on folder path and name.
+     * @param folderPath Folder path.
+     * @param fileName Name of code view.
+     * @returns Code view (or null if code view wasn't found).
+     */
     public getCodeViewByFolderPath(folderPath : string, fileName : string) : ProjectCodeBoxCodeView | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -362,7 +409,13 @@ class ProjectCodeBox extends CodeBox {
         return codeViewEntry.codeBoxCodeView;
     }
 
-    public getCodeViewByPackage(packageName : string | null, fileName : string) : ProjectCodeBoxCodeView | null { // null pro defaultní package
+    /**
+     * Returns code view based on package and name.
+     * @param packageName Package name (null for default package).
+     * @param fileName Name of code view.
+     * @returns Code view (or null if code view wasn't found).
+     */
+    public getCodeViewByPackage(packageName : string | null, fileName : string) : ProjectCodeBoxCodeView | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const codeView = this.foldersManager.getCodeViewByPackage(packageName, fileName);
@@ -411,6 +464,12 @@ class ProjectCodeBox extends CodeBox {
         }
     }
 
+    /**
+     * Changes identifier of code view in code box. (It can change folder path and name of code view but it never changes package of code view.)
+     * @param identifier Identifier of code view whose identifier should be changed.
+     * @param newIdentifier New identifier.
+     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other code view in code box, it should return false).
+     */
     public changeCodeViewIdentifier(identifier: string, newIdentifier: string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -426,6 +485,13 @@ class ProjectCodeBox extends CodeBox {
         return true;
     }
 
+    /**
+     * Changes package of code view.
+     * @param identifier Identifier of code view whose package should be changed.
+     * @param packageName Package name (null for default package). If package does not exist, it is created.
+     * @param keepFolderPath Determines whether code view should stay in the same folder (if false, code view can be moved to different folder based on package).
+     * @returns Indicates whether change has been successfully completed.
+     */
     public changeCodeViewPackage(identifier : string, packageName : string | null, keepFolderPath : boolean) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -470,12 +536,22 @@ class ProjectCodeBox extends CodeBox {
         return true;
     }
 
+    /**
+     * Removes code view from package.
+     * @param identifier Identifier of code view that should be removed from package.
+     * @returns Indicates whether code view has been successfully removed from package.
+     */
     public removeCodeViewPackage(identifier : string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.removeCodeViewPackage(identifier);
     }
 
+    /**
+     * Returns package of code view.
+     * @param identifier Identifier of code view.
+     * @returns Package of code view. If null is returned, code view belongs to default package. If undefined is returned, code view doesn't belong to any package or does not event exist.
+     */
     public getCodeViewPackage(identifier : string) : string | null | undefined { // undefined znamená, že code view nemá balíček
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -543,12 +619,23 @@ class ProjectCodeBox extends CodeBox {
         return codeBoxFiles;
     }
 
+    /**
+     * Returns files in folder.
+     * @param folderPath Folder path.
+     * @param includeSubfolders Determines whether files in subfolders should also be included.
+     * @returns Files.
+     */
     public getFilesByFolderPath(folderPath : string, includeSubfolders : boolean = false) : ProjectCodeBoxFile[] {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.getFilesInFolder(folderPath, includeSubfolders);
     }
 
+    /**
+     * Returns files in package.
+     * @param packageName Package name (null for default package).
+     * @returns Files.
+     */
     public getFilesByPackage(packageName : string | null) : ProjectCodeBoxFile[] {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -561,12 +648,24 @@ class ProjectCodeBox extends CodeBox {
         return this.foldersManager.getFileByIdentifier(identifier);
     }
 
+    /**
+     * Returns files based on folder path and name.
+     * @param folderPath Folder path.
+     * @param fileName Name of file.
+     * @returns File (or null if file wasn't found).
+     */
     public getFileByFolderPath(folderPath : string, fileName : string) : ProjectCodeBoxFile | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.getFileByFolderPath(folderPath, fileName);
     }
 
+    /**
+     * Returns file based on package and name.
+     * @param packageName Package name (null for default package).
+     * @param fileName Name of file.
+     * @returns File (or null if file wasn't found).
+     */
     public getFileByPackage(packageName : string | null, fileName : string) : ProjectCodeBoxFile | null { // null pro defaultní package
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -607,6 +706,12 @@ class ProjectCodeBox extends CodeBox {
         }
     }
 
+    /**
+     * Changes identifier of file in code box. (It can change folder path and name of file but it never changes package of file.)
+     * @param identifier Indentifier of file whose identifier should be changed.
+     * @param newIdentifier New identifier.
+     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other file in code box, it should return false).
+     */
     public changeFileIdentifier(identifier: string, newIdentifier: string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -622,6 +727,13 @@ class ProjectCodeBox extends CodeBox {
         return true;
     }
 
+    /**
+     * Changes package of file.
+     * @param identifier Identifier of file whose package should be changed.
+     * @param packageName Package name (null for default package). If package does not exist, it is created.
+     * @param keepFolderPath Determines whether file should stay in the same folder (if false, file can be moved to different folder based on package).
+     * @returns Indicates whether change has been successfully completed.
+     */
     public changeFilePackage(identifier : string, packageName : string | null, keepFolderPath : boolean) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -662,12 +774,23 @@ class ProjectCodeBox extends CodeBox {
         return true;
     }
 
+    /**
+     * Removes file from package.
+     * @param identifier Identifier of file that should be removed from package.
+     * @returns Indicates whether file has been successfully removed from package.
+     */
     public removeFilePackage(identifier : string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.removeFilePackage(identifier);
     }
 
+    /**
+     * Changes download link of file (or sets file as non-downloadable).
+     * @param identifier Identifier of file whose download link should be changed.
+     * @param newDownloadLink New download link or null to set file as non-downloadable.
+     * @returns Indicates whether file was successfully found and updated.
+     */
     public changeFileDownloadLink(identifier: string, newDownloadLink: string | null) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -683,18 +806,32 @@ class ProjectCodeBox extends CodeBox {
         return true;
     }
 
+    /**
+     * Returns package of file.
+     * @param identifier Identifier of file.
+     * @returns Package of file. If null is returned, file belongs to default package. If undefined is returned, file doesn't belong to any package or does not even exist.
+     */
     public getFilePackage(identifier : string) : string | null | undefined {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.getFilePackage(identifier);
     }
 
+    /**
+     * Creates new folder(s) (if not created yet).
+     * @param folderPath Folder path.
+     */
     public addFolder(folderPath : string) : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         this.foldersManager.addFolder(folderPath);
     }
 
+    /**
+     * Removes folder and all its contents. This might also remove packages if their folders are removed (if generation of folders for packages is enabled via createFoldersForPackages option).
+     * @param folderPath Path to folder that should be removed.
+     * @returns Indicates whether folder has been successfully removed.
+     */
     public removeFolder(folderPath : string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -733,6 +870,12 @@ class ProjectCodeBox extends CodeBox {
         return true;
     }
 
+    /**
+     * Renames folder. This can also change (rename) folder for packages and rename packages.
+     * @param folderPath Path to folder that should be renamed.
+     * @param newName New name for folder.
+     * @returns Indicates whether folder has been successfully renamed.
+     */
     public renameFolder(folderPath : string, newName : string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -770,36 +913,67 @@ class ProjectCodeBox extends CodeBox {
         return true;
     }
 
+    /**
+     * Opens folder.
+     * @param folderPath Path to folder that should be opened.
+     * @param openParentFolders Determines whether parent folders should also be opened.
+     * @param animate Determines whether animation should be used.
+     */
     public openFolder(folderPath : string, openParentFolders : boolean = false, animate : boolean = true) : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         this.foldersManager.openFolder(folderPath, openParentFolders, animate);
     }
 
+    /**
+     * Closes folder.
+     * @param folderPath Path to folder that should be closed.
+     * @param closeChildFolders Determines whether subfolders should be closed too.
+     * @param animate Determines whether animation should be used.
+     */
     public closeFolder(folderPath : string, closeChildFolders : boolean = false, animate : boolean = true) : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         this.foldersManager.closeFolder(folderPath, closeChildFolders, animate);
     }
 
+    /**
+     * Checks whether folder exists.
+     * @param folderPath Path to folder.
+     * @returns Indicates whether folder exists.
+     */
     public folderExists(folderPath : string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.folderExists(folderPath);
     }
 
+    /**
+     * Checks whether folder is opened.
+     * @param folderPath Path to folder.
+     * @returns Indicates whether folder is opened (false might also be returned if folder does not exist).
+     */
     public isFolderOpened(folderPath : string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.isFolderOpened(folderPath);
     }
 
+    /**
+     * Returns names of folder subfolders (only direct subfolders).
+     * @param folderPath Path to folder.
+     * @returns Names of subfolders.
+     */
     public getSubfolderNames(folderPath : string) : string[] | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.getSubfolderNames(folderPath);
     }
 
+    /**
+     * Creates new package (if it does not exist yet).
+     * @param name Name of package.
+     */
     public addPackage(name : string) : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -812,6 +986,13 @@ class ProjectCodeBox extends CodeBox {
         }
     }
 
+    /**
+     * Removes package.
+     * @param name Package name.
+     * @param removePackageFoldersAndContents Determines whether package folder and its contents should be removed.
+     * @param removeAllCodeViewsAndFiles Determines whether all code views and files in package should be removed.
+     * @returns Indicates whether package has been successfully removed.
+     */
     public removePackage(name : string, removePackageFoldersAndContents : boolean = true, removeAllCodeViewsAndFiles : boolean = false) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -921,6 +1102,12 @@ class ProjectCodeBox extends CodeBox {
 
     }
 
+    /**
+     * Renames package. This can also rename folders for package if generation of folders is enabled via createFoldersForPackages option.
+     * @param name Current package name.
+     * @param newName New package name.
+     * @returns Indicates whether package has been successfully renamed.
+     */
     public renamePackage(name : string, newName : string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -952,25 +1139,45 @@ class ProjectCodeBox extends CodeBox {
         return true;
     }
 
-    public openPackage(packageName : string | null, animate : boolean = true) : void { // null pro defaultní package
+    /**
+     * Opens package.
+     * @param packageName Package name (null for default package).
+     * @param animate Determines whether animation should be used.
+     */
+    public openPackage(packageName : string | null, animate : boolean = true) : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         this.foldersManager.openPackage(packageName, animate);
     }
 
-    public closePackage(packageName : string | null, animate : boolean = true) : void { // null pro defaultní package
+    /**
+     * Closes package.
+     * @param packageName Package name (null for default package).
+     * @param animate Determines whether animation should be used.
+     */
+    public closePackage(packageName : string | null, animate : boolean = true) : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         this.foldersManager.closePackage(packageName, animate);
     }
 
+    /**
+     * Checks whether package exists.
+     * @param packageName Package name.
+     * @returns Indicates whether package exists.
+     */
     public packageExists(packageName : string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.packageExists(packageName);
     }
 
-    public isPackageOpened(packageName : string | null) : boolean { // null pro defaultní package
+    /**
+     * Checks whether package is opened.
+     * @param packageName Package name.
+     * @returns Indicates whether package is opened (false might also be returned if package does not exist).
+     */
+    public isPackageOpened(packageName : string | null) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.isPackageFolderOpened(packageName);
@@ -982,13 +1189,21 @@ class ProjectCodeBox extends CodeBox {
         return this.foldersManager.getPackageNames();
     }
 
+    /**
+     * Returns path to folder that is currently used for packages.
+     * @returns Path to folder that is currently used for packages.
+     */
     public getPackagesFolderPath() : string {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.getPackagesFolderPath();
     }
 
-    public changePackagesFolderPathAndRemoveAll(newPackagesFolderPath : string) : void { // todo - napsat, že pro změnu složky pro balíčky se musí smazat všechen obsah
+    /**
+     * Sets new folder path for packages and removes all code views, files, folders and packages (everything needs to be removed, when folder path for packages is changed).
+     * @param newPackagesFolderPath New folder path for packages.
+     */
+    public changePackagesFolderPathAndRemoveAll(newPackagesFolderPath : string) : void {
         this.removeAllCodeViews();
         this.removeAllFiles();
 
@@ -1007,12 +1222,20 @@ class ProjectCodeBox extends CodeBox {
         this.foldersManager.setPackagesFolderPath(newPackagesFolderPath);
     }
 
+    /**
+     * Returns project name.
+     * @returns Project name.
+     */
     public getProjectName() : string {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.projectName;
     }
 
+    /**
+     * Sets new project name.
+     * @param newName New project name.
+     */
     public setProjectName(newName : string) : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -1020,18 +1243,28 @@ class ProjectCodeBox extends CodeBox {
         this.foldersManager.setRootFolderName(this.projectName);
     }
 
+    /**
+     * Opens panel.
+     */
     public openPanel() : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         this.panelToggle.open();
     }
 
+    /**
+     * Closes panel.
+     */
     public closePanel() : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         this.panelToggle.close();
     }
 
+    /**
+     * Checks whether panel is opened.
+     * @returns Indicates whether panel is opened.
+     */
     public isPanelOpened() : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -1058,18 +1291,6 @@ class ProjectCodeBox extends CodeBox {
     }
 
     protected onInit(codeBoxItemInfos: CodeBoxItemInfo[]) : void {
-        console.log("initializing");
-        
-        for (let codeBoxItemInfo of codeBoxItemInfos) {
-            if (codeBoxItemInfo.type === "HTMLElement" && codeBoxItemInfo.element) {
-                const element = codeBoxItemInfo.element;
-
-                if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Folders"] !== undefined) { // todo - tohle se bude dát použít jen pro kořenový code box
-                    this.createFolderStructure(element);
-                }
-            }
-        }
-
         for (let codeBoxItemInfo of codeBoxItemInfos) {
             if (codeBoxItemInfo.type === "CodeViewInfo" && codeBoxItemInfo.codeViewInfo) {
                 let codeViewInfo = codeBoxItemInfo.codeViewInfo;
@@ -1086,6 +1307,7 @@ class ProjectCodeBox extends CodeBox {
                 if (!success) {
                     if (!isActive) continue;
 
+                    // active code view takes precedence over others (other code views with the same identifier are removed)
                     let activeCodeView = this.foldersManager.getCodeViewByIdentifier(identifier);
                     const success = this.foldersManager.removeCodeViewByIdentifier(identifier);
                     if (!success && packageName !== null) {
@@ -1122,6 +1344,12 @@ class ProjectCodeBox extends CodeBox {
                 if (!success) continue;
 
                 this.fileEntries.set(codeBoxFile, new FileEntry(codeBoxFileManager));
+            } else if (codeBoxItemInfo.type === "HTMLElement" && codeBoxItemInfo.element) {
+                const element = codeBoxItemInfo.element;
+
+                if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Folders"] !== undefined) {
+                    this.createFolderStructure(element);
+                }
             }
         }
 
@@ -1147,6 +1375,7 @@ class ProjectCodeBox extends CodeBox {
         this.processCommands(this.commands);
         this.commands = null;
 
+        // potentionally open active code view folder and package based on options
         const activeCodeView = this.getCurrentlyActiveCodeView();
         if (activeCodeView) {
             const codeViewEntry = this.codeViewEntries.get(activeCodeView);
@@ -1166,6 +1395,10 @@ class ProjectCodeBox extends CodeBox {
         this.initialMemento = this.createProjectCodeBoxMemento();
     }
 
+    /**
+     * Creates project code box memento.
+     * @returns Project code box memento.
+     */
     private createProjectCodeBoxMemento() : ProjectCodeBoxMemento {
         const codeViewMementoEntries = new Array<ProjectCodeBoxCodeViewMementoEntry>();
         const fileMementoEntries = new Array<ProjectCodeBoxFileMementoEntry>();
@@ -1204,6 +1437,10 @@ class ProjectCodeBox extends CodeBox {
         );
     }
 
+    /**
+     * Called by folders manager when code view is selected.
+     * @param codeView Code view that should be set as active.
+     */
     private onShowCodeView(codeView : CodeView) : void {
         this.changeActiveCodeView(codeView);
 
@@ -1214,10 +1451,18 @@ class ProjectCodeBox extends CodeBox {
         this.foldersManager.setCodeViewButtonsAsActiveByIdentifier(identifier);
     }
 
+    /**
+     * Called when panel is opened/closed.
+     */
     private onPanelToggled() : void {
         this.foldersManager.updateTabNavigation(this.panelToggle.isOpened());
     }
 
+    /**
+     * Creates folders based on element with folder structure configuration.
+     * @param element Element with folder structure configuration.
+     * @param parentFolderNames Parent folder names (should not be passed, it is used internally).
+     */
     private createFolderStructure(element : HTMLElement, parentFolderNames : string[] = []) {
         for (let i = 0; i < element.children.length; i++) {
             const child = element.children[i];
@@ -1256,6 +1501,10 @@ class ProjectCodeBox extends CodeBox {
         }
     }
 
+    /**
+     * Processes array of commands obtained from script of type application/json.
+     * @param commands Commands.
+     */
     private processCommands(commands : Array<any>) : void {
         for (let command of commands) {
             if (typeof command !== "object") continue;
@@ -1524,10 +1773,19 @@ class ProjectCodeBox extends CodeBox {
         this.removeFilePackage(command.identifier);
     }
 
+    /**
+     * Returns height for lazy initialization placeholder element based on passed code view identifier.
+     * @param codeViewIdentifier Identifier of code view for which should be obtained height for lazy initialization placeholder element.
+     * @param minLinesCount Minimum number of lines.
+     * @param defaultCodeViewOptions Default code view options.
+     * @returns Height for lazy initialization placeholder element or null if height could not be obtained.
+     */
     private getHeightForLazyInitPlaceholderElement(codeViewIdentifier : string, minLinesCount : number | null, defaultCodeViewOptions : CodeViewOptions) : string | null {
         if (this.isInitialized()) {
             return this.initialMemento ? this.initialMemento.getCodeViewHeightByIdentifier(codeViewIdentifier, minLinesCount) : null;
         } else {
+            // if code box is not initialized yet, height is obtained differently (this method might return wrong height for placeholder element, if user sets active code view that does not longer exists)
+
             const preElements = this.getPreElementsBeforeInitialization();
             if (preElements === null) return null;
 
@@ -1558,24 +1816,50 @@ class ProjectCodeBox extends CodeBox {
         }
     }
 
+    /**
+     * Returns folder path from dataset.
+     * @param dataset Dataset.
+     * @returns Folder path or null if folder path is not defined in dataset.
+     */
     private static getFolderPathFromDataset(dataset : DOMStringMap) : string | null {
         return dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Folder"] || null;
     }
 
+    /**
+     * Returns name from dataset.
+     * @param dataset Dataset.
+     * @returns Name or null if name is not defined in dataset.
+     */
     private static getNameFromDataset(dataset : DOMStringMap) : string | null {
         return dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Name"] || null;
     }
 
+    /**
+     * Returns package name from dataset.
+     * @param dataset Dataset.
+     * @returns Package name or null if package name is not defined in dataset.
+     */
     private static getPackageNameFromDataset(dataset : DOMStringMap) : string | null {
         const packageName = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Package"];
         return packageName !== undefined ? packageName : null;
     }
 
+    /**
+     * Helper method for constructor to get name of icon from code box options.
+     * @param options Code box options.
+     * @param iconName Name (label..) of icon.
+     * @returns Name of icon.
+     */
     private static getIconName(options : ProjectCodeBoxOptions, iconName : "codeFile" | "file" | "download" | "panelOpenButton" | "folderArrow" | "project" | "folder" | "package") : string | null {
         if (!options.svgSpriteIcons) return null;
         return options.svgSpriteIcons[iconName] || null;
     }
 
+    /**
+     * Fills code box options by values from dataset.
+     * @param options Code box options.
+     * @param dataset Dataset of root code box element.
+     */
     private fillProjectCodeBoxOptionsFromDataset(options : ProjectCodeBoxOptions, dataset : DOMStringMap) : void {
         if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "FolderStructureHeading"] !== undefined) {
             options.folderStructureHeading = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "FolderStructureHeading"];

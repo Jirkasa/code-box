@@ -45,15 +45,7 @@ pořadí u TabCodeBoxu dořešit (v mementu a taky tam musím přidat metodu na 
 
 - pluginy se asi nebudou předávat jako options, ale budou se moci přidávat nebo odebírat pomocí metod
     - plugin třídy budou mít metody, které se budou volat v různých situacích: init, reset (nevím jak to bude u mementa - ale asi se předtím taky všechno nejdřív nějak resetuje? - takže by se ta metoda mohla taky volat?), a další - nebo lepší - mohlo by existovat PluginMemento - dalo by se tam třeba nějak vytvořit? - uvidím
- */
-
-
-/*
-KOMENTÁŘE Z CODE BOX TŘÍDY
-
-todo - ještě teda budu muset nějak zajistit resetování
-        - možná
-     - 
+    - asi to udělám jen pro code view - kdybych někdy v budoucnu chtěl, můžu to udělat i pro code boxy
  */
 
 /**
@@ -72,20 +64,6 @@ todo - ještě teda budu muset nějak zajistit resetování
  */
 
 /*
-Ok, dostal jsem se do bodu, kdy můžu začít přemýšlet nad děděním.
-    - nesmím zapomínat na to, že private metody jsou v podstatě public u instancí stejného typu uvnitř třídy
-
-    - kde začít?
-        - první taková nepěkná věc, kterou je potřeba udělat, je kdyžtak aktualizovat vlastnost initialCodeViewLinesCount - a kdyžtak to víc ve třídě CodeBox okomentovat
-            - ono to nebude tak těžký, prostě na začátku v konstruktoru si získám command elementy, potom v těch command elementech všechny commandy, které nastavují aktivní code view a potom to kdyžtak změním - ono by se možná i do CodeBox konstruktoru mohla ta hodnota předávat jako volitelný parametr, ale to uvidím
-                - nějak to půjde
-                    - jde o to získat počet řádků aktivního code view
-                        - pokud neexistuje command, který by měnil aktivní code view, mělo by to být v pohodě (implicitActive při dědění code boxu neplatí - napsat do dokumentace - platí to jen pro pre elementy uvnitř samotného code boxu...)
-                            - pokud ale existuje, tak musím zjistit počet řádků toho code view
-                                - pokud existuje to code view v aktuálním code boxu, tak to vzít odtud, a kdyžtak pokračovat směrem nahoru?
-                                    - no jo..., ale ty code views už tam nemusí být - tak si asi budu muset pro každé code view v project code boxu získávat počet řádků? - já nevím - spíš bych udělal asi ještě nějakou metodu v CodeBoxu - toto by bylo dost pomalé
-                                        - dělá se to před konstruktorem, takže tam budou
-    - potom pozor na packages folder, protože ta se může časem změnit, když se ta složka přejmenuje
 
 Příkazy:
     - možná spíš vytvořit jen atribut data-cb-command="příkaz"
