@@ -398,6 +398,7 @@ abstract class CodeBox {
 
     /**
      * Creates memento.
+     * @returns Memento.
      */
     public abstract createMemento() : CodeBoxMemento;
 
