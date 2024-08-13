@@ -2,15 +2,16 @@ import CodeView from "../../code-view/CodeView";
 import GlobalConfig from "../../GlobalConfig";
 import EventSourcePoint from "../../utils/EventSourcePoint";
 import CodeBox, { CodeBoxItemInfo } from "../CodeBox";
-import CodeBoxCodeView from "../CodeBoxCodeView";
 import CodeBoxCodeViewManager from "../CodeBoxCodeViewManager";
-import CodeBoxFile from "../CodeBoxFile";
 import CodeBoxFileManager from "../CodeBoxFileManager";
-import CodeBoxMemento, { CodeViewMementoEntry, FileMementoEntry } from "../CodeBoxMemento";
+import CodeBoxMemento from "../CodeBoxMemento";
 import CodeViewButton from "../CodeViewButton";
 import CodeViewEntry from "./CodeViewEntry";
 import FileEntry from "./FileEntry";
 import TabCodeBoxBuilder from "./TabCodeBoxBuilder";
+import TabCodeBoxCodeView from "./TabCodeBoxCodeView";
+import TabCodeBoxFile from "./TabCodeBoxFile";
+import TabCodeBoxMemento, { TabCodeBoxCodeViewMementoEntry, TabCodeBoxFileMementoEntry } from "./TabCodeBoxMemento";
 import TabCodeBoxOptions from "./TabCodeBoxOptions";
 import TabCodeViewButton from "./TabCodeViewButton";
 import TabFileButton from "./TabFileButton";
@@ -69,23 +70,24 @@ class TabCodeBox extends CodeBox {
         codeViewButton.appendTo(this.tabsContainer);
 
         const codeBoxCodeViewManager = new CodeBoxCodeViewManager();
-        const codeBoxCodeView = new CodeBoxCodeView(identifier, codeView, this, codeBoxCodeViewManager);
+        const codeBoxCodeView = new TabCodeBoxCodeView(identifier, codeView, this, codeBoxCodeViewManager);
 
         this.codeViews.set(identifier, codeView);
-        this.codeViewEntries.set(codeView, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager, codeViewButton));
+        const position = this.codeViewEntries.size + this.fileEntries.size;
+        this.codeViewEntries.set(codeView, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager, codeViewButton, position));
 
         return true;
     }
 
-    public getCodeViews() : CodeBoxCodeView[] {
+    public getCodeViews() : TabCodeBoxCodeView[] {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
-        const codeBoxCodeViews = new Array<CodeBoxCodeView>();
+        const codeBoxCodeViews = new Array<TabCodeBoxCodeView>();
         this.codeViewEntries.forEach(entry => codeBoxCodeViews.push(entry.codeBoxCodeView));
         return codeBoxCodeViews;
     }
 
-    public getCodeView(identifier: string) : CodeBoxCodeView | null {
+    public getCodeView(identifier: string) : TabCodeBoxCodeView | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const codeView = this.codeViews.get(identifier);
@@ -116,6 +118,8 @@ class TabCodeBox extends CodeBox {
         this.codeViews.delete(identifier);
         this.codeViewEntries.delete(codeView);
 
+        this.decrementItemPositionsAfterPosition(codeViewEntry.position);
+
         return true;
     }
 
@@ -128,6 +132,8 @@ class TabCodeBox extends CodeBox {
 
             codeViewEntry.codeViewButton.detach();
             codeViewEntry.codeBoxCodeViewManager.unlinkCodeBox();
+
+            this.decrementItemPositionsAfterPosition(codeViewEntry.position);
         });
 
         this.codeViews.clear();
@@ -152,6 +158,55 @@ class TabCodeBox extends CodeBox {
         this.codeViews.delete(identifier);
         this.codeViews.set(newIdentifier, codeView);
 
+        return true;
+    }
+
+    public getCodeViewButtonPosition(identifier : string) : number | null {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const codeView = this.codeViews.get(identifier);
+        if (!codeView) return null;
+
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return null;
+
+        return codeViewEntry.position;
+    }
+
+    public setCodeViewButtonPosition(identifier : string, position: number) : boolean { // todo - do komentáře napsat, že se to prohodí s jinou položkou
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        position = Math.trunc(position);
+
+        const maxPosition = this.codeViewEntries.size + this.fileEntries.size - 1;
+        if (position < 0 || position > maxPosition) return false;
+
+        const codeView = this.codeViews.get(identifier);
+        if (!codeView) return false;
+
+        const codeViewEntry = this.codeViewEntries.get(codeView);
+        if (!codeViewEntry) return false;
+
+        let positionUpdated = false;
+        this.codeViewEntries.forEach(entry => {
+            if (entry.position === position) {
+                entry.position = codeViewEntry.position;
+                positionUpdated = true;
+            }
+        });
+        if (!positionUpdated) {
+            this.fileEntries.forEach(entry => {
+                if (entry.position === position) {
+                    entry.position = codeViewEntry.position;
+                    positionUpdated = true;
+                }
+            });
+        }
+
+        if (!positionUpdated) return false;
+
+        codeViewEntry.position = position;
+        this.updateButtonsOrder();
         return true;
     }
 
@@ -189,7 +244,7 @@ class TabCodeBox extends CodeBox {
         this.changeActiveCodeView(null);
     }
 
-    public getActiveCodeView() : CodeBoxCodeView | null {
+    public getActiveCodeView() : TabCodeBoxCodeView | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const codeView = this.getCurrentlyActiveCodeView();
@@ -210,21 +265,22 @@ class TabCodeBox extends CodeBox {
         fileButton.appendTo(this.tabsContainer);
 
         const codeBoxFileManager = new CodeBoxFileManager();
-        const codeBoxFile = new CodeBoxFile(identifier, downloadLink, this, codeBoxFileManager);
+        const codeBoxFile = new TabCodeBoxFile(identifier, downloadLink, this, codeBoxFileManager);
 
-        this.fileEntries.set(identifier, new FileEntry(codeBoxFile, codeBoxFileManager, fileButton));
+        const position = this.codeViewEntries.size + this.fileEntries.size;
+        this.fileEntries.set(identifier, new FileEntry(codeBoxFile, codeBoxFileManager, fileButton, position));
         return true;
     }
 
-    public getFiles() : CodeBoxFile[] {
+    public getFiles() : TabCodeBoxFile[] {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
-        const codeBoxFiles = new Array<CodeBoxFile>();
+        const codeBoxFiles = new Array<TabCodeBoxFile>();
         this.fileEntries.forEach(entry => codeBoxFiles.push(entry.codeBoxFile));
         return codeBoxFiles;
     }
 
-    public getFile(identifier: string) : CodeBoxFile | null {
+    public getFile(identifier: string) : TabCodeBoxFile | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         const fileEntry = this.fileEntries.get(identifier);
@@ -243,6 +299,8 @@ class TabCodeBox extends CodeBox {
         
         this.fileEntries.delete(identifier);
 
+        this.decrementItemPositionsAfterPosition(fileEntry.position);
+
         return true;
     }
 
@@ -251,6 +309,8 @@ class TabCodeBox extends CodeBox {
 
         this.fileEntries.forEach(fileEntry => {
             fileEntry.fileButton.detach();
+
+            this.decrementItemPositionsAfterPosition(fileEntry.position);
         });
 
         this.fileEntries.clear();
@@ -284,6 +344,49 @@ class TabCodeBox extends CodeBox {
         return true;
     }
 
+    public getFileButtonPosition(identifier : string) : number | null {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        const fileEntry = this.fileEntries.get(identifier);
+        if (!fileEntry) return null;
+
+        return fileEntry.position;
+    }
+
+    public setFileButtonPosition(identifier : string, position: number) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        position = Math.trunc(position);
+
+        const maxPosition = this.codeViewEntries.size + this.fileEntries.size - 1;
+        if (position < 0 || position > maxPosition) return false;
+
+        const fileEntry = this.fileEntries.get(identifier);
+        if (!fileEntry) return false;
+
+        let positionUpdated = false;
+        this.codeViewEntries.forEach(entry => {
+            if (entry.position === position) {
+                entry.position = fileEntry.position;
+                positionUpdated = true;
+            }
+        });
+        if (!positionUpdated) {
+            this.fileEntries.forEach(entry => {
+                if (entry.position === position) {
+                    entry.position = fileEntry.position;
+                    positionUpdated = true;
+                }
+            });
+        }
+
+        if (!positionUpdated) return false;
+
+        fileEntry.position = position;
+        this.updateButtonsOrder();
+        return true;
+    }
+
     public reset() : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -294,8 +397,8 @@ class TabCodeBox extends CodeBox {
     public createMemento() : CodeBoxMemento {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
-        const codeViewMementoEntries = new Array<CodeViewMementoEntry>();
-        const fileMementoEntries = new Array<FileMementoEntry>();
+        const codeViewMementoEntries = new Array<TabCodeBoxCodeViewMementoEntry>();
+        const fileMementoEntries = new Array<TabCodeBoxFileMementoEntry>();
 
         this.codeViewEntries.forEach((codeViewEntry, codeView) => {
             const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
@@ -303,7 +406,8 @@ class TabCodeBox extends CodeBox {
             codeViewMementoEntries.push({
                 codeView: codeView,
                 codeViewMemento: codeView.createMemento(),
-                identifier: identifier
+                identifier: identifier,
+                position: codeViewEntry.position
             });
         });
         this.fileEntries.forEach(fileEntry => {
@@ -311,11 +415,12 @@ class TabCodeBox extends CodeBox {
             if (identifier === null) return;
             fileMementoEntries.push({
                 downloadLink: fileEntry.codeBoxFile.getDownloadLink(),
-                identifier: identifier
+                identifier: identifier,
+                position: fileEntry.position
             });
         });
 
-        return new CodeBoxMemento(
+        return new TabCodeBoxMemento(
             this,
             (identifier, codeView) => this._addCodeView(identifier, codeView),
             codeViewMementoEntries,
@@ -360,10 +465,11 @@ class TabCodeBox extends CodeBox {
                 codeViewButton.appendTo(this.tabsContainer);
 
                 const codeBoxCodeViewManager = new CodeBoxCodeViewManager();
-                const codeBoxCodeView = new CodeBoxCodeView(identifier, codeViewInfo.codeView, this, codeBoxCodeViewManager);
+                const codeBoxCodeView = new TabCodeBoxCodeView(identifier, codeViewInfo.codeView, this, codeBoxCodeViewManager);
 
                 this.codeViews.set(identifier, codeViewInfo.codeView);
-                this.codeViewEntries.set(codeViewInfo.codeView, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager, codeViewButton));
+                const position = this.codeViewEntries.size + this.fileEntries.size;
+                this.codeViewEntries.set(codeViewInfo.codeView, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager, codeViewButton, position));
             } else if (codeBoxItemInfo.type === "FileInfo" && codeBoxItemInfo.fileInfo) {
                 const fileInfo = codeBoxItemInfo.fileInfo;
 
@@ -375,9 +481,10 @@ class TabCodeBox extends CodeBox {
                 fileButton.appendTo(this.tabsContainer);
 
                 const codeBoxFileManager = new CodeBoxFileManager();
-                const codeBoxFile = new CodeBoxFile(identifier, fileInfo.downloadLink, this, codeBoxFileManager);
+                const codeBoxFile = new TabCodeBoxFile(identifier, fileInfo.downloadLink, this, codeBoxFileManager);
 
-                this.fileEntries.set(identifier, new FileEntry(codeBoxFile, codeBoxFileManager, fileButton));
+                const position = this.codeViewEntries.size + this.fileEntries.size;
+                this.fileEntries.set(identifier, new FileEntry(codeBoxFile, codeBoxFileManager, fileButton, position));
             }
         }
     }
@@ -397,22 +504,40 @@ class TabCodeBox extends CodeBox {
 
         this.changeActiveCodeView(codeView);
     }
+
+    private decrementItemPositionsAfterPosition(position : number) : void {
+        this.codeViewEntries.forEach(entry => {
+            if (entry.position > position) {
+                entry.position--;
+            }
+        });
+        this.fileEntries.forEach(entry => {
+            if (entry.position > position) {
+                entry.position--;
+            }
+        });
+    }
+
+    private updateButtonsOrder() : void {
+        const items = new Array<CodeViewEntry | FileEntry>();
+
+        this.codeViewEntries.forEach(entry => items.push(entry));
+        this.fileEntries.forEach(entry => items.push(entry));
+
+        for (let i = 0; i < items.length; i++) {
+            const entry = items[i];
+            items[i] = items[entry.position];
+            items[entry.position] = entry;
+        }
+
+        for (let item of items) {
+            if (item instanceof CodeViewEntry) {
+                item.codeViewButton.appendTo(this.tabsContainer);
+            } else {
+                item.fileButton.appendTo(this.tabsContainer);
+            }
+        }
+    }
 }
 
 export default TabCodeBox;
-
-/*
-Todo
-- reordrování - toto tam určitě nějak implementovat
-- potom možná přidat i metodu insertBefore - asi taky
-- reset metoda v code boxu (možná - ještě uvidím, ale asi jo)
-- ještě jsem chtěl metodu na přidávání code views - ale jak to řešit?
-- todo - ještě metodu na měnění download linku
-*/
-
-/*
-    - potom jsem chtěl vytvářet i ty pluginy, ale to nechám asi až na potom
-        - nebo přidat tam tady tu možnost vůbec - myslím že asi jo, na nějaké věci, které by třeba do toho code boxu ještě něco přidali
-            - ale to potom teda uvidím
-            - ale zase, jak to dělat...
-*/
