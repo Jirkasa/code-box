@@ -57,14 +57,22 @@ class TabCodeBox extends CodeBox {
 
         const codeViewCopy = codeView.clone();
 
-        let codeViewButton = new TabCodeViewButton(identifier, this.showCodeViewEventSource, codeViewCopy, this.svgSpritePath, this.codeFileIconName);
+        return this._addCodeView(identifier, codeViewCopy);
+    }
+
+    private _addCodeView(identifier : string, codeView : CodeView) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        if (this.codeViews.has(identifier)) return false;
+
+        let codeViewButton = new TabCodeViewButton(identifier, this.showCodeViewEventSource, codeView, this.svgSpritePath, this.codeFileIconName);
         codeViewButton.appendTo(this.tabsContainer);
 
         const codeBoxCodeViewManager = new CodeBoxCodeViewManager();
-        const codeBoxCodeView = new CodeBoxCodeView(identifier, codeViewCopy, this, codeBoxCodeViewManager);
+        const codeBoxCodeView = new CodeBoxCodeView(identifier, codeView, this, codeBoxCodeViewManager);
 
-        this.codeViews.set(identifier, codeViewCopy);
-        this.codeViewEntries.set(codeViewCopy, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager, codeViewButton));
+        this.codeViews.set(identifier, codeView);
+        this.codeViewEntries.set(codeView, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager, codeViewButton));
 
         return true;
     }
@@ -307,7 +315,13 @@ class TabCodeBox extends CodeBox {
             });
         });
 
-        return new CodeBoxMemento(this, codeViewMementoEntries, fileMementoEntries, this.getCurrentlyActiveCodeView());
+        return new CodeBoxMemento(
+            this,
+            (identifier, codeView) => this._addCodeView(identifier, codeView),
+            codeViewMementoEntries,
+            fileMementoEntries,
+            this.getCurrentlyActiveCodeView()
+        );
     }
 
     public applyMemento(memento: CodeBoxMemento) : void {

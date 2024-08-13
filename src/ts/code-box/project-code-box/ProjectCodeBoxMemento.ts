@@ -24,8 +24,8 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
     private packagesFolderPath : string;
     private isRootFolderOpened : boolean;
     
-    constructor(creator : ProjectCodeBox, codeViewEntries : ProjectCodeBoxCodeViewMementoEntry[], fileEntries : ProjectCodeBoxFileMementoEntry[], activeCodeView : CodeView | null, folderStructure : TreeNode<FolderInfo>[], packages : PackageInfo[], packagesFolderPath : string, projectName : string, isPanelOpened : boolean, isRootFolderOpened : boolean) {
-        super(creator, codeViewEntries, fileEntries, activeCodeView);
+    constructor(creator : ProjectCodeBox, addCodeViewToCreatorCodeBox : (identifier : string, codeView : CodeView) => void, codeViewEntries : ProjectCodeBoxCodeViewMementoEntry[], fileEntries : ProjectCodeBoxFileMementoEntry[], activeCodeView : CodeView | null, folderStructure : TreeNode<FolderInfo>[], packages : PackageInfo[], packagesFolderPath : string, projectName : string, isPanelOpened : boolean, isRootFolderOpened : boolean) {
+        super(creator, addCodeViewToCreatorCodeBox, codeViewEntries, fileEntries, activeCodeView);
 
         this.projectCodeBoxCodeViewEntries = codeViewEntries;
         this.projectCodeBoxFileEntries = fileEntries;

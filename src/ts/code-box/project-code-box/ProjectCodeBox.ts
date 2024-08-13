@@ -316,14 +316,32 @@ class ProjectCodeBox extends CodeBox {
 
         const codeViewCopy = codeView.clone();
         
-        const success = this.foldersManager.addCodeView(fileName, codeViewCopy, this.showCodeViewEventSource, parsedFolderPath.join("/"));
+        return this._addCodeView(identifier, codeViewCopy);
+    }
+
+    /**
+     * Adds new code view to code box without making copy of code view.
+     * @param identifier Identifier under which the code view should be added to code box.
+     * @param codeView Code view.
+     * @returns Indicates whether code view has been successfully added.
+     */
+    private _addCodeView(identifier: string, codeView: CodeView) : boolean {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        if (this.foldersManager.getCodeViewByIdentifier(identifier) !== null) return false;
+
+        const parsedFolderPath = identifier.split("/");
+        const fileName = parsedFolderPath.pop();
+        if (fileName === undefined || fileName.trim() === "") return false;
+        
+        const success = this.foldersManager.addCodeView(fileName, codeView, this.showCodeViewEventSource, parsedFolderPath.join("/"));
         if (!success) return false;
 
         identifier = this.foldersManager.getItemIdentifier(fileName, parsedFolderPath.join("/"));
 
         const codeBoxCodeViewManager = new CodeBoxCodeViewManager();
-        const codeBoxCodeView = new ProjectCodeBoxCodeView(identifier, codeViewCopy, this, codeBoxCodeViewManager);
-        this.codeViewEntries.set(codeViewCopy, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager));
+        const codeBoxCodeView = new ProjectCodeBoxCodeView(identifier, codeView, this, codeBoxCodeViewManager);
+        this.codeViewEntries.set(codeView, new CodeViewEntry(codeBoxCodeView, codeBoxCodeViewManager));
 
         return true;
     }
@@ -1425,6 +1443,7 @@ class ProjectCodeBox extends CodeBox {
 
         return new ProjectCodeBoxMemento(
             this,
+            (identifier, codeView) => this._addCodeView(identifier, codeView),
             codeViewMementoEntries,
             fileMementoEntries,
             this.getCurrentlyActiveCodeView(),

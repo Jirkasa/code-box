@@ -18,9 +18,11 @@ class CodeBoxMemento {
     private codeViewEntries : CodeViewMementoEntry[];
     private fileEntries : FileMementoEntry[];
     private activeCodeView : CodeView | null;
+    private addCodeViewToCreatorCodeBox : (identifier : string, codeView : CodeView) => void;
 
-    constructor(creator : CodeBox, codeViewEntries : CodeViewMementoEntry[], fileEntries : FileMementoEntry[], activeCodeView : CodeView | null) {
+    constructor(creator : CodeBox, addCodeViewToCreatorCodeBox : (identifier : string, codeView : CodeView) => void, codeViewEntries : CodeViewMementoEntry[], fileEntries : FileMementoEntry[], activeCodeView : CodeView | null) {
         this.creator = creator;
+        this.addCodeViewToCreatorCodeBox = addCodeViewToCreatorCodeBox;
         this.codeViewEntries = codeViewEntries;
         this.fileEntries = fileEntries;
         this.activeCodeView = activeCodeView;
@@ -35,9 +37,14 @@ class CodeBoxMemento {
         codeBox.removeAllFiles();
 
         for (let codeViewEntry of this.codeViewEntries) {
-            let codeView = codeBox === this.creator ? codeViewEntry.codeView : codeViewEntry.codeView.clone();
-            codeView.applyMemento(codeViewEntry.codeViewMemento);
-            codeBox.addCodeView(codeViewEntry.identifier, codeView);
+            if (codeBox === this.creator) {
+                codeViewEntry.codeView.applyMemento(codeViewEntry.codeViewMemento);
+                this.addCodeViewToCreatorCodeBox(codeViewEntry.identifier, codeViewEntry.codeView);
+            } else {
+                codeBox.addCodeView(codeViewEntry.identifier, codeViewEntry.codeView);
+                const codeView = codeBox.getCodeView(codeViewEntry.identifier);
+                codeView?.applyMemento(codeViewEntry.codeViewMemento);
+            }
 
             if (this.activeCodeView === codeViewEntry.codeView) {
                 codeBox.setActiveCodeView(codeViewEntry.identifier);

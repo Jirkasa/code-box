@@ -287,7 +287,7 @@ abstract class CodeBox {
      * Adds new code view to code box (copy of passed code view is made).
      * @param identifier Identifier under which the code view should be added to code box.
      * @param codeView Code view.
-     * @returns Indicates whether file has been successfully added.
+     * @returns Indicates whether code view has been successfully added.
      */
     public abstract addCodeView(identifier : string, codeView : CodeView) : boolean;
 
