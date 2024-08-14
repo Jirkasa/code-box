@@ -16,7 +16,7 @@ class ProjectCodeBoxCodeView extends CodeBoxCodeView<ProjectCodeBox> {
     }
 
     /**
-     * Moves code view to folder (if folder does not exist, it is created).
+     * Moves code view to folder (if folder does not exist, it is created; package is not changed).
      * @param folderPath Path to folder.
      * @returns Indicates whether code view has been successfully moved to folder (it can return false if there already is code view with the same name).
      */
