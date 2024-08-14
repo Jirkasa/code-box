@@ -173,7 +173,7 @@ class TabCodeBox extends CodeBox {
         return codeViewEntry.position;
     }
 
-    public setCodeViewButtonPosition(identifier : string, position: number) : boolean { // todo - do komentáře napsat, že se to prohodí s jinou položkou
+    public setCodeViewButtonPosition(identifier : string, position: number) : boolean { // todo - do komentáře napsat, že se to prohodí s jinou položkou (je to od nuly)
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         position = Math.trunc(position);

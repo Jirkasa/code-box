@@ -1,6 +1,7 @@
 import CodeView from "../code-view/CodeView";
 import CodeViewOptions from "../code-view/CodeViewOptions";
 import GlobalConfig from "../GlobalConfig";
+import EventSourcePoint from "../utils/EventSourcePoint";
 import { createCodeViewOptionsCopy } from "../utils/utils";
 import ViewportIntersectionObserver from "../utils/ViewportIntersectionObserver";
 import CodeBoxBuilder from "./CodeBoxBuilder";
@@ -79,6 +80,9 @@ abstract class CodeBox {
     private initializationData : InitializationInfo[] | null;
     /** Placeholder element for lazy initialization. */
     private lazyInitPlaceholderElement : HTMLElement | null = null;
+
+    /** Functions called after initialization of code box. */
+    private onInitCallbacks : Array<() => void> | null = new Array<() => void>();
 
     /**
      * Creates new code box.
@@ -273,6 +277,13 @@ abstract class CodeBox {
         this.initialized = true;
 
         this.onAfterInit();
+
+        if (this.onInitCallbacks) {
+            for (let callback of this.onInitCallbacks) {
+                callback();
+            }
+            this.onInitCallbacks = null;
+        }
     }
 
     /**
@@ -407,6 +418,17 @@ abstract class CodeBox {
      * @param memento Memento.
      */
     public abstract applyMemento(memento : CodeBoxMemento) : void;
+
+    /**
+     * Registeres function to be called when code box is initialized.
+     * @param callback Function to be called after initialization of code box.
+     */
+    public addOnInitListener(callback : () => void) : void {
+        if (this.isInitialized()) return;
+        if (this.onInitCallbacks === null) return;
+
+        this.onInitCallbacks.push(callback);
+    }
 
     /**
      * Called on initialization.
