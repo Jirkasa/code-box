@@ -4,14 +4,19 @@ import CodeBox from "./CodeBox";
 
 /** Code view entry for code box memento. */
 export type CodeViewMementoEntry = {
+    /** Code view. */
     codeView : CodeView;
+    /** Identifier. */
     identifier : string;
+    /** Code view memento. */
     codeViewMemento : CodeViewMemento;
 }
 
 /** File entry for code box memento. */
 export type FileMementoEntry = {
+    /** Download link or null. */
     downloadLink : string | null;
+    /** Identifier. */
     identifier : string;
 }
 
@@ -19,7 +24,7 @@ export type FileMementoEntry = {
 class CodeBoxMemento {
     /** Code box based on which memento was created. */
     private creator : CodeBox;
-    /** Code view entries (files in code box when memento was created). */
+    /** Code view entries (code views in code box when memento was created). */
     private codeViewEntries : CodeViewMementoEntry[];
     /** File entries (files in code box when memento was created). */
     private fileEntries : FileMementoEntry[];
