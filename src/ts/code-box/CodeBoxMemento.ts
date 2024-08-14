@@ -2,24 +2,40 @@ import CodeViewMemento from "../code-view/CodeViewMemento";
 import { CodeView } from "../main";
 import CodeBox from "./CodeBox";
 
+/** Code view entry for code box memento. */
 export type CodeViewMementoEntry = {
     codeView : CodeView;
     identifier : string;
     codeViewMemento : CodeViewMemento;
 }
 
+/** File entry for code box memento. */
 export type FileMementoEntry = {
     downloadLink : string | null;
     identifier : string;
 }
 
+/** Represents saved state of code box. */
 class CodeBoxMemento {
+    /** Code box based on which memento was created. */
     private creator : CodeBox;
+    /** Code view entries (files in code box when memento was created). */
     private codeViewEntries : CodeViewMementoEntry[];
+    /** File entries (files in code box when memento was created). */
     private fileEntries : FileMementoEntry[];
+    /** Stores reference to code view that was active when memento was created. */
     private activeCodeView : CodeView | null;
+    /** Function to add code view without making copy to code box based on which the memento was created. */
     private addCodeViewToCreatorCodeBox : (identifier : string, codeView : CodeView) => void;
 
+    /**
+     * Creates new code box memento.
+     * @param creator Code box based on which the memento is created.
+     * @param addCodeViewToCreatorCodeBox Function to add code view without making copy to code box based on which the memento was created.
+     * @param codeViewEntries Code view entries.
+     * @param fileEntries File entries.
+     * @param activeCodeView Active code view.
+     */
     constructor(creator : CodeBox, addCodeViewToCreatorCodeBox : (identifier : string, codeView : CodeView) => void, codeViewEntries : CodeViewMementoEntry[], fileEntries : FileMementoEntry[], activeCodeView : CodeView | null) {
         this.creator = creator;
         this.addCodeViewToCreatorCodeBox = addCodeViewToCreatorCodeBox;
@@ -28,10 +44,18 @@ class CodeBoxMemento {
         this.activeCodeView = activeCodeView;
     }
 
+    /**
+     * Returns code box, based on which the memento was created.
+     * @returns Code box based on which the memento was created.
+     */
     protected getCreator() : CodeBox {
         return this.creator;
     }
 
+    /**
+     * Applies memento to code box.
+     * @param codeBox Code box.
+     */
     public apply(codeBox : CodeBox) {
         codeBox.removeAllCodeViews();
         codeBox.removeAllFiles();

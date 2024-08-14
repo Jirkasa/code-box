@@ -1,8 +1,14 @@
 import FileButton from "./FileButton";
 
+/** Represents file button as anchor element. */
 abstract class ElementFileButton extends FileButton {
+    /** HTML anchor element. */
     protected buttonElement : HTMLAnchorElement;
 
+    /**
+     * Creates new file button.
+     * @param downloadLink Download link (or null for no download).
+     */
     constructor(downloadLink : string | null = null) {
         super();
 
@@ -11,6 +17,14 @@ abstract class ElementFileButton extends FileButton {
         this.buttonElement.setAttribute("download", "");
 
         this.setDownloadLink(downloadLink);
+    }
+
+    public appendTo(container : HTMLElement) : void {
+        container.appendChild(this.buttonElement);
+    }
+
+    public detach() : void {
+        this.buttonElement.remove();
     }
 
     public setDownloadLink(downloadLink: string | null) : void {
@@ -23,14 +37,6 @@ abstract class ElementFileButton extends FileButton {
 
     public getDownloadLink() : string | null {
         return this.buttonElement.getAttribute("href");
-    }
-
-    public appendTo(container : HTMLElement) : void {
-        container.appendChild(this.buttonElement);
-    }
-
-    public detach() : void {
-        this.buttonElement.remove();
     }
 
     public enableTabNavigation() : void {

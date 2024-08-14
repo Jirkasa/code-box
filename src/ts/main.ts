@@ -37,8 +37,6 @@ Ta knihovna by měla být teda rozšiřitelná
 Co mi ještě zbývá:
 - extendnutí pomocí atributu (ale to až potom, protože to se netýká přímo ProjectCodeBoxu, ale spíš nějaké komponenty, která je bude inicializovat)
 - název file elementu by měl jít nastavit přes data-cb-name nebo uvnitř elementu - asi spíš uvnitř elementu, ale mohl bych tam nechat možnost nastavit to i přes to (mělo by to přednost)
-- container s příkazy
-- dědění
 
 
 - pluginy se asi nebudou předávat jako options, ale budou se moci přidávat nebo odebírat pomocí metod
