@@ -2,10 +2,21 @@ import CSSClasses from "../../CSSClasses";
 import SVGIconElementCreator from "../../utils/SVGIconElementCreator";
 import ElementFileButton from "../ElementFileButton";
 
+/** Represents file button for tab code box. */
 class TabFileButton extends ElementFileButton {
+    /** Download icon of button. */
     private downloadIcon : HTMLElement | null = null;
+    /** Text element of button. */
     private textElement : HTMLElement;
 
+    /**
+     * Creates new file button.
+     * @param text Text of button.
+     * @param downloadLink Download link (or null to disable download).
+     * @param svgSpritePath Path to SVG sprite.
+     * @param iconName Name of icon for button.
+     * @param downloadIconName Name of download icon for button.
+     */
     constructor(text : string, downloadLink : string | null = null, svgSpritePath : string | null = null, iconName : string | null = null, downloadIconName : string | null = null) {
         super(downloadLink);
 

@@ -1,14 +1,23 @@
 import CSSClasses from "../../CSSClasses";
 import CodeBoxBuilder from "../CodeBoxBuilder";
 
+/** Builder of tab code box. */
 class TabCodeBoxBuilder implements CodeBoxBuilder {
+    /** Container for tabs (buttons). */
     private tabsContainer : HTMLElement;
 
+    /**
+     * Creates new tab code box builder.
+     */
     constructor() {
         this.tabsContainer = document.createElement("div");
         this.tabsContainer.classList.add(CSSClasses.TAB_CODE_BOX_TABS);
     }
 
+    /**
+     * Returns container for tabs (buttons).
+     * @returns Container for tabs (buttons).
+     */
     public getTabsContainer() : HTMLElement {
         return this.tabsContainer;
     }

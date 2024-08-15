@@ -16,21 +16,37 @@ import TabCodeBoxOptions from "./TabCodeBoxOptions";
 import TabCodeViewButton from "./TabCodeViewButton";
 import TabFileButton from "./TabFileButton";
 
+/** Tab code box. */
 class TabCodeBox extends CodeBox {
+    /** Path to SVG sprite. */
     private readonly svgSpritePath : string | null;
+    /** Name of icon for code view buttons. */
     private readonly codeFileIconName : string | null;
+    /** Name of icon for file buttons. */
     private readonly fileIconName : string | null;
+    /** Name of download icon for file buttons. */
     private readonly downloadIconName : string | null;
 
+    /** Container for code view and file buttons. */
     private tabsContainer : HTMLElement;
+    /** Event source to set active code view of code box. */
     private showCodeViewEventSource = new EventSourcePoint<CodeViewButton, CodeView>();
 
+    /** Memento created after initialization of code box. */
     private initialMemento : CodeBoxMemento | null = null;
 
+    /** Code views stored by identifiers. */
     private codeViews = new Map<string, CodeView>();
+    /** Code view entries stored by code views. */
     private codeViewEntries = new Map<CodeView, CodeViewEntry>();
+    /** File entries stored by identifiers. */
     private fileEntries = new Map<string, FileEntry>();
 
+    /**
+     * Creates new tab code box.
+     * @param element Code box root element.
+     * @param options Code box options.
+     */
     constructor(element : HTMLElement, options : TabCodeBoxOptions = {}) {
         const codeBoxBuilder = new TabCodeBoxBuilder();
         super(element, options, codeBoxBuilder);
@@ -61,6 +77,12 @@ class TabCodeBox extends CodeBox {
         return this._addCodeView(identifier, codeViewCopy);
     }
 
+    /**
+     * Adds new code view to code box without making copy of code view.
+     * @param identifier Identifier under which the code view should be added to code box.
+     * @param codeView Code view.
+     * @returns Indicates whether code view has been successfully added.
+     */
     private _addCodeView(identifier : string, codeView : CodeView) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -161,6 +183,11 @@ class TabCodeBox extends CodeBox {
         return true;
     }
 
+    /**
+     * Returns position of code view button.
+     * @param identifier Identifier of code view.
+     * @returns Position of code view button starting from 0 (or null if code view does not exist).
+     */
     public getCodeViewButtonPosition(identifier : string) : number | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -173,7 +200,13 @@ class TabCodeBox extends CodeBox {
         return codeViewEntry.position;
     }
 
-    public setCodeViewButtonPosition(identifier : string, position: number) : boolean { // todo - do komentáře napsat, že se to prohodí s jinou položkou (je to od nuly)
+    /**
+     * Changes position of code view button by swapping it with different code view or file button.
+     * @param identifier Identifier of code view.
+     * @param position Position of code view or file button (starting from 0) with which should be code view button swapped.
+     * @returns Indicates whether position has been successfully changed.
+     */
+    public setCodeViewButtonPosition(identifier : string, position: number) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         position = Math.trunc(position);
@@ -344,6 +377,11 @@ class TabCodeBox extends CodeBox {
         return true;
     }
 
+    /**
+     * Returns position of file button.
+     * @param identifier Identifier of file.
+     * @returns Position of file button starting from 0 (or null if file does not exist).
+     */
     public getFileButtonPosition(identifier : string) : number | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -353,6 +391,12 @@ class TabCodeBox extends CodeBox {
         return fileEntry.position;
     }
 
+    /**
+     * Changes position of file button by swapping it with different code view or file button.
+     * @param identifier Identifier of file.
+     * @param position Position of code view or file button (starting from 0) with which should be file button swapped.
+     * @returns Indicates whether position has been successfully changed.
+     */
     public setFileButtonPosition(identifier : string, position: number) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -446,6 +490,7 @@ class TabCodeBox extends CodeBox {
                 if (this.codeViews.has(identifier)) {
                     if (!isActive) continue;
                     
+                    // active code view takes precedence over others (other code views with the same identifier are removed)
                     const codeView = this.codeViews.get(identifier);
                     if (codeView) {
                         const codeViewEntry = this.codeViewEntries.get(codeView);
@@ -493,6 +538,11 @@ class TabCodeBox extends CodeBox {
         this.initialMemento = this.createMemento();
     }
 
+    /**
+     * Called by code view buttons when they are clicked.
+     * @param codeViewButton Code view button that requested change of active code view.
+     * @param codeView Code view that should be set as active.
+     */
     private onShowCodeView(codeViewButton : CodeViewButton, codeView : CodeView) : void {
         const activeCodeView = this.getCurrentlyActiveCodeView();
         if (activeCodeView) {
@@ -505,6 +555,10 @@ class TabCodeBox extends CodeBox {
         this.changeActiveCodeView(codeView);
     }
 
+    /**
+     * Decrements positions of all code views and files that have position after passed position.
+     * @param position Position.
+     */
     private decrementItemPositionsAfterPosition(position : number) : void {
         this.codeViewEntries.forEach(entry => {
             if (entry.position > position) {
@@ -518,6 +572,9 @@ class TabCodeBox extends CodeBox {
         });
     }
 
+    /**
+     * Updates code view and file buttons based on positions.
+     */
     private updateButtonsOrder() : void {
         const items = new Array<CodeViewEntry | FileEntry>();
 

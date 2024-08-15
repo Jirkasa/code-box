@@ -5,9 +5,19 @@ import SVGIconElementCreator from "../../utils/SVGIconElementCreator";
 import CodeViewButton from "../CodeViewButton";
 import ElementCodeViewButton from "../ElementCodeViewButton";
 
+/** Represents code view button for tab code box. */
 class TabCodeViewButton extends ElementCodeViewButton {
+    /** Text element of button. */
     private textElement : HTMLElement;
 
+    /**
+     * Creates new code view button.
+     * @param text Text of button.
+     * @param showCodeViewEventSource Event source for which will be fired event when code view to which the button belongs to should be set as active.
+     * @param codeView Code view to which the button belongs to.
+     * @param svgSpritePath Path to SVG sprite.
+     * @param iconName Name of icon for button.
+     */
     constructor(text : string, showCodeViewEventSource : EventSourcePoint<CodeViewButton, CodeView>, codeView : CodeView, svgSpritePath : string | null = null, iconName : string | null = null) {
         super(showCodeViewEventSource, codeView);
 
