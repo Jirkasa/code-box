@@ -158,3 +158,37 @@ ProjectCodeBox poznámky:
 - napsat testy na tady ty věci můžu (hlavně na metody, které jsou složitější - na ty jednoduché ani moc nemusím)
 - upravit importy
 */
+
+
+
+/*
+CodeViewOptions poznámky:
+*/
+// html only: (něco je i pro File elementy)
+/**
+ * Project + Tab:
+ * data-cb-active
+ * data-cb-name
+ * 
+ * Project:
+ * data-cb-folder
+ * data-cb-package
+ */
+
+/**
+ * File elementy:
+ * data-cb-file
+ */
+
+/**
+ * Konfigurační element se složkami:
+ * data-cb-folders (ul element)
+ * data-cb-packages-folder
+ * data-cb-opened
+ */
+
+/**
+ * Element s příkazy:
+ * data-cb-commands
+ */
+// todo - ještě možnost přidat plugin (spíš ne)
