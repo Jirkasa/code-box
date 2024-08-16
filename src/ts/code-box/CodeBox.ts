@@ -1,7 +1,6 @@
 import CodeView from "../code-view/CodeView";
 import CodeViewOptions from "../code-view/CodeViewOptions";
 import GlobalConfig from "../GlobalConfig";
-import EventSourcePoint from "../utils/EventSourcePoint";
 import { createCodeViewOptionsCopy } from "../utils/utils";
 import ViewportIntersectionObserver from "../utils/ViewportIntersectionObserver";
 import CodeBoxBuilder from "./CodeBoxBuilder";

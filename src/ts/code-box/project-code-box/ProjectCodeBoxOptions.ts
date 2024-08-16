@@ -33,7 +33,7 @@ type ProjectCodeBoxOptions = {
     packagesFolderPath ?: string;
     /** Name under which the default package should be displayed (default = "default"). */
     defaultPackageName ?: string;
-    /** Specifies whether folders should be created for packages. This option is not used if the code box has parent code box. */
+    /** Specifies whether folders should be created for packages (default = true). This option is not used if the code box has parent code box. */
     createFoldersForPackages ?: boolean;
     /** Specifies delimiter to be used when creating folders for packages. For example, if the delimiter is "." and the package name is "io.github.jirkasa", folders "io/github/jirkasa" are created. This option is not used if the code box has a parent code box. */
     foldersDelimiterForPackages ?: string;

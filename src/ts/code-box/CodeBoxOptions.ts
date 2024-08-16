@@ -8,7 +8,7 @@ type CodeBoxOptions = {
     implicitActive ?: boolean;
     /** Default options for code views. */
     defaultCodeViewOptions ?: CodeViewOptions;
-    /** Height of the element that is displayed when no code view is set as active. */
+    /** Height of the element that is displayed when no code view is set as active (default = "50rem"). */
     noCodeViewSelectedElementHeight ?: string;
     /** Text of the element that is displayed when no code view is set as active (default = "No code view selected"). */
     noCodeViewSelectedText ?: string;
