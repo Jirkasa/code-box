@@ -1,17 +1,19 @@
 import CodeViewOptions from "../code-view/CodeViewOptions";
 
+/** Code box options. */
 type CodeBoxOptions = {
-    lazyInit ?: boolean; // todo - do dokumentace napsat, že aby se lazy inicializování aplikovalo, musí mít CodeBox parent element
-    implicitActive ?: boolean; // default je false
+    /** Determines whether the code box should be initialized just before it is scrolled into the viewport. By default, this option is enabled (if disabled, the code box is initialized immediately). This helps reduce the load on performance during page loading. */
+    lazyInit ?: boolean;
+    /** Specifies whether the first code view should be set as active by default if no other code view is set as active (default = false). */
+    implicitActive ?: boolean;
+    /** Default options for code views. */
     defaultCodeViewOptions ?: CodeViewOptions;
-    noCodeViewSelectedElementHeight ?: string; // prostě se to bude nastavovat tady a ne v CSS
+    /** Height of the element that is displayed when no code view is set as active. */
+    noCodeViewSelectedElementHeight ?: string;
+    /** Text of the element that is displayed when no code view is set as active (default = "No code view selected"). */
     noCodeViewSelectedText ?: string;
-    minCodeViewLinesCount ?: number; // ale okomentovat to - podle toho se jen bere minimální výška pro code view containery - není to přesné - nebere to v potaz padding (je to jen k tomu, aby se mohla nastavit nějaká optimální minimální výška)
+    /** Minimum number of lines in the code view that determines the minimal height of the code box when the code view is displayed. This value is not exact as it does not account for padding set by CSS styles; it is intended to set an optimal minimal height. */
+    minCodeViewLinesCount ?: number;
 }
-
-// todo - do dokumentace napsat, které vlastnosti je možné měnit i pomocí data atributů
-
-// dále jsou tu file elementy:
-    // - data-cb-file=cestakestažení data-cb-name=název - u ProjectCodeBoxu můžou být ještě další
 
 export default CodeBoxOptions;

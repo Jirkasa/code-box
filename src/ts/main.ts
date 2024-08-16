@@ -192,3 +192,11 @@ CodeViewOptions poznámky:
  * data-cb-commands
  */
 // todo - ještě možnost přidat plugin (spíš ne)
+
+
+// CodeBoxOptions poznámky:
+// todo - do dokumentace napsat, které vlastnosti je možné měnit i pomocí data atributů
+// todo - do dokumentace taky napsat, že výška se kvůli lazy inicializaci musí nastavovat v code box options (a min code view lines count taky)
+
+// dále jsou tu file elementy:
+    // - data-cb-file=cestakestažení data-cb-name=název - u ProjectCodeBoxu můžou být ještě další
