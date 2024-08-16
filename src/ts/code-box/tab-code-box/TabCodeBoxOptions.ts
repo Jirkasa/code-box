@@ -6,9 +6,9 @@ type TabCodeBoxOptions = {
     svgSpritePath ?: string;
     /** Names of the icons in the SVG sprite. */
     svgSpriteIcons ?: {
-        /** Icon for the code view button. */
+        /** Icon for code view button. */
         codeFile ?: string;
-        /** Icon for the file button. */
+        /** Icon for file button. */
         file ?: string;
         /** Icon that is displayed on file buttons with a download link. */
         download ?: string;

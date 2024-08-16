@@ -1,34 +1,58 @@
 import CodeBoxOptions from "../CodeBoxOptions";
 
+/** Project code box options. */
 type ProjectCodeBoxOptions = {
+    /** Path to SVG sprite that contains icons. */
     svgSpritePath ?: string;
+    /** Names of the icons in the SVG sprite. */
     svgSpriteIcons ?: {
+        /** Icon for code view button. */
         codeFile ?: string;
+        /** Icon for file button. */
         file ?: string;
+        /** Icon that is displayed on file buttons with a download link. */
         download ?: string;
+        /** Icon for panel open/close button. */
         panelOpenButton ?: string;
+        /** Icon for folder arrow. */
         folderArrow ?: string;
-        project ?: string;
+        /** Icon for folder. */
         folder ?: string;
+        /** Icon for project (root) folder. */
+        project ?: string;
+        /** Icon for package. */
         package ?: string;
     };
+    /** Folder structure heading (default = "Folder structure"). */
     folderStructureHeading ?: string;
+    /** Packages heading (default = "Packages"). */
     packagesHeading ?: string;
-    projectName ?: string; // neaplikuje se, pokud je parent code box (bere se z parenta)
-    packagesFolderPath ?: string; // bude se dát přepsat přes ty konfigurační elementy // neaplikuje se, pokud je parent code box
+    /** Name of project (root) folder. This option is not used if the code box has parent code box. */
+    projectName ?: string;
+    /** Path to folder for packages. This option is not used if the code box has parent code box. */
+    packagesFolderPath ?: string;
+    /** Name under which the default package should be displayed (default = "default"). */
     defaultPackageName ?: string;
-    createFoldersForPackages ?: boolean; // neaplikuje se, pokud je parent code box
-    foldersDelimiterForPackages ?: string; // neaplikuje se, pokud je parent code box
+    /** Specifies whether folders should be created for packages. This option is not used if the code box has parent code box. */
+    createFoldersForPackages ?: boolean;
+    /** Specifies delimiter to be used when creating folders for packages. For example, if the delimiter is "." and the package name is "io.github.jirkasa", folders "io/github/jirkasa" are created. This option is not used if the code box has a parent code box. */
+    foldersDelimiterForPackages ?: string;
+    /** Speed of folder open/close animation (in milliseconds). */
     folderAnimationSpeed ?: number;
+    /** CSS easing function for folder open/close animation. */
     folderAnimationEasingFunction ?: string;
+    /** Specifies whether folder and its parent folders containing the active code view should be opened on initialization (default = true). */
     openActiveCodeViewFolderOnInit ?: boolean;
+    /** Specifies whether package containing the active code view should be opened on initialization (default = true). */
     openActiveCodeViewPackageOnInit ?: boolean;
-    openRootFolderOnInit ?: boolean; // napsat že to má vliv jen v některých případech, když třeba není žádné code view aktivní (přednost má openActiveCodeViewFolder option)
+    /** Specifies whether the project (root) folder should be opened on initialization (default = true). This option has effect only in certain situations (openActiveCodeViewFolderOnInit option has precedence). */
+    openRootFolderOnInit ?: boolean;
+    /** Specifies whether the side panel should be opened on initialization (default = false). */
     openPanelOnInit ?: boolean;
+    /** Value of the panel open/close button aria-label attribute when panel is closed (default = "Open panel"). */
     openPanelButtonAriaLabel ?: string;
+    /** Value of the panel open/close button aria-label attribute when panel is opened (default = "Close panel"). */
     closePanelButtonAriaLabel ?: string;
 } & CodeBoxOptions;
-
-// todo - potom to uklidit a popsat - a zkontrolovat že všechno používám
 
 export default ProjectCodeBoxOptions;
