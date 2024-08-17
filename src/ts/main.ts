@@ -1,6 +1,9 @@
 export { default as CodeView } from "./code-view/CodeView";
 export { default as TabCodeBox } from "./code-box/tab-code-box/TabCodeBox";
 export { default as ProjectCodeBox } from "./code-box/project-code-box/ProjectCodeBox";
+export { default as CodeViewCreator } from "./creator/CodeViewCreator";
+export { default as TabCodeBoxCreator } from "./creator/TabCodeBoxCreator";
+export { default as ProjectCodeBoxCreator } from "./creator/ProjectCodeBoxCreator";
 // todo - vyexportovat to
 // todo - upravit importy, aby se to neimportovalo odtud
 
@@ -200,3 +203,18 @@ CodeViewOptions poznámky:
 
 // dále jsou tu file elementy:
     // - data-cb-file=cestakestažení data-cb-name=název - u ProjectCodeBoxu můžou být ještě další
+
+
+
+
+
+
+
+// Project code box creator:
+// todo - zdokumentovat data-cb-id atribut
+// todo - zdokumentovat data-cb-extends atribut
+
+// todo - getCreatedCodeBoxById() - pokud má id (napsat do dokumentace že je to podle toho data atributu)
+    // to - získávání podle id by se dalo použít i pro jiné věci - takže to udělám nějak obecně - to bude lepší - a budu to předávat i v entries
+
+// todo - pro CodeView ještě přidat metodu na získání zobrazovaného obsahu ve formě stringu - pokud by to někdo potřeboval - innerText - tím pádem se nebude brát v potaz formátování

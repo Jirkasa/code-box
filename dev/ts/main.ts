@@ -1,4 +1,4 @@
-import {CodeView, TabCodeBox, ProjectCodeBox} from "../../src/ts/main";
+import {CodeView, TabCodeBox, ProjectCodeBox, CodeViewCreator, TabCodeBoxCreator, ProjectCodeBoxCreator} from "../../src/ts/main";
 
 declare global {
     interface Window { myCodeBox: ProjectCodeBox; myTabCodeBox: TabCodeBox }
@@ -88,3 +88,39 @@ new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest3") as HTMLElement
         project: "inventory"
     }
 }, codeBox2);
+
+const codeViewCreator = new CodeViewCreator();
+console.log(codeViewCreator.create("[data-my-code-view]"));
+console.log(codeViewCreator.create("[data-my-code-view]"));
+
+const tabCodeBoxCreator = new TabCodeBoxCreator({
+    svgSpritePath: "./static/icon-sprite.svg",
+    svgSpriteIcons: {
+        codeFile: "file",
+        file: "file-2",
+        download: "download"
+    }
+});
+console.log(tabCodeBoxCreator.create("[data-my-tab-code-box]"));
+console.log(tabCodeBoxCreator.create("[data-my-tab-code-box]"));
+
+console.log("count: " + tabCodeBoxCreator.getCreatedCodeBoxesCount());
+console.log(tabCodeBoxCreator.getCreatedCodeBoxes());
+
+const projectCodeBoxCreator = new ProjectCodeBoxCreator({
+    svgSpritePath: "./static/icon-sprite.svg",
+    svgSpriteIcons: {
+        codeFile: "file",
+        file: "file-2",
+        download: "download",
+        panelOpenButton: "double-arrow-right",
+        folder: "folder",
+        folderArrow: "arrow-right",
+        package: "package",
+        project: "inventory"
+    },
+    packagesFolderPath: "src/main/java",
+    foldersDelimiterForPackages: ".",
+    minCodeViewLinesCount: 20
+});
+console.log(projectCodeBoxCreator.create("[data-my-project-code-box]"));

@@ -1,3 +1,5 @@
+import ProjectCodeBoxOptions from "../code-box/project-code-box/ProjectCodeBoxOptions";
+import TabCodeBoxOptions from "../code-box/tab-code-box/TabCodeBoxOptions";
 import CodeViewOptions from "../code-view/CodeViewOptions";
 
 /**
@@ -26,5 +28,69 @@ export function createCodeViewOptionsCopy(options : CodeViewOptions) : CodeViewO
         showGutter: options.showGutter,
         showLineNumbers: options.showLineNumbers,
         cssClasses: options.cssClasses
+    }
+}
+
+/**
+ * Creates copy of tab code box options.
+ * @param options Tab code box options.
+ * @returns Copy of tab code box options.
+ */
+export function createTabCodeBoxOptionsCopy(options : TabCodeBoxOptions) : TabCodeBoxOptions {
+    return {
+        lazyInit: options.lazyInit,
+        implicitActive: options.implicitActive,
+        defaultCodeViewOptions: options.defaultCodeViewOptions && createCodeViewOptionsCopy(options.defaultCodeViewOptions),
+        noCodeViewSelectedElementHeight: options.noCodeViewSelectedElementHeight,
+        noCodeViewSelectedText: options.noCodeViewSelectedText,
+        minCodeViewLinesCount: options.minCodeViewLinesCount,
+        svgSpritePath: options.svgSpritePath,
+        svgSpriteIcons: options.svgSpriteIcons && {
+            codeFile: options.svgSpriteIcons.codeFile,
+            file: options.svgSpriteIcons.file,
+            download: options.svgSpriteIcons.download
+        }
+    }
+}
+
+/**
+ * Creates copy of project code box options.
+ * @param options Project code box options.
+ * @returns Copy of project code box options.
+ */
+export function createProjectCodeBoxOptionsCopy(options : ProjectCodeBoxOptions) : ProjectCodeBoxOptions {
+    return {
+        lazyInit: options.lazyInit,
+        implicitActive: options.implicitActive,
+        defaultCodeViewOptions: options.defaultCodeViewOptions && createCodeViewOptionsCopy(options.defaultCodeViewOptions),
+        noCodeViewSelectedElementHeight: options.noCodeViewSelectedElementHeight,
+        noCodeViewSelectedText: options.noCodeViewSelectedText,
+        minCodeViewLinesCount: options.minCodeViewLinesCount,
+        svgSpritePath: options.svgSpritePath,
+        svgSpriteIcons: options.svgSpriteIcons && {
+            codeFile: options.svgSpriteIcons.codeFile,
+            file: options.svgSpriteIcons.file,
+            download: options.svgSpriteIcons.download,
+            panelOpenButton: options.svgSpriteIcons.panelOpenButton,
+            folderArrow: options.svgSpriteIcons.folderArrow,
+            folder: options.svgSpriteIcons.folder,
+            project: options.svgSpriteIcons.project,
+            package: options.svgSpriteIcons.package
+        },
+        folderStructureHeading: options.folderStructureHeading,
+        packagesHeading: options.packagesHeading,
+        projectName: options.projectName,
+        packagesFolderPath: options.packagesFolderPath,
+        defaultPackageName: options.defaultPackageName,
+        createFoldersForPackages: options.createFoldersForPackages,
+        foldersDelimiterForPackages: options.foldersDelimiterForPackages,
+        folderAnimationSpeed: options.folderAnimationSpeed,
+        folderAnimationEasingFunction: options.folderAnimationEasingFunction,
+        openActiveCodeViewFolderOnInit: options.openActiveCodeViewFolderOnInit,
+        openActiveCodeViewPackageOnInit: options.openActiveCodeViewPackageOnInit,
+        openRootFolderOnInit: options.openRootFolderOnInit,
+        openPanelOnInit: options.openPanelOnInit,
+        openPanelButtonAriaLabel: options.openPanelButtonAriaLabel,
+        closePanelButtonAriaLabel: options.closePanelButtonAriaLabel
     }
 }
