@@ -272,6 +272,14 @@ class CodeView {
     }
 
     /**
+     * Returns displayed code.
+     * @returns Displayed code.
+     */
+    public getCode() : string {
+        return this.preElement.innerText;
+    }
+
+    /**
      * Called by highlight boxes when their remove method is called.
      * @param highlightBox Highlight box to be removed.
      */

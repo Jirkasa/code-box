@@ -180,6 +180,14 @@ class CodeBoxCodeView<T extends CodeBox = CodeBox> {
     }
 
     /**
+     * Returns displayed code.
+     * @returns Displayed code.
+     */
+    public getCode() : string {
+        return this.codeView.getCode();
+    }
+
+    /**
      * Called by code view manager when identifier should be changed.
      * @param newIdentifier New identifier.
      */

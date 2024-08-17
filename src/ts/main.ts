@@ -213,8 +213,3 @@ CodeViewOptions poznámky:
 // Project code box creator:
 // todo - zdokumentovat data-cb-id atribut
 // todo - zdokumentovat data-cb-extends atribut
-
-// todo - getCreatedCodeBoxById() - pokud má id (napsat do dokumentace že je to podle toho data atributu)
-    // to - získávání podle id by se dalo použít i pro jiné věci - takže to udělám nějak obecně - to bude lepší - a budu to předávat i v entries
-
-// todo - pro CodeView ještě přidat metodu na získání zobrazovaného obsahu ve formě stringu - pokud by to někdo potřeboval - innerText - tím pádem se nebude brát v potaz formátování
