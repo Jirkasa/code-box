@@ -1,7 +1,7 @@
-import {CodeView, TabCodeBox, ProjectCodeBox, CodeViewCreator, TabCodeBoxCreator, ProjectCodeBoxCreator} from "../../src/ts/main";
+import {CodeView, TabCodeBox, ProjectCodeBox, CodeViewCreator, TabCodeBoxCreator, ProjectCodeBoxCreator, VirtualCodeBoxCreator, VirtualCodeBox} from "../../src/ts/main";
 
 declare global {
-    interface Window { myCodeBox: ProjectCodeBox; myTabCodeBox: TabCodeBox }
+    interface Window { myCodeBox: ProjectCodeBox; myTabCodeBox: TabCodeBox, myVirtualCodeBox : VirtualCodeBox | null }
 }
 
 const codeView = new CodeView(document.getElementById("CodeViewTest") as HTMLPreElement, {
@@ -124,3 +124,8 @@ const projectCodeBoxCreator = new ProjectCodeBoxCreator({
     minCodeViewLinesCount: 20
 });
 console.log(projectCodeBoxCreator.create("[data-my-project-code-box]"));
+
+const virtualCodeBoxCreator = new VirtualCodeBoxCreator();
+virtualCodeBoxCreator.create("[data-my-virtual-code-box]");
+
+window.myVirtualCodeBox = virtualCodeBoxCreator.getCreatedCodeBoxById("1") || null;

@@ -54,6 +54,13 @@ class CSSClasses {
     public static readonly PROJECT_CODE_BOX_PANEL_COLLAPSIBLE = "cb-project-code-box__panel-collapsible";
     public static readonly PROJECT_CODE_BOX_PANEL_COLLAPSIBLE_OPENED_MODIFIDER = "cb-project-code-box__panel-collapsible--opened";
     public static readonly PROJECT_CODE_BOX_PANEL_HORIZONTAL_RULE = "cb-project-code-box__panel-horizontal-rule";
+    // VIRTUAL CODE BOX
+    public static readonly VIRTUAL_CODE_BOX = "cb-virtual-code-box";
+    public static readonly VIRTUAL_CODE_BOX_CODE_VIEW_CONTAINER = "cb-virtual-code-box__code-view-container";
+    public static readonly VIRTUAL_CODE_BOX_CODE_VIEW_CONTAINER_HIDDEN_MODIFIER = "cb-virtual-code-box__code-view-container--hidden";
+    public static readonly VIRTUAL_CODE_BOX_NO_CODE_VIEW = "cb-virtual-code-box__no-code-view";
+    public static readonly VIRTUAL_CODE_BOX_NO_CODE_VIEW_HIDDEN_MODIFIER = "cb-virtual-code-box__no-code-view--hidden";
+    public static readonly VIRTUAL_CODE_BOX_NO_CODE_VIEW_MESSAGE = "cb-virtual-code-box__no-code-view-message";
 }
 
 export default CSSClasses;

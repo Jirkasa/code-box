@@ -1,3 +1,4 @@
+import CodeBoxOptions from "../code-box/CodeBoxOptions";
 import ProjectCodeBoxOptions from "../code-box/project-code-box/ProjectCodeBoxOptions";
 import TabCodeBoxOptions from "../code-box/tab-code-box/TabCodeBoxOptions";
 import CodeViewOptions from "../code-view/CodeViewOptions";
@@ -28,6 +29,22 @@ export function createCodeViewOptionsCopy(options : CodeViewOptions) : CodeViewO
         showGutter: options.showGutter,
         showLineNumbers: options.showLineNumbers,
         cssClasses: options.cssClasses
+    }
+}
+
+/**
+ * Creates copy of code box options.
+ * @param options Code box options.
+ * @returns Copy of code box options.
+ */
+export function createCodeBoxOptionsCopy(options : CodeBoxOptions) : CodeBoxOptions {
+    return {
+        lazyInit: options.lazyInit,
+        implicitActive: options.implicitActive,
+        defaultCodeViewOptions: options.defaultCodeViewOptions && createCodeViewOptionsCopy(options.defaultCodeViewOptions),
+        noCodeViewSelectedElementHeight: options.noCodeViewSelectedElementHeight,
+        noCodeViewSelectedText: options.noCodeViewSelectedText,
+        minCodeViewLinesCount: options.minCodeViewLinesCount
     }
 }
 

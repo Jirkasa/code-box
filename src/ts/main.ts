@@ -1,9 +1,11 @@
 export { default as CodeView } from "./code-view/CodeView";
 export { default as TabCodeBox } from "./code-box/tab-code-box/TabCodeBox";
 export { default as ProjectCodeBox } from "./code-box/project-code-box/ProjectCodeBox";
+export { default as VirtualCodeBox } from "./code-box/virtual-code-box/VirtualCodeBox";
 export { default as CodeViewCreator } from "./creator/CodeViewCreator";
 export { default as TabCodeBoxCreator } from "./creator/TabCodeBoxCreator";
 export { default as ProjectCodeBoxCreator } from "./creator/ProjectCodeBoxCreator";
+export { default as VirtualCodeBoxCreator } from "./creator/VirtualCodeBoxCreator";
 // todo - vyexportovat to
 // todo - upravit importy, aby se to neimportovalo odtud
 
@@ -22,20 +24,13 @@ Tři UI komponenty:
         - používá CodeView
         - nebudu exportovat - bude se vytvářet pomocí nějaké další knihovny
     - potom teda ještě nějaký, který se bude ovládat jen přes kód
-
-Další komponenty:
-    ProjectCodeBoxFactory (možná ještě přejmenovat, ale myslím že je to dobré)
-        - bude se dát nastavit lazy creation
+        - pojmenuju to jako VirtualCodeBox
+        - akorát teda files tam budou vlastně k ničemu - ale to je jedno - získat se kdyžtak dají přes kód a dá se s tím třeba něco dělat - i když mě něnapadá co
 
 Ta knihovna by měla být teda rozšiřitelná
     - chci potom vytvářet ten code highlight runner atp., tak na to myslet
 
 - ještě by se hodil code box, který by se dal ovládat jen přes kód - někdo by to třeba někde využil
-
-- u initializer komponent bude možnost získat code box podle id
-
-- přidat něco jako onInit listener - možnost přidat funkci, která se zavolá po inicializaci code boxu
-    - ale to nevím, ještě uvidím
 
 Co mi ještě zbývá:
 - extendnutí pomocí atributu (ale to až potom, protože to se netýká přímo ProjectCodeBoxu, ale spíš nějaké komponenty, která je bude inicializovat)
@@ -48,12 +43,6 @@ Co mi ještě zbývá:
  */
 
 /**
-    - aby uživatel nemusel kdyžtak inicializovat code boxy a code views ručně, tak by na to mohla být nějaká speciální třída, kde by se předal selektor
-        - CodeViewInitializer
-        - TabCodeBoxInitializer
-        - ProjectCodeBoxInitializer
-            - je to ale hromadné, takže nějaký trochu jiný název (třeba CodeViewsInitializer...)
-                - a bude to mít nějakou metodu init, která když se zavolá, tak se code boxy inicializují (půjde volat opakovaně - když uživatel na stránku nějakým svým způsobem přidá nový kód a bude jej chtít inicializovat, tak ať to funguje)
     
     - Pluginy (uvidím jak to s pluginama nakonec bude):
         - v options by byla vlastnost plugin
