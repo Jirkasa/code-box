@@ -75,6 +75,13 @@ abstract class CodeBoxCreator<T extends CodeBox, U extends CodeBoxOptions> {
     }
 
     /**
+     * Returns created code box by id.
+     * @param id Id of created code box.
+     * @returns Code box (or null if code box was not found).
+     */
+    public abstract getCreatedCodeBoxById(id : string) : T | null;
+
+    /**
      * Returns all created code boxes along with the dataset of their root elements.
      * @returns An array of objects, each containing a created code box and the dataset of its root element.
      */

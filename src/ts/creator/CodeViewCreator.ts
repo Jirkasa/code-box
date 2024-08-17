@@ -1,4 +1,5 @@
 import CodeViewOptions from "../code-view/CodeViewOptions";
+import GlobalConfig from "../GlobalConfig";
 import { CodeView } from "../main";
 import { createCodeViewOptionsCopy } from "../utils/utils";
 
@@ -14,6 +15,8 @@ export type CodeViewCreatorEntry = {
 class CodeViewCreator {
     /** Created code views stored by pre element. */
     private createdCodeViews = new Map<HTMLPreElement, CodeView>();
+    /** Stores created code views by id (code views with no id are not stored). */
+    private createdCodeViewsById = new Map<string, CodeView>();
     /** Default code view options used, when no options are provided to the create method. */
     private defaultCodeViewOptions : CodeViewOptions;
 
@@ -42,6 +45,12 @@ class CodeViewCreator {
             try {
                 const codeView = new CodeView(element, codeViewOptions);
                 this.createdCodeViews.set(element, codeView);
+
+                const id = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Id"];
+                if (id !== undefined && !this.createdCodeViewsById.has(id)) {
+                    this.createdCodeViewsById.set(id, codeView);
+                }
+
                 createdCodeViewsCount++;
             } catch(err) {
                 console.error(err);
@@ -49,6 +58,15 @@ class CodeViewCreator {
         });
 
         return createdCodeViewsCount;
+    }
+
+    /**
+     * Returns created code view by id.
+     * @param id Id of created code view.
+     * @returns Code view (or null if code view was not found).
+     */
+    public getCreatedCodeViewById(id : string) : CodeView | null {
+        return this.createdCodeViewsById.get(id) || null;
     }
 
     /**

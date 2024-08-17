@@ -20,11 +20,6 @@ class ProjectCodeBoxCreator extends CodeBoxCreator<ProjectCodeBox, ProjectCodeBo
         super(defaultCodeBoxOptions);
     }
 
-    /**
-     * Returns created code box by id.
-     * @param id Id of created code box.
-     * @returns Code box.
-     */
     public getCreatedCodeBoxById(id : string) : ProjectCodeBox | null {
         return this.createdCodeBoxesById.get(id) || null;
     }
@@ -42,14 +37,19 @@ class ProjectCodeBoxCreator extends CodeBoxCreator<ProjectCodeBox, ProjectCodeBo
             }
         }
 
-        const codeBox = new ProjectCodeBox(element, codeBoxOptions, parentCodeBox);
-
-        const id = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Id"];
-        if (id !== undefined) {
-            this.createdCodeBoxesById.set(id, codeBox);
+        try {
+            const codeBox = new ProjectCodeBox(element, codeBoxOptions, parentCodeBox);
+    
+            const id = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Id"];
+            if (id !== undefined && !this.createdCodeBoxesById.has(id)) {
+                this.createdCodeBoxesById.set(id, codeBox);
+            }
+    
+            return codeBox;
+        } catch (err) {
+            console.error(err);
+            return null;
         }
-
-        return codeBox;
     }
 
     protected getAdditionallyCreatedCodeBoxes(codeBoxOptions : ProjectCodeBoxOptions) : AdditionalCodeBoxInfo<ProjectCodeBox>[] {
@@ -71,16 +71,20 @@ class ProjectCodeBoxCreator extends CodeBoxCreator<ProjectCodeBox, ProjectCodeBo
                 let parentCodeBox = this.createdCodeBoxesById.get(parentCodeBoxId);
                 if (!parentCodeBox) continue;
 
-                const codeBox = new ProjectCodeBox(element, codeBoxOptions, parentCodeBox);
-                const id = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Id"];
-                if (id !== undefined) {
-                    this.createdCodeBoxesById.set(id, codeBox);
+                try {
+                    const codeBox = new ProjectCodeBox(element, codeBoxOptions, parentCodeBox);
+                    const id = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Id"];
+                    if (id !== undefined && !this.createdCodeBoxesById.has(id)) {
+                        this.createdCodeBoxesById.set(id, codeBox);
+                    }
+    
+                    codeBoxInfos.push({
+                        codeBox: codeBox,
+                        rootElement: element
+                    });
+                } catch(err) {
+                    console.error(err);
                 }
-
-                codeBoxInfos.push({
-                    codeBox: codeBox,
-                    rootElement: element
-                });
 
                 this.postponedCodeBoxElements.splice(i, 1);
                 i--;
