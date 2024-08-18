@@ -1,6 +1,6 @@
 import CodeViewOptions from "../code-view/CodeViewOptions";
 import GlobalConfig from "../GlobalConfig";
-import { CodeView } from "../main";
+import CodeView from "../code-view/CodeView";
 import { createCodeViewOptionsCopy } from "../utils/utils";
 
 /** Entry for a CodeView created by code view creator along with the dataset of its corresponding HTML pre element. */

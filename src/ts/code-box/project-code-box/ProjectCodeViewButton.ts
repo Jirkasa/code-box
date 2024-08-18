@@ -1,5 +1,5 @@
 import CSSClasses from "../../CSSClasses";
-import { CodeView } from "../../main";
+import CodeView from "../../code-view/CodeView";
 import EventSourcePoint from "../../utils/EventSourcePoint";
 import SVGIconElementCreator from "../../utils/SVGIconElementCreator";
 import CodeViewButton from "../CodeViewButton";

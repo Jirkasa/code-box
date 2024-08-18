@@ -1,6 +1,6 @@
 import CodeBoxOptions from "../code-box/CodeBoxOptions";
 import GlobalConfig from "../GlobalConfig";
-import { VirtualCodeBox } from "../main";
+import VirtualCodeBox from "../code-box/virtual-code-box/VirtualCodeBox";
 import { createCodeBoxOptionsCopy } from "../utils/utils";
 import CodeBoxCreator from "./CodeBoxCreator";
 

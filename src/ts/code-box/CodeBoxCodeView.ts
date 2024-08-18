@@ -1,6 +1,6 @@
 import CodeViewMemento from "../code-view/CodeViewMemento";
 import HighlightBox from "../code-view/HighlightBox";
-import { CodeView } from "../main";
+import CodeView from "../code-view/CodeView";
 import CodeBox from "./CodeBox";
 import CodeBoxCodeViewManager from "./CodeBoxCodeViewManager";
 

@@ -1,4 +1,4 @@
-import { CodeView } from "../../main";
+import CodeView from "../../code-view/CodeView";
 import CodeViewButton from "../CodeViewButton";
 
 /** Represents code view folder item. */

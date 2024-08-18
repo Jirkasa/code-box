@@ -1,6 +1,6 @@
 import ProjectCodeBoxOptions from "../code-box/project-code-box/ProjectCodeBoxOptions";
 import GlobalConfig from "../GlobalConfig";
-import { ProjectCodeBox } from "../main";
+import ProjectCodeBox from "../code-box/project-code-box/ProjectCodeBox";
 import { createProjectCodeBoxOptionsCopy } from "../utils/utils";
 import CodeBoxCreator, { AdditionalCodeBoxInfo } from "./CodeBoxCreator";
 

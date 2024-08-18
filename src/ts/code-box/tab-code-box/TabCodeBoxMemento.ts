@@ -1,4 +1,4 @@
-import { CodeView } from "../../main";
+import CodeView from "../../code-view/CodeView";
 import CodeBox from "../CodeBox";
 import CodeBoxMemento, { CodeViewMementoEntry, FileMementoEntry } from "../CodeBoxMemento";
 import TabCodeBox from "./TabCodeBox";

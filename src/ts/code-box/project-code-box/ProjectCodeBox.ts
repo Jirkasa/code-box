@@ -1,6 +1,6 @@
 import CodeViewOptions from "../../code-view/CodeViewOptions";
 import GlobalConfig from "../../GlobalConfig";
-import { CodeView } from "../../main";
+import CodeView from "../../code-view/CodeView";
 import EventSourcePoint from "../../utils/EventSourcePoint";
 import CodeBox, { CodeBoxItemInfo } from "../CodeBox";
 import CodeBoxCodeViewManager from "../CodeBoxCodeViewManager";

@@ -1,5 +1,5 @@
 import GlobalConfig from "../../GlobalConfig";
-import { CodeView } from "../../main";
+import CodeView from "../../code-view/CodeView";
 import CodeBox, { CodeBoxItemInfo } from "../CodeBox";
 import CodeBoxCodeView from "../CodeBoxCodeView";
 import CodeBoxCodeViewManager from "../CodeBoxCodeViewManager";

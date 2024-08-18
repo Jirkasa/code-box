@@ -1,4 +1,4 @@
-import { CodeView } from "../../main";
+import CodeView from "../../code-view/CodeView";
 import CodeBoxCodeView from "../CodeBoxCodeView";
 import CodeBoxCodeViewManager from "../CodeBoxCodeViewManager";
 

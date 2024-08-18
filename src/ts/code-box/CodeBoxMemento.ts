@@ -1,5 +1,5 @@
 import CodeViewMemento from "../code-view/CodeViewMemento";
-import { CodeView } from "../main";
+import CodeView from "../code-view/CodeView";
 import CodeBox from "./CodeBox";
 
 /** Code view entry for code box memento. */

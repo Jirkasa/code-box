@@ -1,6 +1,6 @@
 import TabCodeBoxOptions from "../code-box/tab-code-box/TabCodeBoxOptions";
 import GlobalConfig from "../GlobalConfig";
-import { TabCodeBox } from "../main";
+import TabCodeBox from "../code-box/tab-code-box/TabCodeBox";
 import { createTabCodeBoxOptionsCopy } from "../utils/utils";
 import CodeBoxCreator from "./CodeBoxCreator";
 

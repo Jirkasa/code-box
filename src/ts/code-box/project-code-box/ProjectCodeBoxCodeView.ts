@@ -1,4 +1,4 @@
-import { ProjectCodeBox } from "../../main";
+import ProjectCodeBox from "../../code-box/project-code-box/ProjectCodeBox";
 import CodeBoxCodeView from "../CodeBoxCodeView";
 
 /** Represents code view of project code box. */

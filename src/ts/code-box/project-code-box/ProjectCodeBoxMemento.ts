@@ -1,4 +1,4 @@
-import { CodeView } from "../../main";
+import CodeView from "../../code-view/CodeView";
 import TreeNode from "../../utils/TreeNode";
 import CodeBox from "../CodeBox";
 import CodeBoxMemento, { CodeViewMementoEntry, FileMementoEntry } from "../CodeBoxMemento";

@@ -1,5 +1,3 @@
-/** Represents event source that can be used to fire and subscribe to events. */
-
 /**
  * Represents event source that can be used to fire and subscribe to events.
  * @template T Event sender.

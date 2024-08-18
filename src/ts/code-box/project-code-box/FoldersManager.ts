@@ -1,6 +1,6 @@
 import CSSClasses from "../../CSSClasses";
 import GlobalConfig from "../../GlobalConfig";
-import { CodeView } from "../../main";
+import CodeView from "../../code-view/CodeView";
 import EventSourcePoint from "../../utils/EventSourcePoint";
 import TreeNode from "../../utils/TreeNode";
 import CodeViewButton from "../CodeViewButton";
