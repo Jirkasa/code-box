@@ -1,10 +1,3 @@
-/**
- * Code Box
- * https://github.com/Jirkasa/code-box
- * Copyright (c) 2024 Jiří Satora
- * Licensed under the MIT license.
- */
-
 // CodeView
 export { default as CodeView } from "./code-view/CodeView";
 export { default as CodeViewMemento } from "./code-view/CodeViewMemento";
