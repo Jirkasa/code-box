@@ -1,3 +1,10 @@
+/**
+ * Code Box
+ * https://github.com/Jirkasa/code-box
+ * Copyright (c) 2024 Jiří Satora
+ * Licensed under the MIT license.
+ */
+
 // CodeView
 export { default as CodeView } from "./code-view/CodeView";
 export { default as CodeViewMemento } from "./code-view/CodeViewMemento";
@@ -41,31 +48,6 @@ export { default as ProjectCodeBoxCreator } from "./creator/ProjectCodeBoxCreato
 export { default as VirtualCodeBoxCreator } from "./creator/VirtualCodeBoxCreator";
 
 /**
- * přidat licenci: něco jako tady: https://github.com/sk-rt/handy-collapse/blob/main/src/index.ts
- */
-
-/**
- 
-Tři UI komponenty:
-    CodeView
-        - bude obsahovat API na highlightování atp...
-    TabCodeBox
-        - používá CodeView
-    ProjectCodeBox
-        - používá CodeView
-        - nebudu exportovat - bude se vytvářet pomocí nějaké další knihovny
-    - potom teda ještě nějaký, který se bude ovládat jen přes kód
-        - pojmenuju to jako VirtualCodeBox
-        - akorát teda files tam budou vlastně k ničemu - ale to je jedno - získat se kdyžtak dají přes kód a dá se s tím třeba něco dělat - i když mě něnapadá co
-
-Ta knihovna by měla být teda rozšiřitelná
-    - chci potom vytvářet ten code highlight runner atp., tak na to myslet
-
-- ještě by se hodil code box, který by se dal ovládat jen přes kód - někdo by to třeba někde využil
-
-Co mi ještě zbývá:
-- extendnutí pomocí atributu (ale to až potom, protože to se netýká přímo ProjectCodeBoxu, ale spíš nějaké komponenty, která je bude inicializovat)
-- název file elementu by měl jít nastavit přes data-cb-name nebo uvnitř elementu - asi spíš uvnitř elementu, ale mohl bych tam nechat možnost nastavit to i přes to (mělo by to přednost)
 
 
 - pluginy se asi nebudou předávat jako options, ale budou se moci přidávat nebo odebírat pomocí metod
