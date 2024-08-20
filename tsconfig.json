@@ -1,13 +1,12 @@
 {
-    "include": ["src/ts", "dev/ts"],
+    "include": ["ts"],
     "compilerOptions": {
         "outDir": "./dist/",
         "sourceMap": true,
         "module": "ES6",
         "target": "ES5",
         "allowJs": true,
-        "declaration": true,
-        "moduleResolution": "Node",
+        "moduleResolution": "node",
         "strict": true
     }
 }

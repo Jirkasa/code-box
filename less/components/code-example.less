@@ -1,0 +1,42 @@
+.code-example {
+    border: 1px solid @colors[analogic-5];
+    border-radius: .4rem;
+    overflow: hidden;
+
+    &__code {
+        
+
+        code {
+            font-family: "Ubuntu Sans Mono", monospace;
+            font-size: 1.6rem;
+            line-height: 2rem;
+
+            // width
+            &::-webkit-scrollbar {
+                height: 1.6rem;
+            }
+
+            // track
+            &::-webkit-scrollbar-track {
+                background: @colors[grey-40];
+            }
+
+            // handle
+            &::-webkit-scrollbar-thumb {
+                background: @colors[grey-60];
+                border: .1rem solid @colors[grey-40];
+                border-left: none;
+                border-right: none;
+
+                &:hover {
+                    background: darken(@colors[grey-60], 5%);
+                }
+            }
+        }
+    }
+
+    &__result-box {
+        background-color: @colors[grey-20];
+        padding: 3.2rem;
+    }
+}

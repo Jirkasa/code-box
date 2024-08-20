@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.2, minimum-scale=1.0">
+    <title>Code Box</title>
+
+    <% if (locals.useHighlightJS) { %>
+        <script src="<%= pathToRootFolder %>static/js/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+    <% } %>
+</head>
+<body>

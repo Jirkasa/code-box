@@ -1,47 +1,37 @@
 {
-  "name": "code-box",
+  "name": "code-box-documentation",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.prod.js --mode production",
     "dev": "webpack serve --config webpack.dev.js --mode development --open"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Jirkasa/code-box.git"
-  },
   "author": "Jiří Satora",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Jirkasa/code-box/issues"
-  },
-  "homepage": "https://github.com/Jirkasa/code-box#readme",
+  "description": "",
   "devDependencies": {
+    "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.0",
     "ejs": "^3.1.10",
-    "html-loader": "^5.0.0",
+    "html-loader": "^5.1.0",
     "html-webpack-plugin": "^5.6.0",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
-    "mini-css-extract-plugin": "^2.9.0",
-    "postcss": "^8.4.39",
+    "mini-css-extract-plugin": "^2.9.1",
+    "postcss": "^8.4.41",
     "postcss-loader": "^8.1.1",
-    "postcss-preset-env": "^9.5.15",
+    "postcss-preset-env": "^10.0.2",
     "style-loader": "^4.0.0",
     "svg-sprite-loader": "^6.0.11",
     "svgo-loader": "^4.0.0",
     "template-ejs-loader": "^0.9.4",
-    "terser-webpack-plugin": "^5.3.10",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.5.3",
-    "webpack": "^5.92.1",
+    "typescript": "^5.5.4",
+    "webpack": "^5.93.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4",
-    "webpack-merge": "^5.10.0",
+    "webpack-merge": "^6.0.1",
     "webpack-remove-empty-scripts": "^1.0.4"
   }
 }

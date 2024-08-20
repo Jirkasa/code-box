@@ -1,0 +1,20 @@
+.documentation-page-layout {
+    padding: 0 @grid-padding;
+
+    &__container {
+        max-width: @grid-width;
+        margin: 0 auto;
+
+        #display-12-grid();
+    }
+
+    &__content {
+        grid-column: span 9;
+
+        padding: 3.2rem 0;
+    }
+
+    &__navigation {
+        grid-column: span 3;
+    }
+}
