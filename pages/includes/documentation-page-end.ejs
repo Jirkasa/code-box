@@ -1,6 +1,33 @@
         </main>
-        <nav class="documentation-page-layout__navigation">
-
-        </nav>
+        <div class="documentation-page-layout__navigation">
+            <div class="navigation">
+                <h3 class="navigation__heading">Contents</h3>
+                <nav class="navigation__items">
+                    <ul id="DocumentationNavigationItems">
+                        <li>
+                            <div class="navigation__item">
+                                <button data-collapsible-button class="navigation__item-dropdown-button navigation__item-dropdown-button--opened">
+                                    <svg>
+                                        <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
+                                    </svg>
+                                </button>
+                                <a href="<%= pathToRootFolder %>documentation/getting-started/" class="navigation__item-link <% if (locals.activeLink === "getting-started") { %>navigation__item-link--active<% } %>">Getting Started</a>
+                            </div>
+                            <ul data-collapsible <% if (locals.activeLink === "getting-started") { %>data-collapsible-opened<% } %> class="navigation__collapsible">
+                                <li class="navigation__item">
+                                    <a href="#" class="navigation__item-link">Something</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="#" class="navigation__item-link">Options</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="#" class="navigation__item-link">And something</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
 </div>

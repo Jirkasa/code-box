@@ -4,8 +4,7 @@
         <h1 class="u-mb-4">Getting Started</h1>
         <p class="u-mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, facere. Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt atque ad quod impedit iste! Accusantium, facere. Beatae veniam doloremque aperiam, saepe necessitatibus dolore perspiciatis asperiores veritatis architecto eius distinctio iure, harum ullam a maxime sapiente ab officiis quam impedit, voluptates tenetur possimus. At, id! Repellendus aut obcaecati aliquam placeat natus!</p>
         <h2 class="u-mb-4">Something</h2>
-        <div class="code-example u-mb-4">
-            <!-- todo - takže ještě to promyslet -->
+        <div class="code-example u-mb-8">
             <pre class="code-example__code"><code class="language-javascript">const codeView = new CodeView(document.getElementById("CodeViewTest") as HTMLPreElement, {
     highlight: "g,3,15",
     showGutter: true
@@ -16,7 +15,7 @@ codeView.removeHighlights(5);
 codeView.showGutter();
 codeView.hideLineNumbers();</code></pre>
         </div>
-        <div class="code-example">
+        <div class="code-example u-mb-8">
             <pre class="code-example__code"><code class="language-javascript">const projectCodeBox = new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement, {
     projectName: "test",
     svgSpritePath: "./static/icon-sprite.svg",
@@ -38,5 +37,66 @@ codeView.hideLineNumbers();</code></pre>
 });</code></pre>
             <div class="code-example__result-box"></div>
         </div>
-    <%- include("../../includes/documentation-page-end.ejs") %>
+        <div class="code-example">
+            <button class="code-example__collapsible-button">
+                <div class="code-example__collapsible-button-dropdown-icon">
+                    <svg>
+                        <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
+                    </svg>
+                </div>
+                <span>HTML</span>
+            </button>
+            <div class="code-example__collapsible">
+                <pre class="code-example__code"><code class="language-javascript">const projectCodeBox = new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement, {
+    projectName: "test",
+    svgSpritePath: "./static/icon-sprite.svg",
+    svgSpriteIcons: {
+        codeFile: "file",
+        file: "file-2",
+        download: "download",
+        panelOpenButton: "double-arrow-right",
+        folder: "folder",
+        folderArrow: "arrow-right",
+        package: "package",
+        project: "inventory"
+    },
+    minCodeViewLinesCount: 20,
+    foldersDelimiterForPackages: ".",
+    openPanelOnInit: true,
+    createFoldersForPackages: false,
+    packagesFolderPath: "src/main"
+});</code></pre>
+            </div>
+            <button id="CollapsibleButton" class="code-example__collapsible-button">
+                <div class="code-example__collapsible-button-dropdown-icon">
+                    <svg>
+                        <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
+                    </svg>
+                </div>
+                <span>JavaScript</span>
+            </button>
+            <div id="CollapsibleContainer" class="code-example__collapsible">
+                <pre class="code-example__code"><code class="language-javascript">const projectCodeBox = new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement, {
+    projectName: "test",
+    svgSpritePath: "./static/icon-sprite.svg",
+    svgSpriteIcons: {
+        codeFile: "file",
+        file: "file-2",
+        download: "download",
+        panelOpenButton: "double-arrow-right",
+        folder: "folder",
+        folderArrow: "arrow-right",
+        package: "package",
+        project: "inventory"
+    },
+    minCodeViewLinesCount: 20,
+    foldersDelimiterForPackages: ".",
+    openPanelOnInit: true,
+    createFoldersForPackages: false,
+    packagesFolderPath: "src/main"
+});</code></pre>
+            </div>
+            <div class="code-example__result-box"></div>
+        </div>
+    <%- include("../../includes/documentation-page-end.ejs", {pathToRootFolder: "../../", activeLink: "getting-started"}) %>
 <%- include("../../includes/page-end.ejs") %>

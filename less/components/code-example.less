@@ -3,6 +3,39 @@
     border-radius: .4rem;
     overflow: hidden;
 
+    &__collapsible-button {
+        font-size: 1.2rem;
+        line-height: 1;
+
+        display: flex;
+        align-items: center;
+        gap: .4rem;
+
+        background-color: @colors[analogic-5];
+        color: @colors[analogic-1];
+        border: none;
+        padding: .8rem;
+
+        width: 100%;
+
+        cursor: pointer;
+    }
+
+    &__collapsible-button-dropdown-icon {
+        width: 1.2rem;
+        height: 1.2rem;
+
+        svg {
+            width: 100%;
+            height: 100%;
+            fill: @colors[analogic-1];
+        }
+    }
+
+    &__collapsible {
+
+    }
+
     &__code {
         
 
@@ -24,9 +57,7 @@
             // handle
             &::-webkit-scrollbar-thumb {
                 background: @colors[grey-60];
-                border: .1rem solid @colors[grey-40];
-                border-left: none;
-                border-right: none;
+                border-top: .1rem solid @colors[grey-40];
 
                 &:hover {
                     background: darken(@colors[grey-60], 5%);
