@@ -2,101 +2,30 @@
     <%- include("../../includes/header.ejs", {pathToRootFolder: "../../", activeLink: "documentation"}) %>
     <%- include("../../includes/documentation-page-start.ejs") %>
         <h1 class="u-mb-4">Getting Started</h1>
-        <p class="u-mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, facere. Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt atque ad quod impedit iste! Accusantium, facere. Beatae veniam doloremque aperiam, saepe necessitatibus dolore perspiciatis asperiores veritatis architecto eius distinctio iure, harum ullam a maxime sapiente ab officiis quam impedit, voluptates tenetur possimus. At, id! Repellendus aut obcaecati aliquam placeat natus!</p>
-        <h2 class="u-mb-4">Something</h2>
-        <div class="code-example u-mb-8">
-            <pre class="code-example__code"><code class="language-javascript">const codeView = new CodeView(document.getElementById("CodeViewTest") as HTMLPreElement, {
-    highlight: "g,3,15",
-    showGutter: true
-});
-
-codeView.addHighlight(7);
-codeView.removeHighlights(5);
-codeView.showGutter();
-codeView.hideLineNumbers();</code></pre>
-        </div>
-        <div class="code-example u-mb-8">
-            <pre class="code-example__code"><code class="language-javascript">const projectCodeBox = new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement, {
-    projectName: "test",
-    svgSpritePath: "./static/icon-sprite.svg",
-    svgSpriteIcons: {
-        codeFile: "file",
-        file: "file-2",
-        download: "download",
-        panelOpenButton: "double-arrow-right",
-        folder: "folder",
-        folderArrow: "arrow-right",
-        package: "package",
-        project: "inventory"
-    },
-    minCodeViewLinesCount: 20,
-    foldersDelimiterForPackages: ".",
-    openPanelOnInit: true,
-    createFoldersForPackages: false,
-    packagesFolderPath: "src/main"
-});</code></pre>
-            <div class="code-example__result-box"></div>
-        </div>
-        <div class="code-example">
-            <button class="code-example__collapsible-button">
-                <div class="code-example__collapsible-button-dropdown-icon">
-                    <svg>
-                        <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
-                    </svg>
-                </div>
-                <span>HTML</span>
-            </button>
-            <div class="code-example__collapsible">
-                <pre class="code-example__code"><code class="language-javascript">const projectCodeBox = new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement, {
-    projectName: "test",
-    svgSpritePath: "./static/icon-sprite.svg",
-    svgSpriteIcons: {
-        codeFile: "file",
-        file: "file-2",
-        download: "download",
-        panelOpenButton: "double-arrow-right",
-        folder: "folder",
-        folderArrow: "arrow-right",
-        package: "package",
-        project: "inventory"
-    },
-    minCodeViewLinesCount: 20,
-    foldersDelimiterForPackages: ".",
-    openPanelOnInit: true,
-    createFoldersForPackages: false,
-    packagesFolderPath: "src/main"
-});</code></pre>
-            </div>
-            <button id="CollapsibleButton" class="code-example__collapsible-button">
-                <div class="code-example__collapsible-button-dropdown-icon">
-                    <svg>
-                        <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
-                    </svg>
-                </div>
-                <span>JavaScript</span>
-            </button>
-            <div id="CollapsibleContainer" class="code-example__collapsible">
-                <pre class="code-example__code"><code class="language-javascript">const projectCodeBox = new ProjectCodeBox(document.getElementById("ProjectCodeBoxTest") as HTMLElement, {
-    projectName: "test",
-    svgSpritePath: "./static/icon-sprite.svg",
-    svgSpriteIcons: {
-        codeFile: "file",
-        file: "file-2",
-        download: "download",
-        panelOpenButton: "double-arrow-right",
-        folder: "folder",
-        folderArrow: "arrow-right",
-        package: "package",
-        project: "inventory"
-    },
-    minCodeViewLinesCount: 20,
-    foldersDelimiterForPackages: ".",
-    openPanelOnInit: true,
-    createFoldersForPackages: false,
-    packagesFolderPath: "src/main"
-});</code></pre>
-            </div>
-            <div class="code-example__result-box"></div>
-        </div>
+        <p class="u-mb-4">Welcome to the Code Box documentation. Code Box is a JavaScript library developed in TypeScript, designed for showcasing code samples on the web. While it doesn't provide syntax highlighting itself, it serves as a versatile container that allows users to select and display different code samples. You can either enable users to switch between different code samples with a few buttons or present the entire source code in a project-like format. For syntax highlighting, you can easily integrate libraries like <a href="https://highlightjs.org/" target="_blank" class="link">highlight.js</a>.</p>
+        <h2 id="installation" class="u-mb-2">Installation</h2>
+        <p class="u-mb-2">Code box is installed via NPM like any other package.</p>
+        <%- include("./includes/npm-installation.ejs") %>
+        <!-- TODO - potom to zkusit naimportovat a upravit ukázku kódu -->
+        <p class="u-mb-2">After installation, you need to integrate the core CSS styles into your project. If you're using a CSS preprocessor, you can import the styles as shown below. If you're not using a preprocessor, simply copy the CSS file from the node_modules folder.</p>
+        <%- include("./includes/import-core-styles.ejs") %>
+        <h2 id="usage-example" class="u-mb-2">Usage Example</h2>
+        <p class="u-mb-2">The most basic component of the library is the <a href="#" class="link">CodeView</a>. It is simply a code sample. The following example shows how to create it.</p>
+        <%- include("./includes/create-code-view.ejs") %>
+        <p class="u-mb-2">The library also includes CodeBox components, which are composed of multiple CodeViews. These are the main components of the library. The following example demonstrates how to create a <a href="#" class="link">TabCodeBox</a>, which offers the ability to switch between code samples using tabs.</p>
+        <%- include("./includes/create-tab-code-box.ejs") %>
+        <p class="u-mb-2">Another type of CodeBox is a <a href="#" class="link">ProjectCodeBox</a>. This component is designed to simulate a complete project by displaying the entire source code. The following example demonstrates how to create it.</p>
+        <%- include("./includes/create-project-code-box.ejs") %>
+        <h2 id="styling" class="u-mb-2">Styling</h2>
+        <p class="u-mb-4">Code Box comes with only the core styles, leaving the rest up to you. For more details on how to customize the styling, refer to the chapter on <a href="#" class="link">styling</a>.</p>
+        <h2 id="automatic-code-box-creation" class="u-mb-2">Automatic Code Box Creation</h2>
+        <p class="u-mb-2">If you have multiple code boxes and want to avoid creating them manually, you can generate them all at once using a creator. The example below shows how to do this for tab code boxes. You simply create a creator and call its create method, passing in a selector to target the elements from which the code boxes will be generated. For more details, refer to the chapter on <a href="#" class="link">creators</a>.</p>
+        <%- include("./includes/tab-code-box-creator.ejs") %>
     <%- include("../../includes/documentation-page-end.ejs", {pathToRootFolder: "../../", activeLink: "getting-started"}) %>
 <%- include("../../includes/page-end.ejs") %>
+
+<!--
+    todo - přidat odkazy
+    todo - neincludovat dev types do dist
+    todo - nezapomenout na todo - zkusit naimportovat CSS core styles
+-->

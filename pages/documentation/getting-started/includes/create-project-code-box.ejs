@@ -1,0 +1,61 @@
+<div class="code-example u-mb-4">
+    <button class="code-example__collapsible-button">
+        <div class="code-example__collapsible-button-dropdown-icon">
+            <svg>
+                <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
+            </svg>
+        </div>
+        <span>HTML</span>
+    </button>
+    <div class="code-example__collapsible">
+        <pre class="code-example__code"><code class="language-html">&lt;div id="MyProjectCodeBox"&gt;
+    &lt;pre data-cb-active data-cb-name="style.css" data-cb-folder="css" data-cb-active&gt;&lt;code&gt;h1 {
+    font-size: 16px;
+    color: red;
+}&lt;/code&gt;&lt;/pre&gt;
+    &lt;pre data-cb-name="main.js" data-cb-folder="js"&gt;&lt;code&gt;let x = 1;
+let y = 2;
+
+console.log("result: " + (x + y));&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+    <button id="CollapsibleButton" class="code-example__collapsible-button">
+        <div class="code-example__collapsible-button-dropdown-icon">
+            <svg>
+                <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
+            </svg>
+        </div>
+        <span>JavaScript</span>
+    </button>
+    <div id="CollapsibleContainer" class="code-example__collapsible">
+        <pre class="code-example__code"><code class="language-javascript">import { ProjectCodeBox } from "code-box";
+
+new ProjectCodeBox(document.getElementById("MyProjectCodeBox"), {
+    minCodeViewLinesCount: 10,
+    projectName: "example",
+    svgSpritePath: "./img/icon-sprite.svg",
+    svgSpriteIcons: {
+        codeFile: "file",
+        file: "file-2",
+        download: "download",
+        panelOpenButton: "double-arrow-right",
+        folderArrow: "arrow-right",
+        folder: "folder",
+        project: "inventory",
+        package: "package"
+    }
+});</code></pre>
+    </div>
+    <div class="code-example__result-box">
+        <div id="MyProjectCodeBox">
+            <pre data-cb-active data-cb-name="style.css" data-cb-folder="css" data-cb-active><code class="no-highlight">h1 {
+    font-size: 16px;
+    color: red;
+}</code></pre>
+            <pre data-cb-name="main.js" data-cb-folder="js"><code class="no-highlight">let x = 1;
+let y = 2;
+
+console.log("result: " + (x + y));</code></pre>
+        </div>
+    </div>
+</div>

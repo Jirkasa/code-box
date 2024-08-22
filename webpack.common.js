@@ -8,10 +8,17 @@ const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 function createHtmlWebpackPluginsForPagesInFolder(folderName) {
     const htmlPlugins = [];
     fs.readdirSync(`./pages/${folderName}`).forEach(pageName => {
+
+        const chunks = ["style", "common"];
+
+        if (fs.existsSync(`./js/documentation/${pageName}/main.js`)) {
+            chunks.push("documentation-" + pageName);
+        }
+
         const htmlPlugin = new HtmlWebpackPlugin({
             template: path.resolve(__dirname, "pages", folderName, pageName, "index.ejs"),
             filename: `${folderName}/${pageName}/index.html`,
-            chunks: ["style", "common"],
+            chunks: chunks,
             inject: true
         });
     
@@ -26,7 +33,8 @@ module.exports = {
     entry: {
         style: "./less/main.less",
         icons: './icons/main.js',
-        common: "./ts/common/main.ts"
+        common: "./ts/common/main.ts",
+        "documentation-getting-started": "./js/documentation/getting-started/main.js"
     },
     output: {
         clean: true
