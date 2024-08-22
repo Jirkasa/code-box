@@ -49,6 +49,8 @@ type ProjectCodeBoxOptions = {
     openRootFolderOnInit ?: boolean;
     /** Specifies whether the side panel should be opened on initialization (default = false). */
     openPanelOnInit ?: boolean;
+    /** Specifies whether the side panel should be closed when code view is selected by clicking on its button. */
+    closePanelOnCodeViewSelect ?: boolean;
     /** Value of the panel open/close button aria-label attribute when panel is closed (default = "Open panel"). */
     openPanelButtonAriaLabel ?: string;
     /** Value of the panel open/close button aria-label attribute when panel is opened (default = "Close panel"). */

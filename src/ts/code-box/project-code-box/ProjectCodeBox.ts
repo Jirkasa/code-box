@@ -77,6 +77,8 @@ class ProjectCodeBox extends CodeBox {
     private readonly openActiveCodeViewFolderOnInit : boolean;
     /** Determines whether active code view package should be opened on initialization. */
     private readonly openActiveCodeViewPackageOnInit : boolean;
+    /** Determines whether panel should be closed when code view is selected by clicking on its button. */
+    private readonly closePanelOnCodeViewSelect : boolean;
 
     /**
      * Creates new project code box.
@@ -301,6 +303,7 @@ class ProjectCodeBox extends CodeBox {
 
         this.openActiveCodeViewFolderOnInit = options.openActiveCodeViewFolderOnInit !== undefined ? options.openActiveCodeViewFolderOnInit : true;
         this.openActiveCodeViewPackageOnInit = options.openActiveCodeViewPackageOnInit !== undefined ? options.openActiveCodeViewPackageOnInit : true;
+        this.closePanelOnCodeViewSelect = options.closePanelOnCodeViewSelect !== undefined ? options.closePanelOnCodeViewSelect : true;
 
         this.showCodeViewEventSource.subscribe((_, codeView) => this.onShowCodeView(codeView));
     }
@@ -1463,6 +1466,10 @@ class ProjectCodeBox extends CodeBox {
     private onShowCodeView(codeView : CodeView) : void {
         this.changeActiveCodeView(codeView);
 
+        if (this.closePanelOnCodeViewSelect) {
+            this.panelToggle.close();
+        }
+
         const codeViewEntry = this.codeViewEntries.get(codeView);
         if (!codeViewEntry) return;
         const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
@@ -1921,6 +1928,9 @@ class ProjectCodeBox extends CodeBox {
         }
         if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "OpenPanelOnInit"] !== undefined) {
             options.openPanelOnInit = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "OpenPanelOnInit"] === "true";
+        }
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ClosePanelOnCodeViewSelected"] !== undefined) {
+            options.closePanelOnCodeViewSelect = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ClosePanelOnCodeViewSelected"] === "true";
         }
         if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "OpenPanelButtonAriaLabel"] !== undefined) {
             options.openPanelButtonAriaLabel = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "OpenPanelButtonAriaLabel"];

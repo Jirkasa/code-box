@@ -8,7 +8,11 @@ const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = merge(commonConfig, {
     output: {
-        path: path.resolve(__dirname, "dist")
+        path: path.resolve(__dirname, "dist"),
+        library: "CodeBox",
+        libraryTarget: 'umd',
+        globalObject: "window",
+        umdNamedDefine: true
     },
     module: {
         rules: [
