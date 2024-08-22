@@ -1,0 +1,24 @@
+.footer {
+    background-color: @colors[grey-90];
+    border-top: .1rem solid @colors[grey-80];
+
+    padding: 0 @grid-padding;
+
+    &__content {
+        font-size: 1.2rem;
+        line-height: 1.6rem;
+
+        margin: 0 auto;
+        max-width: @grid-width;
+
+        color: @colors[grey-40];
+
+        padding: 1.2rem 0;
+    }
+
+    &__link {
+        &:link, &:visited {
+            color: @colors[analogic-2];
+        }
+    }
+}
