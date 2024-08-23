@@ -6,7 +6,7 @@
                     <ul id="DocumentationNavigationItems">
                         <li>
                             <div class="navigation__item">
-                                <button data-collapsible-button class="navigation__item-dropdown-button navigation__item-dropdown-button--opened">
+                                <button data-collapsible-button class="navigation__item-dropdown-button">
                                     <svg>
                                         <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
                                     </svg>
@@ -25,6 +25,30 @@
                                 </li>
                                 <li class="navigation__item">
                                     <a href="<%= pathToRootFolder %>documentation/getting-started/#automatic-code-box-creation" class="navigation__item-link">Automatic Code Box Creation</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="navigation__item">
+                                <button data-collapsible-button class="navigation__item-dropdown-button">
+                                    <svg>
+                                        <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
+                                    </svg>
+                                </button>
+                                <a href="<%= pathToRootFolder %>documentation/styling/" class="navigation__item-link <% if (locals.activeLink === "styling") { %>navigation__item-link--active<% } %>">Styling</a>
+                            </div>
+                            <ul data-collapsible <% if (locals.activeLink === "styling") { %>data-collapsible-opened<% } %> class="navigation__collapsible">
+                                <li class="navigation__item">
+                                    <a href="<%= pathToRootFolder %>documentation/styling/#rules-for-styling" class="navigation__item-link">Rules For Styling</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="<%= pathToRootFolder %>documentation/styling/#styling-code-view" class="navigation__item-link">Styling Code View</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="<%= pathToRootFolder %>documentation/styling/#styling-tab-code-box" class="navigation__item-link">Styling Tab Code Box</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="<%= pathToRootFolder %>documentation/styling/#styling-project-code-box" class="navigation__item-link">Styling Project Code Box</a>
                                 </li>
                             </ul>
                         </li>

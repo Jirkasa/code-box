@@ -1,0 +1,230 @@
+<div class="code-example">
+    <select data-css-code-switch class="code-example__switch">
+        <option value="SCSS/LESS">SCSS/LESS</option>
+        <option value="CSS">CSS</option>
+    </select>
+    <pre data-less-code class="code-example__code"><code class="language-less">.cb-project-code-box {
+    background-color: #191A1B;
+
+    &__no-code-view {
+        background-color: #191A1B;
+    }
+
+    &__no-code-view-message {
+        color: #E3EBEC;
+    }
+
+    &__panel {
+        background-color: #191A1B;
+    }
+
+    &__panel-content {
+        background-color: #bacccf;
+    }
+
+    &__panel-open-button {
+        background-color: #54BBCA;
+        border-top-right-radius: .8rem;
+        border-bottom-right-radius: .8rem;
+    }
+
+    &__panel-open-button {
+        svg {
+            fill: #282B2C;
+        }
+    }
+
+    &__panel-heading {
+        font-weight: 600;
+
+        color: #282B2C;
+    }
+
+    &__panel-item {
+        &, &:link, &:visited {
+            color: #282B2C;
+            gap: .4rem;
+        }
+
+        &--project {
+            &, &:link, &:visited {
+                .cb-project-code-box__panel-item-icon svg {
+                    fill: #258291;
+                }
+            }
+        }
+
+        &--package {
+            &, &:link, &:visited {
+                .cb-project-code-box__panel-item-icon svg {
+                    fill: #5079ae;
+                }
+            }
+        }
+
+        &--default-package {
+            &, &:link, &:visited {
+                .cb-project-code-box__panel-item-icon svg {
+                    fill: #5E6364;
+                }
+            }
+        }
+
+        &--folder {
+            &, &:link, &:visited {
+                .cb-project-code-box__panel-item-icon svg {
+                    fill: #806f9b;
+                }
+            }
+        }
+
+        &--file {
+            &, &:link, &:visited {
+                .cb-project-code-box__panel-item-icon svg {
+                    fill: #282B2C;
+                }
+            }
+        }
+    }
+
+    &__panel-item-arrow-icon {
+        width: 1.8rem;
+        height: 1.8rem;
+
+        svg {
+            fill: #5E6364;
+        }
+    }
+
+    &__panel-item-download-icon {
+        svg {
+            fill: #258291;
+        }
+    }
+
+    &__panel-horizontal-rule {
+        background-color: #a5b6b9;
+    }
+}</code></pre>
+    <pre data-css-code class="code-example__code" style="display: none;"><code class="language-css">.cb-project-code-box {
+    background-color: #191A1B;
+}
+
+.cb-project-code-box__no-code-view {
+    background-color: #191A1B;
+}
+
+.cb-project-code-box__no-code-view-message {
+    color: #E3EBEC;
+}
+
+.cb-project-code-box__panel {
+    background-color: #191A1B;
+}
+
+.cb-project-code-box__panel-content {
+    background-color: #bacccf;
+}
+
+.cb-project-code-box__panel-open-button {
+    background-color: #54BBCA;
+    border-top-right-radius: 0.8rem;
+    border-bottom-right-radius: 0.8rem;
+}
+
+.cb-project-code-box__panel-open-button svg {
+    fill: #282B2C;
+}
+
+.cb-project-code-box__panel-heading {
+    font-weight: 600;
+    color: #282B2C;
+}
+
+.cb-project-code-box__panel-item,
+.cb-project-code-box__panel-item:link,
+.cb-project-code-box__panel-item:visited {
+    color: #282B2C;
+    gap: 0.4rem;
+}
+
+.cb-project-code-box__panel-item--project .cb-project-code-box__panel-item-icon svg,
+.cb-project-code-box__panel-item--project:link .cb-project-code-box__panel-item-icon svg,
+.cb-project-code-box__panel-item--project:visited .cb-project-code-box__panel-item-icon svg {
+    fill: #258291;
+}
+
+.cb-project-code-box__panel-item--package .cb-project-code-box__panel-item-icon svg,
+.cb-project-code-box__panel-item--package:link .cb-project-code-box__panel-item-icon svg,
+.cb-project-code-box__panel-item--package:visited .cb-project-code-box__panel-item-icon svg {
+    fill: #5079ae;
+}
+
+.cb-project-code-box__panel-item--default-package .cb-project-code-box__panel-item-icon svg,
+.cb-project-code-box__panel-item--default-package:link .cb-project-code-box__panel-item-icon svg,
+.cb-project-code-box__panel-item--default-package:visited .cb-project-code-box__panel-item-icon svg {
+    fill: #5E6364;
+}
+
+.cb-project-code-box__panel-item--folder .cb-project-code-box__panel-item-icon svg,
+.cb-project-code-box__panel-item--folder:link .cb-project-code-box__panel-item-icon svg,
+.cb-project-code-box__panel-item--folder:visited .cb-project-code-box__panel-item-icon svg {
+    fill: #806f9b;
+}
+
+.cb-project-code-box__panel-item--file .cb-project-code-box__panel-item-icon svg,
+.cb-project-code-box__panel-item--file:link .cb-project-code-box__panel-item-icon svg,
+.cb-project-code-box__panel-item--file:visited .cb-project-code-box__panel-item-icon svg {
+    fill: #282B2C;
+}
+
+.cb-project-code-box__panel-item-arrow-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+.cb-project-code-box__panel-item-arrow-icon svg {
+    fill: #5E6364;
+}
+
+.cb-project-code-box__panel-item-download-icon svg {
+    fill: #258291;
+}
+
+.cb-project-code-box__panel-horizontal-rule {
+    background-color: #a5b6b9;
+}</code></pre>
+    <div class="code-example__result-box styled-code-view-example styled-project-code-box-example">
+        <div id="ProjectCodeBoxStylingExample">
+            <pre data-cb-name="MyApp.java" data-cb-package="io.github.jirkasa"><code>package io.github.jirkasa;
+
+public class MyApp {
+    public static void main(String[] args) {
+        System.out.println("Hello world!");
+    }
+}</code></pre>
+            <pre data-cb-name="Book.java" data-cb-package data-cb-active><code>public class Book {
+    private String title;
+    private int year;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+}</code></pre>
+            <pre data-cb-name="README.txt"><code>This is example app.</code></pre>
+            <div data-cb-name="Image.png" data-cb-file="../../static/Image.png"></div>
+        </div>
+    </div>
+</div>

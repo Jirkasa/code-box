@@ -1,0 +1,50 @@
+<%- include("../../includes/page-start.ejs", {pathToRootFolder: "../../", useHighlightJS: true}) %>
+    <%- include("../../includes/header.ejs", {pathToRootFolder: "../../", activeLink: "documentation"}) %>
+    <%- include("../../includes/documentation-page-start.ejs") %>
+        <h1 class="u-mb-4">Styling</h1>
+        <p class="u-mb-4">Code Box comes with only the core styles. It's entirely up to you how you style it. It doesn't offer any pre-built themes, giving you complete flexibility to match the look and feel of your project. In this section, you’ll find out how you can do that.</p>
+        <h2 id="rules-for-styling" class="u-mb-2">Rules For Styling</h2>
+        <p class="u-mb-4">You have the freedom to style the code view and code box components however you like, with just a few exceptions for styling code boxes. Do not set the height for the element that displays the message when no code view is selected, and do not set a minimum height for the code view container. These properties are controlled by options (or data attributes) to support <a href="#" class="link">lazy initialization</a>.</p>
+        <h2 id="styling-code-view" class="u-mb-2">Styling Code View</h2>
+        <h3 class="u-mb-1">Core Styles</h3>
+        <p class="u-mb-2">Following code sample shows the core CSS styles for <a href="#" class="link">CodeView</a> (written in LESS preprocessor).</p>
+        <%- include("./includes/code-view-core-styles.ejs") %>
+        <h3 class="u-mb-1">Example of styling</h3>
+        <p class="u-mb-2">The following code sample demonstrates how to style the <a href="#" class="link">CodeView</a>.</p>
+        <%- include("./includes/code-view-styling-example.ejs") %>
+        <h2 id="styling-tab-code-box" class="u-mb-2">Styling Tab Code Box</h2>
+        <h3 class="u-mb-1">Core Styles</h3>
+        <p class="u-mb-2">Following code sample shows the core CSS styles for <a href="#" class="link">TabCodeBox</a> (written in LESS preprocessor).</p>
+        <%- include("./includes/tab-code-box-core-styles.ejs") %>
+        <h3 class="u-mb-1">Example of styling</h3>
+        <p class="u-mb-2">The following code sample demonstrates how to style the <a href="#" class="link">TabCodeBox</a> (CodeView is already styled).</p>
+        <%- include("./includes/tab-code-box-styling-example.ejs") %>
+        <h2 id="styling-project-code-box" class="u-mb-2">Styling Project Code Box</h2>
+        <h3 class="u-mb-1">Core Styles</h3>
+        <p class="u-mb-2">Following code sample shows the core CSS styles for <a href="#" class="link">ProjectCodeBox</a> (written in LESS preprocessor).</p>
+        <%- include("./includes/project-code-box-core-styles.ejs") %>
+        <h3 class="u-mb-1">Example of styling</h3>
+        <p class="u-mb-2">The following code sample demonstrates how to style the <a href="#" class="link">ProjectCodeBox</a> (CodeView is already styled).</p>
+        <%- include("./includes/project-code-box-styling-example.ejs") %>
+    <%- include("../../includes/documentation-page-end.ejs", {pathToRootFolder: "../../", activeLink: "styling"}) %>
+    <%- include("../../includes/footer.ejs") %>
+<%- include("../../includes/page-end.ejs") %>
+
+<!--
+    todo - přidat odkazy
+    todo - neincludovat dev types do dist
+    todo - nezapomenout na todo - zkusit naimportovat CSS core styles
+
+    
+
+    Takže začátek mám. Co dál:
+    X - Styling
+        - ukázat jak nastylovat code view, tab code box a project code box - s příkladem - a možností přepnutí do "CSS" / "SCSS/LESS"
+        - ukázat jaké jsou základní styly (také s možností přepínání - někde vpravo nahoře bude select)
+    - Code View
+    - Code Box
+    - Tab Code Box
+    - Project Code Box
+    - Virtual Code Box
+    - Creators
+-->

@@ -1,0 +1,52 @@
+.styled-tab-code-box-example {
+    .cb-tab-code-box {
+        &__tab {
+            &, &:link, &.visited {
+                background-color: #99c7ce;
+                padding: .4rem .8rem;
+                border-top-left-radius: .8rem;
+                border-top-right-radius: .8rem;
+            }
+
+            &--active {
+                &, &:link, &:visited {
+                    background-color: #54BBCA;
+                    border: none;
+                }
+            }
+
+            &:hover, &:focus-visible {
+                background-color: #54BBCA;
+            }
+
+            &:focus-visible {
+                outline: .2rem solid #282B2C;
+                outline-offset: -.2rem;
+            }
+        }
+
+        &__tab-icon {
+            svg {
+                fill: #282B2C;
+            }
+        }
+
+        &__tab-download-icon {
+            svg {
+                fill: #282B2C;
+            }
+        }
+
+        &__tab-text {
+            color: #282B2C;
+        }
+        
+        &__no-code-view {
+            background-color: #191A1B;
+        }
+
+        &__no-code-view-message {
+            color: #E3EBEC;
+        }
+    }
+}

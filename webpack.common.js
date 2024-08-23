@@ -34,7 +34,8 @@ module.exports = {
         style: "./less/main.less",
         icons: './icons/main.js',
         common: "./ts/common/main.ts",
-        "documentation-getting-started": "./js/documentation/getting-started/main.js"
+        "documentation-getting-started": "./js/documentation/getting-started/main.js",
+        "documentation-styling": "./js/documentation/styling/main.js"
     },
     output: {
         clean: true

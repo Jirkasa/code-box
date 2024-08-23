@@ -3,6 +3,8 @@
     border-radius: .4rem;
     overflow: hidden;
 
+    position: relative;
+
     &__collapsible-button {
         font-size: 1.2rem;
         line-height: 1;
@@ -77,6 +79,30 @@
                 color: @colors[grey-20];
             }
         }
+
+        &--with-max-height {
+            code {
+                max-height: 40rem;
+            }
+        }
+    }
+
+    &__switch {
+        position: absolute;
+        top: .8rem;
+        right: .8rem;
+
+        font-family: inherit;
+
+        font-size: 1.6rem;
+        line-height: 1;
+
+        color: @colors[grey-20];
+        background-color: @colors[analogic-2];
+        border: none;
+        border-radius: .4rem;
+
+        padding: .4rem;
     }
 
     &__result-box {
