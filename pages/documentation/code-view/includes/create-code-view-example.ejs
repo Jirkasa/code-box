@@ -1,0 +1,41 @@
+<div class="code-example u-mb-2">
+    <button class="code-example__collapsible-button">
+        <div class="code-example__collapsible-button-dropdown-icon">
+            <svg>
+                <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
+            </svg>
+        </div>
+        <span>HTML</span>
+    </button>
+    <div class="code-example__collapsible">
+        <pre class="code-example__code"><code class="language-html">&lt;pre id="MyCodeView"&gt;&lt;code&gt;let x = 1;
+let y = 2;
+
+let result = x + y;
+
+console.log("result: " + result);&lt;/code&gt;&lt;/pre&gt;</code></pre>
+    </div>
+    <button class="code-example__collapsible-button">
+        <div class="code-example__collapsible-button-dropdown-icon">
+            <svg>
+                <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
+            </svg>
+        </div>
+        <span>JavaScript</span>
+    </button>
+    <div class="code-example__collapsible">
+        <pre class="code-example__code"><code class="language-javascript">import { CodeView } from "code-box";
+
+new CodeView(document.getElementById("MyCodeView"), {
+    highlight: "1-2,6"
+});</code></pre>
+    </div>
+    <div class="code-example__result-box">
+        <pre id="CreateCodeViewExample"><code class="no-highlight">let x = 1;
+let y = 2;
+
+let result = x + y;
+
+console.log("result: " + result);</code></pre>
+    </div>
+</div>

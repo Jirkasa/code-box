@@ -35,7 +35,8 @@ module.exports = {
         icons: './icons/main.js',
         common: "./ts/common/main.ts",
         "documentation-getting-started": "./js/documentation/getting-started/main.js",
-        "documentation-styling": "./js/documentation/styling/main.js"
+        "documentation-styling": "./js/documentation/styling/main.js",
+        "documentation-code-view": "./js/documentation/code-view/main.js"
     },
     output: {
         clean: true
