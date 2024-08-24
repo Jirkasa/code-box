@@ -28,7 +28,7 @@ class VirtualCodeBox extends CodeBox {
      * @param element Code box root element.
      * @param options Code box options.
      */
-    constructor(element : HTMLElement, options : CodeBoxOptions) {
+    constructor(element : HTMLElement, options : CodeBoxOptions = {}) {
         super(element, options, new VirtualCodeBoxBuilder());
     }
 

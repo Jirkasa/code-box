@@ -10,7 +10,7 @@ type CodeViewOptions = {
     lineHeight ?: number;
     /** Specifies the unit for the line height (default = "rem"). */
     lineHeightUnit ?: string;
-    /** CSS classes that should be added to the root element of the code view. */
+    /** CSS classes to be added to the root element of the code view. */
     cssClasses ?: string[];
 }
 
