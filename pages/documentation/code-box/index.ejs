@@ -1,0 +1,606 @@
+<%- include("../../includes/page-start.ejs", {pathToRootFolder: "../../", useHighlightJS: true}) %>
+    <%- include("../../includes/header.ejs", {pathToRootFolder: "../../", activeLink: "documentation"}) %>
+    <%- include("../../includes/documentation-page-start.ejs") %>
+        <h1 class="u-mb-4">Code Box</h1>
+        <p class="u-mb-4">A code box is a component that acts as a container for <a href="#" class="link">CodeViews</a>, allowing users to select and display different code samples. There are currently three types of code boxes, all of which extend a base class called CodeBox that defines some <a href="#" class="link">common methods</a>.</p>
+        <h2 id="types-of-code-boxes" class="u-mb-2">Types of code boxes</h2>
+        <p class="u-mb-1">There are currently following types of code boxes:</p>
+        <table class="contents-table u-mb-2">
+            <tbody>
+                <tr>
+                    <th scope="row"><a href="#" class="link">TabCodeBox</a></th>
+                    <td>Offers ability to switch between code samples using tabs.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">ProjectCodeBox</a></th>
+                    <td>Simulates a complete project by displaying the entire source code.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">VirtualCodeBox</a></th>
+                    <td>Code box with no additional GUI, that is controlled only through code.</td>
+                </tr>
+            </tbody>
+        </table>
+        <%- include("./includes/types-of-code-boxes.ejs") %>
+        <h2 id="elements-of-code-box" class="u-mb-2">Elements of code box</h2>
+        <p class="u-mb-2">A code box is created from an element containing pre elements, which represent code views, and other elements that describe files. The following code sample demonstrates an example of such an element:</p>
+        <%- include("./includes/elements-of-code-box.ejs") %>
+        <h3 class="u-mb-1">Data attributes for code views</h3>
+        <p class="u-mb-1">In addition to the <a href="#" class="link">code view options</a>, code views within a code box can also include the following data attributes:</p>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row">data-cb-name</th>
+                    <td>Specifies the name (identifier) of the code view. Each code view in the code box should have a unique name; duplicates will be ignored.</td>
+                </tr>
+                <tr>
+                    <th scope="row">data-cb-active</th>
+                    <td>Marks the code view as active. This code view will be automatically displayed when the code box is initialized.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="u-mb-1">Data attributes for files</h3>
+        <p class="u-mb-1">Files in a code box are defined as elements with the data-cb-file attribute. Similar to code views, their name is set using the data-cb-name attribute. The following table describes these attributes:</p>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row">data-cb-file</th>
+                    <td>Marks the element as a file. A download link can be provided as its value. If no value is provided, the file will be non-downloadable.</td>
+                </tr>
+                <tr>
+                    <th scope="row">data-cb-name</th>
+                    <td>Specifies the name (identifier) of the file. Each file in the code box should have a unique name; duplicates will be ignored.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 id="options" class="u-mb-2">Options</h2>
+        <p class="u-mb-1">All code boxes inherit from the CodeBox class, so they also include the following options. Some of these options can also be configured using data attributes, with data attributes taking precedence.</p>
+        <table class="contents-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><a href="#" class="link">lazyInit</a></th>
+                    <td>Determines whether the code box should be initialized just before it is scrolled into the viewport.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">implicitActive</a></th>
+                    <td>Specifies whether the first code view should be set as active by default if no other code view is set as active.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">defaultCodeViewOptions</a></th>
+                    <td>Specifies default options for code views.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">noCodeViewSelectedElementHeight</a></th>
+                    <td>Specifies height of the element that is displayed when no code view is set as active.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">noCodeViewSelectedText</a></th>
+                    <td>Specifies text of the element that is displayed when no code view is set as active.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">minCodeViewLinesCount</a></th>
+                    <td>Specifies the minimum number of lines in the code view that determines the minimal height of the code box when the code view is displayed.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="option-heading u-mb-1"><span class="option-heading__name">lazyInit</span> <span class="option-heading__type">: boolean</span></h3>
+        <p class="option-info">Default value: <span class="option-info__value">true</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-lazy-init</span></p>
+        <p class="u-mb-4">Determines whether the code box should be initialized just before it is scrolled into the viewport. By default, this option is enabled (if disabled, the code box is initialized immediately). This helps reduce the load on performance during page loading.</p>
+        <h3 class="option-heading u-mb-1"><span class="option-heading__name">implicitActive</span> <span class="option-heading__type">: boolean</span></h3>
+        <p class="option-info">Default value: <span class="option-info__value">false</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-implicit-active</span></p>
+        <p class="u-mb-4">Specifies whether the first code view should be set as active by default if no other code view is set as active.</p>
+        <h3 class="option-heading u-mb-1"><span class="option-heading__name">defaultCodeViewOptions</span> <span class="option-heading__type">: <a href="#" class="option-heading__type-link">CodeViewOptions</a></span></h3>
+        <p class="option-info u-mb-2">Default value: <span class="option-info__value">{}</span></p>
+        <p class="u-mb-4">Specifies default options for code views.</p>
+        <h3 class="option-heading u-mb-1"><span class="option-heading__name">noCodeViewSelectedElementHeight</span> <span class="option-heading__type">: string</span></h3>
+        <p class="option-info">Default value: <span class="option-info__value">"50rem"</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-no-code-view-selected-element-height</span></p>
+        <p class="u-mb-4">Specifies height of the element that is displayed when no code view is set as active.</p>
+        <h3 class="option-heading u-mb-1"><span class="option-heading__name">noCodeViewSelectedText</span> <span class="option-heading__type">: string</span></h3>
+        <p class="option-info">Default value: <span class="option-info__value">"No code view selected"</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-no-code-view-selected-text</span></p>
+        <p class="u-mb-4">Specifies text of the element that is displayed when no code view is set as active.</p>
+        <h3 class="option-heading u-mb-1"><span class="option-heading__name">minCodeViewLinesCount</span> <span class="option-heading__type">: number</span></h3>
+        <p class="option-info">Default value: <span class="option-info__value">undefined</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-min-code-view-lines-count</span></p>
+        <p class="u-mb-4">Specifies the minimum number of lines in the code view that determines the minimal height of the code box when the code view is displayed. This value is not exact as it does not account for padding set by CSS styles; it is intended to set an optimal minimal height.</p>
+        <h2 id="methods" class="u-mb-2">Methods</h2>
+        <p class="u-mb-1">CodeBox class defines the following methods:</p>
+        <table class="contents-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><a href="#" class="link">appendTo</a></th>
+                    <td>Appends code box to element.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">detach</a></th>
+                    <td>Detaches code box from its parent element.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">init</a></th>
+                    <td>Initializes code box if it hasn't been initialized yet.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">isInitialized</a></th>
+                    <td>Checks whether the code box is initialized.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">addOnInitListener</a></th>
+                    <td>Registeres function to be called when code box is initialized.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">addCodeView</a></th>
+                    <td>Adds new code view to code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">getCodeViews</a></th>
+                    <td>Returns all code views of code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">getCodeView</a></th>
+                    <td>Returns code view based on identifier.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">removeCodeView</a></th>
+                    <td>Removes code view from code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">removeAllCodeViews</a></th>
+                    <td>Removes all code views from code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">changeCodeViewIdentifier</a></th>
+                    <td>Changes identifier of code view in code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">setActiveCodeView</a></th>
+                    <td>Sets code view as active (displays it in code box).</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">setNoActiveCodeView</a></th>
+                    <td>Displays no code view in code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">getActiveCodeView</a></th>
+                    <td>Returns currently active code view.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">addFile</a></th>
+                    <td>Adds new file to code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">getFiles</a></th>
+                    <td>Returns all files of code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">getFile</a></th>
+                    <td>Returns file based on identifier.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">removeFile</a></th>
+                    <td>Removes file from code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">removeAllFiles</a></th>
+                    <td>Removes all files from code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">changeFileIdentifier</a></th>
+                    <td>Changes identifier of file in code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">changeFileDownloadLink</a></th>
+                    <td>Changes download link of file.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">reset</a></th>
+                    <td>Resets code box to its post-initialization state.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">createMemento</a></th>
+                    <td>Creates memento.</td>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#" class="link">applyMemento</a></th>
+                    <td>Applies memento.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">appendTo</h3>
+        <p class="method-signature u-mb-2">appendTo(element: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement" target="_blank" class="method-signature__link">HTMLElement</a>): void</p>
+        <p class="u-mb-2">Appends code box to element.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row">element <span class="properties-table__type">: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement" target="_blank" class="properties-table__type-link">HTMLElement</a></span></th>
+                    <td>Element to append code box to.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">detach</h3>
+        <p class="method-signature u-mb-2">detach(): void</p>
+        <p class="u-mb-4">Detaches code box from its parent element.</p>
+        <h3 class="method-heading u-mb-1">init</h3>
+        <p class="method-signature u-mb-2">init(): void</p>
+        <p class="u-mb-4">Initializes code box if it hasn't been initialized yet. When lazy initialization is disabled, the code box is initialized immediately after it is created.</p>
+        <h3 class="method-heading u-mb-1">isInitialized</h3>
+        <p class="method-signature u-mb-2">isInitialized(): boolean</p>
+        <p class="u-mb-2">Checks whether the code box is initialized.</p>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type">boolean</span></th>
+                    <td>Indicates whether the code box is initialized.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">addOnInitListener</h3>
+        <p class="method-signature u-mb-2">addOnInitListener(callback: () => void): void</p>
+        <p class="u-mb-2">Registeres function to be called when code box is initialized.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row">callback <span class="properties-table__type">: () => void</span></th>
+                    <td>Function to be called after initialization of code box.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">addCodeView</h3>
+        <p class="method-signature u-mb-2">addCodeView(identifier: string, codeView: CodeView): boolean</p>
+        <p class="u-mb-2">Adds new code view to code box (copy of passed code view is made).</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table u-mb-2">
+            <tbody>
+                <tr>
+                    <th scope="row">identifier <span class="properties-table__type">: string</span></th>
+                    <td>Identifier under which the code view should be added to code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row">codeView <span class="properties-table__type">: <a href="#" class="properties-table__type-link">CodeView</a></span></th>
+                    <td>Code view.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type">boolean</span></th>
+                    <td>Indicates whether code view has been successfully added.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">getCodeViews</h3>
+        <p class="method-signature u-mb-2">getCodeViews(): <a href="#" class="method-signature__link">CodeBoxCodeView</a>[]</p>
+        <p class="u-mb-2">Returns all code views of code box.</p>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeBoxCodeView</a>[]</span></th>
+                    <td>Code views.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">getCodeView</h3>
+        <p class="method-signature u-mb-2">getCodeView(identifier: string): <a href="#" class="method-signature__link">CodeBoxCodeView</a> | null</p>
+        <p class="u-mb-2">Returns code view based on identifier.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table u-mb-2">
+            <tbody>
+                <tr>
+                    <th scope="row">identifier <span class="properties-table__type">: string</span></th>
+                    <td>Identifier of code view.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeBoxCodeView</a> | null</span></th>
+                    <td>Code view or null if code view wasn't found.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">removeCodeView</h3>
+        <p class="method-signature u-mb-2">removeCodeView(identifier: string): boolean</p>
+        <p class="u-mb-2">Removes code view from code box.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table u-mb-2">
+            <tbody>
+                <tr>
+                    <th scope="row">identifier <span class="properties-table__type">: string</span></th>
+                    <td>Identifier of code view to be removed.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type">boolean</span></th>
+                    <td>Indicates whether code view has been removed.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">removeAllCodeViews</h3>
+        <p class="method-signature u-mb-2">removeAllCodeViews(): void</p>
+        <p class="u-mb-4">Removes all code views from code box.</p>
+        <h3 class="method-heading u-mb-1">changeCodeViewIdentifier</h3>
+        <p class="method-signature u-mb-2">changeCodeViewIdentifier(identifier: string, newIdentifier: string): boolean</p>
+        <p class="u-mb-2">Changes identifier of code view in code box.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table u-mb-2">
+            <tbody>
+                <tr>
+                    <th scope="row">identifier <span class="properties-table__type">: string</span></th>
+                    <td>Identifier of code view whose identifier should be changed.</td>
+                </tr>
+                <tr>
+                    <th scope="row">newIdentifier <span class="properties-table__type">: string</span></th>
+                    <td>New identifier.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type">boolean</span></th>
+                    <td>Indicates whether change has been successfully completed (if passed new identifier already belongs to some other code view in code box, it returns false).</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">setActiveCodeView</h3>
+        <p class="method-signature u-mb-2">setActiveCodeView(identifier: string): boolean</p>
+        <p class="u-mb-2">Sets code view as active (displays it in code box).</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table u-mb-2">
+            <tbody>
+                <tr>
+                    <th scope="row">identifier <span class="properties-table__type">: string</span></th>
+                    <td>Identifier of code view which should be set as active.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type">boolean</span></th>
+                    <td>Indicates whether code view was found and has been successfully set as active.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">setNoActiveCodeView</h3>
+        <p class="method-signature u-mb-2">setNoActiveCodeView(): void</p>
+        <p class="u-mb-4">Displays no code view in code box.</p>
+        <h3 class="method-heading u-mb-1">getActiveCodeView</h3>
+        <p class="method-signature u-mb-2">getActiveCodeView(): <a href="#" class="method-signature__link">CodeBoxCodeView</a> | null</p>
+        <p class="u-mb-2">Returns currently active code view.</p>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type"><a href="#" class="method-signature__link">CodeBoxCodeView</a> | null</span></th>
+                    <td>Active code view or null if no code view is set as active.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">addFile</h3>
+        <p class="method-signature u-mb-2">addFile(identifier: string, downloadLink: string | null): boolean</p>
+        <p class="u-mb-2">Adds new file to code box.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table u-mb-2">
+            <tbody>
+                <tr>
+                    <th scope="row">identifier <span class="properties-table__type">: string</span></th>
+                    <td>Identifier under which the file should be added to code box.</td>
+                </tr>
+                <tr>
+                    <th scope="row">downloadLink <span class="properties-table__type">: string | null</span></th>
+                    <td>Download link or null if file should not be downloadable.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type">boolean</span></th>
+                    <td>Indicates whether file has been successfully added.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">getFiles</h3>
+        <p class="method-signature u-mb-2">getFiles(): <a href="#" class="method-signature__link">CodeBoxFile</a>[]</p>
+        <p class="u-mb-2">Returns all files of code box.</p>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeBoxFile</a>[]</span></th>
+                    <td>Files.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">getFile</h3>
+        <p class="method-signature u-mb-2">getFile(identifier: string): <a href="#" class="method-signature__link">CodeBoxFile</a> | null</p>
+        <p class="u-mb-2">Returns file based on identifier.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table u-mb-2">
+            <tbody>
+                <tr>
+                    <th scope="row">identifier <span class="properties-table__type">: string</span></th>
+                    <td>Identifier of file.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeBoxFile</a> | null</span></th>
+                    <td>File or null if file wasn't found.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">removeFile</h3>
+        <p class="method-signature u-mb-2">removeFile(identifier: string): boolean</p>
+        <p class="u-mb-2">Removes file from code box.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table u-mb-2">
+            <tbody>
+                <tr>
+                    <th scope="row">identifier <span class="properties-table__type">: string</span></th>
+                    <td>Identifier of file to be removed.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type">boolean</span></th>
+                    <td>Indicates whether file has been removed.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">removeAllFiles</h3>
+        <p class="method-signature u-mb-2">removeAllFiles(): void</p>
+        <p class="u-mb-4">Removes all files from code box.</p>
+        <h3 class="method-heading u-mb-1">changeFileIdentifier</h3>
+        <p class="method-signature u-mb-2">changeFileIdentifier(identifier: string, newIdentifier: string): boolean</p>
+        <p class="u-mb-2">Changes identifier of file in code box.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table u-mb-2">
+            <tbody>
+                <tr>
+                    <th scope="row">identifier <span class="properties-table__type">: string</span></th>
+                    <td>Indentifier of file whose identifier should be changed.</td>
+                </tr>
+                <tr>
+                    <th scope="row">newIdentifier <span class="properties-table__type">: string</span></th>
+                    <td>New identifier.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type">boolean</span></th>
+                    <td>Indicates whether change has been successfully completed (if passed new identifier already belongs to some other file in code box, it returns false).</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">changeFileDownloadLink</h3>
+        <p class="method-signature u-mb-2">changeFileDownloadLink(identifier: string, newDownloadLink: string | null): boolean</p>
+        <p class="u-mb-2">Changes download link of file.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table u-mb-2">
+            <tbody>
+                <tr>
+                    <th scope="row">identifier <span class="properties-table__type">: string</span></th>
+                    <td>Identifier of file whose download link should be changed.</td>
+                </tr>
+                <tr>
+                    <th scope="row">newDownloadLink <span class="properties-table__type">: string | null</span></th>
+                    <td>Download link (or null if file should not be downloadable).</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type">boolean</span></th>
+                    <td>Indicates whether file was found and its download link has been successfully changed.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">reset</h3>
+        <p class="method-signature u-mb-2">reset(): void</p>
+        <p class="u-mb-4">Resets code box to its post-initialization state.</p>
+        <h3 class="method-heading u-mb-1">createMemento</h3>
+        <p class="method-signature u-mb-2">createMemento(): <a href="#" class="method-signature__link">CodeBoxMemento</a></p>
+        <p class="u-mb-2">Creates memento (saved state of code box).</p>
+        <h4 class="u-mb-1">Returns</h4>
+        <table class="properties-table u-mb-4">
+            <tbody>
+                <tr>
+                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeBoxMemento</a></span></th>
+                    <td>Memento (saved state of code box).</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="method-heading u-mb-1">applyMemento</h3>
+        <p class="method-signature u-mb-2">applyMemento(memento: <a href="#" class="method-signature__link">CodeBoxMemento</a>): void</p>
+        <p class="u-mb-2">Applies memento (sets code box to the state defined by the provided memento).</p>
+        <h4 class="u-mb-1">Params</h4>
+        <table class="properties-table">
+            <tbody>
+                <tr>
+                    <th scope="row">memento <span class="properties-table__type">: <a href="#" class="properties-table__type-link">CodeBoxMemento</a></span></th>
+                    <td>Memento (saved state of code box).</td>
+                </tr>
+            </tbody>
+        </table>
+    <%- include("../../includes/documentation-page-end.ejs", {pathToRootFolder: "../../", activeLink: "code-box"}) %>
+    <%- include("../../includes/footer.ejs") %>
+<%- include("../../includes/page-end.ejs") %>
+
+
+
+<!-- 
+Ok, takže Code Box
+- úvod - napsat, že knihovna nabízí moméntálně tři typy code boxů (TabCodeBox, ProjectCodeBox a VirtualCodeBox)
+    - a taky samozřejmě na začátku napsat, co to ten code box vůbec je
+    - existuje pro ně společná třída jménem CodeBox (je to základ a definuje pro code boxy společné metody)
+- typy code boxů - a ukázat jak vypadají - vše v jednom a oddělit nadpisy
+- metody
+- a ještě options
+
+
+- ještě musím popsat, jak se přidávají files - co to jsou files
+    - a asi i code views - prostě jak se s code boxem obecně pracuje
+
+
+
+- budou tam popsané metody
+    - to potom ale zkopíruju a ukážu i u každého code boxu, protože tam se někde mění návratový typ
+- musím tam vysvětlit i CodeBoxCodeView a CodeBoxFile třídu
+    - spíš ne, to bude v části o dalších komponentách - bude na to odkaz, tak na to můžou kliknou, pokud se chtějí dozvědět více
+        - a je asi více pravděpodobné, že to lidi budou hledat tam
+-->
+
+
+
+<!--
+    todo - přidat odkazy
+    todo - neincludovat dev types do dist
+    todo - nezapomenout na todo - zkusit naimportovat CSS core styles
+    todo - dokumentační komentáře kdyžtak upravit podle dokumentace
+    todo - potom u všech stránek projít odsazení a kdyžtak jej někde zvětšit
+    todo - webpack přidat code splitting
+    todo - potom v kódu projít úplně každou option a data atribut, a podívat se jestli jsem to do dokumentace napsal
+    todo - u project code boxu popsat další data atributy (data-cb-folder...)
+
+    Takže začátek mám. Co dál:
+    X - Styling
+        - ukázat jak nastylovat code view, tab code box a project code box - s příkladem - a možností přepnutí do "CSS" / "SCSS/LESS"
+        - ukázat jaké jsou základní styly (také s možností přepínání - někde vpravo nahoře bude select)
+    X - Code View
+    - Code Box
+    - Tab Code Box
+    - Project Code Box
+    - Virtual Code Box
+    - Creators
+    - a ještě asi udělat stránku o dalších komponentách - tam bude vysvětleno: HighlightBox, memento...
+-->

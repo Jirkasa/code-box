@@ -79,6 +79,30 @@
                                 </li>
                             </ul>
                         </li>
+                        <li>
+                            <div class="navigation__item">
+                                <button data-collapsible-button class="navigation__item-dropdown-button">
+                                    <svg>
+                                        <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
+                                    </svg>
+                                </button>
+                                <a href="<%= pathToRootFolder %>documentation/code-box/" class="navigation__item-link <% if (locals.activeLink === "code-box") { %>navigation__item-link--active<% } %>">Code Box</a>
+                            </div>
+                            <ul data-collapsible <% if (locals.activeLink === "code-box") { %>data-collapsible-opened<% } %> class="navigation__collapsible">
+                                <li class="navigation__item">
+                                    <a href="<%= pathToRootFolder %>documentation/code-box/#types-of-code-boxes" class="navigation__item-link">Types of Code Boxes</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="<%= pathToRootFolder %>documentation/code-box/#elements-of-code-box" class="navigation__item-link">Elements of Code Box</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="<%= pathToRootFolder %>documentation/code-box/#options" class="navigation__item-link">Options</a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="<%= pathToRootFolder %>documentation/code-box/#methods" class="navigation__item-link">Methods</a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
             </div>
