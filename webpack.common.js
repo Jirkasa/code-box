@@ -37,7 +37,8 @@ module.exports = {
         "documentation-getting-started": "./js/documentation/getting-started/main.js",
         "documentation-styling": "./js/documentation/styling/main.js",
         "documentation-code-view": "./js/documentation/code-view/main.js",
-        "documentation-code-box": "./js/documentation/code-box/main.js"
+        "documentation-code-box": "./js/documentation/code-box/main.js",
+        "documentation-tab-code-box": "./js/documentation/tab-code-box/main.js"
     },
     output: {
         clean: true

@@ -103,6 +103,19 @@
                                 </li>
                             </ul>
                         </li>
+                        <li>
+                            <div class="navigation__item">
+                                <button data-collapsible-button class="navigation__item-dropdown-button">
+                                    <svg>
+                                        <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
+                                    </svg>
+                                </button>
+                                <a href="<%= pathToRootFolder %>documentation/tab-code-box/" class="navigation__item-link <% if (locals.activeLink === "tab-code-box") { %>navigation__item-link--active<% } %>">Tab Code Box</a>
+                            </div>
+                            <ul data-collapsible <% if (locals.activeLink === "tab-code-box") { %>data-collapsible-opened<% } %> class="navigation__collapsible">
+                                
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
             </div>
