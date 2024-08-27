@@ -204,7 +204,7 @@ class TabCodeBox extends CodeBox {
      * Changes position of code view button by swapping it with different code view or file button.
      * @param identifier Identifier of code view.
      * @param position Position of code view or file button (starting from 0) with which should be code view button swapped.
-     * @returns Indicates whether position has been successfully changed.
+     * @returns Indicates whether the position has been successfully changed.
      */
     public setCodeViewButtonPosition(identifier : string, position: number) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
@@ -395,7 +395,7 @@ class TabCodeBox extends CodeBox {
      * Changes position of file button by swapping it with different code view or file button.
      * @param identifier Identifier of file.
      * @param position Position of code view or file button (starting from 0) with which should be file button swapped.
-     * @returns Indicates whether position has been successfully changed.
+     * @returns Indicates whether the position has been successfully changed.
      */
     public setFileButtonPosition(identifier : string, position: number) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);

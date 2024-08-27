@@ -77,6 +77,8 @@ class ProjectCodeBox extends CodeBox {
     private readonly openActiveCodeViewFolderOnInit : boolean;
     /** Determines whether active code view package should be opened on initialization. */
     private readonly openActiveCodeViewPackageOnInit : boolean;
+    /** Determines whether the folder and its parent folders containing the active code view should not be opened on initialization when the code view is within a package. This option overrides openActiveCodeViewFolderOnInit when set to true and the active code view is within a package. */
+    private readonly preventActiveCodeViewFolderOpenOnInitIfPackage : boolean;
     /** Determines whether panel should be closed when code view is selected by clicking on its button. */
     private readonly closePanelOnCodeViewSelect : boolean;
 
@@ -303,6 +305,7 @@ class ProjectCodeBox extends CodeBox {
 
         this.openActiveCodeViewFolderOnInit = options.openActiveCodeViewFolderOnInit !== undefined ? options.openActiveCodeViewFolderOnInit : true;
         this.openActiveCodeViewPackageOnInit = options.openActiveCodeViewPackageOnInit !== undefined ? options.openActiveCodeViewPackageOnInit : true;
+        this.preventActiveCodeViewFolderOpenOnInitIfPackage = options.preventActiveCodeViewFolderOpenOnInitIfPackage !== undefined ? options.preventActiveCodeViewFolderOpenOnInitIfPackage : false;
         this.closePanelOnCodeViewSelect = options.closePanelOnCodeViewSelect !== undefined ? options.closePanelOnCodeViewSelect : true;
 
         this.showCodeViewEventSource.subscribe((_, codeView) => this.onShowCodeView(codeView));
@@ -1401,12 +1404,12 @@ class ProjectCodeBox extends CodeBox {
         if (activeCodeView) {
             const codeViewEntry = this.codeViewEntries.get(activeCodeView);
             if (codeViewEntry) {
-                if (this.openActiveCodeViewFolderOnInit) {
+                const packageName = codeViewEntry.codeBoxCodeView.getPackage();
+                if (this.openActiveCodeViewFolderOnInit && (packageName === undefined || !this.preventActiveCodeViewFolderOpenOnInitIfPackage)) {
                     const folderPath = (codeViewEntry.codeBoxCodeView.getIdentifier() || "").split("/");
                     folderPath.pop();
                     this.foldersManager.openFolder(folderPath.join("/"), true, false);
                 }
-                const packageName = codeViewEntry.codeBoxCodeView.getPackage();
                 if (this.openActiveCodeViewPackageOnInit && packageName !== undefined) {
                     this.foldersManager.openPackage(packageName, false);
                 }
@@ -1922,6 +1925,9 @@ class ProjectCodeBox extends CodeBox {
         }
         if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "OpenActiveCodeViewPackageOnInit"] !== undefined) {
             options.openActiveCodeViewPackageOnInit = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "OpenActiveCodeViewPackageOnInit"] === "true";
+        }
+        if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "PreventActiveCodeViewFolderOpenOnInitIfPackage"] !== undefined) {
+            options.preventActiveCodeViewFolderOpenOnInitIfPackage = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "PreventActiveCodeViewFolderOpenOnInitIfPackage"] === "true";
         }
         if (dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "OpenRootFolderOnInit"] !== undefined) {
             options.openRootFolderOnInit = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "OpenRootFolderOnInit"] === "true";

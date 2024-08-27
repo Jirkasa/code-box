@@ -47,6 +47,7 @@ https://krasimirtsonev.com/blog/article/javascript-library-starter-using-webpack
 UglifyJsPlugin
 
 TODO - přidat možnost nastavit, že se nemá otevírat složka s aktivním code view, pokud má balíček
+    - openActiveCodeViewFolderOnInit && (packageName === undefined || (!prevent))
 
 - pluginy se asi nebudou předávat jako options, ale budou se moci přidávat nebo odebírat pomocí metod
     - plugin třídy budou mít metody, které se budou volat v různých situacích: init, reset (nevím jak to bude u mementa - ale asi se předtím taky všechno nejdřív nějak resetuje? - takže by se ta metoda mohla taky volat?), a další - nebo lepší - mohlo by existovat PluginMemento - dalo by se tam třeba nějak vytvořit? - uvidím

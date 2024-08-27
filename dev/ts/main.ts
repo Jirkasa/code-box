@@ -48,7 +48,8 @@ const projectCodeBox = new ProjectCodeBox(document.getElementById("ProjectCodeBo
     minCodeViewLinesCount: 20,
     foldersDelimiterForPackages: ".",
     openPanelOnInit: true,
-    createFoldersForPackages: false,
+    createFoldersForPackages: true,
+    preventActiveCodeViewFolderOpenOnInitIfPackage: true,
     packagesFolderPath: "src/main",
     // closePanelOnCodeViewSelect: false
 });

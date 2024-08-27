@@ -45,6 +45,8 @@ type ProjectCodeBoxOptions = {
     openActiveCodeViewFolderOnInit ?: boolean;
     /** Specifies whether package containing the active code view should be opened on initialization (default = true). */
     openActiveCodeViewPackageOnInit ?: boolean;
+    /** Specifies whether the folder and its parent folders containing the active code view should not be opened on initialization when the code view is within a package. This option overrides openActiveCodeViewFolderOnInit when set to true and the active code view is within a package. (default = false) */
+    preventActiveCodeViewFolderOpenOnInitIfPackage ?: boolean;
     /** Specifies whether the project (root) folder should be opened on initialization (default = true). This option has effect only in certain situations (openActiveCodeViewFolderOnInit option has precedence). */
     openRootFolderOnInit ?: boolean;
     /** Specifies whether the side panel should be opened on initialization (default = false). */

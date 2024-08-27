@@ -219,7 +219,7 @@ abstract class CodeBox {
     }
 
     /**
-     * Initializes code box if it hasn't been initialized yet. (When lazy initialization is disabled, code box is initialized right away.)
+     * Initializes code box if it hasn't been initialized yet. (When lazy initialization is disabled, code box is initialized immediately after it is created.)
      */
     public init() : void {
         if (this.initialized) return;
@@ -294,6 +294,17 @@ abstract class CodeBox {
     }
 
     /**
+     * Registeres function to be called when code box is initialized.
+     * @param callback Function to be called after initialization of code box.
+     */
+    public addOnInitListener(callback : () => void) : void {
+        if (this.isInitialized()) return;
+        if (this.onInitCallbacks === null) return;
+
+        this.onInitCallbacks.push(callback);
+    }
+
+    /**
      * Adds new code view to code box (copy of passed code view is made).
      * @param identifier Identifier under which the code view should be added to code box.
      * @param codeView Code view.
@@ -330,7 +341,7 @@ abstract class CodeBox {
      * Changes identifier of code view in code box.
      * @param identifier Identifier of code view whose identifier should be changed.
      * @param newIdentifier New identifier.
-     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other code view in code box, it should return false).
+     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other code view in code box, it returns false).
      */
     public abstract changeCodeViewIdentifier(identifier : string, newIdentifier : string) : boolean;
 
@@ -375,7 +386,7 @@ abstract class CodeBox {
 
     /**
      * Removes file from code box.
-     * @param identifier Identifier of file to be remove.
+     * @param identifier Identifier of file to be removed.
      * @returns Indicates whether file has been removed.
      */
     public abstract removeFile(identifier : string) : boolean;
@@ -389,7 +400,7 @@ abstract class CodeBox {
      * Changes identifier of file in code box.
      * @param identifier Indentifier of file whose identifier should be changed.
      * @param newIdentifier New identifier.
-     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other file in code box, it should return false).
+     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other file in code box, it returns false).
      */
     public abstract changeFileIdentifier(identifier : string, newIdentifier : string) : boolean;
 
@@ -397,7 +408,7 @@ abstract class CodeBox {
      * Changes download link of file.
      * @param identifier Identifier of file whose download link should be changed.
      * @param newDownloadLink Download link (or null if file should not be downloadable).
-     * @returns Indicates whether file was found and its link has been successfully changed.
+     * @returns Indicates whether file was found and its download link has been successfully changed.
      */
     public abstract changeFileDownloadLink(identifier : string, newDownloadLink : string | null) : boolean;
 
@@ -417,17 +428,6 @@ abstract class CodeBox {
      * @param memento Memento.
      */
     public abstract applyMemento(memento : CodeBoxMemento) : void;
-
-    /**
-     * Registeres function to be called when code box is initialized.
-     * @param callback Function to be called after initialization of code box.
-     */
-    public addOnInitListener(callback : () => void) : void {
-        if (this.isInitialized()) return;
-        if (this.onInitCallbacks === null) return;
-
-        this.onInitCallbacks.push(callback);
-    }
 
     /**
      * Called on initialization.

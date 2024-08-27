@@ -101,7 +101,7 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
     }
 
     /**
-     * This method can be called after code box is prepared to inherit from its parent code box. (These things are not inherited: open/close state of panel, open/close state of folders and packages, highlights of code views. Folder path for packages is also not changed. Packages of overwritten code views and files are not changed unless new package was explicitely assigned.)
+     * This method can be called after code box is prepared to inherit from its parent code box. (These things are not inherited: open/close state of panel, open/close state of folders and packages, highlights of code views. Folder path for packages is also not changed. Packages of overwritten code views and files are not changed unless new package is explicitely assigned.)
      * @param codeBox Code box.
      */
     public applyToInherit(codeBox : ProjectCodeBox) : void {
