@@ -39,7 +39,8 @@ module.exports = {
         "documentation-code-view": "./js/documentation/code-view/main.js",
         "documentation-code-box": "./js/documentation/code-box/main.js",
         "documentation-tab-code-box": "./js/documentation/tab-code-box/main.js",
-        "documentation-project-code-box": "./js/documentation/project-code-box/main.js"
+        "documentation-project-code-box": "./js/documentation/project-code-box/main.js",
+        "documentation-virtual-code-box": "./js/documentation/virtual-code-box/main.js"
     },
     output: {
         clean: true

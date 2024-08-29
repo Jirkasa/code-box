@@ -1,0 +1,66 @@
+<%- include("../../includes/page-start.ejs", {pathToRootFolder: "../../", useHighlightJS: true}) %>
+    <%- include("../../includes/header.ejs", {pathToRootFolder: "../../", activeLink: "documentation"}) %>
+    <%- include("../../includes/documentation-page-start.ejs") %>
+        <h1 class="u-mb-4">Virtual Code Box</h1>
+        <p class="u-mb-4">VirtualCodeBox is a special type of code box, that is controlled only through code. It doesn't have any additional GUI.</p>
+        <h2 id="usage-example" class="u-mb-2">Usage Example</h2>
+        <p class="u-mb-2">The following example demonstrates how to create a VirtualCodeBox. Simply instantiate the VirtualCodeBox class by passing a reference to the root element of code box. You can read more about elements of code box <a href="#" class="link">here</a>. You can also provide additional options as a second parameter.</p>
+        <%- include("./includes/create-virtual-code-box-example.ejs") %>
+        <p class="u-mb-4">If you want to create multiple virtual code boxes, you can use the <a href="#" class="link">VirtualCodeBoxCreator</a>. For more information, refer to the chapter on creators.</p>
+        <h2 id="options" class="u-mb-2">Options</h2>
+        <p class="u-mb-4">VirtualCodeBox accepts all options from the <a href="#" class="link">base CodeBox class</a> and does not have any additional options.</p>
+        <h2 id="methods" class="u-mb-2">Methods</h2>
+        <p>VirtualCodeBox has methods that are already described in the chapter about the <a href="#" class="link">base CodeBox class</a>. It does not define any additional methods.</p>
+    <%- include("../../includes/documentation-page-end.ejs", {pathToRootFolder: "../../", activeLink: "virtual-code-box"}) %>
+    <%- include("../../includes/footer.ejs") %>
+<%- include("../../includes/page-end.ejs") %>
+
+
+
+<!-- 
+Ok, takže Code Box
+- úvod - napsat, že knihovna nabízí moméntálně tři typy code boxů (TabCodeBox, ProjectCodeBox a VirtualCodeBox)
+    - a taky samozřejmě na začátku napsat, co to ten code box vůbec je
+    - existuje pro ně společná třída jménem CodeBox (je to základ a definuje pro code boxy společné metody)
+- typy code boxů - a ukázat jak vypadají - vše v jednom a oddělit nadpisy
+- metody
+- a ještě options
+
+
+- ještě musím popsat, jak se přidávají files - co to jsou files
+    - a asi i code views - prostě jak se s code boxem obecně pracuje
+
+
+
+- budou tam popsané metody
+    - to potom ale zkopíruju a ukážu i u každého code boxu, protože tam se někde mění návratový typ
+- musím tam vysvětlit i CodeBoxCodeView a CodeBoxFile třídu
+    - spíš ne, to bude v části o dalších komponentách - bude na to odkaz, tak na to můžou kliknou, pokud se chtějí dozvědět více
+        - a je asi více pravděpodobné, že to lidi budou hledat tam
+-->
+
+
+
+<!--
+    todo - přidat odkazy
+    todo - neincludovat dev types do dist
+    todo - nezapomenout na todo - zkusit naimportovat CSS core styles
+    todo - dokumentační komentáře kdyžtak upravit podle dokumentace
+    todo - potom u všech stránek projít odsazení a kdyžtak jej někde zvětšit
+    todo - webpack přidat code splitting
+    todo - potom v kódu projít úplně každou option a data atribut, a podívat se jestli jsem to do dokumentace napsal
+    todo - u project code boxu popsat další data atributy (data-cb-folder...)
+    todo - projít to a zkontrolovat, jestli jsem někde nenechal to class="no-highlight"
+
+    Takže začátek mám. Co dál:
+    X - Styling
+        - ukázat jak nastylovat code view, tab code box a project code box - s příkladem - a možností přepnutí do "CSS" / "SCSS/LESS"
+        - ukázat jaké jsou základní styly (také s možností přepínání - někde vpravo nahoře bude select)
+    X - Code View
+    X - Code Box
+    X - Tab Code Box
+    X - Project Code Box
+    - Virtual Code Box
+    - Creators
+    - a ještě asi udělat stránku o dalších komponentách - tam bude vysvětleno: HighlightBox, memento... (Other Components?)
+-->
