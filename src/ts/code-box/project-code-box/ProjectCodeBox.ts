@@ -124,7 +124,7 @@ class ProjectCodeBox extends CodeBox {
         } else {
             projectName = options.projectName || GlobalConfig.DEFAULT_PROJECT_NAME;
             if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ProjectName"] !== undefined) {
-                options.projectName = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ProjectName"] || GlobalConfig.DEFAULT_PROJECT_NAME;
+                projectName = element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "ProjectName"] || GlobalConfig.DEFAULT_PROJECT_NAME;
             }
             packagesFolderPath = options.packagesFolderPath || null;
             if (element.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "PackagesFolderPath"] !== undefined) {
@@ -492,7 +492,7 @@ class ProjectCodeBox extends CodeBox {
      * Changes identifier of code view in code box. (It can change folder path and name of code view but it never changes package of code view.)
      * @param identifier Identifier of code view whose identifier should be changed.
      * @param newIdentifier New identifier.
-     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other code view in code box, it should return false).
+     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other code view in code box, it returns false).
      */
     public changeCodeViewIdentifier(identifier: string, newIdentifier: string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
@@ -576,7 +576,7 @@ class ProjectCodeBox extends CodeBox {
      * @param identifier Identifier of code view.
      * @returns Package of code view. If null is returned, code view belongs to default package. If undefined is returned, code view doesn't belong to any package or does not event exist.
      */
-    public getCodeViewPackage(identifier : string) : string | null | undefined { // undefined znamená, že code view nemá balíček
+    public getCodeViewPackage(identifier : string) : string | null | undefined {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         return this.foldersManager.getCodeViewPackage(identifier);
@@ -673,7 +673,7 @@ class ProjectCodeBox extends CodeBox {
     }
 
     /**
-     * Returns files based on folder path and name.
+     * Returns file based on folder path and name.
      * @param folderPath Folder path.
      * @param fileName Name of file.
      * @returns File (or null if file wasn't found).
@@ -734,7 +734,7 @@ class ProjectCodeBox extends CodeBox {
      * Changes identifier of file in code box. (It can change folder path and name of file but it never changes package of file.)
      * @param identifier Indentifier of file whose identifier should be changed.
      * @param newIdentifier New identifier.
-     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other file in code box, it should return false).
+     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other file in code box, it returns false).
      */
     public changeFileIdentifier(identifier: string, newIdentifier: string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
@@ -810,11 +810,16 @@ class ProjectCodeBox extends CodeBox {
     }
 
     /**
-     * Changes download link of file (or sets file as non-downloadable).
-     * @param identifier Identifier of file whose download link should be changed.
-     * @param newDownloadLink New download link or null to set file as non-downloadable.
-     * @returns Indicates whether file was successfully found and updated.
+     * Returns package of file.
+     * @param identifier Identifier of file.
+     * @returns Package of file. If null is returned, file belongs to default package. If undefined is returned, file doesn't belong to any package or does not even exist.
      */
+    public getFilePackage(identifier : string) : string | null | undefined {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.foldersManager.getFilePackage(identifier);
+    }
+
     public changeFileDownloadLink(identifier: string, newDownloadLink: string | null) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -828,17 +833,6 @@ class ProjectCodeBox extends CodeBox {
         fileEntry?.codeBoxFileManager.changeDownloadLink(newDownloadLink);
 
         return true;
-    }
-
-    /**
-     * Returns package of file.
-     * @param identifier Identifier of file.
-     * @returns Package of file. If null is returned, file belongs to default package. If undefined is returned, file doesn't belong to any package or does not even exist.
-     */
-    public getFilePackage(identifier : string) : string | null | undefined {
-        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
-
-        return this.foldersManager.getFilePackage(identifier);
     }
 
     /**
@@ -986,7 +980,7 @@ class ProjectCodeBox extends CodeBox {
     /**
      * Returns names of folder subfolders (only direct subfolders).
      * @param folderPath Path to folder.
-     * @returns Names of subfolders.
+     * @returns Names of subfolders or null if folder does not exist.
      */
     public getSubfolderNames(folderPath : string) : string[] | null {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
@@ -1207,6 +1201,10 @@ class ProjectCodeBox extends CodeBox {
         return this.foldersManager.isPackageFolderOpened(packageName);
     }
 
+    /**
+     * Returns all packages.
+     * @returns Packages.
+     */
     public getPackages() : string[] {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 

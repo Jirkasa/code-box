@@ -37,9 +37,9 @@ type ProjectCodeBoxOptions = {
     createFoldersForPackages ?: boolean;
     /** Specifies delimiter to be used when creating folders for packages. For example, if the delimiter is "." and the package name is "io.github.jirkasa", folders "io/github/jirkasa" are created. This option is not used if the code box has a parent code box. */
     foldersDelimiterForPackages ?: string;
-    /** Speed of folder open/close animation (in milliseconds). */
+    /** Speed of folder open/close animation (in milliseconds) (default = 200). */
     folderAnimationSpeed ?: number;
-    /** CSS easing function for folder open/close animation. */
+    /** CSS easing function for folder open/close animation (default = "ease-in-out"). */
     folderAnimationEasingFunction ?: string;
     /** Specifies whether folder and its parent folders containing the active code view should be opened on initialization (default = true). */
     openActiveCodeViewFolderOnInit ?: boolean;
@@ -47,11 +47,11 @@ type ProjectCodeBoxOptions = {
     openActiveCodeViewPackageOnInit ?: boolean;
     /** Specifies whether the folder and its parent folders containing the active code view should not be opened on initialization when the code view is within a package. This option overrides openActiveCodeViewFolderOnInit when set to true and the active code view is within a package. (default = false) */
     preventActiveCodeViewFolderOpenOnInitIfPackage ?: boolean;
-    /** Specifies whether the project (root) folder should be opened on initialization (default = true). This option has effect only in certain situations (openActiveCodeViewFolderOnInit option has precedence). */
+    /** Specifies whether the project (root) folder should be opened on initialization (default = true). This option has effect only in certain situations (openActiveCodeViewFolderOnInit option takes precedence). */
     openRootFolderOnInit ?: boolean;
     /** Specifies whether the side panel should be opened on initialization (default = false). */
     openPanelOnInit ?: boolean;
-    /** Specifies whether the side panel should be closed when code view is selected by clicking on its button. */
+    /** Specifies whether the side panel should be closed when code view is selected by clicking on its button (default = true). */
     closePanelOnCodeViewSelect ?: boolean;
     /** Value of the panel open/close button aria-label attribute when panel is closed (default = "Open panel"). */
     openPanelButtonAriaLabel ?: string;

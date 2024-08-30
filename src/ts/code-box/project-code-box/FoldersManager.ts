@@ -515,7 +515,7 @@ class FoldersManager {
     /**
      * Returns subfolder names of folder.
      * @param folderPath Path to folder.
-     * @returns Names of subfolders.
+     * @returns Names of subfolders or null if folder does not exist.
      */
     public getSubfolderNames(folderPath : string) : string[] | null {
         folderPath = this.normalizeFolderPath(folderPath);
