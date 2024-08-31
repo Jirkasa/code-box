@@ -34,8 +34,8 @@ export { default as ProjectCodeBoxOptions } from "./code-box/project-code-box/Pr
 export { default as VirtualCodeBox } from "./code-box/virtual-code-box/VirtualCodeBox";
 
 // Creators
-export { default as CodeBoxCreator, CodeBoxCreatorEntry } from "./creator/CodeBoxCreator";
-export { default as CodeViewCreator } from "./creator/CodeViewCreator";
+export { default as CodeBoxCreator, CodeBoxCreatorEntry, AdditionalCodeBoxInfo } from "./creator/CodeBoxCreator";
+export { default as CodeViewCreator, CodeViewCreatorEntry } from "./creator/CodeViewCreator";
 export { default as TabCodeBoxCreator } from "./creator/TabCodeBoxCreator";
 export { default as ProjectCodeBoxCreator } from "./creator/ProjectCodeBoxCreator";
 export { default as VirtualCodeBoxCreator } from "./creator/VirtualCodeBoxCreator";
