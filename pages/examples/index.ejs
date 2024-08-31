@@ -1,0 +1,71 @@
+<%- include("../includes/page-start.ejs", {pathToRootFolder: "../", useHighlightJS: true}) %>
+    <%- include("../includes/header.ejs", {pathToRootFolder: "../", activeLink: "examples"}) %>
+    <%- include("./includes/page-start.ejs") %>
+        <h1 class="u-mb-4">Examples</h1>
+        <p class="u-mb-4">This page showcases a few examples of what can be created with Code Box.</p>
+        <h2 class="u-mb-2">Code View</h2>
+        <h3 class="u-mb-2">Simple Code View</h3>
+        <%- include("./includes/simple-code-view.ejs") %>
+        <h3 class="u-mb-2">Highlighting</h3>
+        <%- include("./includes/highlighting.ejs") %>
+        <h2 class="u-mb-2">Code Boxes</h2>
+        <h3 class="u-mb-2">Tab Code Box</h3>
+        <%- include("./includes/tab-code-box.ejs") %>
+        <h3 class="u-mb-2">Project Code Box</h3>
+        <%- include("./includes/project-code-box.ejs") %>
+        <h3 class="u-mb-2">Project Code Box Inheritance</h3>
+        <%- include("./includes/project-code-box-inheritance.ejs") %>
+        <h2 class="u-mb-2">Styling</h2>
+        <h3 class="u-mb-2">Styling Code View</h3>
+        <%- include("./includes/styling-code-view.ejs") %>
+        <h3 class="u-mb-2">Styling Tab Code Box</h3>
+        <%- include("./includes/styling-tab-code-box.ejs") %>
+        <h3 class="u-mb-2">Styling Project Code Box</h3>
+        <%- include("./includes/styling-project-code-box.ejs") %>
+        <h2 class="u-mb-2">Other</h2>
+        <h3 class="u-mb-2">Visualization of Code Execution</h3>
+        <%- include("./includes/visualization-of-code-execution.ejs") %>
+    <%- include("./includes/page-end.ejs") %>
+    <%- include("../includes/footer.ejs") %>
+<%- include("../includes/page-end.ejs") %>
+
+
+<!-- 
+Takže examples:
+- budou tam jen ukázky s kódem - žádný text (jen nadpisy)
+        - jen na začátku bude text (napsat že je to jen ukázka toho, co knihovna nabízí - co se s tím dá vytvořit)
+
+- Code View
+    - Simple Code View
+    - Highlighting
+- Code Boxes
+    - Tab Code Box
+    - Project Code Box
+    - Project Code Box Inheritance
+- Styling
+    - Styling Code View
+    - Styling Tab Code Box
+    - Styling Project Code Box
+- Other
+    - Visualization of Code Execution (v nějaké jednoduché nekonečné smyčce)
+
+- to asi stačí - všechny ty možnosti budou otevřené - alespoň něco tam bude
+- kódy budou zavřené - je to jen na to, aby se na to uživatelé mohli podívat a zjistit co se dá s knihovnou dělat
+- do code boxů dát i nějaké files
+-->
+
+
+
+
+<!--
+    todo - přidat odkazy
+    todo - neincludovat dev types do dist
+    todo - nezapomenout na todo - zkusit naimportovat CSS core styles
+    todo - dokumentační komentáře kdyžtak upravit podle dokumentace
+    todo - potom u všech stránek projít odsazení a kdyžtak jej někde zvětšit
+    todo - webpack přidat code splitting
+    todo - potom v kódu projít úplně každou option a data atribut, a podívat se jestli jsem to do dokumentace napsal
+    todo - u project code boxu popsat další data atributy (data-cb-folder...)
+    todo - projít to a zkontrolovat, jestli jsem někde nenechal to class="no-highlight"
+    todo - tak ještě projít zdrojové kódy a zjistit, jestli jsem všude změnil id (jak vidím, tak zapomínám hodně)
+-->

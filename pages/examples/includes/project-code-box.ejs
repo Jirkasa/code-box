@@ -1,4 +1,4 @@
-<div class="code-example u-mb-2">
+<div class="code-example u-mb-4">
     <button class="code-example__collapsible-button">
         <div class="code-example__collapsible-button-dropdown-icon">
             <svg>
@@ -7,7 +7,7 @@
         </div>
         <span>HTML</span>
     </button>
-    <div class="code-example__collapsible">
+    <div data-collapsible-closed class="code-example__collapsible">
         <pre class="code-example__code"><code class="language-html">&lt;div id="MyProjectCodeBox"&gt;
     &lt;ul data-cb-folders&gt;
         &lt;li&gt;
@@ -59,7 +59,7 @@ public class MyApp {
         </div>
         <span>JavaScript</span>
     </button>
-    <div class="code-example__collapsible">
+    <div data-collapsible-closed class="code-example__collapsible">
         <pre class="code-example__code"><code class="language-javascript">import { ProjectCodeBox } from "code-box";
 
 new ProjectCodeBox(document.getElementById("MyProjectCodeBox"), {
@@ -81,7 +81,7 @@ new ProjectCodeBox(document.getElementById("MyProjectCodeBox"), {
 });</code></pre>
     </div>
     <div class="code-example__result-box">
-        <div id="CreateProjectCodeBoxExample">
+        <div id="ProjectCodeBoxExample">
             <ul data-cb-folders>
                 <li>
                     src

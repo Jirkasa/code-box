@@ -1,0 +1,63 @@
+<div class="code-example">
+    <button class="code-example__collapsible-button">
+        <div class="code-example__collapsible-button-dropdown-icon">
+            <svg>
+                <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
+            </svg>
+        </div>
+        <span>HTML</span>
+    </button>
+    <div data-collapsible-closed class="code-example__collapsible">
+        <pre class="code-example__code"><code class="language-html">&lt;pre id="MyCodeView"&gt;&lt;code&gt;let counter = 0;
+
+// infinite loop
+while (counter >= 0) {
+    counter++;
+
+    if (counter % 3 === 0) {
+        console.log("Current count: " + counter);
+    }
+}&lt;/code&gt;&lt;/pre&gt;</code></pre>
+    </div>
+    <button class="code-example__collapsible-button">
+        <div class="code-example__collapsible-button-dropdown-icon">
+            <svg>
+                <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
+            </svg>
+        </div>
+        <span>JavaScript</span>
+    </button>
+    <div data-collapsible-closed class="code-example__collapsible">
+        <pre class="code-example__code"><code class="language-javascript">import { CodeView } from "code-box";
+
+const codeView = new CodeView(document.getElementById("MyCodeView"));
+
+const highlightBox = codeView.addHighlight(1);
+const steps = [4, 5, 7, 4, 5, 7, 4, 5, 7, 8];
+let currentStep = 0;
+
+setInterval(() => {
+    const lineNumber = steps[currentStep];
+
+    highlightBox.setRange(lineNumber);
+
+    if (currentStep === (steps.length - 1)) {
+        currentStep = 0;
+    } else {
+        currentStep++;
+    }
+}, 400);</code></pre>
+    </div>
+    <div class="code-example__result-box">
+        <pre id="VisualizationOfCodeExecutionExample"><code class="no-highlight">let counter = 0;
+
+// infinite loop
+while (counter >= 0) {
+    counter++;
+
+    if (counter % 3 === 0) {
+        console.log("Current count: " + counter);
+    }
+}</code></pre>
+    </div>
+</div>

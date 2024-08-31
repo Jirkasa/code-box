@@ -32,8 +32,10 @@ console.log("result: " + (x + y));&lt;/code&gt;&lt;/pre&gt;
         </div>
         <span>JavaScript</span>
     </button>
-    <div id="CollapsibleContainer" class="code-example__collapsible">
-        <pre class="code-example__code"><code class="language-javascript">const codeBox1 = new ProjectCodeBox(document.getElementById("CodeBox1"), {
+    <div class="code-example__collapsible">
+        <pre class="code-example__code"><code class="language-javascript">import { ProjectCodeBox } from "code-box";
+
+const codeBox1 = new ProjectCodeBox(document.getElementById("CodeBox1"), {
     minCodeViewLinesCount: 10,
     svgSpritePath: "./img/icon-sprite.svg",
     projectName: "example-app",

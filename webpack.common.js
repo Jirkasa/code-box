@@ -34,6 +34,7 @@ module.exports = {
         style: "./less/main.less",
         icons: './icons/main.js',
         common: "./ts/common/main.ts",
+        examples: "./js/examples/main.js",
         "documentation-getting-started": "./js/documentation/getting-started/main.js",
         "documentation-styling": "./js/documentation/styling/main.js",
         "documentation-code-view": "./js/documentation/code-view/main.js",
@@ -98,6 +99,12 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, "pages", "index.ejs"),
             chunks: ["style", "common"],
+            inject: true
+        }),
+        new HtmlWebpackPlugin({
+            template: path.resolve(__dirname, "pages", "examples", "index.ejs"),
+            chunks: ["style", "common", "examples"],
+            filename: `examples/index.html`,
             inject: true
         }),
         ...documentationPages,
