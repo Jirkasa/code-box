@@ -41,7 +41,8 @@ module.exports = {
         "documentation-tab-code-box": "./js/documentation/tab-code-box/main.js",
         "documentation-project-code-box": "./js/documentation/project-code-box/main.js",
         "documentation-virtual-code-box": "./js/documentation/virtual-code-box/main.js",
-        "documentation-creators": "./js/documentation/creators/main.js"
+        "documentation-creators": "./js/documentation/creators/main.js",
+        "documentation-other-components": "./js/documentation/other-components/main.js"
     },
     output: {
         clean: true
