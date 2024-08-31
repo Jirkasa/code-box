@@ -1,4 +1,4 @@
-<div class="code-example">
+<div class="code-example u-mb-4">
     <button class="code-example__collapsible-button">
         <div class="code-example__collapsible-button-dropdown-icon">
             <svg>
@@ -8,7 +8,7 @@
         <span>HTML</span>
     </button>
     <div class="code-example__collapsible">
-        <pre class="code-example__code"><code class="language-html">&lt;div data-my-code-box&gt;
+        <pre class="code-example__code"><code class="language-html">&lt;div data-my-code-box data-cb-id="MyIdentifier"&gt;
     &lt;pre data-cb-name="addition" data-cb-active&gt;&lt;code&gt;let x = 1;
 let y = 2;
 
@@ -17,20 +17,9 @@ console.log("result: " + (x + y));&lt;/code&gt;&lt;/pre&gt;
 let string2 = " string.";
 
 console.log(string1 + string2);&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;br&gt;
-
-&lt;div data-my-code-box&gt;
-    &lt;pre data-cb-name="arrays" data-cb-active&gt;&lt;code&gt;let numbers = [5, 3, 1];
-let strings = ["code", "box"];&lt;/code&gt;&lt;/pre&gt;
-    &lt;pre data-cb-name="object"&gt;&lt;code&gt;let book = {
-    title: "Design Patterns",
-    year: 1994
-}&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;</code></pre>
     </div>
-    <button id="CollapsibleButton" class="code-example__collapsible-button">
+    <button class="code-example__collapsible-button">
         <div class="code-example__collapsible-button-dropdown-icon">
             <svg>
                 <use xlink:href="../../static/icon-sprite.svg#arrow-right"></use>
@@ -38,10 +27,10 @@ let strings = ["code", "box"];&lt;/code&gt;&lt;/pre&gt;
         </div>
         <span>JavaScript</span>
     </button>
-    <div id="CollapsibleContainer" class="code-example__collapsible">
+    <div class="code-example__collapsible">
         <pre class="code-example__code"><code class="language-javascript">import { TabCodeBoxCreator } from "code-box";
 
-const creator = new TabCodeBoxCreator({
+const codeBoxCreator = new TabCodeBoxCreator({
     svgSpritePath: "./img/icon-sprite.svg",
     svgSpriteIcons: {
         codeFile: "file",
@@ -49,10 +38,14 @@ const creator = new TabCodeBoxCreator({
         download: "download"
     }
 });
-creator.create("[data-my-code-box]");</code></pre>
+codeBoxCreator.create("[data-my-code-box]");
+
+const codeBox = codeBoxCreator.getCreatedCodeBoxById("MyIdentifier");
+codeBox.init();
+codeBox.setActiveCodeView("connecting strings");</code></pre>
     </div>
     <div class="code-example__result-box">
-        <div data-my-code-box>
+        <div data-code-box-identifier-example data-cb-id="MyIdentifier">
             <pre data-cb-name="addition" data-cb-active><code class="no-highlight">let x = 1;
 let y = 2;
 
@@ -61,17 +54,6 @@ console.log("result: " + (x + y));</code></pre>
 let string2 = " string.";
 
 console.log(string1 + string2);</code></pre>
-        </div>
-
-        <br>
-
-        <div data-my-code-box>
-            <pre data-cb-name="arrays" data-cb-active><code class="no-highlight">let numbers = [5, 3, 1];
-let strings = ["code", "box"];</code></pre>
-            <pre data-cb-name="object"><code class="no-highlight">let book = {
-    title: "Design Patterns",
-    year: 1994
-}</code></pre>
         </div>
     </div>
 </div>
