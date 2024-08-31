@@ -65,6 +65,8 @@ class TabCodeBox extends CodeBox {
             this.fileIconName = null;
             this.downloadIconName = null;
         }
+
+        if (!this.isLazyInitializationEnabled) this.init();
     }
 
     public addCodeView(identifier: string, codeView: CodeView) : boolean {

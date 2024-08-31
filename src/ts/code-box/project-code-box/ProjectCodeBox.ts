@@ -309,6 +309,8 @@ class ProjectCodeBox extends CodeBox {
         this.closePanelOnCodeViewSelect = options.closePanelOnCodeViewSelect !== undefined ? options.closePanelOnCodeViewSelect : true;
 
         this.showCodeViewEventSource.subscribe((_, codeView) => this.onShowCodeView(codeView));
+
+        if (!this.isLazyInitializationEnabled) this.init();
     }
 
     public addCodeView(identifier: string, codeView: CodeView) : boolean {

@@ -30,6 +30,7 @@ class VirtualCodeBox extends CodeBox {
      */
     constructor(element : HTMLElement, options : CodeBoxOptions = {}) {
         super(element, options, new VirtualCodeBoxBuilder());
+        if (!this.isLazyInitializationEnabled) this.init();
     }
 
     public addCodeView(identifier: string, codeView: CodeView) : boolean {

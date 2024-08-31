@@ -79,6 +79,8 @@ abstract class CodeBox {
     private initializationData : InitializationInfo[] | null;
     /** Placeholder element for lazy initialization. */
     private lazyInitPlaceholderElement : HTMLElement | null = null;
+    /** Indicates whether lazy initialization is enabled. */
+    protected readonly isLazyInitializationEnabled : boolean;
 
     /** Functions called after initialization of code box. */
     private onInitCallbacks : Array<() => void> | null = new Array<() => void>();
@@ -97,6 +99,7 @@ abstract class CodeBox {
 
         this.defaultCodeViewOptions = options.defaultCodeViewOptions ? createCodeViewOptionsCopy(options.defaultCodeViewOptions) : null;
         this.minCodeViewLinesCount = options.minCodeViewLinesCount || null;
+        this.isLazyInitializationEnabled = (options.lazyInit === undefined || options.lazyInit);
 
         const preElements = Array<HTMLPreElement>();
         this.initializationData = new Array<InitializationInfo>();
@@ -161,8 +164,8 @@ abstract class CodeBox {
             this.showNoCodeViewSelectedMessage();
         }
 
-        // prepare for lazy initialization or initialize right away
-        if ((options.lazyInit === undefined || options.lazyInit) && this.rootElement.parentElement) {
+        // potentionally prepare for lazy initialization
+        if (this.isLazyInitializationEnabled && this.rootElement.parentElement) {
             // create placeholder element
             this.lazyInitPlaceholderElement = document.createElement("div");
 
@@ -181,8 +184,6 @@ abstract class CodeBox {
                         const height = linesCount * CodeBox.getCodeViewLineHeight(activePreElement, options.defaultCodeViewOptions || {});
                         this.lazyInitPlaceholderElement.style.height = `${height}${CodeBox.getCodeViewLineHeightUnit(activePreElement, options.defaultCodeViewOptions || {})}`;
                     } else {
-                        // just to be sure
-                        this.init();
                         return;
                     }
                 } else {
@@ -198,8 +199,6 @@ abstract class CodeBox {
 
             // observe intersection between viewport and placeholder element
             ViewportIntersectionObserver.observe(this.lazyInitPlaceholderElement, isIntersecting => this.onLazyInitPlaceholderElementIntersectionChange(isIntersecting));
-        } else {
-            this.init();
         }
     }
 
