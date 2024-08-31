@@ -594,55 +594,72 @@
         </ul>
         <%- include("./includes/sprite-icons-option.ejs") %>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">folderStructureHeading</span> <span class="option-heading__type">: string</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">"Folder structure"</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">"Folder structure"</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-folder-structure-heading</span></p>
         <p class="u-mb-4">Specifies folder structure heading.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">packagesHeading</span> <span class="option-heading__type">: string</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">"Packages"</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">"Packages"</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-packages-heading</span></p>
         <p class="u-mb-4">Specifies packages heading.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">projectName</span> <span class="option-heading__type">: string</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">"unnamed"</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">"unnamed"</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-project-name</span></p>
         <p class="u-mb-4">Specifies the name of project (root) folder. This option is not used if the code box has parent code box.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">packagesFolderPath</span> <span class="option-heading__type">: string</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">"/"</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">"/"</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-packages-folder-path</span></p>
         <p class="u-mb-4">Specifies path to folder for packages. This option is not used if the code box has parent code box.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">defaultPackageName</span> <span class="option-heading__type">: string</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">"default"</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">"default"</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-default-package-name</span></p>
         <p class="u-mb-4">Specifies name under which the default package should be displayed.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">createFoldersForPackages</span> <span class="option-heading__type">: boolean</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">true</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">true</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-create-folders-for-packages</span></p>
         <p class="u-mb-4">Specifies whether folders should be created for packages. This option is not used if the code box has parent code box.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">foldersDelimiterForPackages</span> <span class="option-heading__type">: string</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">undefined</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">undefined</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-folders-delimiter-for-packages</span></p>
         <p class="u-mb-4">Specifies delimiter to be used when creating folders for packages. For example, if the delimiter is "." and the package name is "io.github.jirkasa", folders "io/github/jirkasa" are created. This option is not used if the code box has a parent code box.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">folderAnimationSpeed</span> <span class="option-heading__type">: number</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">200</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">200</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-folder-animation-speed</span></p>
         <p class="u-mb-4">Specifies speed of folder open/close animation (in milliseconds).</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">folderAnimationEasingFunction</span> <span class="option-heading__type">: string</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">"ease-in-out"</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">"ease-in-out"</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-folder-animation-easing-function</span></p>
         <p class="u-mb-4">Specifies CSS easing function for folder open/close animation.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">openActiveCodeViewFolderOnInit</span> <span class="option-heading__type">: boolean</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">true</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">true</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-open-active-code-view-folder-on-init</span></p>
         <p class="u-mb-4">Specifies whether folder and its parent folders containing the active code view should be opened on initialization.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">openActiveCodeViewPackageOnInit</span> <span class="option-heading__type">: boolean</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">true</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">true</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-open-active-code-view-package-on-init</span></p>
         <p class="u-mb-4">Specifies whether package containing the active code view should be opened on initialization.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">preventActiveCodeViewFolderOpenOnInitIfPackage</span> <span class="option-heading__type">: boolean</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">false</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">false</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-prevent-active-code-view-folder-open-on-init-if-package</span></p>
         <p class="u-mb-4">Specifies whether the folder and its parent folders containing the active code view should not be opened on initialization when the code view is within a package. This option overrides openActiveCodeViewFolderOnInit when set to true and the active code view is within a package.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">openRootFolderOnInit</span> <span class="option-heading__type">: boolean</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">true</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">true</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-open-root-folder-on-init</span></p>
         <p class="u-mb-4">Specifies whether the project (root) folder should be opened on initialization. This option has effect only in certain situations (openActiveCodeViewFolderOnInit option takes precedence).</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">openPanelOnInit</span> <span class="option-heading__type">: boolean</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">false</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">false</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-open-panel-on-init</span></p>
         <p class="u-mb-4">Specifies whether the side panel should be opened on initialization.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">closePanelOnCodeViewSelect</span> <span class="option-heading__type">: boolean</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">true</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">true</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-close-panel-on-code-view-select</span></p>
         <p class="u-mb-4">Specifies whether the side panel should be closed when code view is selected by clicking on its button.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">openPanelButtonAriaLabel</span> <span class="option-heading__type">: string</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">"Open panel"</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">"Open panel"</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-open-panel-button-aria-label</span></p>
         <p class="u-mb-4">Specifies value of the panel open/close button aria-label attribute when panel is closed.</p>
         <h3 class="option-heading u-mb-1"><span class="option-heading__name">closePanelButtonAriaLabel</span> <span class="option-heading__type">: string</span></h3>
-        <p class="option-info u-mb-2">Default value: <span class="option-info__value">"Close panel"</span></p>
+        <p class="option-info">Default value: <span class="option-info__value">"Close panel"</span></p>
+        <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-close-panel-button-aria-label</span></p>
         <p class="u-mb-4">Specifies value of the panel open/close button aria-label attribute when panel is opened.</p>
         <h2 id="methods" class="u-mb-2">Methods</h2>
         <p class="u-mb-1">ProjectCodeBox has the following methods. Many of these methods are also described in the <a href="#" class="link">chapter about the base CodeBox class</a>. However, some of them have a return type that is a subclass of <a href="#" class="link">CodeBoxCodeView</a> or <a href="#" class="link">CodeBoxFile</a> - specifically, <a href="#" class="link">ProjectCodeBoxCodeView</a> or <a href="#" class="link">ProjectCodeBoxFile</a>. For clarity, these methods are also listed in this chapter.</p>
