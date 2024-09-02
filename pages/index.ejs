@@ -1,3 +1,87 @@
 <%- include("./includes/page-start.ejs", {pathToRootFolder: "./"}) %>
     <%- include("./includes/header.ejs", {pathToRootFolder: "./"}) %>
+    <div class="home-page-intro-section">
+        <div class="home-page-intro-section__content">
+            <h1 class="home-page-intro-section__heading">Code Box</h1>
+            <p class="home-page-intro-section__intro-text">JavaScript library for displaying code samples on the web.</p>
+            <div class="home-page-intro-section__call-to-actions">
+                <a href="./documentation/getting-started/" class="home-page-intro-section__get-started-button">Get Started</a>
+                <div class="home-page-intro-section__installation-command">npm install code-box</div>
+            </div>
+        </div>
+    </div>
+    <div class="home-page-about-section">
+        <div class="home-page-about-section__content">
+            <div class="home-page-about-section__section">
+                <div class="home-page-code-box">
+                    <%- include("./home-page-code-boxes/tab-code-box.ejs") %>
+                </div>
+                <div>
+                    <p class="u-mb-2">Code Box is a JavaScript library developed in TypeScript, designed for showcasing code samples on the web. It serves as a container that allows users to select and display different code samples.</p>
+                    <p>It doesn't include syntax highlighting itself, but you can easily integrate libraries such as <a href="https://highlightjs.org/" target="_blank" class="link">highlight.js</a> to add it.</p>
+                </div>
+            </div>
+            <div class="home-page-about-section__section">
+                <div>
+                    <p class="u-mb-2">You can either enable users to switch between different code samples with a few buttons or present the entire source code in a project-like format.</p>
+                    <p>Code Box can be used to enhance your programming tutorials, making them more interactive and engaging by allowing users to see and switch between various code examples easily. It's also a great tool for documentation of libraries or frameworks, providing a great way to showcase different functions and features - even within a complete project example.</p>
+                </div>
+                <div class="home-page-code-box">
+                    <%- include("./home-page-code-boxes/project-code-box.ejs") %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer__content footer__content--centered">Created by <a href="https://jirkasa.github.io/" target="_blank" class="footer__link">Jiří Satora</a></div>
+    </footer>
 <%- include("./includes/page-end.ejs") %>
+
+
+<!-- 
+Takže co tam bude:
+- ten úvod (to už mám)
+- potom jen nějaké ukázky s trocha textu (a to by mohlo být asi všechno)
+- ještě by se ale něco hodilo dát nahonec, ať je tam sekce s černou barvou pozadí (ale to uvidím)
+-->
+
+
+<!-- 
+Takže examples:
+- budou tam jen ukázky s kódem - žádný text (jen nadpisy)
+        - jen na začátku bude text (napsat že je to jen ukázka toho, co knihovna nabízí - co se s tím dá vytvořit)
+
+- Code View
+    - Simple Code View
+    - Highlighting
+- Code Boxes
+    - Tab Code Box
+    - Project Code Box
+    - Project Code Box Inheritance
+- Styling
+    - Styling Code View
+    - Styling Tab Code Box
+    - Styling Project Code Box
+- Other
+    - Visualization of Code Execution (v nějaké jednoduché nekonečné smyčce)
+
+- to asi stačí - všechny ty možnosti budou otevřené - alespoň něco tam bude
+- kódy budou zavřené - je to jen na to, aby se na to uživatelé mohli podívat a zjistit co se dá s knihovnou dělat
+- do code boxů dát i nějaké files
+-->
+
+
+
+
+<!--
+    todo - přidat odkazy
+    todo - neincludovat dev types do dist
+    todo - nezapomenout na todo - zkusit naimportovat CSS core styles
+    todo - dokumentační komentáře kdyžtak upravit podle dokumentace
+    todo - potom u všech stránek projít odsazení a kdyžtak jej někde zvětšit
+    todo - webpack přidat code splitting
+    todo - potom v kódu projít úplně každou option a data atribut, a podívat se jestli jsem to do dokumentace napsal
+    todo - u project code boxu popsat další data atributy (data-cb-folder...)
+    todo - projít to a zkontrolovat, jestli jsem někde nenechal to class="no-highlight"
+    todo - tak ještě projít zdrojové kódy a zjistit, jestli jsem všude změnil id (jak vidím, tak zapomínám hodně)
+-->
