@@ -4,35 +4,35 @@
         <h1 class="u-mb-4">Creators</h1>
         <p class="u-mb-4">Most of the time, you probably don't want to create each code box or code view manually. Instead, you can create them all at once using creators.</p>
         <h2 id="code-view-creator" class="u-mb-2">Code View Creator</h2>
-        <p class="u-mb-2">CodeViewCreator is a component that allows you to create multiple code views at once. The following example demonstrates how it can be used. You simply create an instance of CodeViewCreator class and call its <a href="#" class="link">create</a> method, passing in a selector to target the &lt;pre&gt; elements from which the code views should be created. If no options are provided as the second parameter to the create method, the default options will be used. These default options can be set by passing them to the constructor when creating an instance of CodeViewCreator.</p>
+        <p class="u-mb-2">CodeViewCreator is a component that allows you to create multiple code views at once. The following example demonstrates how it can be used. You simply create an instance of CodeViewCreator class and call its <a href="#code-view-creator-create-method" class="link">create</a> method, passing in a selector to target the &lt;pre&gt; elements from which the code views should be created. If no options are provided as the second parameter to the create method, the default options will be used. These default options can be set by passing them to the constructor when creating an instance of CodeViewCreator.</p>
         <%- include("./includes/code-view-creator-example.ejs") %>
         <h3 class="u-mb-1">Assigning Identifiers</h3>
-        <p class="u-mb-2">When you use the CodeViewCreator to create code views, you don’t have direct access to the created code views. However, you can assign identifiers to the &lt;pre&gt; elements using the <span class="highlighted-text">data-cb-id</span> attribute as shown in the following example. After calling the create method to generate the code views, you can retrieve a specific code view by using the <a href="#" class="link">getCreatedCodeViewById</a> method.</p>
+        <p class="u-mb-2">When you use the CodeViewCreator to create code views, you don’t have direct access to the created code views. However, you can assign identifiers to the &lt;pre&gt; elements using the <span class="highlighted-text">data-cb-id</span> attribute as shown in the following example. After calling the create method to generate the code views, you can retrieve a specific code view by using the <a href="#code-view-creator-get-created-code-view-by-id-method" class="link">getCreatedCodeViewById</a> method.</p>
         <%- include("./includes/code-view-identifiers-example.ejs") %>
         <h3 class="u-mb-1">Methods</h3>
         <p class="u-mb-1">CodeViewCreator has the following methods.</p>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><a href="#" class="link">create</a></th>
+                    <th scope="row"><a href="#code-view-creator-create-method" class="link">create</a></th>
                     <td>Creates code views based on the provided selector.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCreatedCodeViewById</a></th>
+                    <th scope="row"><a href="#code-view-creator-get-created-code-view-by-id-method" class="link">getCreatedCodeViewById</a></th>
                     <td>Returns created code view by id.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCreatedCodeViews</a></th>
+                    <th scope="row"><a href="#code-view-creator-get-created-code-views-method" class="link">getCreatedCodeViews</a></th>
                     <td>Returns all created code views along with the dataset of their corresponding HTML &lt;pre&gt; elements.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCreatedCodeViewsCount</a></th>
+                    <th scope="row"><a href="#code-view-creator-get-created-code-views-count-method" class="link">getCreatedCodeViewsCount</a></th>
                     <td>Returns the number of created code views.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">create</h3>
-        <p class="method-signature u-mb-2">create(selector: string, codeViewOptions: <a href="#" class="method-signature__link">CodeViewOptions</a> = this.defaultCodeViewOptions): number</p>
+        <h3 id="code-view-creator-create-method" class="method-heading u-mb-1">create</h3>
+        <p class="method-signature u-mb-2">create(selector: string, codeViewOptions: <a href="../code-view/#options" class="method-signature__link">CodeViewOptions</a> = this.defaultCodeViewOptions): number</p>
         <p class="u-mb-2">Creates code views based on the provided selector.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -42,7 +42,7 @@
                     <td>Selector used to find HTML &lt;pre&gt; elements to create code views from.</td>
                 </tr>
                 <tr>
-                    <th scope="row">codeViewOptions <span class="properties-table__type">?: <a href="#" class="properties-table__type-link">CodeViewOptions</a></span></th>
+                    <th scope="row">codeViewOptions <span class="properties-table__type">?: <a href="../code-view/#options" class="properties-table__type-link">CodeViewOptions</a></span></th>
                     <td>The options to be used, when creating code views. Defaults to the internal default options (provided to constructor).</td>
                 </tr>
             </tbody>
@@ -56,8 +56,8 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCreatedCodeViewById</h3>
-        <p class="method-signature u-mb-2">getCreatedCodeViewById(id: string): <a href="#" class="method-signature__link">CodeView</a> | null</p>
+        <h3 id="code-view-creator-get-created-code-view-by-id-method" class="method-heading u-mb-1">getCreatedCodeViewById</h3>
+        <p class="method-signature u-mb-2">getCreatedCodeViewById(id: string): <a href="../code-view/" class="method-signature__link">CodeView</a> | null</p>
         <p class="u-mb-2">Returns created code view by id.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -72,24 +72,24 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeView</a> | null</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../code-view/" class="properties-table__type-link">CodeView</a> | null</span></th>
                     <td>Code view or null if code view was not found.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCreatedCodeViews</h3>
-        <p class="method-signature u-mb-2">getCreatedCodeViews(): <a href="#" class="method-signature__link">CodeViewCreatorEntry</a>[]</p>
+        <h3 id="code-view-creator-get-created-code-views-method" class="method-heading u-mb-1">getCreatedCodeViews</h3>
+        <p class="method-signature u-mb-2">getCreatedCodeViews(): <a href="../other-components/#code-view-creator-entry" class="method-signature__link">CodeViewCreatorEntry</a>[]</p>
         <p class="u-mb-2">Returns all created code views along with the dataset of their corresponding HTML &lt;pre&gt; elements.</p>
         <h4 class="u-mb-1">Returns</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeViewCreatorEntry</a>[]</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#code-view-creator-entry" class="properties-table__type-link">CodeViewCreatorEntry</a>[]</span></th>
                     <td>An array of objects, each containing a created CodeView instance and the dataset of the HTML &lt;pre&gt; element.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCreatedCodeViewsCount</h3>
+        <h3 id="code-view-creator-get-created-code-views-count-method" class="method-heading u-mb-1">getCreatedCodeViewsCount</h3>
         <p class="method-signature u-mb-2">getCreatedCodeViewsCount(): number</p>
         <p class="u-mb-2">Returns the number of created code views.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -104,41 +104,41 @@
         <h2 id="code-box-creators" class="u-mb-2">Code Box Creators</h2>
         <p class="u-mb-1">If you want to create multiple code boxes at once, you can use creators. There is a specific creator class for each type of code box:</p>
         <ul class="u-mb-2">
-            <li><a href="#" class="link">TabCodeBoxCreator</a></li>
-            <li><a href="#" class="link">ProjectCodeBoxCreator</a></li>
-            <li><a href="#" class="link">VirtualCodeBoxCreator</a></li>
+            <li><a href="#tab-code-box-creator" class="link">TabCodeBoxCreator</a></li>
+            <li><a href="#project-code-box-creator" class="link">ProjectCodeBoxCreator</a></li>
+            <li><a href="#virtual-code-box-creator" class="link">VirtualCodeBoxCreator</a></li>
         </ul>
         <p class="u-mb-4">All of these creator classes can accept default code box options as a parameter in the constructor, which will be used if no options are provided as the second parameter to the create method when creating code boxes.</p>
         <h3 class="u-mb-1">Assigning Identifiers</h3>
         <p class="u-mb-2">All code box creator classes inherit from the generic CodeBoxCreator base class, which defines some common methods. One of these methods is <span class="highlighted-text">getCreatedCodeBoxById</span>, which allows you to retrieve a created code box by its identifier. These identifiers can be assigned to the root elements of code boxes using the <span class="highlighted-text">data-cb-id</span> attribute, as shown in the following example.</p>
         <%- include("./includes/code-box-identifiers-example.ejs") %>
         <h2 id="tab-code-box-creator" class="u-mb-2">Tab Code Box Creator</h2>
-        <p class="u-mb-2">TabCodeBoxCreator can be used to create <a href="#" class="link">TabCodeBoxes</a>. The following example shows how to do it. Simply create an instance of the TabCodeBoxCreator class and call the <a href="#" class="link">create</a> method, passing in a selector to target the elements from which the code boxes should be created.</p>
+        <p class="u-mb-2">TabCodeBoxCreator can be used to create <a href="../tab-code-box/" class="link">TabCodeBoxes</a>. The following example shows how to do it. Simply create an instance of the TabCodeBoxCreator class and call the <a href="#tab-code-box-creator-create-method" class="link">create</a> method, passing in a selector to target the elements from which the code boxes should be created.</p>
         <%- include("./includes/tab-code-box-creator-example.ejs") %>
         <h3 class="u-mb-1">Methods</h3>
         <p class="u-mb-1">TabCodeBoxCreator has the following methods.</p>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><a href="#" class="link">create</a></th>
+                    <th scope="row"><a href="#tab-code-box-creator-create-method" class="link">create</a></th>
                     <td>Creates code boxes based on the provided selector.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCreatedCodeBoxById</a></th>
+                    <th scope="row"><a href="#tab-code-box-creator-get-created-code-box-by-id-method" class="link">getCreatedCodeBoxById</a></th>
                     <td>Returns created code box by id.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCreatedCodeBoxes</a></th>
+                    <th scope="row"><a href="#tab-code-box-creator-get-created-code-boxes-method" class="link">getCreatedCodeBoxes</a></th>
                     <td>Returns all created code boxes along with the dataset of their root elements.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCreatedCodeBoxesCount</a></th>
+                    <th scope="row"><a href="#tab-code-box-creator-get-created-code-boxes-count-method" class="link">getCreatedCodeBoxesCount</a></th>
                     <td>Returns the number of created code boxes.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">create</h3>
-        <p class="method-signature u-mb-2">create(selector: string, codeBoxOptions: <a href="#" class="method-signature__link">TabCodeBoxOptions</a> = this.defaultCodeBoxOptions): number</p>
+        <h3 id="tab-code-box-creator-create-method" class="method-heading u-mb-1">create</h3>
+        <p class="method-signature u-mb-2">create(selector: string, codeBoxOptions: <a href="../tab-code-box/#options" class="method-signature__link">TabCodeBoxOptions</a> = this.defaultCodeBoxOptions): number</p>
         <p class="u-mb-2">Creates code boxes based on the provided selector.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -148,7 +148,7 @@
                     <td>Selector used to find HTML elements to create code boxes from.</td>
                 </tr>
                 <tr>
-                    <th scope="row">codeBoxOptions <span class="properties-table__type">?: <a href="#" class="properties-table__type-link">TabCodeBoxOptions</a></span></th>
+                    <th scope="row">codeBoxOptions <span class="properties-table__type">?: <a href="../tab-code-box/#options" class="properties-table__type-link">TabCodeBoxOptions</a></span></th>
                     <td>The options to be used, when creating code boxes. Defaults to the internal default options (provided to constructor).</td>
                 </tr>
             </tbody>
@@ -162,8 +162,8 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCreatedCodeBoxById</h3>
-        <p class="method-signature u-mb-2">getCreatedCodeBoxById(id: string): <a href="#" class="method-signature__link">TabCodeBox</a> | null</p>
+        <h3 id="tab-code-box-creator-get-created-code-box-by-id-method" class="method-heading u-mb-1">getCreatedCodeBoxById</h3>
+        <p class="method-signature u-mb-2">getCreatedCodeBoxById(id: string): <a href="../tab-code-box/" class="method-signature__link">TabCodeBox</a> | null</p>
         <p class="u-mb-2">Returns created code box by id.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -178,24 +178,24 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">TabCodeBox</a> | null</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../tab-code-box/" class="properties-table__type-link">TabCodeBox</a> | null</span></th>
                     <td>Code box or null if code box was not found.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCreatedCodeBoxes</h3>
-        <p class="method-signature u-mb-2">getCreatedCodeBoxes(): <a href="#" class="method-signature__link">CodeBoxCreatorEntry</a>&lt;<a href="#" class="method-signature__link">TabCodeBox</a>&gt;[]</p>
+        <h3 id="tab-code-box-creator-get-created-code-boxes-method" class="method-heading u-mb-1">getCreatedCodeBoxes</h3>
+        <p class="method-signature u-mb-2">getCreatedCodeBoxes(): <a href="../other-components/#code-box-creator-entry" class="method-signature__link">CodeBoxCreatorEntry</a>&lt;<a href="../tab-code-box/" class="method-signature__link">TabCodeBox</a>&gt;[]</p>
         <p class="u-mb-2">Returns all created code boxes along with the dataset of their root elements.</p>
         <h4 class="u-mb-1">Returns</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeBoxCreatorEntry</a>&lt;<a href="#" class="properties-table__type-link">TabCodeBox</a>&gt;[]</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#code-box-creator-entry" class="properties-table__type-link">CodeBoxCreatorEntry</a>&lt;<a href="../tab-code-box/" class="properties-table__type-link">TabCodeBox</a>&gt;[]</span></th>
                     <td>An array of objects, each containing a created code box and the dataset of its root element.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCreatedCodeBoxesCount</h3>
+        <h3 id="tab-code-box-creator-get-created-code-boxes-count-method" class="method-heading u-mb-1">getCreatedCodeBoxesCount</h3>
         <p class="method-signature u-mb-2">getCreatedCodeBoxesCount(): number</p>
         <p class="u-mb-2">Returns the number of created code boxes.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -208,35 +208,35 @@
             </tbody>
         </table>
         <h2 id="project-code-box-creator" class="u-mb-2">Project Code Box Creator</h2>
-        <p class="u-mb-2">ProjectCodeBoxCreator can be used to create <a href="#" class="link">ProjectCodeBoxes</a>. The following example shows how to do it. Simply create an instance of the ProjectCodeBoxCreator class and call the <a href="#" class="link">create</a> method, passing in a selector to target the elements from which the code boxes should be created.</p>
+        <p class="u-mb-2">ProjectCodeBoxCreator can be used to create <a href="../project-code-box/" class="link">ProjectCodeBoxes</a>. The following example shows how to do it. Simply create an instance of the ProjectCodeBoxCreator class and call the <a href="#project-code-box-creator-create-method" class="link">create</a> method, passing in a selector to target the elements from which the code boxes should be created.</p>
         <%- include("./includes/project-code-box-creator-example.ejs") %>
         <h3 class="u-mb-1">Inheritance</h3>
-        <p class="u-mb-2">As described <a href="#" class="link">here</a>, project code boxes can inherit from other project code boxes. When using ProjectCodeBoxCreator to create code boxes, you can specify a parent code box by adding the data-cb-extends attribute to the root element of code box. Simply set the value of data-cb-extends attribute to match the data-cb-id attribute of the parent code box as shown in the following example.</p>
+        <p class="u-mb-2">As described <a href="../project-code-box/#inheritance" class="link">here</a>, project code boxes can inherit from other project code boxes. When using ProjectCodeBoxCreator to create code boxes, you can specify a parent code box by adding the data-cb-extends attribute to the root element of code box. Simply set the value of data-cb-extends attribute to match the data-cb-id attribute of the parent code box as shown in the following example.</p>
         <%- include("./includes/project-code-box-inheritance-example.ejs") %>
         <h3 class="u-mb-2">Methods</h3>
         <p class="u-mb-1">ProjectCodeBoxCreator has the following methods.</p>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><a href="#" class="link">create</a></th>
+                    <th scope="row"><a href="#project-code-box-creator-create-method" class="link">create</a></th>
                     <td>Creates code boxes based on the provided selector.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCreatedCodeBoxById</a></th>
+                    <th scope="row"><a href="#project-code-box-creator-get-created-code-box-by-id-method" class="link">getCreatedCodeBoxById</a></th>
                     <td>Returns created code box by id.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCreatedCodeBoxes</a></th>
+                    <th scope="row"><a href="#project-code-box-creator-get-created-code-boxes-method" class="link">getCreatedCodeBoxes</a></th>
                     <td>Returns all created code boxes along with the dataset of their root elements.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCreatedCodeBoxesCount</a></th>
+                    <th scope="row"><a href="#project-code-box-creator-get-created-code-boxes-count-method" class="link">getCreatedCodeBoxesCount</a></th>
                     <td>Returns the number of created code boxes.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">create</h3>
-        <p class="method-signature u-mb-2">create(selector: string, codeBoxOptions: <a href="#" class="method-signature__link">ProjectCodeBoxOptions</a> = this.defaultCodeBoxOptions): number</p>
+        <h3 id="project-code-box-creator-create-method" class="method-heading u-mb-1">create</h3>
+        <p class="method-signature u-mb-2">create(selector: string, codeBoxOptions: <a href="../project-code-box/#options" class="method-signature__link">ProjectCodeBoxOptions</a> = this.defaultCodeBoxOptions): number</p>
         <p class="u-mb-2">Creates code boxes based on the provided selector.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -246,7 +246,7 @@
                     <td>Selector used to find HTML elements to create code boxes from.</td>
                 </tr>
                 <tr>
-                    <th scope="row">codeBoxOptions <span class="properties-table__type">?: <a href="#" class="properties-table__type-link">ProjectCodeBoxOptions</a></span></th>
+                    <th scope="row">codeBoxOptions <span class="properties-table__type">?: <a href="../project-code-box/#options" class="properties-table__type-link">ProjectCodeBoxOptions</a></span></th>
                     <td>The options to be used, when creating code boxes. Defaults to the internal default options (provided to constructor).</td>
                 </tr>
             </tbody>
@@ -260,8 +260,8 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCreatedCodeBoxById</h3>
-        <p class="method-signature u-mb-2">getCreatedCodeBoxById(id: string): <a href="#" class="method-signature__link">ProjectCodeBox</a> | null</p>
+        <h3 id="project-code-box-creator-get-created-code-box-by-id-method" class="method-heading u-mb-1">getCreatedCodeBoxById</h3>
+        <p class="method-signature u-mb-2">getCreatedCodeBoxById(id: string): <a href="../project-code-box/" class="method-signature__link">ProjectCodeBox</a> | null</p>
         <p class="u-mb-2">Returns created code box by id.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -276,24 +276,24 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBox</a> | null</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../project-code-box/" class="properties-table__type-link">ProjectCodeBox</a> | null</span></th>
                     <td>Code box or null if code box was not found.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCreatedCodeBoxes</h3>
-        <p class="method-signature u-mb-2">getCreatedCodeBoxes(): <a href="#" class="method-signature__link">CodeBoxCreatorEntry</a>&lt;<a href="#" class="method-signature__link">ProjectCodeBox</a>&gt;[]</p>
+        <h3 id="project-code-box-creator-get-created-code-boxes-method" class="method-heading u-mb-1">getCreatedCodeBoxes</h3>
+        <p class="method-signature u-mb-2">getCreatedCodeBoxes(): <a href="../other-components/#code-box-creator-entry" class="method-signature__link">CodeBoxCreatorEntry</a>&lt;<a href="../project-code-box/" class="method-signature__link">ProjectCodeBox</a>&gt;[]</p>
         <p class="u-mb-2">Returns all created code boxes along with the dataset of their root elements.</p>
         <h4 class="u-mb-1">Returns</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeBoxCreatorEntry</a>&lt;<a href="#" class="properties-table__type-link">ProjectCodeBox</a>&gt;[]</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#code-box-creator-entry" class="properties-table__type-link">CodeBoxCreatorEntry</a>&lt;<a href="../project-code-box/" class="properties-table__type-link">ProjectCodeBox</a>&gt;[]</span></th>
                     <td>An array of objects, each containing a created code box and the dataset of its root element.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCreatedCodeBoxesCount</h3>
+        <h3 id="project-code-box-creator-get-created-code-boxes-count-method" class="method-heading u-mb-1">getCreatedCodeBoxesCount</h3>
         <p class="method-signature u-mb-2">getCreatedCodeBoxesCount(): number</p>
         <p class="u-mb-2">Returns the number of created code boxes.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -306,32 +306,32 @@
             </tbody>
         </table>
         <h2 id="virtual-code-box-creator" class="u-mb-2">Virtual Code Box Creator</h2>
-        <p class="u-mb-2">VirtualCodeBoxCreator can be used to create <a href="#" class="link">VirtualCodeBoxes</a>. The following example shows how to do it. Simply create an instance of the VirtualCodeBoxCreator class and call the <a href="#" class="link">create</a> method, passing in a selector to target the elements from which the code boxes should be created.</p>
+        <p class="u-mb-2">VirtualCodeBoxCreator can be used to create <a href="../virtual-code-box/" class="link">VirtualCodeBoxes</a>. The following example shows how to do it. Simply create an instance of the VirtualCodeBoxCreator class and call the <a href="#virtual-code-box-creator-create-method" class="link">create</a> method, passing in a selector to target the elements from which the code boxes should be created.</p>
         <%- include("./includes/virtual-code-box-creator-example.ejs") %>
         <h3 class="u-mb-1">Methods</h3>
         <p class="u-mb-1">VirtualCodeBoxCreator has the following methods.</p>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><a href="#" class="link">create</a></th>
+                    <th scope="row"><a href="#virtual-code-box-creator-create-method" class="link">create</a></th>
                     <td>Creates code boxes based on the provided selector.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCreatedCodeBoxById</a></th>
+                    <th scope="row"><a href="#virtual-code-box-creator-get-created-code-box-by-id-method" class="link">getCreatedCodeBoxById</a></th>
                     <td>Returns created code box by id.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCreatedCodeBoxes</a></th>
+                    <th scope="row"><a href="#virtual-code-box-creator-get-created-code-boxes-method" class="link">getCreatedCodeBoxes</a></th>
                     <td>Returns all created code boxes along with the dataset of their root elements.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCreatedCodeBoxesCount</a></th>
+                    <th scope="row"><a href="#virtual-code-box-creator-get-created-code-boxes-count-method" class="link">getCreatedCodeBoxesCount</a></th>
                     <td>Returns the number of created code boxes.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">create</h3>
-        <p class="method-signature u-mb-2">create(selector: string, codeBoxOptions: <a href="#" class="method-signature__link">CodeBoxOptions</a> = this.defaultCodeBoxOptions): number</p>
+        <h3 id="virtual-code-box-creator-create-method" class="method-heading u-mb-1">create</h3>
+        <p class="method-signature u-mb-2">create(selector: string, codeBoxOptions: <a href="../code-box/#options" class="method-signature__link">CodeBoxOptions</a> = this.defaultCodeBoxOptions): number</p>
         <p class="u-mb-2">Creates code boxes based on the provided selector.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -341,7 +341,7 @@
                     <td>Selector used to find HTML elements to create code boxes from.</td>
                 </tr>
                 <tr>
-                    <th scope="row">codeBoxOptions <span class="properties-table__type">?: <a href="#" class="properties-table__type-link">CodeBoxOptions</a></span></th>
+                    <th scope="row">codeBoxOptions <span class="properties-table__type">?: <a href="../code-box/#options" class="properties-table__type-link">CodeBoxOptions</a></span></th>
                     <td>The options to be used, when creating code boxes. Defaults to the internal default options (provided to constructor).</td>
                 </tr>
             </tbody>
@@ -355,8 +355,8 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCreatedCodeBoxById</h3>
-        <p class="method-signature u-mb-2">getCreatedCodeBoxById(id: string): <a href="#" class="method-signature__link">VirtualCodeBox</a> | null</p>
+        <h3 id="virtual-code-box-creator-get-created-code-box-by-id-method" class="method-heading u-mb-1">getCreatedCodeBoxById</h3>
+        <p class="method-signature u-mb-2">getCreatedCodeBoxById(id: string): <a href="../virtual-code-box/" class="method-signature__link">VirtualCodeBox</a> | null</p>
         <p class="u-mb-2">Returns created code box by id.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -371,24 +371,24 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">VirtualCodeBox</a> | null</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../virtual-code-box/" class="properties-table__type-link">VirtualCodeBox</a> | null</span></th>
                     <td>Code box or null if code box was not found.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCreatedCodeBoxes</h3>
-        <p class="method-signature u-mb-2">getCreatedCodeBoxes(): <a href="#" class="method-signature__link">CodeBoxCreatorEntry</a>&lt;<a href="#" class="method-signature__link">VirtualCodeBox</a>&gt;[]</p>
+        <h3 id="virtual-code-box-creator-get-created-code-boxes-method" class="method-heading u-mb-1">getCreatedCodeBoxes</h3>
+        <p class="method-signature u-mb-2">getCreatedCodeBoxes(): <a href="../other-components/#code-box-creator-entry" class="method-signature__link">CodeBoxCreatorEntry</a>&lt;<a href="../virtual-code-box/" class="method-signature__link">VirtualCodeBox</a>&gt;[]</p>
         <p class="u-mb-2">Returns all created code boxes along with the dataset of their root elements.</p>
         <h4 class="u-mb-1">Returns</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeBoxCreatorEntry</a>&lt;<a href="#" class="properties-table__type-link">VirtualCodeBox</a>&gt;[]</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#code-box-creator-entry" class="properties-table__type-link">CodeBoxCreatorEntry</a>&lt;<a href="../virtual-code-box/" class="properties-table__type-link">VirtualCodeBox</a>&gt;[]</span></th>
                     <td>An array of objects, each containing a created code box and the dataset of its root element.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCreatedCodeBoxesCount</h3>
+        <h3 id="virtual-code-box-creator-get-created-code-boxes-count-method" class="method-heading u-mb-1">getCreatedCodeBoxesCount</h3>
         <p class="method-signature u-mb-2">getCreatedCodeBoxesCount(): number</p>
         <p class="u-mb-2">Returns the number of created code boxes.</p>
         <h4 class="u-mb-1">Returns</h4>

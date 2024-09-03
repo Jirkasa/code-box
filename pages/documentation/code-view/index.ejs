@@ -6,62 +6,62 @@
         <h2 id="usage-example" class="u-mb-2">Usage Example</h2>
         <p class="u-mb-2">The following example demonstrates how to create a CodeView instance. Simply instantiate the CodeView class by passing a reference to the &lt;pre&gt; element that contains the &lt;code&gt; element. You can also provide additional options as a second parameter.</p>
         <%- include("./includes/create-code-view-example.ejs") %>
-        <p class="u-mb-4">If you want to create multiple code views, you can use the <a href="#" class="link">CodeViewCreator</a>. For more information, refer to the chapter on <a href="#" class="link">creators</a>.</p>
+        <p class="u-mb-4">If you want to create multiple code views, you can use the <a href="../creators/#code-view-creator" class="link">CodeViewCreator</a>. For more information, refer to the chapter on <a href="../creators/" class="link">creators</a>.</p>
         <h2 id="options" class="u-mb-2">Options</h2>
         <p class="u-mb-2">CodeView offers options to customize its appearance. These options can be set either by passing an object to the constructor or by using data attributes. When both are provided, data attributes will override the values specified in the options object.</p>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><a href="#" class="link">highlight</a></th>
+                    <th scope="row"><a href="#highlight-option" class="link">highlight</a></th>
                     <td>Specifies lines of code to be highlighted.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">showGutter</a></th>
+                    <th scope="row"><a href="#show-gutter-option" class="link">showGutter</a></th>
                     <td>Specifies whether the gutter (the area where line numbers appear) should be visible.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">showLineNumbers</a></th>
+                    <th scope="row"><a href="#show-line-numbers-option" class="link">showLineNumbers</a></th>
                     <td>Specifies whether line numbers should be visible.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">lineHeight</a></th>
+                    <th scope="row"><a href="#line-height-option" class="link">lineHeight</a></th>
                     <td>Specifies the line height.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">lineHeightUnit</a></th>
+                    <th scope="row"><a href="#line-height-unit-option" class="link">lineHeightUnit</a></th>
                     <td>Specifies the unit for the line height.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">cssClasses</a></th>
+                    <th scope="row"><a href="#css-classes-option" class="link">cssClasses</a></th>
                     <td>CSS classes that should be added to the root element of the code view.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">highlight</span> <span class="option-heading__type">: string</span></h3>
+        <h3 id="highlight-option" class="option-heading u-mb-1"><span class="option-heading__name">highlight</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">undefined</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-highlight</span></p>
         <p class="u-mb-2">Specifies lines of code to be highlighted. For example, the string format can be "1" to highlight the first line, "1-5" to highlight lines 1 through 5, or "2-4,6-8" to highlight lines 2 through 4 and 6 through 8.</p>
         <%- include("./includes/highlight-option-example.ejs") %>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">showGutter</span> <span class="option-heading__type">: boolean</span></h3>
+        <h3 id="show-gutter-option" class="option-heading u-mb-1"><span class="option-heading__name">showGutter</span> <span class="option-heading__type">: boolean</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">true</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-show-gutter</span></p>
         <p class="u-mb-2">Specifies whether the gutter (the area where line numbers appear) should be visible.</p>
         <%- include("./includes/show-gutter-option-example.ejs") %>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">showLineNumbers</span> <span class="option-heading__type">: boolean</span></h3>
+        <h3 id="show-line-numbers-option" class="option-heading u-mb-1"><span class="option-heading__name">showLineNumbers</span> <span class="option-heading__type">: boolean</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">true</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-show-line-numbers</span></p>
         <p class="u-mb-2">Specifies whether line numbers should be visible.</p>
         <%- include("./includes/show-line-numbers-option-example.ejs") %>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">lineHeight</span> <span class="option-heading__type">: number</span></h3>
+        <h3 id="line-height-option" class="option-heading u-mb-1"><span class="option-heading__name">lineHeight</span> <span class="option-heading__type">: number</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">2</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-line-height</span></p>
-        <p class="u-mb-2">Specifies the line height. The unit for the line height can be set using the <a href="#" class="link">lineHeightUnit</a> option.</p>
+        <p class="u-mb-2">Specifies the line height. The unit for the line height can be set using the <a href="#line-height-unit-option" class="link">lineHeightUnit</a> option.</p>
         <%- include("./includes/line-height-option-example.ejs") %>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">lineHeightUnit</span> <span class="option-heading__type">: string</span></h3>
+        <h3 id="line-height-unit-option" class="option-heading u-mb-1"><span class="option-heading__name">lineHeightUnit</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">"rem"</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-line-height-unit</span></p>
-        <p class="u-mb-4">Specifies the unit for line height. The line height value itself can be set using the <a href="#" class="link">lineHeight</a> option.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">cssClasses</span> <span class="option-heading__type">: string[]</span></h3>
+        <p class="u-mb-4">Specifies the unit for line height. The line height value itself can be set using the <a href="#line-height-option" class="link">lineHeight</a> option.</p>
+        <h3 id="css-classes-option" class="option-heading u-mb-1"><span class="option-heading__name">cssClasses</span> <span class="option-heading__type">: string[]</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">undefined</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-css-classes</span></p>
         <p class="u-mb-4">Specifies CSS classes to be added to the root element of the code view. When setting this option using a data attribute, separate multiple CSS classes with spaces.</p>
@@ -87,72 +87,72 @@
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><a href="#" class="link">appendTo</a></th>
+                    <th scope="row"><a href="#append-to-method" class="link">appendTo</a></th>
                     <td>Appends code view to element.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">detach</a></th>
+                    <th scope="row"><a href="#detach-method" class="link">detach</a></th>
                     <td>Detaches code view from its parent element.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">reset</a></th>
+                    <th scope="row"><a href="#reset-method" class="link">reset</a></th>
                     <td>Resets code view to its initial state.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">createMemento</a></th>
+                    <th scope="row"><a href="#create-memento-method" class="link">createMemento</a></th>
                     <td>Creates memento.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">applyMemento</a></th>
+                    <th scope="row"><a href="#apply-memento-method" class="link">applyMemento</a></th>
                     <td>Applies memento.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">clone</a></th>
+                    <th scope="row"><a href="#clone-method" class="link">clone</a></th>
                     <td>Creates copy of code view.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">addHighlight</a></th>
+                    <th scope="row"><a href="#add-highlight-method" class="link">addHighlight</a></th>
                     <td>Adds new highlight.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">removeHighlights</a></th>
+                    <th scope="row"><a href="#remove-highlights-method" class="link">removeHighlights</a></th>
                     <td>Removes highlights based on provided range.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getHighlightBoxes</a></th>
+                    <th scope="row"><a href="#get-highlight-boxes-method" class="link">getHighlightBoxes</a></th>
                     <td>Returns all highlight boxes in provided range.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">showGutter</a></th>
+                    <th scope="row"><a href="#show-gutter-method" class="link">showGutter</a></th>
                     <td>Shows gutter.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">hideGutter</a></th>
+                    <th scope="row"><a href="#hide-gutter-method" class="link">hideGutter</a></th>
                     <td>Hides gutter.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">isGutterVisible</a></th>
+                    <th scope="row"><a href="#is-gutter-visible-method" class="link">isGutterVisible</a></th>
                     <td>Checks whether gutter is visible.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">showLineNumbers</a></th>
+                    <th scope="row"><a href="#show-line-numbers-method" class="link">showLineNumbers</a></th>
                     <td>Shows line numbers.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">hideLineNumbers</a></th>
+                    <th scope="row"><a href="#hide-line-numbers-method" class="link">hideLineNumbers</a></th>
                     <td>Hides line numbers.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">areLineNumbersVisible</a></th>
+                    <th scope="row"><a href="#are-line-numbers-visible-method" class="link">areLineNumbersVisible</a></th>
                     <td>Checks whether line numbers are visible.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCode</a></th>
+                    <th scope="row"><a href="#get-code-method" class="link">getCode</a></th>
                     <td>Returns displayed code.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">appendTo</h3>
+        <h3 id="append-to-method" class="method-heading u-mb-1">appendTo</h3>
         <p class="method-signature u-mb-2">appendTo(element: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement" target="_blank" class="method-signature__link">HTMLElement</a>): void</p>
         <p class="u-mb-2">Appends code view to element.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -164,50 +164,50 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">detach</h3>
+        <h3 id="detach-method" class="method-heading u-mb-1">detach</h3>
         <p class="method-signature u-mb-2">detach(): void</p>
         <p class="u-mb-4">Detaches code view from its parent element.</p>
-        <h3 class="method-heading u-mb-1">reset</h3>
+        <h3 id="reset-method" class="method-heading u-mb-1">reset</h3>
         <p class="method-signature u-mb-2">reset(): void</p>
         <p class="u-mb-4">Resets code view to its initial state.</p>
-        <h3 class="method-heading u-mb-1">createMemento</h3>
-        <p class="method-signature u-mb-2">createMemento(): <a href="#" class="method-signature__link">CodeViewMemento</a></p>
+        <h3 id="create-memento-method" class="method-heading u-mb-1">createMemento</h3>
+        <p class="method-signature u-mb-2">createMemento(): <a href="../other-components/#code-view-memento" class="method-signature__link">CodeViewMemento</a></p>
         <p class="u-mb-2">Creates memento (saved state of code view).</p>
         <h4 class="u-mb-1">Returns</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeViewMemento</a></span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#code-view-memento" class="properties-table__type-link">CodeViewMemento</a></span></th>
                     <td>Memento (saved state of code view).</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">applyMemento</h3>
-        <p class="method-signature u-mb-2">applyMemento(memento: <a href="#" class="method-signature__link">CodeViewMemento</a>): void</p>
+        <h3 id="apply-memento-method" class="method-heading u-mb-1">applyMemento</h3>
+        <p class="method-signature u-mb-2">applyMemento(memento: <a href="../other-components/#code-view-memento" class="method-signature__link">CodeViewMemento</a>): void</p>
         <p class="u-mb-2">Applies memento (sets code view to the state defined by the provided memento).</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row">memento <span class="properties-table__type">: <a href="#" class="properties-table__type-link">CodeViewMemento</a></span></th>
+                    <th scope="row">memento <span class="properties-table__type">: <a href="../other-components/#code-view-memento" class="properties-table__type-link">CodeViewMemento</a></span></th>
                     <td>Memento (saved state of code view).</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">clone</h3>
-        <p class="method-signature u-mb-2">clone(): <a href="#" class="method-signature__link">CodeView</a></p>
+        <h3 id="clone-method" class="method-heading u-mb-1">clone</h3>
+        <p class="method-signature u-mb-2">clone(): <a href="../code-view/" class="method-signature__link">CodeView</a></p>
         <p class="u-mb-2">Creates a copy of code view. The copy reflects the state after initialization with the original options and does not include any changes made by subsequent method calls.</p>
         <h4 class="u-mb-1">Returns</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeView</a></span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../code-view/" class="properties-table__type-link">CodeView</a></span></th>
                     <td>Copy of code view.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">addHighlight</h3>
-        <p class="method-signature u-mb-2">addHighlight(start: number, end: number = start): <a href="#" class="method-signature__link">HighlightBox</a></p>
+        <h3 id="add-highlight-method" class="method-heading u-mb-1">addHighlight</h3>
+        <p class="method-signature u-mb-2">addHighlight(start: number, end: number = start): <a href="../other-components/#highlight-box" class="method-signature__link">HighlightBox</a></p>
         <p class="u-mb-2">Adds new highlight.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -226,12 +226,12 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">HighlightBox</a></span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#highlight-box" class="properties-table__type-link">HighlightBox</a></span></th>
                     <td>Created highlight box.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">removeHighlights</h3>
+        <h3 id="remove-highlights-method" class="method-heading u-mb-1">removeHighlights</h3>
         <p class="method-signature u-mb-2">removeHighlights(start: number | null = null, end: number | null = start): void</p>
         <p class="u-mb-2">Removes highlights based on provided range (all intersecting highlights are removed). If no parameters are provided, all highlights are removed.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -247,8 +247,8 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getHighlightBoxes</h3>
-        <p class="method-signature u-mb-2">getHighlightBoxes(start: number | null = null, end: number | null = start): <a href="#" class="properties-table__type-link">HighlightBox</a>[]</p>
+        <h3 id="get-highlight-boxes-method" class="method-heading u-mb-1">getHighlightBoxes</h3>
+        <p class="method-signature u-mb-2">getHighlightBoxes(start: number | null = null, end: number | null = start): <a href="../other-components/#highlight-box" class="properties-table__type-link">HighlightBox</a>[]</p>
         <p class="u-mb-2">Returns all highlight boxes (which represent highlights) in provided range. If no parameters are provided, all highlight boxes are returned.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -267,18 +267,18 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">HighlightBox</a>[]</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#highlight-box" class="properties-table__type-link">HighlightBox</a>[]</span></th>
                     <td>Highlight boxes.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">showGutter</h3>
+        <h3 id="show-gutter-method" class="method-heading u-mb-1">showGutter</h3>
         <p class="method-signature u-mb-2">showGutter(): void</p>
         <p class="u-mb-4">Shows gutter (the area where line numbers appear).</p>
-        <h3 class="method-heading u-mb-1">hideGutter</h3>
+        <h3 id="hide-gutter-method" class="method-heading u-mb-1">hideGutter</h3>
         <p class="method-signature u-mb-2">hideGutter(): void</p>
         <p class="u-mb-4">Hides gutter (the area where line numbers appear).</p>
-        <h3 class="method-heading u-mb-1">isGutterVisible</h3>
+        <h3 id="is-gutter-visible-method" class="method-heading u-mb-1">isGutterVisible</h3>
         <p class="method-signature u-mb-2">isGutterVisible(): boolean</p>
         <p class="u-mb-2">Checks whether gutter (the area where line numbers appear) is visible.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -290,13 +290,13 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">showLineNumbers</h3>
+        <h3 id="show-line-numbers-method" class="method-heading u-mb-1">showLineNumbers</h3>
         <p class="method-signature u-mb-2">showLineNumbers(): void</p>
         <p class="u-mb-4">Shows line numbers.</p>
-        <h3 class="method-heading u-mb-1">hideLineNumbers</h3>
+        <h3 id="hide-line-numbers-method" class="method-heading u-mb-1">hideLineNumbers</h3>
         <p class="method-signature u-mb-2">hideLineNumbers(): void</p>
         <p class="u-mb-4">Hides line numbers.</p>
-        <h3 class="method-heading u-mb-1">areLineNumbersVisible</h3>
+        <h3 id="are-line-numbers-visible-method" class="method-heading u-mb-1">areLineNumbersVisible</h3>
         <p class="method-signature u-mb-2">areLineNumbersVisible(): boolean</p>
         <p class="u-mb-2">Checks whether line numbers are visible.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -308,7 +308,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCode</h3>
+        <h3 id="get-code-method" class="method-heading u-mb-1">getCode</h3>
         <p class="method-signature u-mb-2">getCode(): string</p>
         <p class="u-mb-2">Returns displayed code.</p>
         <h4 class="u-mb-1">Returns</h4>

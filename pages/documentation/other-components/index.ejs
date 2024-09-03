@@ -4,30 +4,30 @@
         <h1 class="u-mb-4">Other Components</h1>
         <p class="u-mb-4">This page provides information about components that are not covered in any other chapter of the documentation.</p>
         <h2 id="highlight-box" class="u-mb-2">Highlight Box</h2>
-        <p class="u-mb-2">HighlightBox represents a highlight in <a href="#" class="link">CodeView</a>. It is returned when you add a new highlight using the <a href="#" class="link">addHighlight</a> method, or you can retrieve it using the <a href="#" class="link">getHighlightBoxes</a> method. The following example demonstrates its usage.</p>
+        <p class="u-mb-2">HighlightBox represents a highlight in <a href="../code-view/" class="link">CodeView</a>. It is returned when you add a new highlight using the <a href="../code-view/#add-highlight-method" class="link">addHighlight</a> method, or you can retrieve it using the <a href="../code-view/#get-highlight-boxes-method" class="link">getHighlightBoxes</a> method. The following example demonstrates its usage.</p>
         <%- include("./includes/highlight-box-example.ejs") %>
         <h3 class="u-mb-1">Methods</h3>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getStart</a></th>
+                    <th scope="row"><a href="#highlight-box-get-start-method" class="link">getStart</a></th>
                     <td>Returns start line of highlight.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getEnd</a></th>
+                    <th scope="row"><a href="#highlight-box-get-end-method" class="link">getEnd</a></th>
                     <td>Returns end line of highlight.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">setRange</a></th>
+                    <th scope="row"><a href="#highlight-box-set-range-method" class="link">setRange</a></th>
                     <td>Sets new range for highlight.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">remove</a></th>
+                    <th scope="row"><a href="#highlight-box-remove-method" class="link">remove</a></th>
                     <td>Removes highlight.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getStart</h3>
+        <h3 id="highlight-box-get-start-method" class="method-heading u-mb-1">getStart</h3>
         <p class="method-signature u-mb-2">getStart(): number</p>
         <p class="u-mb-2">Returns start line of highlight.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -39,7 +39,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getEnd</h3>
+        <h3 id="highlight-box-get-end-method" class="method-heading u-mb-1">getEnd</h3>
         <p class="method-signature u-mb-2">getEnd(): number</p>
         <p class="u-mb-2">Returns end line of highlight.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -51,7 +51,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">setRange</h3>
+        <h3 id="highlight-box-set-range-method" class="method-heading u-mb-1">setRange</h3>
         <p class="method-signature u-mb-2">setRange(start: number, end: number = start): void</p>
         <p class="u-mb-2">Sets new range for highlight.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -67,22 +67,22 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">remove</h3>
+        <h3 id="highlight-box-remove-method" class="method-heading u-mb-1">remove</h3>
         <p class="method-signature u-mb-2">remove(): void</p>
         <p class="u-mb-4">Removes highlight.</p>
         <h2 id="code-view-memento" class="u-mb-2">Code View Memento</h2>
-        <p class="u-mb-2">CodeViewMemento represents saved state of a <a href="#" class="link">CodeView</a>. You can create a memento using the <a href="#" class="link">createMemento</a> method and then apply it using the <a href="#" class="link">applyMemento</a> method as demonstrated in the following example. This allows you to save the current state of the code view and easily restore it later.</p>
+        <p class="u-mb-2">CodeViewMemento represents saved state of a <a href="../code-view/" class="link">CodeView</a>. You can create a memento using the <a href="../code-view/#create-memento-method" class="link">createMemento</a> method and then apply it using the <a href="../code-view/#apply-memento-method" class="link">applyMemento</a> method as demonstrated in the following example. This allows you to save the current state of the code view and easily restore it later.</p>
         <%- include("./includes/code-view-memento-example.ejs") %>
         <p class="u-mb-2">Alternatively, you can apply a memento by calling its apply method and passing the code view as a parameter.</p>
         <%- include("./includes/code-view-memento-apply-alternative.ejs") %>
         <h2 id="code-box-memento" class="u-mb-2">Code Box Memento</h2>
-        <p class="u-mb-2">CodeBoxMemento represents saved state of a <a href="#" class="link">CodeBox</a>. You can create a memento using the <a href="#" class="link">createMemento</a> method and then apply it using the <a href="#" class="link">applyMemento</a> method as demonstrated in the following example. This allows you to save the current state of the code box and easily restore it later.</p>
+        <p class="u-mb-2">CodeBoxMemento represents saved state of a <a href="../code-box/" class="link">CodeBox</a>. You can create a memento using the <a href="../code-box/#create-memento-method" class="link">createMemento</a> method and then apply it using the <a href="../code-box/#apply-memento-method" class="link">applyMemento</a> method as demonstrated in the following example. This allows you to save the current state of the code box and easily restore it later.</p>
         <%- include("./includes/code-box-memento-example.ejs") %>
         <p class="u-mb-2">Alternatively, you can apply a memento by calling its apply method and passing the code box as a parameter.</p>
         <%- include("./includes/code-box-memento-apply-alternative.ejs") %>
         <h2 id="code-box-code-view" class="u-mb-2">Code Box Code View</h2>
-        <p class="u-mb-2">CodeBoxCodeView represents a <a href="#" class="link">CodeView</a> within a <a href="#" class="link">CodeBox</a>. It internally uses a CodeView, retaining most of its methods while adding a few additional ones specific to CodeBox.</p>
-        <p class="u-mb-2">The following example demonstrates how you can obtain an instance of CodeBoxCodeView using the <a href="#" class="link">getCodeView</a> method.</p>
+        <p class="u-mb-2">CodeBoxCodeView represents a <a href="../code-view/" class="link">CodeView</a> within a <a href="../code-box/" class="link">CodeBox</a>. It internally uses a CodeView, retaining most of its methods while adding a few additional ones specific to CodeBox.</p>
+        <p class="u-mb-2">The following example demonstrates how you can obtain an instance of CodeBoxCodeView using the <a href="../code-box/#get-code-view-method" class="link">getCodeView</a> method.</p>
         <%- include("./includes/get-code-box-code-view-example.ejs") %>
         <h3 class="u-mb-1">Properties</h3>
         <p class="u-mb-2">CodeBoxCodeView has a few <span class="highlighted-text">readonly</span> properties. Do not change them when using plain JavaScript.</p>
@@ -102,84 +102,84 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="u-mb-1">Methods</h3>
+        <h3 id="code-box-code-view-methods" class="u-mb-1">Methods</h3>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getIdentifier</a></th>
+                    <th scope="row"><a href="#code-box-code-view-get-identifier-method" class="link">getIdentifier</a></th>
                     <td>Returns identifier of code view.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">changeIdentifier</a></th>
+                    <th scope="row"><a href="#code-box-code-view-change-identifier-method" class="link">changeIdentifier</a></th>
                     <td>Changes identifier of code view.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">setAsActive</a></th>
+                    <th scope="row"><a href="#code-box-code-view-set-as-active-method" class="link">setAsActive</a></th>
                     <td>Sets code view as active.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">remove</a></th>
+                    <th scope="row"><a href="#code-box-code-view-remove-method" class="link">remove</a></th>
                     <td>Removes code view from code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">reset</a></th>
+                    <th scope="row"><a href="#code-box-code-view-reset-method" class="link">reset</a></th>
                     <td>Resets code view to its initial state.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">createMemento</a></th>
+                    <th scope="row"><a href="#code-box-code-view-create-memento-method" class="link">createMemento</a></th>
                     <td>Creates memento.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">applyMemento</a></th>
+                    <th scope="row"><a href="#code-box-code-view-apply-memento-method" class="link">applyMemento</a></th>
                     <td>Applies memento.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">clone</a></th>
+                    <th scope="row"><a href="#code-box-code-view-clone-method" class="link">clone</a></th>
                     <td>Creates copy of code view.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">addHighlight</a></th>
+                    <th scope="row"><a href="#code-box-code-view-add-highlight-method" class="link">addHighlight</a></th>
                     <td>Adds new highlight.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">removeHighlights</a></th>
+                    <th scope="row"><a href="#code-box-code-view-remove-highlights-method" class="link">removeHighlights</a></th>
                     <td>Removes highlights based on provided range.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getHighlightBoxes</a></th>
+                    <th scope="row"><a href="#code-box-code-view-get-highlight-boxes-method" class="link">getHighlightBoxes</a></th>
                     <td>Returns all highlight boxes in provided range.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">showGutter</a></th>
+                    <th scope="row"><a href="code-box-code-view-show-gutter-method" class="link">showGutter</a></th>
                     <td>Shows gutter.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">hideGutter</a></th>
+                    <th scope="row"><a href="#code-box-code-view-hide-gutter-method" class="link">hideGutter</a></th>
                     <td>Hides gutter.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">isGutterVisible</a></th>
+                    <th scope="row"><a href="#code-box-code-view-is-gutter-visible-method" class="link">isGutterVisible</a></th>
                     <td>Checks whether gutter is visible.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">showLineNumbers</a></th>
+                    <th scope="row"><a href="#code-box-code-view-show-line-numbers-method" class="link">showLineNumbers</a></th>
                     <td>Shows line numbers.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">hideLineNumbers</a></th>
+                    <th scope="row"><a href="#code-box-code-view-hide-line-numbers-method" class="link">hideLineNumbers</a></th>
                     <td>Hides line numbers.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">areLineNumbersVisible</a></th>
+                    <th scope="row"><a href="#code-box-code-view-are-line-numbers-visible-method" class="link">areLineNumbersVisible</a></th>
                     <td>Checks whether line numbers are visible.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCode</a></th>
+                    <th scope="row"><a href="#code-box-code-view-get-code-method" class="link">getCode</a></th>
                     <td>Returns displayed code.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getIdentifier</h3>
+        <h3 id="code-box-code-view-get-identifier-method" class="method-heading u-mb-1">getIdentifier</h3>
         <p class="method-signature u-mb-2">getIdentifier(): string | null</p>
         <p class="u-mb-2">Returns identifier of code view.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -191,7 +191,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">changeIdentifier</h3>
+        <h3 id="code-box-code-view-change-identifier-method" class="method-heading u-mb-1">changeIdentifier</h3>
         <p class="method-signature u-mb-2">changeIdentifier(newIdentifier: string): boolean</p>
         <p class="u-mb-2">Changes identifier of code view.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -212,53 +212,53 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">setAsActive</h3>
+        <h3 id="code-box-code-view-set-as-active-method" class="method-heading u-mb-1">setAsActive</h3>
         <p class="method-signature u-mb-2">setAsActive(): void</p>
         <p class="u-mb-4">Sets code view as active (displays it in code box).</p>
-        <h3 class="method-heading u-mb-1">remove</h3>
+        <h3 id="code-box-code-view-remove-method" class="method-heading u-mb-1">remove</h3>
         <p class="method-signature u-mb-2">remove(): void</p>
         <p class="u-mb-4">Removes code view from code box.</p>
-        <h3 class="method-heading u-mb-1">reset</h3>
+        <h3 id="code-box-code-view-reset-method" class="method-heading u-mb-1">reset</h3>
         <p class="method-signature u-mb-2">reset(): void</p>
         <p class="u-mb-4">Resets code view to its initial state.</p>
-        <h3 class="method-heading u-mb-1">createMemento</h3>
-        <p class="method-signature u-mb-2">createMemento(): <a href="#" class="method-signature__link">CodeViewMemento</a></p>
+        <h3 id="code-box-code-view-create-memento-method" class="method-heading u-mb-1">createMemento</h3>
+        <p class="method-signature u-mb-2">createMemento(): <a href="#code-view-memento" class="method-signature__link">CodeViewMemento</a></p>
         <p class="u-mb-2">Creates memento (saved state of code view).</p>
         <h4 class="u-mb-1">Returns</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeViewMemento</a></span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="#code-view-memento" class="properties-table__type-link">CodeViewMemento</a></span></th>
                     <td>Memento (saved state of code view).</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">applyMemento</h3>
-        <p class="method-signature u-mb-2">applyMemento(memento: <a href="#" class="method-signature__link">CodeViewMemento</a>): void</p>
+        <h3 id="code-box-code-view-apply-memento-method" class="method-heading u-mb-1">applyMemento</h3>
+        <p class="method-signature u-mb-2">applyMemento(memento: <a href="#code-view-memento" class="method-signature__link">CodeViewMemento</a>): void</p>
         <p class="u-mb-2">Applies memento (sets code view to the state defined by the provided memento).</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row">memento <span class="properties-table__type">: <a href="#" class="properties-table__type-link">CodeViewMemento</a></span></th>
+                    <th scope="row">memento <span class="properties-table__type">: <a href="#code-view-memento" class="properties-table__type-link">CodeViewMemento</a></span></th>
                     <td>Memento (saved state of code view).</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">clone</h3>
-        <p class="method-signature u-mb-2">clone(): <a href="#" class="method-signature__link">CodeView</a></p>
+        <h3 id="code-box-code-view-clone-method" class="method-heading u-mb-1">clone</h3>
+        <p class="method-signature u-mb-2">clone(): <a href="../code-view/" class="method-signature__link">CodeView</a></p>
         <p class="u-mb-2">Creates a copy of code view. The copy reflects the state after initialization with the original options and does not include any changes made by subsequent method calls.</p>
         <h4 class="u-mb-1">Returns</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeView</a></span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../code-view/" class="properties-table__type-link">CodeView</a></span></th>
                     <td>Copy of code view.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">addHighlight</h3>
-        <p class="method-signature u-mb-2">addHighlight(start: number, end: number = start): <a href="#" class="method-signature__link">HighlightBox</a></p>
+        <h3 id="code-box-code-view-add-highlight-method" class="method-heading u-mb-1">addHighlight</h3>
+        <p class="method-signature u-mb-2">addHighlight(start: number, end: number = start): <a href="#highlight-box" class="method-signature__link">HighlightBox</a></p>
         <p class="u-mb-2">Adds new highlight.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -277,12 +277,12 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">HighlightBox</a></span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="#highlight-box" class="properties-table__type-link">HighlightBox</a></span></th>
                     <td>Created highlight box.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">removeHighlights</h3>
+        <h3 id="code-box-code-view-remove-highlights-method" class="method-heading u-mb-1">removeHighlights</h3>
         <p class="method-signature u-mb-2">removeHighlights(start: number | null = null, end: number | null = start): void</p>
         <p class="u-mb-2">Removes highlights based on provided range (all intersecting highlights are removed). If no parameters are provided, all highlights are removed.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -298,8 +298,8 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getHighlightBoxes</h3>
-        <p class="method-signature u-mb-2">getHighlightBoxes(start: number | null = null, end: number | null = start): <a href="#" class="properties-table__type-link">HighlightBox</a>[]</p>
+        <h3 id="code-box-code-view-get-highlight-boxes-method" class="method-heading u-mb-1">getHighlightBoxes</h3>
+        <p class="method-signature u-mb-2">getHighlightBoxes(start: number | null = null, end: number | null = start): <a href="#highlight-box" class="properties-table__type-link">HighlightBox</a>[]</p>
         <p class="u-mb-2">Returns all highlight boxes (which represent highlights) in provided range. If no parameters are provided, all highlight boxes are returned.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -318,18 +318,18 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">HighlightBox</a>[]</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="#highlight-box" class="properties-table__type-link">HighlightBox</a>[]</span></th>
                     <td>Highlight boxes.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">showGutter</h3>
+        <h3 id="code-box-code-view-show-gutter-method" class="method-heading u-mb-1">showGutter</h3>
         <p class="method-signature u-mb-2">showGutter(): void</p>
         <p class="u-mb-4">Shows gutter (the area where line numbers appear).</p>
-        <h3 class="method-heading u-mb-1">hideGutter</h3>
+        <h3 id="code-box-code-view-hide-gutter-method" class="method-heading u-mb-1">hideGutter</h3>
         <p class="method-signature u-mb-2">hideGutter(): void</p>
         <p class="u-mb-4">Hides gutter (the area where line numbers appear).</p>
-        <h3 class="method-heading u-mb-1">isGutterVisible</h3>
+        <h3 id="code-box-code-view-is-gutter-visible-method" class="method-heading u-mb-1">isGutterVisible</h3>
         <p class="method-signature u-mb-2">isGutterVisible(): boolean</p>
         <p class="u-mb-2">Checks whether gutter (the area where line numbers appear) is visible.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -341,13 +341,13 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">showLineNumbers</h3>
+        <h3 id="code-box-code-view-show-line-numbers-method" class="method-heading u-mb-1">showLineNumbers</h3>
         <p class="method-signature u-mb-2">showLineNumbers(): void</p>
         <p class="u-mb-4">Shows line numbers.</p>
-        <h3 class="method-heading u-mb-1">hideLineNumbers</h3>
+        <h3 id="code-box-code-view-hide-line-numbers-method" class="method-heading u-mb-1">hideLineNumbers</h3>
         <p class="method-signature u-mb-2">hideLineNumbers(): void</p>
         <p class="u-mb-4">Hides line numbers.</p>
-        <h3 class="method-heading u-mb-1">areLineNumbersVisible</h3>
+        <h3 id="code-box-code-view-are-line-numbers-visible-method" class="method-heading u-mb-1">areLineNumbersVisible</h3>
         <p class="method-signature u-mb-2">areLineNumbersVisible(): boolean</p>
         <p class="u-mb-2">Checks whether line numbers are visible.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -359,7 +359,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCode</h3>
+        <h3 id="code-box-code-view-get-code-method" class="method-heading u-mb-1">getCode</h3>
         <p class="method-signature u-mb-2">getCode(): string</p>
         <p class="u-mb-2">Returns displayed code.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -372,24 +372,24 @@
             </tbody>
         </table>
         <h2 id="tab-code-box-code-view" class="u-mb-2">Tab Code Box Code View</h2>
-        <p class="u-mb-4">TabCodeBoxCodeView is a type of <a href="#" class="link">CodeBoxCodeView</a> used within a <a href="#" class="link">TabCodeBox</a>. It includes additional methods to set and get the position of its code view button.</p>
+        <p class="u-mb-4">TabCodeBoxCodeView is a type of <a href="#code-box-code-view" class="link">CodeBoxCodeView</a> used within a <a href="../tab-code-box/" class="link">TabCodeBox</a>. It includes additional methods to set and get the position of its code view button.</p>
         <h3 class="u-mb-1">Methods</h3>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row" colspan="2"><a href="#" class="link">...all methods from CodeBoxCodeView class</a></th>
+                    <th scope="row" colspan="2"><a href="#code-box-code-view-methods" class="link">...all methods from CodeBoxCodeView class</a></th>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getButtonPosition</a></th>
+                    <th scope="row"><a href="#tab-code-box-code-view-get-button-position-method" class="link">getButtonPosition</a></th>
                     <td>Returns position of code view button.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">setButtonPosition</a></th>
+                    <th scope="row"><a href="#tab-code-box-code-view-set-button-position-method" class="link">setButtonPosition</a></th>
                     <td>Changes position of code view button by swapping it with different code view or file button.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getButtonPosition</h3>
+        <h3 id="tab-code-box-code-view-get-button-position-method" class="method-heading u-mb-1">getButtonPosition</h3>
         <p class="method-signature u-mb-2">getButtonPosition(): number | null</p>
         <p class="u-mb-2">Returns position of code view button.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -401,7 +401,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">setButtonPosition</h3>
+        <h3 id="tab-code-box-code-view-set-button-position-method" class="method-heading u-mb-1">setButtonPosition</h3>
         <p class="method-signature u-mb-2">setButtonPosition(position: number): boolean</p>
         <p class="u-mb-2">Changes position of code view button by swapping it with different code view or file button.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -423,41 +423,44 @@
             </tbody>
         </table>
         <h2 id="project-code-box-code-view" class="u-mb-2">Project Code Box Code View</h2>
-        <p class="u-mb-4">ProjectCodeBoxCodeView is a type of <a href="#" class="link">CodeBoxCodeView</a> used within a <a href="#" class="link">ProjectCodeBox</a>. It includes additional methods related to ProjectCodeBox.</p>
+        <p class="u-mb-4">ProjectCodeBoxCodeView is a type of <a href="#code-box-code-view" class="link">CodeBoxCodeView</a> used within a <a href="../project-code-box/" class="link">ProjectCodeBox</a>. It includes additional methods related to ProjectCodeBox.</p>
         <h3 class="u-mb-1">Methods</h3>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getFolderPath</a></th>
+                    <th scope="row" colspan="2"><a href="#code-box-code-view-methods" class="link">...all methods from CodeBoxCodeView class</a></th>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#project-code-box-code-view-get-folder-path-method" class="link">getFolderPath</a></th>
                     <td>Returns path to folder in which the code view is located.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">moveToFolder</a></th>
+                    <th scope="row"><a href="#project-code-box-code-view-move-to-folder-method" class="link">moveToFolder</a></th>
                     <td>Moves code view to folder.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getFileName</a></th>
+                    <th scope="row"><a href="#project-code-box-code-view-get-file-name-method" class="link">getFileName</a></th>
                     <td>Returns file name of code view.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">changeFileName</a></th>
+                    <th scope="row"><a href="#project-code-box-code-view-change-file-name-method" class="link">changeFileName</a></th>
                     <td>Changes file name of code view.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getPackage</a></th>
+                    <th scope="row"><a href="#project-code-box-code-view-get-package-method" class="link">getPackage</a></th>
                     <td>Returns package of code view.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">changePackage</a></th>
+                    <th scope="row"><a href="#project-code-box-code-view-change-package-method" class="link">changePackage</a></th>
                     <td>Changes package of code view.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">removePackage</a></th>
+                    <th scope="row"><a href="#project-code-box-code-view-remove-package-method" class="link">removePackage</a></th>
                     <td>Removes code view from package.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getFolderPath</h3>
+        <h3 id="project-code-box-code-view-get-folder-path-method" class="method-heading u-mb-1">getFolderPath</h3>
         <p class="method-signature u-mb-2">getFolderPath(): string | null</p>
         <p class="u-mb-2">Returns path to folder in which the code view is located.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -469,7 +472,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">moveToFolder</h3>
+        <h3 id="project-code-box-code-view-move-to-folder-method" class="method-heading u-mb-1">moveToFolder</h3>
         <p class="method-signature u-mb-2">moveToFolder(folderPath: string): boolean</p>
         <p class="u-mb-2">Moves code view to folder. If folder does not exist, it is created. Package is not changed.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -490,7 +493,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getFileName</h3>
+        <h3 id="project-code-box-code-view-get-file-name-method" class="method-heading u-mb-1">getFileName</h3>
         <p class="method-signature u-mb-2">getFileName(): string | null</p>
         <p class="u-mb-2">Returns file name of code view.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -502,7 +505,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">changeFileName</h3>
+        <h3 id="project-code-box-code-view-change-file-name-method" class="method-heading u-mb-1">changeFileName</h3>
         <p class="method-signature u-mb-2">changeFileName(newName: string): boolean</p>
         <p class="u-mb-2">Changes file name of code view.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -523,7 +526,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getPackage</h3>
+        <h3 id="project-code-box-code-view-get-package-method" class="method-heading u-mb-1">getPackage</h3>
         <p class="method-signature u-mb-2">getPackage(): string | null | undefined</p>
         <p class="u-mb-2">Returns package of code view.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -535,7 +538,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">changePackage</h3>
+        <h3 id="project-code-box-code-view-change-package-method" class="method-heading u-mb-1">changePackage</h3>
         <p class="method-signature u-mb-2">changePackage(packageName: string | null, keepFolderPath: boolean): boolean</p>
         <p class="u-mb-2">Changes package of code view.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -560,38 +563,38 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">removePackage</h3>
+        <h3 id="project-code-box-code-view-remove-package-method" class="method-heading u-mb-1">removePackage</h3>
         <p class="method-signature u-mb-2">removePackage(): void</p>
         <p class="u-mb-4">Removes code view from package.</p>
         <h2 id="code-box-file" class="u-mb-2">Code Box File</h2>
-        <p class="u-mb-2">CodeBoxFile represents a file within a <a href="#" class="link">CodeBox</a>. The following example demonstrates how you can obtain an instance of CodeBoxFile using the <a href="#" class="link">getFile</a> method.</p>
+        <p class="u-mb-2">CodeBoxFile represents a file within a <a href="../code-box/" class="link">CodeBox</a>. The following example demonstrates how you can obtain an instance of CodeBoxFile using the <a href="../code-box/#get-file-method" class="link">getFile</a> method.</p>
         <%- include("./includes/get-code-box-file-example.ejs") %>
-        <h3 class="u-mb-1">Methods</h3>
+        <h3 id="code-box-file-methods" class="u-mb-1">Methods</h3>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getIdentifier</a></th>
+                    <th scope="row"><a href="#code-box-file-get-identifier-method" class="link">getIdentifier</a></th>
                     <td>Returns identifier of file.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">changeIdentifier</a></th>
+                    <th scope="row"><a href="#code-box-file-change-identifier-method" class="link">changeIdentifier</a></th>
                     <td>Changes identifier of file.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">remove</a></th>
+                    <th scope="row"><a href="#code-box-file-remove-method" class="link">remove</a></th>
                     <td>Removes file from code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getDownloadLink</a></th>
+                    <th scope="row"><a href="#code-box-file-get-download-link-method" class="link">getDownloadLink</a></th>
                     <td>Returns download link of file.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">setDownloadLink</a></th>
+                    <th scope="row"><a href="#code-box-file-set-download-link-method" class="link">setDownloadLink</a></th>
                     <td>Changes download link of file or sets it as non-downloadable.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getIdentifier</h3>
+        <h3 id="code-box-file-get-identifier-method" class="method-heading u-mb-1">getIdentifier</h3>
         <p class="method-signature u-mb-2">getIdentifier(): string | null</p>
         <p class="u-mb-2">Returns identifier of file.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -603,7 +606,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">changeIdentifier</h3>
+        <h3 id="code-box-file-change-identifier-method" class="method-heading u-mb-1">changeIdentifier</h3>
         <p class="method-signature u-mb-2">changeIdentifier(newIdentifier: string): boolean</p>
         <p class="u-mb-2">Changes identifier of file.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -624,10 +627,10 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">remove</h3>
+        <h3 id="code-box-file-remove-method" class="method-heading u-mb-1">remove</h3>
         <p class="method-signature u-mb-2">remove(): void</p>
         <p class="u-mb-4">Removes file from code box.</p>
-        <h3 class="method-heading u-mb-1">getDownloadLink</h3>
+        <h3 id="code-box-file-get-download-link-method" class="method-heading u-mb-1">getDownloadLink</h3>
         <p class="method-signature u-mb-2">getDownloadLink(): string | null</p>
         <p class="u-mb-2">Returns download link of file.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -639,7 +642,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">setDownloadLink</h3>
+        <h3 id="code-box-file-set-download-link-method" class="method-heading u-mb-1">setDownloadLink</h3>
         <p class="method-signature u-mb-2">setDownloadLink(downloadLink: string | null): void</p>
         <p class="u-mb-2">Changes download link of file or sets it as non-downloadable.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -652,24 +655,24 @@
             </tbody>
         </table>
         <h2 id="tab-code-box-file" class="u-mb-2">Tab Code Box File</h2>
-        <p class="u-mb-4">TabCodeBoxFile is a type of <a href="#" class="link">CodeBoxFile</a> used within a <a href="#" class="link">TabCodeBox</a>. It includes additional methods to set and get the position of its file button.</p>
+        <p class="u-mb-4">TabCodeBoxFile is a type of <a href="#code-box-file" class="link">CodeBoxFile</a> used within a <a href="../tab-code-box/" class="link">TabCodeBox</a>. It includes additional methods to set and get the position of its file button.</p>
         <h3 class="u-mb-1">Methods</h3>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row" colspan="2"><a href="#" class="link">...all methods from CodeBoxFile class</a></th>
+                    <th scope="row" colspan="2"><a href="#code-box-file-methods" class="link">...all methods from CodeBoxFile class</a></th>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getButtonPosition</a></th>
+                    <th scope="row"><a href="#tab-code-box-file-get-button-position-method" class="link">getButtonPosition</a></th>
                     <td>Returns position of file button.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">setButtonPosition</a></th>
+                    <th scope="row"><a href="#tab-code-box-file-set-button-position-method" class="link">setButtonPosition</a></th>
                     <td>Changes position of file button by swapping it with different code view or file button.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getButtonPosition</h3>
+        <h3 id="tab-code-box-file-get-button-position-method" class="method-heading u-mb-1">getButtonPosition</h3>
         <p class="method-signature u-mb-2">getButtonPosition(): number | null</p>
         <p class="u-mb-2">Returns position of file button.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -681,7 +684,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">setButtonPosition</h3>
+        <h3 id="tab-code-box-file-set-button-position-method" class="method-heading u-mb-1">setButtonPosition</h3>
         <p class="method-signature u-mb-2">setButtonPosition(position: number): boolean</p>
         <p class="u-mb-2">Changes position of file button by swapping it with different code view or file button.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -703,41 +706,44 @@
             </tbody>
         </table>
         <h2 id="project-code-box-file" class="u-mb-2">Project Code Box File</h2>
-        <p class="u-mb-4">ProjectCodeBoxFile is a type of <a href="#" class="link">CodeBoxFile</a> used within a <a href="#" class="link">ProjectCodeBox</a>. It includes additional methods related to ProjectCodeBox.</p>
+        <p class="u-mb-4">ProjectCodeBoxFile is a type of <a href="#code-box-file" class="link">CodeBoxFile</a> used within a <a href="../project-code-box/" class="link">ProjectCodeBox</a>. It includes additional methods related to ProjectCodeBox.</p>
         <h3 class="u-mb-1">Methods</h3>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getFolderPath</a></th>
+                    <th scope="row" colspan="2"><a href="#code-box-file-methods" class="link">...all methods from CodeBoxFile class</a></th>
+                </tr>
+                <tr>
+                    <th scope="row"><a href="#project-code-box-file-get-folder-path-method" class="link">getFolderPath</a></th>
                     <td>Returns path to folder in which the file is located.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">moveToFolder</a></th>
+                    <th scope="row"><a href="#project-code-box-file-move-to-folder-method" class="link">moveToFolder</a></th>
                     <td>Moves file to folder.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getFileName</a></th>
+                    <th scope="row"><a href="#project-code-box-file-get-file-name-method" class="link">getFileName</a></th>
                     <td>Returns file name of file.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">changeFileName</a></th>
+                    <th scope="row"><a href="#project-code-box-file-change-file-name-method" class="link">changeFileName</a></th>
                     <td>Changes file name of file.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getPackage</a></th>
+                    <th scope="row"><a href="#project-code-box-file-get-package-method" class="link">getPackage</a></th>
                     <td>Returns package of file.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">changePackage</a></th>
+                    <th scope="row"><a href="#project-code-box-file-change-package-method" class="link">changePackage</a></th>
                     <td>Changes package of file.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">removePackage</a></th>
+                    <th scope="row"><a href="#project-code-box-file-remove-package-method" class="link">removePackage</a></th>
                     <td>Removes file from package.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getFolderPath</h3>
+        <h3 id="project-code-box-file-get-folder-path-method" class="method-heading u-mb-1">getFolderPath</h3>
         <p class="method-signature u-mb-2">getFolderPath(): string | null</p>
         <p class="u-mb-2">Returns path to folder in which the file is located.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -749,7 +755,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">moveToFolder</h3>
+        <h3 id="project-code-box-file-move-to-folder-method" class="method-heading u-mb-1">moveToFolder</h3>
         <p class="method-signature u-mb-2">moveToFolder(folderPath: string): boolean</p>
         <p class="u-mb-2">Moves file to folder. If folder does not exist, it is created. Package is not changed.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -770,7 +776,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getFileName</h3>
+        <h3 id="project-code-box-file-get-file-name-method" class="method-heading u-mb-1">getFileName</h3>
         <p class="method-signature u-mb-2">getFileName(): string | null</p>
         <p class="u-mb-2">Returns name of file</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -782,7 +788,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">changeFileName</h3>
+        <h3 id="project-code-box-file-change-file-name-method" class="method-heading u-mb-1">changeFileName</h3>
         <p class="method-signature u-mb-2">changeFileName(newName: string): boolean</p>
         <p class="u-mb-2">Changes name of file.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -803,7 +809,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getPackage</h3>
+        <h3 id="project-code-box-file-get-package-method" class="method-heading u-mb-1">getPackage</h3>
         <p class="method-signature u-mb-2">getPackage(): string | null | undefined</p>
         <p class="u-mb-2">Returns package of file.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -815,7 +821,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">changePackage</h3>
+        <h3 id="project-code-box-file-change-package-method" class="method-heading u-mb-1">changePackage</h3>
         <p class="method-signature u-mb-2">changePackage(packageName: string | null, keepFolderPath: boolean): boolean</p>
         <p class="u-mb-2">Changes package of file.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -840,33 +846,33 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">removePackage</h3>
+        <h3 id="project-code-box-file-remove-package-method" class="method-heading u-mb-1">removePackage</h3>
         <p class="method-signature u-mb-2">removePackage(): void</p>
         <p class="u-mb-4">Removes file from package.</p>
         <h2 id="code-view-creator-entry" class="u-mb-2">Code View Creator Entry</h2>
-        <p class="u-mb-2">When you invoke the <a href="#" class="link">getCreatedCodeViews</a> method of <a href="#" class="link">CodeViewCreator</a>, it returns an array of CodeViewCreatorEntry objects. CodeViewCreatorEntry object has the following properties:</p>
+        <p class="u-mb-2">When you invoke the <a href="../creators/#code-view-creator-get-created-code-views-method" class="link">getCreatedCodeViews</a> method of <a href="../creators/#code-view-creator" class="link">CodeViewCreator</a>, it returns an array of CodeViewCreatorEntry objects. CodeViewCreatorEntry object has the following properties:</p>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row">codeView <span class="properties-table__type">: <a href="#" class="properties-table__type-link">CodeView</a></span></th>
+                    <th scope="row">codeView <span class="properties-table__type">: <a href="../code-view/" class="properties-table__type-link">CodeView</a></span></th>
                     <td>Code view.</td>
                 </tr>
                 <tr>
-                    <th scope="row">preElementDataset <span class="properties-table__type">: <a href="#" class="properties-table__type-link">DOMStringMap</a></span></th>
+                    <th scope="row">preElementDataset <span class="properties-table__type">: <a href="https://developer.mozilla.org/en-US/docs/Web/API/DOMStringMap" target="_blank" class="properties-table__type-link">DOMStringMap</a></span></th>
                     <td>Dataset of HTML pre element used to create the code view.</td>
                 </tr>
             </tbody>
         </table>
         <h2 id="code-box-creator-entry" class="u-mb-2">Code Box Creator Entry</h2>
-        <p class="u-mb-2">When you invoke the <a href="#" class="link">getCreatedCodeBoxes</a> method of <a href="#" class="link">CodeBoxCreator</a>, it returns an array of CodeBoxCreatorEntry objects. CodeBoxCreatorEntry object has the following properties (type of codeBox property depends on specific type of creator):</p>
+        <p class="u-mb-2">When you invoke the <a href="../creators/#code-box-creator-get-created-code-boxes-method" class="link">getCreatedCodeBoxes</a> method of <a href="../creators/#code-box-creators" class="link">CodeBoxCreator</a>, it returns an array of CodeBoxCreatorEntry objects. CodeBoxCreatorEntry object has the following properties (type of codeBox property depends on specific type of creator):</p>
         <table class="properties-table">
             <tbody>
                 <tr>
-                    <th scope="row">codeBox <span class="properties-table__type">: T extends <a href="#" class="properties-table__type-link">CodeBox</a></span></th>
+                    <th scope="row">codeBox <span class="properties-table__type">: T extends <a href="../code-box/" class="properties-table__type-link">CodeBox</a></span></th>
                     <td>Code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row">rootElementDataset <span class="properties-table__type">: <a href="#" class="properties-table__type-link">DOMStringMap</a></span></th>
+                    <th scope="row">rootElementDataset <span class="properties-table__type">: <a href="https://developer.mozilla.org/en-US/docs/Web/API/DOMStringMap" target="_blank" class="properties-table__type-link">DOMStringMap</a></span></th>
                     <td>Dataset of the root element of the code box.</td>
                 </tr>
             </tbody>

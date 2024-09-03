@@ -4,7 +4,7 @@
         <h1 class="u-mb-4">Project Code Box</h1>
         <p class="u-mb-4">ProjectCodeBox is designed to simulate a complete project by displaying the entire source code.</p>
         <h2 id="elements-of-project-code-box" class="u-mb-2">Elements of Project Code Box</h2>
-        <p class="u-mb-2">In addition to code view and file elements (described <a href="#" class="link">here</a>), a project code box can also include folder structure configuration elements and commands. The following code sample shows what an element for a project code box might look like.</p>
+        <p class="u-mb-2">In addition to code view and file elements (described <a href="../code-box/#elements-of-code-box" class="link">here</a>), a project code box can also include folder structure configuration elements and commands. The following code sample shows what an element for a project code box might look like.</p>
         <%- include("./includes/project-code-box-elements.ejs") %>
         <h3 class="u-mb-1">Additional data attributes for code views and files</h3>
         <p class="u-mb-2">In addition to the attributes <span class="highlighted-text">data-cb-name</span>, <span class="highlighted-text">data-cb-active</span>, and <span class="highlighted-text">data-cb-file</span>, code views and files in a project code box can also contain the following data attributes.</p>
@@ -30,11 +30,11 @@
         <h2 id="usage-example" class="u-mb-2">Usage Example</h2>
         <p class="u-mb-2">The following example demonstrates how to create a ProjectCodeBox. Simply instantiate the ProjectCodeBox class by passing a reference to the root element of code box. You can also provide additional options as a second parameter.</p>
         <%- include("./includes/create-project-code-box.ejs") %>
-        <p class="u-mb-4">If you want to create multiple project code boxes, you can use the <a href="#" class="link">ProjectCodeBoxCreator</a>. For more information, refer to the chapter on <a href="#" class="link">creators</a>.</p>
+        <p class="u-mb-4">If you want to create multiple project code boxes, you can use the <a href="../creators/#project-code-box-creator" class="link">ProjectCodeBoxCreator</a>. For more information, refer to the chapter on <a href="../creators/" class="link">creators</a>.</p>
         <h2 id="inheritance" class="u-mb-2">Inheritance</h2>
         <p class="u-mb-2">Project code boxes have the ability to inherit from other project code boxes. When creating an instance of a ProjectCodeBox, you can pass a parent project code box as the third parameter. The newly created project code box will inherit all code views, files, folders, and packages from its parent code box. Additionally, the new code box can add its own code views or files, delete some, or make other modifications as needed. The following example shows how to create a project code box that inherits from a parent code box.</p>
         <%- include("./includes/project-code-box-inheritance-example.ejs") %>
-        <p class="u-mb-4">Most of the time, you will likely use <a href="#" class="link">ProjectCodeBoxCreator</a> to avoid manually creating each code box and redundantly specifying options.</p>
+        <p class="u-mb-4">Most of the time, you will likely use <a href="../creators/#project-code-box-creator" class="link">ProjectCodeBoxCreator</a> to avoid manually creating each code box and redundantly specifying options.</p>
         <h3 class="u-mb-1">What is inherited</h3>
         <p class="u-mb-1">The following things are inherited:</p>
         <ul class="u-mb-4">
@@ -44,8 +44,8 @@
             <li>packages</li>
             <li>folder path for packages</li>
             <li>project name</li>
-            <li><a href="#" class="link">createFoldersForPackages</a> option</li>
-            <li><a href="#" class="link">foldersDelimiterForPackages</a> option</li>
+            <li><a href="#create-folders-for-packages-option" class="link">createFoldersForPackages</a> option</li>
+            <li><a href="#folders-delimiter-for-packages-option" class="link">foldersDelimiterForPackages</a> option</li>
         </ul>
         <h3 class="u-mb-1">What is not inherited</h3>
         <p class="u-mb-1">The following things are not inherited:</p>
@@ -67,89 +67,89 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><a href="#" class="link">rename project</a></td>
+                    <td><a href="#rename-project-command" class="link">rename project</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">add folder</a></td>
+                    <td><a href="#add-folder-command" class="link">add folder</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">remove folder</a></td>
+                    <td><a href="#remove-folder-command" class="link">remove folder</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">rename folder</a></td>
+                    <td><a href="#rename-folder-command" class="link">rename folder</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">open folder</a></td>
+                    <td><a href="#open-folder-command" class="link">open folder</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">close folder</a></td>
+                    <td><a href="#close-folder-command" class="link">close folder</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">add package</a></td>
+                    <td><a href="#add-package-command" class="link">add package</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">remove package</a></td>
+                    <td><a href="#remove-package-command" class="link">remove package</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">rename package</a></td>
+                    <td><a href="#rename-package-command" class="link">rename package</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">open package</a></td>
+                    <td><a href="#open-package-command" class="link">open package</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">close package</a></td>
+                    <td><a href="#close-package-command" class="link">close package</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">remove code view</a></td>
+                    <td><a href="#remove-code-view-command" class="link">remove code view</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">rename code view</a></td>
+                    <td><a href="#rename-code-view-command" class="link">rename code view</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">move code view to folder</a></td>
+                    <td><a href="#move-code-view-to-folder-command" class="link">move code view to folder</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">change code view package</a></td>
+                    <td><a href="#change-code-view-package-command" class="link">change code view package</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">remove code view package</a></td>
+                    <td><a href="#remove-code-view-package-command" class="link">remove code view package</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">remove all code views</a></td>
+                    <td><a href="#remove-all-code-views-command" class="link">remove all code views</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">add code view highlight</a></td>
+                    <td><a href="#add-code-view-highlight-command" class="link">add code view highlight</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">remove code view highlight</a></td>
+                    <td><a href="#remove-code-view-highlight-command" class="link">remove code view highlight</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">set active code view</a></td>
+                    <td><a href="#set-active-code-view-command" class="link">set active code view</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">set no active code view</a></td>
+                    <td><a href="#set-no-active-code-view-command" class="link">set no active code view</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">remove file</a></td>
+                    <td><a href="#remove-file-command" class="link">remove file</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">rename file</a></td>
+                    <td><a href="#rename-file-command" class="link">rename file</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">move file to folder</a></td>
+                    <td><a href="#move-file-to-folder-command" class="link">move file to folder</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">change file package</a></td>
+                    <td><a href="#change-file-package-command" class="link">change file package</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">remove file package</a></td>
+                    <td><a href="#remove-file-package-command" class="link">remove file package</a></td>
                 </tr>
                 <tr>
-                    <td><a href="#" class="link">remove all files</a></td>
+                    <td><a href="#remove-all-files-command" class="link">remove all files</a></td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">rename project</h3>
+        <h3 id="rename-project-command" class="command-heading u-mb-1">rename project</h3>
         <p class="u-mb-2">Renames project.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -160,7 +160,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">add folder</h3>
+        <h3 id="add-folder-command" class="command-heading u-mb-1">add folder</h3>
         <p class="u-mb-2">Creates new folder(s) (if not created yet).</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -171,8 +171,8 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">remove folder</h3>
-        <p class="u-mb-2">Removes folder and all its contents. This might also remove packages if their folders are removed (if generation of folders for packages is enabled via <a href="#" class="link">createFoldersForPackages</a> option).</p>
+        <h3 id="remove-folder-command" class="command-heading u-mb-1">remove folder</h3>
+        <p class="u-mb-2">Removes folder and all its contents. This might also remove packages if their folders are removed (if generation of folders for packages is enabled via <a href="#create-folders-for-packages-option" class="link">createFoldersForPackages</a> option).</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
             <tbody>
@@ -182,7 +182,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">rename folder</h3>
+        <h3 id="rename-folder-command" class="command-heading u-mb-1">rename folder</h3>
         <p class="u-mb-2">Renames folder. This can also change (rename) folder for packages and rename packages.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -197,7 +197,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">open folder</h3>
+        <h3 id="open-folder-command" class="command-heading u-mb-1">open folder</h3>
         <p class="u-mb-2">Opens folder.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -212,7 +212,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">close folder</h3>
+        <h3 id="close-folder-command" class="command-heading u-mb-1">close folder</h3>
         <p class="u-mb-2">Closes folder.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -227,7 +227,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">add package</h3>
+        <h3 id="add-package-command" class="command-heading u-mb-1">add package</h3>
         <p class="u-mb-2">Creates new package (if it does not exist yet).</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -238,7 +238,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">remove package</h3>
+        <h3 id="remove-package-command" class="command-heading u-mb-1">remove package</h3>
         <p class="u-mb-2">Removes package.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -257,8 +257,8 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">rename package</h3>
-        <p class="u-mb-2">Renames package. This can also rename folders for package if generation of folders is enabled via <a href="#" class="link">createFoldersForPackages</a> option.</p>
+        <h3 id="rename-package-command" class="command-heading u-mb-1">rename package</h3>
+        <p class="u-mb-2">Renames package. This can also rename folders for package if generation of folders is enabled via <a href="#create-folders-for-packages-option" class="link">createFoldersForPackages</a> option.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
             <tbody>
@@ -272,7 +272,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">open package</h3>
+        <h3 id="open-package-command" class="command-heading u-mb-1">open package</h3>
         <p class="u-mb-2">Opens package.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -283,7 +283,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">close package</h3>
+        <h3 id="close-package-command" class="command-heading u-mb-1">close package</h3>
         <p class="u-mb-2">Closes package.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -294,7 +294,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">remove code view</h3>
+        <h3 id="remove-code-view-command" class="command-heading u-mb-1">remove code view</h3>
         <p class="u-mb-2">Removes code view from code box.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -305,7 +305,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">rename code view</h3>
+        <h3 id="rename-code-view-command" class="command-heading u-mb-1">rename code view</h3>
         <p class="u-mb-2">Changes file name of code view.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -320,7 +320,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">move code view to folder</h3>
+        <h3 id="move-code-view-to-folder-command" class="command-heading u-mb-1">move code view to folder</h3>
         <p class="u-mb-2">Moves code view to folder (if folder does not exist, it is created; package is not changed).</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -335,7 +335,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">change code view package</h3>
+        <h3 id="change-code-view-package-command" class="command-heading u-mb-1">change code view package</h3>
         <p class="u-mb-2">Changes package of code view.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -354,7 +354,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">remove code view package</h3>
+        <h3 id="remove-code-view-package-command" class="command-heading u-mb-1">remove code view package</h3>
         <p class="u-mb-2">Removes code view from package.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -365,9 +365,9 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">remove all code views</h3>
+        <h3 id="remove-all-code-views-command" class="command-heading u-mb-1">remove all code views</h3>
         <p class="u-mb-4">Removes all code views from code box.</p>
-        <h3 class="command-heading u-mb-1">add code view highlight</h3>
+        <h3 id="add-code-view-highlight-command" class="command-heading u-mb-1">add code view highlight</h3>
         <p class="u-mb-2">Adds new highlight to code view.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -386,7 +386,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">remove code view highlight</h3>
+        <h3 id="remove-code-view-highlight-command" class="command-heading u-mb-1">remove code view highlight</h3>
         <p class="u-mb-2">Removes highlights from code view based on specified range (all intersecting highlights are removed).</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -405,7 +405,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">set active code view</h3>
+        <h3 id="set-active-code-view-command" class="command-heading u-mb-1">set active code view</h3>
         <p class="u-mb-2">Sets code view as active (displays it in code box).</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -416,9 +416,9 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">set no active code view</h3>
+        <h3 id="set-no-active-code-view-command" class="command-heading u-mb-1">set no active code view</h3>
         <p class="u-mb-4">Displays no code view in code box.</p>
-        <h3 class="command-heading u-mb-1">remove file</h3>
+        <h3 id="remove-file-command" class="command-heading u-mb-1">remove file</h3>
         <p class="u-mb-2">Removes file from code box.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -429,7 +429,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">rename file</h3>
+        <h3 id="rename-file-command" class="command-heading u-mb-1">rename file</h3>
         <p class="u-mb-2">Changes name of file.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -444,7 +444,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">move file to folder</h3>
+        <h3 id="move-file-to-folder-command" class="command-heading u-mb-1">move file to folder</h3>
         <p class="u-mb-2">Moves file to folder (if folder does not exist, it is created; package is not changed).</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -459,7 +459,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">change file package</h3>
+        <h3 id="change-file-package-command" class="command-heading u-mb-1">change file package</h3>
         <p class="u-mb-2">Changes package of file.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -478,7 +478,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">remove file package</h3>
+        <h3 id="remove-file-package-command" class="command-heading u-mb-1">remove file package</h3>
         <p class="u-mb-2">Removes file from package.</p>
         <h4 class="u-mb-1">Properties</h4>
         <table class="properties-table u-mb-4">
@@ -489,97 +489,97 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="command-heading u-mb-1">remove all files</h3>
+        <h3 id="remove-all-files-command" class="command-heading u-mb-1">remove all files</h3>
         <p class="u-mb-4">Removes all files from code box.</p>
         <h2 id="options" class="heading-secondary u-mb-2">Options</h2>
         <p class="u-mb-1">ProjectCodeBox accepts the following options and all options from the base CodeBox class.</p>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row" colspan="2"><a href="#" class="link">...all options from CodeBox class</a></th>
+                    <th scope="row" colspan="2"><a href="../code-box/#options" class="link">...all options from CodeBox class</a></th>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">svgSpritePath</a></th>
+                    <th scope="row"><a href="#svg-sprite-path-option" class="link">svgSpritePath</a></th>
                     <td>Specifies path to the SVG sprite that contains icons.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">svgSpriteIcons</a></th>
+                    <th scope="row"><a href="#svg-sprite-icons-option" class="link">svgSpriteIcons</a></th>
                     <td>Specifies names of the icons in the SVG sprite.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">folderStructureHeading</a></th>
+                    <th scope="row"><a href="#folders-structure-heading-option" class="link">folderStructureHeading</a></th>
                     <td>Specifies folder structure heading.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">packagesHeading</a></th>
+                    <th scope="row"><a href="#packages-heading-option" class="link">packagesHeading</a></th>
                     <td>Specifies packages heading.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">projectName</a></th>
+                    <th scope="row"><a href="#project-name-option" class="link">projectName</a></th>
                     <td>Specifies name of project.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">packagesFolderPath</a></th>
+                    <th scope="row"><a href="#packages-folder-path-option" class="link">packagesFolderPath</a></th>
                     <td>Specifies path to folder for packages.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">defaultPackageName</a></th>
+                    <th scope="row"><a href="#default-package-name-option" class="link">defaultPackageName</a></th>
                     <td>Specifies name under which the default package should be displayed.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">createFoldersForPackages</a></th>
+                    <th scope="row"><a href="#create-folders-for-packages-option" class="link">createFoldersForPackages</a></th>
                     <td>Specifies whether folders should be created for packages.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">foldersDelimiterForPackages</a></th>
+                    <th scope="row"><a href="#folders-delimiter-for-packages-option" class="link">foldersDelimiterForPackages</a></th>
                     <td>Specifies delimiter to be used when creating folders for packages.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">folderAnimationSpeed</a></th>
+                    <th scope="row"><a href="#folder-animation-speed-option" class="link">folderAnimationSpeed</a></th>
                     <td>Specifies speed of folder open/close animation.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">folderAnimationEasingFunction</a></th>
+                    <th scope="row"><a href="#folder-animation-easing-function-option" class="link">folderAnimationEasingFunction</a></th>
                     <td>Specifies CSS easing function for folder open/close animation.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">openActiveCodeViewFolderOnInit</a></th>
+                    <th scope="row"><a href="#open-active-code-view-folder-on-init-option" class="link">openActiveCodeViewFolderOnInit</a></th>
                     <td>Specifies whether folder and its parent folders containing the active code view should be opened on initialization.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">openActiveCodeViewPackageOnInit</a></th>
+                    <th scope="row"><a href="#open-active-code-view-package-on-init-option" class="link">openActiveCodeViewPackageOnInit</a></th>
                     <td>Specifies whether package containing the active code view should be opened on initialization.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link" style="word-break: break-all;">preventActiveCodeViewFolderOpenOnInitIfPackage</a></th>
+                    <th scope="row"><a href="#prevent-active-code-view-folder-open-on-init-if-package-option" class="link" style="word-break: break-all;">preventActiveCodeViewFolderOpenOnInitIfPackage</a></th>
                     <td>Specifies whether the folder and its parent folders containing the active code view should not be opened on initialization when the code view is within a package.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">openRootFolderOnInit</a></th>
+                    <th scope="row"><a href="#open-root-folder-on-init-option" class="link">openRootFolderOnInit</a></th>
                     <td>Specifies whether the project (root) folder should be opened on initialization.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">openPanelOnInit</a></th>
+                    <th scope="row"><a href="#open-panel-on-init-option" class="link">openPanelOnInit</a></th>
                     <td>Specifies whether the side panel should be opened on initialization.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">closePanelOnCodeViewSelect</a></th>
+                    <th scope="row"><a href="#close-panel-on-code-view-select-option" class="link">closePanelOnCodeViewSelect</a></th>
                     <td>Specifies whether the side panel should be closed when code view is selected by clicking on its button.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">openPanelButtonAriaLabel</a></th>
+                    <th scope="row"><a href="#open-panel-button-aria-label-option" class="link">openPanelButtonAriaLabel</a></th>
                     <td>Specifies value of the panel open/close button aria-label attribute when panel is closed.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">closePanelButtonAriaLabel</a></th>
+                    <th scope="row"><a href="#close-panel-button-aria-label-option" class="link">closePanelButtonAriaLabel</a></th>
                     <td>Specifies value of the panel open/close button aria-label attribute when panel is opened.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">svgSpritePath</span> <span class="option-heading__type">: string</span></h3>
+        <h3 id="svg-sprite-path-option" class="option-heading u-mb-1"><span class="option-heading__name">svgSpritePath</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info u-mb-2">Default value: <span class="option-info__value">undefined</span></p>
         <p class="u-mb-4">Specifies path to the SVG sprite that contains icons.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">svgSpriteIcons</span> <span class="option-heading__type">: object</span></h3>
+        <h3 id="svg-sprite-icons-option" class="option-heading u-mb-1"><span class="option-heading__name">svgSpriteIcons</span> <span class="option-heading__type">: object</span></h3>
         <p class="option-info u-mb-2">Default value: <span class="option-info__value">{}</span></p>
         <p>Specifies names of the icons in the SVG sprite in a form of object with the following properties:</p>
         <ul class="u-mb-2">
@@ -593,325 +593,325 @@
             <li><span class="highlighted-text">package</span> - name of icon for package</li>
         </ul>
         <%- include("./includes/sprite-icons-option.ejs") %>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">folderStructureHeading</span> <span class="option-heading__type">: string</span></h3>
+        <h3 id="folder-structure-heading-option" class="option-heading u-mb-1"><span class="option-heading__name">folderStructureHeading</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">"Folder structure"</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-folder-structure-heading</span></p>
         <p class="u-mb-4">Specifies folder structure heading.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">packagesHeading</span> <span class="option-heading__type">: string</span></h3>
+        <h3 id="packages-heading-option" class="option-heading u-mb-1"><span class="option-heading__name">packagesHeading</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">"Packages"</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-packages-heading</span></p>
         <p class="u-mb-4">Specifies packages heading.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">projectName</span> <span class="option-heading__type">: string</span></h3>
+        <h3 id="project-name-option" class="option-heading u-mb-1"><span class="option-heading__name">projectName</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">"unnamed"</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-project-name</span></p>
         <p class="u-mb-4">Specifies the name of project (root) folder. This option is not used if the code box has parent code box.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">packagesFolderPath</span> <span class="option-heading__type">: string</span></h3>
+        <h3 id="packages-folder-path-option" class="option-heading u-mb-1"><span class="option-heading__name">packagesFolderPath</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">"/"</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-packages-folder-path</span></p>
         <p class="u-mb-4">Specifies path to folder for packages. This option is not used if the code box has parent code box.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">defaultPackageName</span> <span class="option-heading__type">: string</span></h3>
+        <h3 id="default-package-name-option" class="option-heading u-mb-1"><span class="option-heading__name">defaultPackageName</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">"default"</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-default-package-name</span></p>
         <p class="u-mb-4">Specifies name under which the default package should be displayed.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">createFoldersForPackages</span> <span class="option-heading__type">: boolean</span></h3>
+        <h3 id="create-folders-for-packages-option" class="option-heading u-mb-1"><span class="option-heading__name">createFoldersForPackages</span> <span class="option-heading__type">: boolean</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">true</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-create-folders-for-packages</span></p>
         <p class="u-mb-4">Specifies whether folders should be created for packages. This option is not used if the code box has parent code box.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">foldersDelimiterForPackages</span> <span class="option-heading__type">: string</span></h3>
+        <h3 id="folders-delimiter-for-packages-option" class="option-heading u-mb-1"><span class="option-heading__name">foldersDelimiterForPackages</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">undefined</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-folders-delimiter-for-packages</span></p>
         <p class="u-mb-4">Specifies delimiter to be used when creating folders for packages. For example, if the delimiter is "." and the package name is "io.github.jirkasa", folders "io/github/jirkasa" are created. This option is not used if the code box has a parent code box.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">folderAnimationSpeed</span> <span class="option-heading__type">: number</span></h3>
+        <h3 id="folder-animation-speed-option" class="option-heading u-mb-1"><span class="option-heading__name">folderAnimationSpeed</span> <span class="option-heading__type">: number</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">200</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-folder-animation-speed</span></p>
         <p class="u-mb-4">Specifies speed of folder open/close animation (in milliseconds).</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">folderAnimationEasingFunction</span> <span class="option-heading__type">: string</span></h3>
+        <h3 id="folder-animation-easing-function-option" class="option-heading u-mb-1"><span class="option-heading__name">folderAnimationEasingFunction</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">"ease-in-out"</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-folder-animation-easing-function</span></p>
         <p class="u-mb-4">Specifies CSS easing function for folder open/close animation.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">openActiveCodeViewFolderOnInit</span> <span class="option-heading__type">: boolean</span></h3>
+        <h3 id="open-active-code-view-folder-on-init-option" class="option-heading u-mb-1"><span class="option-heading__name">openActiveCodeViewFolderOnInit</span> <span class="option-heading__type">: boolean</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">true</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-open-active-code-view-folder-on-init</span></p>
         <p class="u-mb-4">Specifies whether folder and its parent folders containing the active code view should be opened on initialization.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">openActiveCodeViewPackageOnInit</span> <span class="option-heading__type">: boolean</span></h3>
+        <h3 id="open-active-code-view-package-on-init-option" class="option-heading u-mb-1"><span class="option-heading__name">openActiveCodeViewPackageOnInit</span> <span class="option-heading__type">: boolean</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">true</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-open-active-code-view-package-on-init</span></p>
         <p class="u-mb-4">Specifies whether package containing the active code view should be opened on initialization.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">preventActiveCodeViewFolderOpenOnInitIfPackage</span> <span class="option-heading__type">: boolean</span></h3>
+        <h3 id="prevent-active-code-view-folder-open-on-init-if-package-option" class="option-heading u-mb-1"><span class="option-heading__name">preventActiveCodeViewFolderOpenOnInitIfPackage</span> <span class="option-heading__type">: boolean</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">false</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-prevent-active-code-view-folder-open-on-init-if-package</span></p>
         <p class="u-mb-4">Specifies whether the folder and its parent folders containing the active code view should not be opened on initialization when the code view is within a package. This option overrides openActiveCodeViewFolderOnInit when set to true and the active code view is within a package.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">openRootFolderOnInit</span> <span class="option-heading__type">: boolean</span></h3>
+        <h3 id="open-root-folder-on-init-option" class="option-heading u-mb-1"><span class="option-heading__name">openRootFolderOnInit</span> <span class="option-heading__type">: boolean</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">true</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-open-root-folder-on-init</span></p>
         <p class="u-mb-4">Specifies whether the project (root) folder should be opened on initialization. This option has effect only in certain situations (openActiveCodeViewFolderOnInit option takes precedence).</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">openPanelOnInit</span> <span class="option-heading__type">: boolean</span></h3>
+        <h3 id="open-panel-on-init-option" class="option-heading u-mb-1"><span class="option-heading__name">openPanelOnInit</span> <span class="option-heading__type">: boolean</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">false</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-open-panel-on-init</span></p>
         <p class="u-mb-4">Specifies whether the side panel should be opened on initialization.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">closePanelOnCodeViewSelect</span> <span class="option-heading__type">: boolean</span></h3>
+        <h3 id="close-panel-on-code-view-select-option" class="option-heading u-mb-1"><span class="option-heading__name">closePanelOnCodeViewSelect</span> <span class="option-heading__type">: boolean</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">true</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-close-panel-on-code-view-select</span></p>
         <p class="u-mb-4">Specifies whether the side panel should be closed when code view is selected by clicking on its button.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">openPanelButtonAriaLabel</span> <span class="option-heading__type">: string</span></h3>
+        <h3 id="open-panel-button-aria-label-option" class="option-heading u-mb-1"><span class="option-heading__name">openPanelButtonAriaLabel</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">"Open panel"</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-open-panel-button-aria-label</span></p>
         <p class="u-mb-4">Specifies value of the panel open/close button aria-label attribute when panel is closed.</p>
-        <h3 class="option-heading u-mb-1"><span class="option-heading__name">closePanelButtonAriaLabel</span> <span class="option-heading__type">: string</span></h3>
+        <h3 id="close-panel-button-aria-label-option" class="option-heading u-mb-1"><span class="option-heading__name">closePanelButtonAriaLabel</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">"Close panel"</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-close-panel-button-aria-label</span></p>
         <p class="u-mb-4">Specifies value of the panel open/close button aria-label attribute when panel is opened.</p>
         <h2 id="methods" class="u-mb-2">Methods</h2>
-        <p class="u-mb-1">ProjectCodeBox has the following methods. Many of these methods are also described in the <a href="#" class="link">chapter about the base CodeBox class</a>. However, some of them have a return type that is a subclass of <a href="#" class="link">CodeBoxCodeView</a> or <a href="#" class="link">CodeBoxFile</a> - specifically, <a href="#" class="link">ProjectCodeBoxCodeView</a> or <a href="#" class="link">ProjectCodeBoxFile</a>. For clarity, these methods are also listed in this chapter.</p>
+        <p class="u-mb-1">ProjectCodeBox has the following methods. Many of these methods are also described in the <a href="../code-box/" class="link">chapter about the base CodeBox class</a>. However, some of them have a return type that is a subclass of <a href="../other-components/#code-box-code-view" class="link">CodeBoxCodeView</a> or <a href="../other-components/#code-box-file" class="link">CodeBoxFile</a> - specifically, <a href="../other-components/#project-code-box-code-view" class="link">ProjectCodeBoxCodeView</a> or <a href="../other-components/#project-code-box-file" class="link">ProjectCodeBoxFile</a>. For clarity, these methods are also listed in this chapter.</p>
         <table class="contents-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><a href="#" class="link">appendTo</a></th>
+                    <th scope="row"><a href="#append-to-method" class="link">appendTo</a></th>
                     <td>Appends code box to element.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">detach</a></th>
+                    <th scope="row"><a href="#detach-method" class="link">detach</a></th>
                     <td>Detaches code box from its parent element.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">init</a></th>
+                    <th scope="row"><a href="#init-method" class="link">init</a></th>
                     <td>Initializes code box if it hasn't been initialized yet.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">isInitialized</a></th>
+                    <th scope="row"><a href="#is-initialized-method" class="link">isInitialized</a></th>
                     <td>Checks whether the code box is initialized.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">addOnInitListener</a></th>
+                    <th scope="row"><a href="#add-on-init-listener-method" class="link">addOnInitListener</a></th>
                     <td>Registeres function to be called when code box is initialized.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">addCodeView</a></th>
+                    <th scope="row"><a href="#add-code-view-method" class="link">addCodeView</a></th>
                     <td>Adds new code view to code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCodeViews</a></th>
+                    <th scope="row"><a href="#get-code-views-method" class="link">getCodeViews</a></th>
                     <td>Returns all code views of code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCodeViewsByFolderPath</a></th>
+                    <th scope="row"><a href="#get-code-views-by-folder-path-method" class="link">getCodeViewsByFolderPath</a></th>
                     <td>Returns code views in folder.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCodeViewsByPackage</a></th>
+                    <th scope="row"><a href="#get-code-views-by-package-method" class="link">getCodeViewsByPackage</a></th>
                     <td>Returns code views in package.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCodeView</a></th>
+                    <th scope="row"><a href="#get-code-view-method" class="link">getCodeView</a></th>
                     <td>Returns code view based on identifier.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCodeViewByFolderPath</a></th>
+                    <th scope="row"><a href="#get-code-view-by-folder-path-method" class="link">getCodeViewByFolderPath</a></th>
                     <td>Returns code view based on folder path and name.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCodeViewByPackage</a></th>
+                    <th scope="row"><a href="#get-code-view-by-package-method" class="link">getCodeViewByPackage</a></th>
                     <td>Returns code view based on package and name.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">removeCodeView</a></th>
+                    <th scope="row"><a href="#remove-code-view-method" class="link">removeCodeView</a></th>
                     <td>Removes code view from code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">removeAllCodeViews</a></th>
+                    <th scope="row"><a href="#remove-all-code-views-method" class="link">removeAllCodeViews</a></th>
                     <td>Removes all code views from code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">changeCodeViewIdentifier</a></th>
+                    <th scope="row"><a href="#change-code-view-identifier-method" class="link">changeCodeViewIdentifier</a></th>
                     <td>Changes identifier of code view in code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">changeCodeViewPackage</a></th>
+                    <th scope="row"><a href="#change-code-view-package-method" class="link">changeCodeViewPackage</a></th>
                     <td>Changes package of code view.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">removeCodeViewPackage</a></th>
+                    <th scope="row"><a href="#remove-code-view-package-method" class="link">removeCodeViewPackage</a></th>
                     <td>Removes code view from package.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getCodeViewPackage</a></th>
+                    <th scope="row"><a href="#get-code-view-package-method" class="link">getCodeViewPackage</a></th>
                     <td>Returns package of code view.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">setActiveCodeView</a></th>
+                    <th scope="row"><a href="#set-active-code-view-method" class="link">setActiveCodeView</a></th>
                     <td>Sets code view as active (displays it in code box).</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">setNoActiveCodeView</a></th>
+                    <th scope="row"><a href="#set-no-active-code-view-method" class="link">setNoActiveCodeView</a></th>
                     <td>Displays no code view in code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getActiveCodeView</a></th>
+                    <th scope="row"><a href="#get-active-code-view-method" class="link">getActiveCodeView</a></th>
                     <td>Returns currently active code view.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">addFile</a></th>
+                    <th scope="row"><a href="#add-file-method" class="link">addFile</a></th>
                     <td>Adds new file to code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getFiles</a></th>
+                    <th scope="row"><a href="#get-files-method" class="link">getFiles</a></th>
                     <td>Returns all files of code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getFilesByFolderPath</a></th>
+                    <th scope="row"><a href="#get-files-by-folder-path-method" class="link">getFilesByFolderPath</a></th>
                     <td>Returns files in folder.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getFilesByPackage</a></th>
+                    <th scope="row"><a href="#get-files-by-package-method" class="link">getFilesByPackage</a></th>
                     <td>Returns files in package.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getFile</a></th>
+                    <th scope="row"><a href="#get-file-method" class="link">getFile</a></th>
                     <td>Returns file based on identifier.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getFileByFolderPath</a></th>
+                    <th scope="row"><a href="#get-file-by-folder-path-method" class="link">getFileByFolderPath</a></th>
                     <td>Returns files based on folder path and name.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getFileByPackage</a></th>
+                    <th scope="row"><a href="#get-file-by-package-method" class="link">getFileByPackage</a></th>
                     <td>Returns file based on package and name.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">removeFile</a></th>
+                    <th scope="row"><a href="#remove-file-method" class="link">removeFile</a></th>
                     <td>Removes file from code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">removeAllFiles</a></th>
+                    <th scope="row"><a href="#remove-all-files-method" class="link">removeAllFiles</a></th>
                     <td>Removes all files from code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">changeFileIdentifier</a></th>
+                    <th scope="row"><a href="#change-file-identifier-method" class="link">changeFileIdentifier</a></th>
                     <td>Changes identifier of file in code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">changeFilePackage</a></th>
+                    <th scope="row"><a href="#change-file-package-method" class="link">changeFilePackage</a></th>
                     <td>Changes package of file.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">removeFilePackage</a></th>
+                    <th scope="row"><a href="#remove-file-package-method" class="link">removeFilePackage</a></th>
                     <td>Removes file from package.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getFilePackage</a></th>
+                    <th scope="row"><a href="#get-file-package-method" class="link">getFilePackage</a></th>
                     <td>Returns package of file.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">changeFileDownloadLink</a></th>
+                    <th scope="row"><a href="#change-file-download-link-method" class="link">changeFileDownloadLink</a></th>
                     <td>Changes download link of file.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">addFolder</a></th>
+                    <th scope="row"><a href="#add-folder-method" class="link">addFolder</a></th>
                     <td>Creates new folder(s).</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">removeFolder</a></th>
+                    <th scope="row"><a href="#remove-folder-method" class="link">removeFolder</a></th>
                     <td>Removes folder and all its contents.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">renameFolder</a></th>
+                    <th scope="row"><a href="#rename-folder-method" class="link">renameFolder</a></th>
                     <td>Renames folder.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">openFolder</a></th>
+                    <th scope="row"><a href="#open-folder-method" class="link">openFolder</a></th>
                     <td>Opens folder.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">closeFolder</a></th>
+                    <th scope="row"><a href="#close-folder-method" class="link">closeFolder</a></th>
                     <td>Closes folder.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">folderExists</a></th>
+                    <th scope="row"><a href="#folder-exists-method" class="link">folderExists</a></th>
                     <td>Checks whether folder exists.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">isFolderOpened</a></th>
+                    <th scope="row"><a href="#is-folder-opened-method" class="link">isFolderOpened</a></th>
                     <td>Checks whether folder is opened.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getSubfolderNames</a></th>
+                    <th scope="row"><a href="#get-subfolder-names-method" class="link">getSubfolderNames</a></th>
                     <td>Returns names of folder subfolders.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">addPackage</a></th>
+                    <th scope="row"><a href="#add-package-method" class="link">addPackage</a></th>
                     <td>Creates new package.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">removePackage</a></th>
+                    <th scope="row"><a href="#remove-package-method" class="link">removePackage</a></th>
                     <td>Removes package.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">renamePackage</a></th>
+                    <th scope="row"><a href="#rename-package-method" class="link">renamePackage</a></th>
                     <td>Renames package.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">openPackage</a></th>
+                    <th scope="row"><a href="#open-package-method" class="link">openPackage</a></th>
                     <td>Opens package.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">closePackage</a></th>
+                    <th scope="row"><a href="#close-package-method" class="link">closePackage</a></th>
                     <td>Closes package.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">packageExists</a></th>
+                    <th scope="row"><a href="#package-exists-method" class="link">packageExists</a></th>
                     <td>Checks whether package exists.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">isPackageOpened</a></th>
+                    <th scope="row"><a href="#is-package-opened-method" class="link">isPackageOpened</a></th>
                     <td>Checks whether package is opened.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getPackages</a></th>
+                    <th scope="row"><a href="#get-packages-method" class="link">getPackages</a></th>
                     <td>Returns all packages.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getPackagesFolderPath</a></th>
+                    <th scope="row"><a href="#get-packages-folder-path-method" class="link">getPackagesFolderPath</a></th>
                     <td>Returns path to folder that is currently used for packages.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">changePackagesFolderPathAndRemoveAll</a></th>
+                    <th scope="row"><a href="#change-packages-folder-path-and-remove-all-method" class="link">changePackagesFolderPathAndRemoveAll</a></th>
                     <td>Sets new folder path for packages and removes all code views, files, folders and packages.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">getProjectName</a></th>
+                    <th scope="row"><a href="#get-project-name-method" class="link">getProjectName</a></th>
                     <td>Returns project name.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">setProjectName</a></th>
+                    <th scope="row"><a href="#set-project-name-method" class="link">setProjectName</a></th>
                     <td>Sets new project name.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">openPanel</a></th>
+                    <th scope="row"><a href="#open-panel-method" class="link">openPanel</a></th>
                     <td>Opens panel.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">closePanel</a></th>
+                    <th scope="row"><a href="#close-panel-method" class="link">closePanel</a></th>
                     <td>Closes panel.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">isPanelOpened</a></th>
+                    <th scope="row"><a href="#is-panel-opened-method" class="link">isPanelOpened</a></th>
                     <td>Checks whether panel is opened.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">reset</a></th>
+                    <th scope="row"><a href="#reset-method" class="link">reset</a></th>
                     <td>Resets code box to its post-initialization state.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">createMemento</a></th>
+                    <th scope="row"><a href="#create-memento-method" class="link">createMemento</a></th>
                     <td>Creates memento.</td>
                 </tr>
                 <tr>
-                    <th scope="row"><a href="#" class="link">applyMemento</a></th>
+                    <th scope="row"><a href="#apply-memento-method" class="link">applyMemento</a></th>
                     <td>Applies memento.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">appendTo</h3>
+        <h3 id="append-to-method" class="method-heading u-mb-1">appendTo</h3>
         <p class="method-signature u-mb-2">appendTo(element: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement" target="_blank" class="method-signature__link">HTMLElement</a>): void</p>
         <p class="u-mb-2">Appends code box to element.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -923,13 +923,13 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">detach</h3>
+        <h3 id="detach-method" class="method-heading u-mb-1">detach</h3>
         <p class="method-signature u-mb-2">detach(): void</p>
         <p class="u-mb-4">Detaches code box from its parent element.</p>
-        <h3 class="method-heading u-mb-1">init</h3>
+        <h3 id="init-method" class="method-heading u-mb-1">init</h3>
         <p class="method-signature u-mb-2">init(): void</p>
         <p class="u-mb-4">Initializes code box if it hasn't been initialized yet. When lazy initialization is disabled, the code box is initialized immediately after it is created.</p>
-        <h3 class="method-heading u-mb-1">isInitialized</h3>
+        <h3 id="is-initialized-method" class="method-heading u-mb-1">isInitialized</h3>
         <p class="method-signature u-mb-2">isInitialized(): boolean</p>
         <p class="u-mb-2">Checks whether the code box is initialized.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -941,7 +941,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">addOnInitListener</h3>
+        <h3 id="add-on-init-listener-method" class="method-heading u-mb-1">addOnInitListener</h3>
         <p class="method-signature u-mb-2">addOnInitListener(callback: () => void): void</p>
         <p class="u-mb-2">Registeres function to be called when code box is initialized.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -953,7 +953,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">addCodeView</h3>
+        <h3 id="add-code-view-method" class="method-heading u-mb-1">addCodeView</h3>
         <p class="method-signature u-mb-2">addCodeView(identifier: string, codeView: CodeView): boolean</p>
         <p class="u-mb-2">Adds new code view to code box (copy of passed code view is made).</p>
         <h4 class="u-mb-1">Params</h4>
@@ -964,7 +964,7 @@
                     <td>Identifier under which the code view should be added to code box.</td>
                 </tr>
                 <tr>
-                    <th scope="row">codeView <span class="properties-table__type">: <a href="#" class="properties-table__type-link">CodeView</a></span></th>
+                    <th scope="row">codeView <span class="properties-table__type">: <a href="../code-view/" class="properties-table__type-link">CodeView</a></span></th>
                     <td>Code view.</td>
                 </tr>
             </tbody>
@@ -978,20 +978,20 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCodeViews</h3>
-        <p class="method-signature u-mb-2">getCodeViews(): <a href="#" class="method-signature__link">ProjectCodeBoxCodeView</a>[]</p>
+        <h3 id="get-code-views-method" class="method-heading u-mb-1">getCodeViews</h3>
+        <p class="method-signature u-mb-2">getCodeViews(): <a href="../other-components/#project-code-box-code-view" class="method-signature__link">ProjectCodeBoxCodeView</a>[]</p>
         <p class="u-mb-2">Returns all code views of code box.</p>
         <h4 class="u-mb-1">Returns</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBoxCodeView</a>[]</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-code-view" class="properties-table__type-link">ProjectCodeBoxCodeView</a>[]</span></th>
                     <td>Code views.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCodeViewsByFolderPath</h3>
-        <p class="method-signature u-mb-2">getCodeViewsByFolderPath(folderPath: string, includeSubfolders: boolean = false): <a href="#" class="method-signature__link">ProjectCodeBoxCodeView</a>[]</p>
+        <h3 id="get-code-views-by-folder-path-method" class="method-heading u-mb-1">getCodeViewsByFolderPath</h3>
+        <p class="method-signature u-mb-2">getCodeViewsByFolderPath(folderPath: string, includeSubfolders: boolean = false): <a href="../other-components/#project-code-box-code-view" class="method-signature__link">ProjectCodeBoxCodeView</a>[]</p>
         <p class="u-mb-2">Returns code views in folder.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -1010,13 +1010,13 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBoxCodeView</a>[]</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-code-view" class="properties-table__type-link">ProjectCodeBoxCodeView</a>[]</span></th>
                     <td>Code views.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCodeViewsByPackage</h3>
-        <p class="method-signature u-mb-2">getCodeViewsByPackage(packageName : string | null): <a href="#" class="method-signature__link">ProjectCodeBoxCodeView</a>[]</p>
+        <h3 id="get-code-views-by-package-method" class="method-heading u-mb-1">getCodeViewsByPackage</h3>
+        <p class="method-signature u-mb-2">getCodeViewsByPackage(packageName : string | null): <a href="../other-components/#project-code-box-code-view" class="method-signature__link">ProjectCodeBoxCodeView</a>[]</p>
         <p class="u-mb-2">Returns code views in package.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -1031,13 +1031,13 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBoxCodeView</a>[]</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-code-view" class="properties-table__type-link">ProjectCodeBoxCodeView</a>[]</span></th>
                     <td>Code views.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCodeView</h3>
-        <p class="method-signature u-mb-2">getCodeView(identifier: string): <a href="#" class="method-signature__link">ProjectCodeBoxCodeView</a> | null</p>
+        <h3 id="get-code-view-method" class="method-heading u-mb-1">getCodeView</h3>
+        <p class="method-signature u-mb-2">getCodeView(identifier: string): <a href="../other-components/#project-code-box-code-view" class="method-signature__link">ProjectCodeBoxCodeView</a> | null</p>
         <p class="u-mb-2">Returns code view based on identifier.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -1052,13 +1052,13 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBoxCodeView</a> | null</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-code-view" class="properties-table__type-link">ProjectCodeBoxCodeView</a> | null</span></th>
                     <td>Code view or null if code view wasn't found.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCodeViewByFolderPath</h3>
-        <p class="method-signature u-mb-2">getCodeViewByFolderPath(folderPath: string, fileName: string): <a href="#" class="method-signature__link">ProjectCodeBoxCodeView</a> | null</p>
+        <h3 id="get-code-view-by-folder-path-method" class="method-heading u-mb-1">getCodeViewByFolderPath</h3>
+        <p class="method-signature u-mb-2">getCodeViewByFolderPath(folderPath: string, fileName: string): <a href="../other-components/#project-code-box-code-view" class="method-signature__link">ProjectCodeBoxCodeView</a> | null</p>
         <p class="u-mb-2">Returns code view based on folder path and name.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -1077,13 +1077,13 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBoxCodeView</a> | null</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-code-view" class="properties-table__type-link">ProjectCodeBoxCodeView</a> | null</span></th>
                     <td>Code view or null if code view wasn't found.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCodeViewByPackage</h3>
-        <p class="method-signature u-mb-2">getCodeViewByPackage(packageName: string | null, fileName: string): <a href="#" class="method-signature__link">ProjectCodeBoxCodeView</a> | null</p>
+        <h3 id="get-code-view-by-package-method" class="method-heading u-mb-1">getCodeViewByPackage</h3>
+        <p class="method-signature u-mb-2">getCodeViewByPackage(packageName: string | null, fileName: string): <a href="../other-components/#project-code-box-code-view" class="method-signature__link">ProjectCodeBoxCodeView</a> | null</p>
         <p class="u-mb-2">Returns code view based on package and name.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -1102,12 +1102,12 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBoxCodeView</a> | null</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-code-view" class="properties-table__type-link">ProjectCodeBoxCodeView</a> | null</span></th>
                     <td>Code view or null if code view wasn't found.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">removeCodeView</h3>
+        <h3 id="remove-code-view-method" class="method-heading u-mb-1">removeCodeView</h3>
         <p class="method-signature u-mb-2">removeCodeView(identifier: string): boolean</p>
         <p class="u-mb-2">Removes code view from code box.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1128,10 +1128,10 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">removeAllCodeViews</h3>
+        <h3 id="remove-all-code-views-method" class="method-heading u-mb-1">removeAllCodeViews</h3>
         <p class="method-signature u-mb-2">removeAllCodeViews(): void</p>
         <p class="u-mb-4">Removes all code views from code box.</p>
-        <h3 class="method-heading u-mb-1">changeCodeViewIdentifier</h3>
+        <h3 id="change-code-view-identifier-method" class="method-heading u-mb-1">changeCodeViewIdentifier</h3>
         <p class="method-signature u-mb-2">changeCodeViewIdentifier(identifier: string, newIdentifier: string): boolean</p>
         <p class="u-mb-2">Changes identifier of code view in code box. It can change folder path and name of code view but it never changes package of code view.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1156,7 +1156,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">changeCodeViewPackage</h3>
+        <h3 id="change-code-view-package-method" class="method-heading u-mb-1">changeCodeViewPackage</h3>
         <p class="method-signature u-mb-2">changeCodeViewPackage(identifier: string, packageName: string | null, keepFolderPath: boolean): boolean</p>
         <p class="u-mb-2">Changes package of code view.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1185,7 +1185,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">removeCodeViewPackage</h3>
+        <h3 id="remove-code-view-package-method" class="method-heading u-mb-1">removeCodeViewPackage</h3>
         <p class="method-signature u-mb-2">removeCodeViewPackage(identifier: string): boolean</p>
         <p class="u-mb-2">Removes code view from package.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1207,7 +1207,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getCodeViewPackage</h3>
+        <h3 id="get-code-view-package-method" class="method-heading u-mb-1">getCodeViewPackage</h3>
         <p class="method-signature u-mb-2">getCodeViewPackage(identifier: string): string | null | undefined</p>
         <p class="u-mb-2">Returns package of code view.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1229,7 +1229,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">setActiveCodeView</h3>
+        <h3 id="set-active-code-view-method" class="method-heading u-mb-1">setActiveCodeView</h3>
         <p class="method-signature u-mb-2">setActiveCodeView(identifier: string): boolean</p>
         <p class="u-mb-2">Sets code view as active (displays it in code box).</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1250,22 +1250,22 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">setNoActiveCodeView</h3>
+        <h3 id="set-no-active-code-view-method" class="method-heading u-mb-1">setNoActiveCodeView</h3>
         <p class="method-signature u-mb-2">setNoActiveCodeView(): void</p>
         <p class="u-mb-4">Displays no code view in code box.</p>
-        <h3 class="method-heading u-mb-1">getActiveCodeView</h3>
-        <p class="method-signature u-mb-2">getActiveCodeView(): <a href="#" class="method-signature__link">ProjectCodeBoxCodeView</a> | null</p>
+        <h3 id="get-active-code-view-method" class="method-heading u-mb-1">getActiveCodeView</h3>
+        <p class="method-signature u-mb-2">getActiveCodeView(): <a href="../other-components/#project-code-box-code-view" class="method-signature__link">ProjectCodeBoxCodeView</a> | null</p>
         <p class="u-mb-2">Returns currently active code view.</p>
         <h4 class="u-mb-1">Returns</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="method-signature__link">ProjectCodeBoxCodeView</a> | null</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-code-view" class="method-signature__link">ProjectCodeBoxCodeView</a> | null</span></th>
                     <td>Active code view or null if no code view is set as active.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">addFile</h3>
+        <h3 id="add-file-method" class="method-heading u-mb-1">addFile</h3>
         <p class="method-signature u-mb-2">addFile(identifier: string, downloadLink: string | null): boolean</p>
         <p class="u-mb-2">Adds new file to code box.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1290,20 +1290,20 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getFiles</h3>
-        <p class="method-signature u-mb-2">getFiles(): <a href="#" class="method-signature__link">ProjectCodeBoxFile</a>[]</p>
+        <h3 id="get-files-method" class="method-heading u-mb-1">getFiles</h3>
+        <p class="method-signature u-mb-2">getFiles(): <a href="../other-components/#project-code-box-file" class="method-signature__link">ProjectCodeBoxFile</a>[]</p>
         <p class="u-mb-2">Returns all files of code box.</p>
         <h4 class="u-mb-1">Returns</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBoxFile</a>[]</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-file" class="properties-table__type-link">ProjectCodeBoxFile</a>[]</span></th>
                     <td>Files.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getFilesByFolderPath</h3>
-        <p class="method-signature u-mb-2">getFilesByFolderPath(folderPath: string, includeSubfolders: boolean = false): <a href="#" class="method-signature__link">ProjectCodeBoxFile</a>[]</p>
+        <h3 id="get-files-by-folder-path-method" class="method-heading u-mb-1">getFilesByFolderPath</h3>
+        <p class="method-signature u-mb-2">getFilesByFolderPath(folderPath: string, includeSubfolders: boolean = false): <a href="../other-components/#project-code-box-file" class="method-signature__link">ProjectCodeBoxFile</a>[]</p>
         <p class="u-mb-2">Returns files in folder.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -1322,13 +1322,13 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBoxFile</a>[]</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-file" class="properties-table__type-link">ProjectCodeBoxFile</a>[]</span></th>
                     <td>Files.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getFilesByPackage</h3>
-        <p class="method-signature u-mb-2">getFilesByPackage(packageName : string | null): <a href="#" class="method-signature__link">ProjectCodeBoxFile</a>[]</p>
+        <h3 id="get-files-by-package-method" class="method-heading u-mb-1">getFilesByPackage</h3>
+        <p class="method-signature u-mb-2">getFilesByPackage(packageName : string | null): <a href="../other-components/#project-code-box-file" class="method-signature__link">ProjectCodeBoxFile</a>[]</p>
         <p class="u-mb-2">Returns files in package.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -1343,13 +1343,13 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBoxFile</a>[]</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-file" class="properties-table__type-link">ProjectCodeBoxFile</a>[]</span></th>
                     <td>Files.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getFile</h3>
-        <p class="method-signature u-mb-2">getFile(identifier: string): <a href="#" class="method-signature__link">ProjectCodeBoxFile</a> | null</p>
+        <h3 id="get-file-method" class="method-heading u-mb-1">getFile</h3>
+        <p class="method-signature u-mb-2">getFile(identifier: string): <a href="../other-components/#project-code-box-file" class="method-signature__link">ProjectCodeBoxFile</a> | null</p>
         <p class="u-mb-2">Returns file based on identifier.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -1364,13 +1364,13 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBoxFile</a> | null</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-file" class="properties-table__type-link">ProjectCodeBoxFile</a> | null</span></th>
                     <td>File or null if file wasn't found.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getFileByFolderPath</h3>
-        <p class="method-signature u-mb-2">getFileByFolderPath(folderPath: string, fileName: string): <a href="#" class="method-signature__link">ProjectCodeBoxFile</a> | null</p>
+        <h3 id="get-file-by-folder-path-method" class="method-heading u-mb-1">getFileByFolderPath</h3>
+        <p class="method-signature u-mb-2">getFileByFolderPath(folderPath: string, fileName: string): <a href="../other-components/#project-code-box-file" class="method-signature__link">ProjectCodeBoxFile</a> | null</p>
         <p class="u-mb-2">Returns file based on folder path and name.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -1389,13 +1389,13 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBoxFile</a> | null</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-file" class="properties-table__type-link">ProjectCodeBoxFile</a> | null</span></th>
                     <td>File or null if file wasn't found.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getFileByPackage</h3>
-        <p class="method-signature u-mb-2">getFileByPackage(packageName: string | null, fileName: string): <a href="#" class="method-signature__link">ProjectCodeBoxFile</a> | null</p>
+        <h3 id="get-file-by-package-method" class="method-heading u-mb-1">getFileByPackage</h3>
+        <p class="method-signature u-mb-2">getFileByPackage(packageName: string | null, fileName: string): <a href="../other-components/#project-code-box-file" class="method-signature__link">ProjectCodeBoxFile</a> | null</p>
         <p class="u-mb-2">Returns file based on package and name.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
@@ -1414,12 +1414,12 @@
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">ProjectCodeBoxFile</a> | null</span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#project-code-box-file" class="properties-table__type-link">ProjectCodeBoxFile</a> | null</span></th>
                     <td>File or null if file wasn't found.</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">removeFile</h3>
+        <h3 id="remove-file-method" class="method-heading u-mb-1">removeFile</h3>
         <p class="method-signature u-mb-2">removeFile(identifier: string): boolean</p>
         <p class="u-mb-2">Removes file from code box.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1440,10 +1440,10 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">removeAllFiles</h3>
+        <h3 id="remove-all-files-method" class="method-heading u-mb-1">removeAllFiles</h3>
         <p class="method-signature u-mb-2">removeAllFiles(): void</p>
         <p class="u-mb-4">Removes all files from code box.</p>
-        <h3 class="method-heading u-mb-1">changeFileIdentifier</h3>
+        <h3 id="change-file-identifier-method" class="method-heading u-mb-1">changeFileIdentifier</h3>
         <p class="method-signature u-mb-2">changeFileIdentifier(identifier: string, newIdentifier: string): boolean</p>
         <p class="u-mb-2">Changes identifier of file in code box. It can change folder path and name of file but it never changes package of file.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1468,7 +1468,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">changeFilePackage</h3>
+        <h3 id="change-file-package-method" class="method-heading u-mb-1">changeFilePackage</h3>
         <p class="method-signature u-mb-2">changeFilePackage(identifier: string, packageName: string | null, keepFolderPath: boolean): boolean</p>
         <p class="u-mb-2">Changes package of file.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1497,7 +1497,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">removeFilePackage</h3>
+        <h3 id="remove-file-package-method" class="method-heading u-mb-1">removeFilePackage</h3>
         <p class="method-signature u-mb-2">removeFilePackage(identifier: string): boolean</p>
         <p class="u-mb-2">Removes file from package.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1519,7 +1519,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getFilePackage</h3>
+        <h3 id="get-file-package-method" class="method-heading u-mb-1">getFilePackage</h3>
         <p class="method-signature u-mb-2">getFilePackage(identifier: string): string | null | undefined</p>
         <p class="u-mb-2">Returns package of file.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1541,7 +1541,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">changeFileDownloadLink</h3>
+        <h3 id="change-file-download-link-method" class="method-heading u-mb-1">changeFileDownloadLink</h3>
         <p class="method-signature u-mb-2">changeFileDownloadLink(identifier: string, newDownloadLink: string | null): boolean</p>
         <p class="u-mb-2">Changes download link of file.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1566,7 +1566,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">addFolder</h3>
+        <h3 id="add-folder-method" class="method-heading u-mb-1">addFolder</h3>
         <p class="method-signature u-mb-2">addFolder(folderPath: string): void</p>
         <p class="u-mb-2">Creates new folder(s) (if not created yet).</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1578,9 +1578,9 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">removeFolder</h3>
+        <h3 id="remove-folder-method" class="method-heading u-mb-1">removeFolder</h3>
         <p class="method-signature u-mb-2">removeFolder(folderPath: string): boolean</p>
-        <p class="u-mb-2">Removes folder and all its contents. This might also remove packages if their folders are removed (if generation of folders for packages is enabled via <a href="#" class="link">createFoldersForPackages</a> option).</p>
+        <p class="u-mb-2">Removes folder and all its contents. This might also remove packages if their folders are removed (if generation of folders for packages is enabled via <a href="#create-folders-for-packages-option" class="link">createFoldersForPackages</a> option).</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
             <tbody>
@@ -1599,7 +1599,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">renameFolder</h3>
+        <h3 id="rename-folder-method" class="method-heading u-mb-1">renameFolder</h3>
         <p class="method-signature u-mb-2">renameFolder(folderPath: string, newName: string): boolean</p>
         <p class="u-mb-2">Renames folder. This can also change (rename) folder for packages and rename packages.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1624,7 +1624,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">openFolder</h3>
+        <h3 id="open-folder-method" class="method-heading u-mb-1">openFolder</h3>
         <p class="method-signature u-mb-2">openFolder(folderPath: string, openParentFolders: boolean = false, animate: boolean = true): void</p>
         <p class="u-mb-2">Opens folder.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1644,7 +1644,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">closeFolder</h3>
+        <h3 id="close-folder-method" class="method-heading u-mb-1">closeFolder</h3>
         <p class="method-signature u-mb-2">closeFolder(folderPath: string, closeChildFolders: boolean = false, animate: boolean = true): void</p>
         <p class="u-mb-2">Closes folder.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1664,7 +1664,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">folderExists</h3>
+        <h3 id="folder-exists-method" class="method-heading u-mb-1">folderExists</h3>
         <p class="method-signature u-mb-2">folderExists(folderPath: string): boolean</p>
         <p class="u-mb-2">Checks whether folder exists.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1685,7 +1685,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">isFolderOpened</h3>
+        <h3 id="is-folder-opened-method" class="method-heading u-mb-1">isFolderOpened</h3>
         <p class="method-signature u-mb-2">isFolderOpened(folderPath: string): boolean</p>
         <p class="u-mb-2">Checks whether folder is opened.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1706,7 +1706,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getSubfolderNames</h3>
+        <h3 id="get-subfolder-names-method" class="method-heading u-mb-1">getSubfolderNames</h3>
         <p class="method-signature u-mb-2">getSubfolderNames(folderPath: string): string[] | null</p>
         <p class="u-mb-2">Returns names of folder subfolders (only direct subfolders).</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1727,7 +1727,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">addPackage</h3>
+        <h3 id="add-package-method" class="method-heading u-mb-1">addPackage</h3>
         <p class="method-signature u-mb-2">addPackage(name: string): void</p>
         <p class="u-mb-2">Creates new package (if it does not exist yet).</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1739,7 +1739,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">removePackage</h3>
+        <h3 id="remove-package-method" class="method-heading u-mb-1">removePackage</h3>
         <p class="method-signature u-mb-2">removePackage(name: string, removePackageFoldersAndContents: boolean = true, removeAllCodeViewsAndFiles: boolean = false): boolean</p>
         <p class="u-mb-2">Removes package.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1768,9 +1768,9 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">renamePackage</h3>
+        <h3 id="rename-package-method" class="method-heading u-mb-1">renamePackage</h3>
         <p class="method-signature u-mb-2">renamePackage(name: string, newName: string): boolean</p>
-        <p class="u-mb-2">Renames package. This can also rename folders for package if generation of folders is enabled via <a href="#" class="link">createFoldersForPackages</a> option.</p>
+        <p class="u-mb-2">Renames package. This can also rename folders for package if generation of folders is enabled via <a href="#create-folders-for-packages-option" class="link">createFoldersForPackages</a> option.</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table u-mb-2">
             <tbody>
@@ -1793,7 +1793,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">openPackage</h3>
+        <h3 id="open-package-method" class="method-heading u-mb-1">openPackage</h3>
         <p class="method-signature u-mb-2">openPackage(packageName: string | null, animate: boolean = true): void</p>
         <p class="u-mb-2">Opens package.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1809,7 +1809,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">closePackage</h3>
+        <h3 id="close-package-method" class="method-heading u-mb-1">closePackage</h3>
         <p class="method-signature u-mb-2">closePackage(packageName: string | null, animate: boolean = true): void</p>
         <p class="u-mb-2">Closes package.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1825,7 +1825,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">packageExists</h3>
+        <h3 id="package-exists-method" class="method-heading u-mb-1">packageExists</h3>
         <p class="method-signature u-mb-2">packageExists(packageName: string): boolean</p>
         <p class="u-mb-2">Checks whether package exists.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1846,7 +1846,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">isPackageOpened</h3>
+        <h3 id="is-package-opened-method" class="method-heading u-mb-1">isPackageOpened</h3>
         <p class="method-signature u-mb-2">isPackageOpened(packageName: string | null): boolean</p>
         <p class="u-mb-2">Checks whether package is opened.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1867,7 +1867,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getPackages</h3>
+        <h3 id="get-packages-method" class="method-heading u-mb-1">getPackages</h3>
         <p class="method-signature u-mb-2">getPackages(): string[]</p>
         <p class="u-mb-2">Returns all packages.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -1879,7 +1879,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getPackagesFolderPath</h3>
+        <h3 id="get-packages-folder-path-method" class="method-heading u-mb-1">getPackagesFolderPath</h3>
         <p class="method-signature u-mb-2">getPackagesFolderPath(): string</p>
         <p class="u-mb-2">Returns path to folder that is currently used for packages.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -1891,7 +1891,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">changePackagesFolderPathAndRemoveAll</h3>
+        <h3 id="change-packages-folder-path-and-remove-all-method" class="method-heading u-mb-1">changePackagesFolderPathAndRemoveAll</h3>
         <p class="method-signature u-mb-2">changePackagesFolderPathAndRemoveAll(newPackagesFolderPath: string): void</p>
         <p class="u-mb-2">Sets new folder path for packages and removes all code views, files, folders and packages (everything needs to be removed, when folder path for packages is changed).</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1903,7 +1903,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">getProjectName</h3>
+        <h3 id="get-project-name-method" class="method-heading u-mb-1">getProjectName</h3>
         <p class="method-signature u-mb-2">getProjectName(): string</p>
         <p class="u-mb-2">Returns project name.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -1915,7 +1915,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">setProjectName</h3>
+        <h3 id="set-project-name-method" class="method-heading u-mb-1">setProjectName</h3>
         <p class="method-signature u-mb-2">setProjectName(newName: string): void</p>
         <p class="u-mb-2">Sets new project name.</p>
         <h4 class="u-mb-1">Params</h4>
@@ -1927,13 +1927,13 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">openPanel</h3>
+        <h3 id="open-panel-method" class="method-heading u-mb-1">openPanel</h3>
         <p class="method-signature u-mb-2">openPanel(): void</p>
         <p class="u-mb-4">Opens panel.</p>
-        <h3 class="method-heading u-mb-1">closePanel</h3>
+        <h3 id="close-panel-method" class="method-heading u-mb-1">closePanel</h3>
         <p class="method-signature u-mb-2">closePanel(): void</p>
         <p class="u-mb-4">Closes panel.</p>
-        <h3 class="method-heading u-mb-1">isPanelOpened</h3>
+        <h3 id="is-panel-opened-method" class="method-heading u-mb-1">isPanelOpened</h3>
         <p class="method-signature u-mb-2">isPanelOpened(): boolean</p>
         <p class="u-mb-2">Checks whether panel is opened.</p>
         <h4 class="u-mb-1">Returns</h4>
@@ -1945,29 +1945,29 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">reset</h3>
+        <h3 id="reset-method" class="method-heading u-mb-1">reset</h3>
         <p class="method-signature u-mb-2">reset(): void</p>
         <p class="u-mb-4">Resets code box to its post-initialization state.</p>
-        <h3 class="method-heading u-mb-1">createMemento</h3>
-        <p class="method-signature u-mb-2">createMemento(): <a href="#" class="method-signature__link">CodeBoxMemento</a></p>
+        <h3 id="create-memento-method" class="method-heading u-mb-1">createMemento</h3>
+        <p class="method-signature u-mb-2">createMemento(): <a href="../other-components/#code-box-memento" class="method-signature__link">CodeBoxMemento</a></p>
         <p class="u-mb-2">Creates memento (saved state of code box).</p>
         <h4 class="u-mb-1">Returns</h4>
         <table class="properties-table u-mb-4">
             <tbody>
                 <tr>
-                    <th scope="row"><span class="properties-table__type"><a href="#" class="properties-table__type-link">CodeBoxMemento</a></span></th>
+                    <th scope="row"><span class="properties-table__type"><a href="../other-components/#code-box-memento" class="properties-table__type-link">CodeBoxMemento</a></span></th>
                     <td>Memento (saved state of code box).</td>
                 </tr>
             </tbody>
         </table>
-        <h3 class="method-heading u-mb-1">applyMemento</h3>
-        <p class="method-signature u-mb-2">applyMemento(memento: <a href="#" class="method-signature__link">CodeBoxMemento</a>): void</p>
+        <h3 id="apply-memento-method" class="method-heading u-mb-1">applyMemento</h3>
+        <p class="method-signature u-mb-2">applyMemento(memento: <a href="../other-components/#code-box-memento" class="method-signature__link">CodeBoxMemento</a>): void</p>
         <p class="u-mb-2">Applies memento (sets code box to the state defined by the provided memento).</p>
         <h4 class="u-mb-1">Params</h4>
         <table class="properties-table">
             <tbody>
                 <tr>
-                    <th scope="row">memento <span class="properties-table__type">: <a href="#" class="properties-table__type-link">CodeBoxMemento</a></span></th>
+                    <th scope="row">memento <span class="properties-table__type">: <a href="../other-components/#code-box-memento" class="properties-table__type-link">CodeBoxMemento</a></span></th>
                     <td>Memento (saved state of code box).</td>
                 </tr>
             </tbody>
