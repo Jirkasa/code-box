@@ -2,11 +2,11 @@
     <%- include("../../includes/header.ejs", {pathToRootFolder: "../../", activeLink: "documentation"}) %>
     <%- include("../../includes/documentation-page-start.ejs") %>
         <h1 class="u-mb-4">Code View</h1>
-        <p class="u-mb-4">CodeView is one of the core components of the library. While it is used by code boxes, it can also be created independently. It simply represents a code sample.</p>
+        <p class="u-mb-6">CodeView is one of the core components of the library. While it is used by code boxes, it can also be created independently. It simply represents a code sample.</p>
         <h2 id="usage-example" class="u-mb-2">Usage Example</h2>
         <p class="u-mb-2">The following example demonstrates how to create a CodeView instance. Simply instantiate the CodeView class by passing a reference to the &lt;pre&gt; element that contains the &lt;code&gt; element. You can also provide additional options as a second parameter.</p>
         <%- include("./includes/create-code-view-example.ejs") %>
-        <p class="u-mb-4">If you want to create multiple code views, you can use the <a href="../creators/#code-view-creator" class="link">CodeViewCreator</a>. For more information, refer to the chapter on <a href="../creators/" class="link">creators</a>.</p>
+        <p class="u-mb-6">If you want to create multiple code views, you can use the <a href="../creators/#code-view-creator" class="link">CodeViewCreator</a>. For more information, refer to the chapter on <a href="../creators/" class="link">creators</a>.</p>
         <h2 id="options" class="u-mb-2">Options</h2>
         <p class="u-mb-2">CodeView offers options to customize its appearance. These options can be set either by passing an object to the constructor or by using data attributes. When both are provided, data attributes will override the values specified in the options object.</p>
         <table class="contents-table u-mb-4">
@@ -64,10 +64,10 @@
         <h3 id="css-classes-option" class="option-heading u-mb-1"><span class="option-heading__name">cssClasses</span> <span class="option-heading__type">: string[]</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">undefined</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-css-classes</span></p>
-        <p class="u-mb-4">Specifies CSS classes to be added to the root element of the code view. When setting this option using a data attribute, separate multiple CSS classes with spaces.</p>
+        <p class="u-mb-6">Specifies CSS classes to be added to the root element of the code view. When setting this option using a data attribute, separate multiple CSS classes with spaces.</p>
         <h2 id="properties" class="u-mb-2">Properties</h2>
         <p class="u-mb-2">CodeView has a few <span class="highlighted-text">readonly</span> properties. Do not change them when using plain JavaScript.</p>
-        <table class="properties-table u-mb-4">
+        <table class="properties-table u-mb-6">
             <tbody>
                 <tr>
                     <th scope="row">lineHeight <span class="properties-table__type">: number</span></th>

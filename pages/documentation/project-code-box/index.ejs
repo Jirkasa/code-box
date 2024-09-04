@@ -2,7 +2,7 @@
     <%- include("../../includes/header.ejs", {pathToRootFolder: "../../", activeLink: "documentation"}) %>
     <%- include("../../includes/documentation-page-start.ejs") %>
         <h1 class="u-mb-4">Project Code Box</h1>
-        <p class="u-mb-4">ProjectCodeBox is designed to simulate a complete project by displaying the entire source code.</p>
+        <p class="u-mb-6">ProjectCodeBox is designed to simulate a complete project by displaying the entire source code.</p>
         <h2 id="elements-of-project-code-box" class="u-mb-2">Elements of Project Code Box</h2>
         <p class="u-mb-2">In addition to code view and file elements (described <a href="../code-box/#elements-of-code-box" class="link">here</a>), a project code box can also include folder structure configuration elements and commands. The following code sample shows what an element for a project code box might look like.</p>
         <%- include("./includes/project-code-box-elements.ejs") %>
@@ -30,7 +30,7 @@
         <h2 id="usage-example" class="u-mb-2">Usage Example</h2>
         <p class="u-mb-2">The following example demonstrates how to create a ProjectCodeBox. Simply instantiate the ProjectCodeBox class by passing a reference to the root element of code box. You can also provide additional options as a second parameter.</p>
         <%- include("./includes/create-project-code-box.ejs") %>
-        <p class="u-mb-4">If you want to create multiple project code boxes, you can use the <a href="../creators/#project-code-box-creator" class="link">ProjectCodeBoxCreator</a>. For more information, refer to the chapter on <a href="../creators/" class="link">creators</a>.</p>
+        <p class="u-mb-6">If you want to create multiple project code boxes, you can use the <a href="../creators/#project-code-box-creator" class="link">ProjectCodeBoxCreator</a>. For more information, refer to the chapter on <a href="../creators/" class="link">creators</a>.</p>
         <h2 id="inheritance" class="u-mb-2">Inheritance</h2>
         <p class="u-mb-2">Project code boxes have the ability to inherit from other project code boxes. When creating an instance of a ProjectCodeBox, you can pass a parent project code box as the third parameter. The newly created project code box will inherit all code views, files, folders, and packages from its parent code box. Additionally, the new code box can add its own code views or files, delete some, or make other modifications as needed. The following example shows how to create a project code box that inherits from a parent code box.</p>
         <%- include("./includes/project-code-box-inheritance-example.ejs") %>
@@ -56,7 +56,7 @@
             <li>highlights of code views</li>
         </ul>
         <h3 class="u-mb-1">Note on packages</h3>
-        <p class="u-mb-4">The packages of overwritten code views and files are not changed unless a new package is explicitly assigned.</p>
+        <p class="u-mb-6">The packages of overwritten code views and files are not changed unless a new package is explicitly assigned.</p>
         <h2 id="commands" class="u-mb-2">Commands</h2>
         <p class="u-mb-1">As mentioned previously, a project code box can include a script element with commands to be executed. The following commands are available:</p>
         <table class="contents-table u-mb-4">
@@ -490,7 +490,7 @@
             </tbody>
         </table>
         <h3 id="remove-all-files-command" class="command-heading u-mb-1">remove all files</h3>
-        <p class="u-mb-4">Removes all files from code box.</p>
+        <p class="u-mb-6">Removes all files from code box.</p>
         <h2 id="options" class="heading-secondary u-mb-2">Options</h2>
         <p class="u-mb-1">ProjectCodeBox accepts the following options and all options from the base CodeBox class.</p>
         <table class="contents-table u-mb-4">
@@ -660,7 +660,7 @@
         <h3 id="close-panel-button-aria-label-option" class="option-heading u-mb-1"><span class="option-heading__name">closePanelButtonAriaLabel</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">"Close panel"</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-close-panel-button-aria-label</span></p>
-        <p class="u-mb-4">Specifies value of the panel open/close button aria-label attribute when panel is opened.</p>
+        <p class="u-mb-6">Specifies value of the panel open/close button aria-label attribute when panel is opened.</p>
         <h2 id="methods" class="u-mb-2">Methods</h2>
         <p class="u-mb-1">ProjectCodeBox has the following methods. Many of these methods are also described in the <a href="../code-box/" class="link">chapter about the base CodeBox class</a>. However, some of them have a return type that is a subclass of <a href="../other-components/#code-box-code-view" class="link">CodeBoxCodeView</a> or <a href="../other-components/#code-box-file" class="link">CodeBoxFile</a> - specifically, <a href="../other-components/#project-code-box-code-view" class="link">ProjectCodeBoxCodeView</a> or <a href="../other-components/#project-code-box-file" class="link">ProjectCodeBoxFile</a>. For clarity, these methods are also listed in this chapter.</p>
         <table class="contents-table u-mb-4">

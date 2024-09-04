@@ -2,7 +2,7 @@
     <%- include("../../includes/header.ejs", {pathToRootFolder: "../../", activeLink: "documentation"}) %>
     <%- include("../../includes/documentation-page-start.ejs") %>
         <h1 class="u-mb-4">Code Box</h1>
-        <p class="u-mb-4">A code box is a component that acts as a container for <a href="../code-view/" class="link">CodeViews</a>, allowing users to select and display different code samples. There are currently three types of code boxes, all of which extend a base class called CodeBox that defines some common <a href="#methods" class="link">methods</a> and <a href="#options" class="link">options</a>.</p>
+        <p class="u-mb-6">A code box is a component that acts as a container for <a href="../code-view/" class="link">CodeViews</a>, allowing users to select and display different code samples. There are currently three types of code boxes, all of which extend a base class called CodeBox that defines some common <a href="#methods" class="link">methods</a> and <a href="#options" class="link">options</a>.</p>
         <h2 id="types-of-code-boxes" class="u-mb-2">Types of code boxes</h2>
         <p class="u-mb-1">There are currently following types of code boxes:</p>
         <table class="contents-table u-mb-2">
@@ -41,7 +41,7 @@
         </table>
         <h3 class="u-mb-1">Data attributes for files</h3>
         <p class="u-mb-1">Files in a code box are defined as elements with the data-cb-file attribute. Similar to code views, their name is set using the data-cb-name attribute. The following table describes these attributes:</p>
-        <table class="properties-table u-mb-4">
+        <table class="properties-table u-mb-6">
             <tbody>
                 <tr>
                     <th scope="row">data-cb-file</th>
@@ -105,7 +105,7 @@
         <h3 id="min-code-view-lines-count-option" class="option-heading u-mb-1"><span class="option-heading__name">minCodeViewLinesCount</span> <span class="option-heading__type">: number</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">undefined</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-min-code-view-lines-count</span></p>
-        <p class="u-mb-4">Specifies the minimum number of lines in the code view that determines the minimal height of the code box when the code view is displayed. This value is not exact as it does not account for padding set by CSS styles; it is intended to set an optimal minimal height.</p>
+        <p class="u-mb-6">Specifies the minimum number of lines in the code view that determines the minimal height of the code box when the code view is displayed. This value is not exact as it does not account for padding set by CSS styles; it is intended to set an optimal minimal height.</p>
         <h2 id="methods" class="u-mb-2">Methods</h2>
         <p class="u-mb-1">CodeBox class defines the following methods:</p>
         <table class="contents-table u-mb-4">

@@ -2,7 +2,7 @@
     <%- include("../../includes/header.ejs", {pathToRootFolder: "../../", activeLink: "documentation"}) %>
     <%- include("../../includes/documentation-page-start.ejs") %>
         <h1 class="u-mb-4">Other Components</h1>
-        <p class="u-mb-4">This page provides information about components that are not covered in any other chapter of the documentation.</p>
+        <p class="u-mb-6">This page provides information about components that are not covered in any other chapter of the documentation.</p>
         <h2 id="highlight-box" class="u-mb-2">Highlight Box</h2>
         <p class="u-mb-2">HighlightBox represents a highlight in <a href="../code-view/" class="link">CodeView</a>. It is returned when you add a new highlight using the <a href="../code-view/#add-highlight-method" class="link">addHighlight</a> method, or you can retrieve it using the <a href="../code-view/#get-highlight-boxes-method" class="link">getHighlightBoxes</a> method. The following example demonstrates its usage.</p>
         <%- include("./includes/highlight-box-example.ejs") %>
@@ -69,7 +69,7 @@
         </table>
         <h3 id="highlight-box-remove-method" class="method-heading u-mb-1">remove</h3>
         <p class="method-signature u-mb-2">remove(): void</p>
-        <p class="u-mb-4">Removes highlight.</p>
+        <p class="u-mb-6">Removes highlight.</p>
         <h2 id="code-view-memento" class="u-mb-2">Code View Memento</h2>
         <p class="u-mb-2">CodeViewMemento represents saved state of a <a href="../code-view/" class="link">CodeView</a>. You can create a memento using the <a href="../code-view/#create-memento-method" class="link">createMemento</a> method and then apply it using the <a href="../code-view/#apply-memento-method" class="link">applyMemento</a> method as demonstrated in the following example. This allows you to save the current state of the code view and easily restore it later.</p>
         <%- include("./includes/code-view-memento-example.ejs") %>
@@ -363,7 +363,7 @@
         <p class="method-signature u-mb-2">getCode(): string</p>
         <p class="u-mb-2">Returns displayed code.</p>
         <h4 class="u-mb-1">Returns</h4>
-        <table class="properties-table u-mb-4">
+        <table class="properties-table u-mb-6">
             <tbody>
                 <tr>
                     <th scope="row"><span class="properties-table__type">string</span></th>
@@ -414,7 +414,7 @@
             </tbody>
         </table>
         <h4 class="u-mb-1">Returns</h4>
-        <table class="properties-table u-mb-4">
+        <table class="properties-table u-mb-6">
             <tbody>
                 <tr>
                     <th scope="row"><span class="properties-table__type">boolean</span></th>
@@ -565,7 +565,7 @@
         </table>
         <h3 id="project-code-box-code-view-remove-package-method" class="method-heading u-mb-1">removePackage</h3>
         <p class="method-signature u-mb-2">removePackage(): void</p>
-        <p class="u-mb-4">Removes code view from package.</p>
+        <p class="u-mb-6">Removes code view from package.</p>
         <h2 id="code-box-file" class="u-mb-2">Code Box File</h2>
         <p class="u-mb-2">CodeBoxFile represents a file within a <a href="../code-box/" class="link">CodeBox</a>. The following example demonstrates how you can obtain an instance of CodeBoxFile using the <a href="../code-box/#get-file-method" class="link">getFile</a> method.</p>
         <%- include("./includes/get-code-box-file-example.ejs") %>
@@ -646,7 +646,7 @@
         <p class="method-signature u-mb-2">setDownloadLink(downloadLink: string | null): void</p>
         <p class="u-mb-2">Changes download link of file or sets it as non-downloadable.</p>
         <h4 class="u-mb-1">Params</h4>
-        <table class="properties-table u-mb-4">
+        <table class="properties-table u-mb-6">
             <tbody>
                 <tr>
                     <th scope="row">downloadLink <span class="properties-table__type">: string | null</span></th>
@@ -697,7 +697,7 @@
             </tbody>
         </table>
         <h4 class="u-mb-1">Returns</h4>
-        <table class="properties-table u-mb-4">
+        <table class="properties-table u-mb-6">
             <tbody>
                 <tr>
                     <th scope="row"><span class="properties-table__type">boolean</span></th>
@@ -848,10 +848,10 @@
         </table>
         <h3 id="project-code-box-file-remove-package-method" class="method-heading u-mb-1">removePackage</h3>
         <p class="method-signature u-mb-2">removePackage(): void</p>
-        <p class="u-mb-4">Removes file from package.</p>
+        <p class="u-mb-6">Removes file from package.</p>
         <h2 id="code-view-creator-entry" class="u-mb-2">Code View Creator Entry</h2>
         <p class="u-mb-2">When you invoke the <a href="../creators/#code-view-creator-get-created-code-views-method" class="link">getCreatedCodeViews</a> method of <a href="../creators/#code-view-creator" class="link">CodeViewCreator</a>, it returns an array of CodeViewCreatorEntry objects. CodeViewCreatorEntry object has the following properties:</p>
-        <table class="properties-table u-mb-4">
+        <table class="properties-table u-mb-6">
             <tbody>
                 <tr>
                     <th scope="row">codeView <span class="properties-table__type">: <a href="../code-view/" class="properties-table__type-link">CodeView</a></span></th>
