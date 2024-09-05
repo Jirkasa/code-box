@@ -36,6 +36,10 @@
 
             color: @colors[analogic-1];
         }
+        &:focus-visible {
+            outline: .2rem solid @colors[analogic-1];
+            border-radius: .4rem;
+        }
     }
 
     &__navigation {
@@ -57,6 +61,8 @@
             text-decoration: none;
 
             color: @colors[grey-20];
+
+            transition: all .15s;
         }
 
         &--active {
@@ -64,6 +70,13 @@
                 color: @colors[analogic-1];
                 text-decoration: underline;
             }
+        }
+        &:hover, &:focus-visible {
+            color: @colors[analogic-1];
+        }
+        &:focus-visible {
+            outline: .2rem solid @colors[analogic-1];
+            border-radius: .4rem;
         }
     }
 
@@ -81,6 +94,20 @@
             width: 100%;
             height: 100%;
             fill: @colors[grey-20];
+
+            transition: all .15s;
+        }
+
+        &:hover, &:focus-visible {
+            svg {
+                fill: @colors[analogic-1];
+            }
+        }
+
+        &:focus-visible {
+            outline: .2rem solid @colors[analogic-1];
+            border-radius: .4rem;
+            outline-offset: .6rem;
         }
     }
 }

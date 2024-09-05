@@ -22,6 +22,16 @@
         width: 100%;
 
         cursor: pointer;
+
+        transition: all .15s;
+
+        &:hover, &:focus-visible {
+            background-color: darken(@colors[analogic-5], 2%);
+        }
+        &:focus-visible {
+            outline: .2rem solid @colors[analogic-1];
+            outline-offset: -.2rem;
+        }
     }
 
     &__collapsible-button-dropdown-icon {

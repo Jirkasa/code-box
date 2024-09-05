@@ -1,5 +1,11 @@
 .link {
     &:link, &:visited {
         color: @colors[analogic-1];
+
+        transition: all .15s;
+    }
+    &:focus-visible {
+        border-radius: .4rem;
+        outline: .2rem solid @colors[analogic-1];
     }
 }

@@ -42,6 +42,11 @@
 
         cursor: pointer;
 
+        &:focus-visible {
+            outline: .2rem solid @colors[analogic-1];
+            border-radius: .4rem;
+        }
+
         svg {
             width: 100%;
             height: 100%;
@@ -60,11 +65,23 @@
             text-decoration: none;
 
             color: @colors[grey-20];
+
+            transition: all .15s;
+        }
+
+        &:hover, &:focus-visible {
+            color: @colors[analogic-1];
+        }
+
+        &:focus-visible {
+            outline: .2rem solid @colors[analogic-1];
+            border-radius: .4rem;
         }
 
         &--active {
             &:link, &:visited {
                 color: @colors[analogic-1];
+                text-decoration: underline;
             }
         }
     }

@@ -55,6 +55,15 @@
             border-radius: .4rem;
 
             padding: 1.6rem;
+
+            transition: all .15s;
+        }
+        &:hover, &:focus-visible {
+            background-color: darken(@colors[analogic-4], 10%);
+        }
+        &:focus-visible {
+            outline: .2rem solid @colors[analogic-1];
+            outline-offset: .2rem;
         }
     }
 
@@ -165,6 +174,8 @@
                 padding: .4rem .8rem;
                 border-top-left-radius: .8rem;
                 border-top-right-radius: .8rem;
+
+                transition: all .15s;
             }
 
             &--active {
@@ -179,7 +190,7 @@
             }
 
             &:focus-visible {
-                outline: .2rem solid @colors[grey-80];
+                outline: .2rem solid @colors[analogic-1];
                 outline-offset: -.2rem;
             }
         }
@@ -226,6 +237,16 @@
             background-color: @colors[analogic-4];
             border-top-right-radius: .8rem;
             border-bottom-right-radius: .8rem;
+
+            transition: all .15s;
+
+            &:hover, &:focus-visible {
+                background-color: darken(@colors[analogic-4], 10%);
+            }
+            &:focus-visible {
+                outline: .2rem solid @colors[analogic-1];
+                outline-offset: -.2rem;
+            }
         }
 
         &__panel-open-button {
@@ -244,6 +265,10 @@
             &, &:link, &:visited {
                 color: @colors[grey-80];
                 gap: .4rem;
+            }
+            &:focus-visible {
+                outline: .2rem solid @colors[grey-80];
+                border-radius: .4rem;
             }
 
             &--project {
