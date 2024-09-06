@@ -14,19 +14,29 @@ class NavigationToggle {
         this.toggleButton.addEventListener("click", () => this.onToggleButtonClick());
     }
 
-    private onToggleButtonClick() {
-        this.opened = !this.opened;
+    public open() : void {
+        this.opened = true;
 
-        if (this.opened) {
-            this.toggleButton.classList.add(this.toggleButtonCheckedCSSClass);
-            for (let navigation of this.navigations) {
-                navigation.open();
-            }
-        } else {
-            this.toggleButton.classList.remove(this.toggleButtonCheckedCSSClass);
+        this.toggleButton.classList.add(this.toggleButtonCheckedCSSClass);
+        for (let navigation of this.navigations) {
+            navigation.open();
+        }
+    }
+
+    public close() : void {
+        this.opened = false;
+        
+        this.toggleButton.classList.remove(this.toggleButtonCheckedCSSClass);
             for (let navigation of this.navigations) {
                 navigation.close();
             }
+    }
+
+    private onToggleButtonClick() : void {
+        if (this.opened) {
+            this.close();
+        } else {
+            this.open();
         }
     }
 }

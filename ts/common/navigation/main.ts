@@ -36,12 +36,22 @@ function initNavigationToggle() {
         ));
     }
 
+    let navigationToggle : NavigationToggle | null = null;
+
     if (navigationToggleButton) {
-        new NavigationToggle(
+        navigationToggle = new NavigationToggle(
             navigationToggleButton,
             CSS_NAVIGATION_TOGGLE_BUTTON_CHECKED_CLASS,
             navigations
         );
+    }
+
+    if (documentationNavigation && navigationToggle) {
+        documentationNavigation.addEventListener("click", event => {
+            if (!(event.target instanceof HTMLAnchorElement)) return;
+
+            navigationToggle.close();
+        });
     }
 }
 
