@@ -3,6 +3,38 @@
 
     position: sticky;
     top: @header-height;
+    overflow-y: auto;
+    max-height: ~"calc(100vh - @{header-height})";
+
+    @media (max-width: @navigation-breakpoint) {
+        max-height: ~"calc(100vh - @{header-height} - @{header-navigation-height})";
+        padding: 3.2rem @grid-padding;
+
+        @media (max-width: @grid-padding-small-breakpoint) {
+            padding-left: @grid-padding-small;
+            padding-right: @grid-padding-small;
+        }
+    }
+
+    // width
+    &::-webkit-scrollbar {
+        width: 1.2rem;
+    }
+
+    // track
+    &::-webkit-scrollbar-track {
+        background: @colors[grey-80];
+    }
+
+    // handle
+    &::-webkit-scrollbar-thumb {
+        background: @colors[grey-60];
+        border-radius: .2rem;
+
+        &:hover {
+            background: darken(@colors[grey-60], 5%);
+        }
+    }
 
     &__heading {
         font-size: 1.6rem;

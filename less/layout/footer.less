@@ -4,6 +4,10 @@
 
     padding: 0 @grid-padding;
 
+    @media (max-width: @grid-padding-small-breakpoint) {
+        padding: 0 @grid-padding-small;
+    }
+
     &__content {
         font-size: 1.2rem;
         line-height: 1.6rem;

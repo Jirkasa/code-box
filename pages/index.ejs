@@ -12,13 +12,13 @@
     </div>
     <div class="home-page-about-section">
         <div class="home-page-about-section__content">
-            <div class="home-page-about-section__section">
-                <div class="home-page-code-box">
-                    <%- include("./home-page-code-boxes/tab-code-box.ejs") %>
-                </div>
+            <div class="home-page-about-section__section home-page-about-section__section--inverted">
                 <div>
                     <p class="u-mb-2">Code Box is a JavaScript library developed in TypeScript, designed for showcasing code samples on the web. It serves as a container that allows users to select and display different code samples.</p>
                     <p>It doesn't include syntax highlighting itself, but you can easily integrate libraries such as <a href="https://highlightjs.org/" target="_blank" class="link">highlight.js</a> to add it.</p>
+                </div>
+                <div class="home-page-code-box">
+                    <%- include("./home-page-code-boxes/tab-code-box.ejs") %>
                 </div>
             </div>
             <div class="home-page-about-section__section">
@@ -45,4 +45,7 @@
     todo - webpack přidat code splitting
     todo - něco možná udělat s těmi odkazy na id (třeba použít nějakou knihovnu?)
     todo - na hlavní stránce vytvořit nějakou animaci
+    todo - meta atributy - description atd.
+    todo - při kliknutí na tlačítko navigace zavřít side bar
+    todo - vypnout scrolování stránky když je navigace otevřená
 -->

@@ -1,0 +1,68 @@
+.navigation-toggle-button {
+    display: none;
+
+    height: 3.2rem;
+    width: 3.6rem;
+
+    border: none;
+    background-color: transparent;
+    font-size: 0;
+
+    cursor: pointer;
+
+    position: relative;
+
+    &:focus-visible {
+        outline: .2rem solid @colors[analogic-1];
+        outline-offset: .3rem;
+        border-radius: .4rem;
+    }
+
+    @media (max-width: @navigation-breakpoint) {
+        display: block;
+    }
+
+    &__icon {
+        #center-pos-abs();
+
+        width: 100%;
+        height: .4rem;
+        border-radius: .2rem;
+
+        background-color: @colors[grey-20];
+
+        transition: all .2s;
+
+        &::before, &::after {
+            content: "";
+
+            position: absolute;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+            border-radius: .2rem;
+
+            background-color: @colors[grey-20];
+
+            transition: all .2s;
+        }
+        &::before {
+            bottom: 1rem;
+        }
+        &::after {
+            top: 1rem;
+        }
+    }
+
+    &--checked &__icon {
+        background-color: transparent;
+
+        &::before {
+            transform: translateY(1rem) rotate(-45deg);
+        }
+        &::after {
+            transform: translateY(-1rem) rotate(45deg);
+        }
+    }
+}

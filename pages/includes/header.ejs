@@ -2,7 +2,11 @@
     <div class="header__container">
         <div class="header__content">
             <a href="<%= pathToRootFolder %>" class="header__home-link">Code Box</a>
-            <nav class="header__navigation">
+            <button id="NavigationToggleButton" class="navigation-toggle-button">
+                Open/Close navigation
+                <div class="navigation-toggle-button__icon"></div>
+            </button>
+            <nav id="MainNavigation" class="header__navigation">
                 <ul>
                     <li><a href="<%= pathToRootFolder %>examples/" class="header__navigation-link <% if (locals.activeLink === "examples") { %>header__navigation-link--active<% } %>">Examples</a></li>
                     <li><a href="<%= pathToRootFolder %>documentation/getting-started/" class="header__navigation-link <% if (locals.activeLink === "documentation") { %>header__navigation-link--active<% } %>">Documentation</a></li>

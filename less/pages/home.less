@@ -6,6 +6,10 @@
 
     min-height: 40vh;
 
+    @media (max-width: @grid-padding-small-breakpoint) {
+        padding: 0 @grid-padding-small;
+    }
+
     &__content {
         max-width: @grid-width;
         margin: 0 auto;
@@ -39,6 +43,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-wrap: wrap;
         gap: 1.6rem;
     }
 
@@ -86,6 +91,10 @@
 
     padding: 0 @grid-padding;
 
+    @media (max-width: @grid-padding-small-breakpoint) {
+        padding: 0 @grid-padding-small;
+    }
+
     &__content {
         display: flex;
         flex-direction: column;
@@ -95,21 +104,49 @@
         margin: 0 auto;
 
         padding: 3.2rem 0;
+
+        @media (max-width: #pxToEm(800)[]) {
+            gap: 2.4rem;
+        }
     }
 
     &__section {
         display: grid;
-        grid-template-columns: 60% 40%;
-
-        &:nth-child(even) {
-            grid-template-columns: 40% 60%;
-        }
+        grid-template-columns: 40% 60%;
 
         > :first-child {
             padding-right: 1.6rem;
         }
         > :last-child {
             padding-left: 1.6rem;
+        }
+
+        &--inverted {
+            grid-template-columns: 60% 40%;
+
+            > :first-child {
+                padding-right: 0;
+                padding-left: 1.6rem;
+                grid-column: 2;
+                grid-row: 1;
+            }
+            > :last-child {
+                padding-left: 0;
+                padding-right: 1.6rem;
+                grid-column: 1;
+                grid-row: 1;
+            }
+        }
+
+        @media (max-width: #pxToEm(800)[]) {
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+
+            > :first-child, > :last-child {
+                padding: 0;
+            }
+
         }
     }
 }

@@ -1,0 +1,24 @@
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+
+    // width
+    &::-webkit-scrollbar {
+        width: 1.2rem;
+    }
+
+    // track
+    &::-webkit-scrollbar-track {
+        background: @colors[grey-80];
+    }
+
+    // handle
+    &::-webkit-scrollbar-thumb {
+        background: @colors[grey-60];
+        border-radius: .2rem;
+
+        &:hover {
+            background: darken(@colors[grey-60], 5%);
+        }
+    }
+}

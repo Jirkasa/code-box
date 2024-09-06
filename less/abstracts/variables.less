@@ -1,3 +1,4 @@
+// COLORS
 @colors: {
     analogic-1: #3EDCF5;
     analogic-2: #5D97A0;
@@ -15,9 +16,16 @@
     grey-0: #ffffff;
 }
 
+// GRID
 @grid-width: 102.4rem;
 @grid-gutter: 3.2rem;
 @grid-column-width: 5.6rem;
 @grid-padding: 3.2rem;
+@grid-padding-small: 2.4rem;
+@grid-padding-small-breakpoint: #pxToEm(600)[];
+@grid-no-gutter-breakpoint: #pxToEm(600)[];
 
+// OTHER
 @header-height: 4.8rem;
+@header-navigation-height: 4.8rem; // (height of navigation up to @navigation-breakpoint)
+@navigation-breakpoint: #pxToEm(900)[]; // this has to also be changed in TypeScript (ts/common/navigation/main.ts)

@@ -1,20 +1,56 @@
 .documentation-page-layout {
     padding: 0 @grid-padding;
 
+    @media (max-width: @grid-padding-small-breakpoint) {
+        padding: 0 @grid-padding-small;
+    }
+
     &__container {
         max-width: @grid-width;
         margin: 0 auto;
 
         #display-12-grid();
+
+        @media (max-width: @grid-no-gutter-breakpoint) {
+            column-gap: 0;
+        }
     }
 
     &__content {
         grid-column: span 9;
 
         padding: 3.2rem 0;
+
+        @media (max-width: @navigation-breakpoint) {
+            grid-column: span 12;
+        }
     }
 
     &__navigation {
         grid-column: span 3;
+
+        @media (max-width: @navigation-breakpoint) {
+            position: fixed;
+            top: @header-height + @header-navigation-height - .1rem;
+            right: 0;
+            transform: translateX(100%);
+            z-index: 600;
+
+            height: ~"calc(100vh - @{header-height} - @{header-navigation-height} + .1rem)";
+            max-width: 100%;
+
+            background-color: @colors[grey-90];
+            border-left: .1rem solid @colors[grey-60];
+
+            transition: all .2s;
+
+            &--opened {
+                transform: translateX(0);
+            }
+
+            @media (max-width: #pxToEm(500)[]) {
+                width: 100%;
+            }
+        }
     }
 }
