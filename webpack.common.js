@@ -96,6 +96,11 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.js']
     },
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+        },
+    },
     plugins: [
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, "pages", "index.ejs"),
