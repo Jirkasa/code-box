@@ -39,7 +39,7 @@ class CodeBoxFile<T extends CodeBox = CodeBox> {
     /**
      * Changes identifier of file.
      * @param newIdentifier New identifier.
-     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other file in code box, it should return false).
+     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other file in code box, it returns false).
      */
     public changeIdentifier(newIdentifier : string) : boolean {
         if (!this.codeBox) return false;
@@ -63,7 +63,7 @@ class CodeBoxFile<T extends CodeBox = CodeBox> {
     }
 
     /**
-     * Changes download link of file or sets 
+     * Changes download link of file or sets it as non-downloadable.
      * @param downloadLink Download link (or null if file should not be downloadable).
      */
     public setDownloadLink(downloadLink : string | null) : void {

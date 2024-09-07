@@ -74,7 +74,7 @@ class ProjectCodeBoxCodeView extends CodeBoxCodeView<ProjectCodeBox> {
     /**
      * Changes package of code view.
      * @param packageName Package name (null for default package). If package does not exist, it is created.
-     * @param keepFolderPath  Determines whether code view should stay in the same folder (if false, code view can be moved to different folder based on package).
+     * @param keepFolderPath Determines whether code view should stay in the same folder (if false, code view can be moved to different folder based on package).
      * @returns Indicates whether change has been successfully completed.
      */
     public changePackage(packageName : string | null, keepFolderPath : boolean) : boolean {
@@ -84,7 +84,6 @@ class ProjectCodeBoxCodeView extends CodeBoxCodeView<ProjectCodeBox> {
 
     /**
      * Removes code view from package.
-     * @returns Indicates whether code view has been successfully removed from package.
      */
     public removePackage() : void {
         if (!this.codeBox) return;

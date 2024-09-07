@@ -52,7 +52,7 @@ class CodeBoxCodeView<T extends CodeBox = CodeBox> {
     /**
      * Changes identifier of code view.
      * @param newIdentifier New identifier.
-     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other code view in code box, it should return false).
+     * @returns Indicates whether change has been successfully completed (if passed new identifier already belongs to some other code view in code box, it returns false).
      */
     public changeIdentifier(newIdentifier : string) : boolean {
         if (!this.codeBox) return false;
