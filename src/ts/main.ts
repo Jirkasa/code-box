@@ -44,7 +44,6 @@ export { default as VirtualCodeBoxCreator } from "./creator/VirtualCodeBoxCreato
 
 /**
 TODO:
-- pluginy jsem zatím odložil, můžu je kdyžtak přidat později (jen si někde napsat komentáře, které jsem si tu k tomu napsal)
 - neincludovat dev types do dist
 - dokumentační komentáře kdyžtak upravit podle dokumentace (ale to uvidím jak se mi bude chtít)
 - napsat testy (alespoň na složitější věci)
