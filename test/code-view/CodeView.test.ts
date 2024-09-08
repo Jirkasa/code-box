@@ -4,6 +4,7 @@ import CodeView from '../../src/ts/code-view/CodeView';
 import CodeViewOptions from '../../src/ts/code-view/CodeViewOptions';
 
 const window = new Window();
+vi.stubGlobal('window', window);
 vi.stubGlobal('document', window.document);
 
 beforeEach(() => {

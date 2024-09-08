@@ -1502,7 +1502,7 @@ class ProjectCodeBox extends CodeBox {
             let childElement : HTMLElement | null = null;
 
             child.childNodes.forEach(node => {
-                if (node instanceof Text) {
+                if (node.nodeType === Node.TEXT_NODE) {
                     let text = node.textContent?.trim();
 
                     if (text && text.length > 0) {

@@ -59,3 +59,7 @@ Jak vytvořit knihovnu:
 
 - UglifyJsPlugin
  */
+
+/**
+ * počet řádků: 9393
+ */
