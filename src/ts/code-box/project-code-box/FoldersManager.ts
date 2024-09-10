@@ -279,7 +279,7 @@ class FoldersManager {
             }
 
             // if folder to be deleted is located inside folder for packages, some packages can be deleted
-            if (folderPath.startsWith(packagesFolderPath + "/")) {
+            if (packagesFolderPath === "" || folderPath.startsWith(packagesFolderPath + "/")) {
                 const deletedPackageNames = new Array<string>();
 
                 this.packages.forEach((packageFolder, packageName) => {
@@ -290,7 +290,7 @@ class FoldersManager {
                         parsedPackageName = [packageName];
                     }
 
-                    const packageFolderPath = packagesFolderPath + "/" + parsedPackageName.join("/");
+                    const packageFolderPath = (packagesFolderPath === "" ? "" : (packagesFolderPath + "/")) + parsedPackageName.join("/");
 
                     // if last folder for package is located inside folder to be deleted, package must be deleted
                     if ((packageFolderPath + "/").startsWith(folderPath + "/")) {
@@ -352,10 +352,15 @@ class FoldersManager {
             this.packagesFolderPath = this.parseFolderPath(path);
         }
 
-        // if folders are created for packages and rename folder is located inside folder for packages or it is folder for packages, some packages might need to be renamed
-        if (this.createFoldersForPackages && oldFolderPath.startsWith(packagesFolderPath + "/")) {
+        // if folders are created for packages and renamed folder is located inside folder for packages or it is folder for packages, some packages might need to be renamed
+        if (this.createFoldersForPackages && (packagesFolderPath === "" || oldFolderPath.startsWith(packagesFolderPath + "/"))) {
             // get folders names inside package folder based on folder path...
-            const packagesFolderNames = oldFolderPath.replace(packagesFolderPath + "/", "").split("/");
+            let packagesFolderNames : string[];
+            if (packagesFolderPath === "") {
+                packagesFolderNames = oldFolderPath.split("/");
+            } else {
+                packagesFolderNames = oldFolderPath.replace(packagesFolderPath + "/", "").split("/");
+            }
             const index = packagesFolderNames.length-1;
 
             const changes = new Array<{oldName: string, newName: string}>;

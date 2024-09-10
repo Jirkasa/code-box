@@ -869,7 +869,7 @@ class ProjectCodeBox extends CodeBox {
             }
 
             const codeViewEntry = this.codeViewEntries.get(codeView);
-            if (!codeViewEntry) continue;            
+            if (!codeViewEntry) continue;
 
             codeViewEntry.codeBoxCodeViewManager.unlinkCodeBox();
             this.codeViewEntries.delete(codeView);
