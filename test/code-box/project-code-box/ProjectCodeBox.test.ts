@@ -1052,4 +1052,16 @@ describe("removePackage()", () => {
         expect(codeBox.getFile("assets/img/favicon.svg")).not.toBeNull();
         expect(codeBox.getFile("assets/img/favicon.svg")?.getPackage()).toBeUndefined();
     });
+
+    it("it should remove package and its code view and files but do not remove the folder as it contains some other stuff (foldersDelimiterForPackages option is set)", () => {
+        const codeBox = createCodeBox({ foldersDelimiterForPackages: "." });
+
+        codeBox.removePackage("io.github.jirkasa", true, true);
+
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
+        expect(codeBox.folderExists("io/github/jirkasa")).toBe(true);
+        expect(codeBox.folderExists("io/github/jirkasa/data")).toBe(true);
+        expect(codeBox.getCodeView("io/github/jirkasa/MyApp.java")).toBeNull();
+        expect(codeBox.getFile("assets/img/favicon.svg")).toBeNull();
+    });
 });

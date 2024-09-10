@@ -1046,7 +1046,7 @@ class ProjectCodeBox extends CodeBox {
                     if (!codeViewEntry) continue;
                     const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
                     if (identifier === null) continue;
-                    if (removeAllCodeViewsAndFiles || identifier.startsWith(packageFolderPath)) {
+                    if (removeAllCodeViewsAndFiles || identifier.startsWith(packageFolderPath + "/")) {
                         this.foldersManager.removeCodeViewByIdentifier(identifier);
                         codeViewEntry.codeBoxCodeViewManager.unlinkCodeBox();
                         this.codeViewEntries.delete(codeView);
@@ -1060,7 +1060,7 @@ class ProjectCodeBox extends CodeBox {
                     if (!fileEntry) continue;
                     const identifier = codeBoxFile.getIdentifier();
                     if (identifier === null) continue;
-                    if (removeAllCodeViewsAndFiles || identifier.startsWith(packageFolderPath)) {
+                    if (removeAllCodeViewsAndFiles || identifier.startsWith(packageFolderPath + "/")) {
                         this.foldersManager.removeFileByIdentifier(identifier);
                         fileEntry.codeBoxFileManager.unlinkCodeBox();
                         this.fileEntries.delete(codeBoxFile);
