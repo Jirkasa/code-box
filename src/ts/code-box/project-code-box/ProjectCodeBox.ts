@@ -1009,7 +1009,7 @@ class ProjectCodeBox extends CodeBox {
     /**
      * Removes package.
      * @param name Package name.
-     * @param removePackageFoldersAndContents Determines whether package folder and its contents should be removed.
+     * @param removePackageFoldersAndContents Determines whether package folder and its contents can be removed (if the folder contains some other code views, files or subfolders, it is not removed).
      * @param removeAllCodeViewsAndFiles Determines whether all code views and files in package should be removed.
      * @returns Indicates whether package has been successfully removed.
      */
@@ -1039,18 +1039,20 @@ class ProjectCodeBox extends CodeBox {
             } else {
                 const codeViews = this.foldersManager.getCodeViewsInPackage(name);
                 const codeBoxFiles = this.foldersManager.getFilesInPackage(name);
+                const packageFolderPath = this.foldersManager.getPackageFolderPath(name) || "";
 
                 for (let codeView of codeViews) {
                     const codeViewEntry = this.codeViewEntries.get(codeView);
                     if (!codeViewEntry) continue;
                     const identifier = codeViewEntry.codeBoxCodeView.getIdentifier();
                     if (identifier === null) continue;
-                    this.foldersManager.removeCodeViewByIdentifier(identifier);
-                    codeViewEntry.codeBoxCodeViewManager.unlinkCodeBox();
-                    this.codeViewEntries.delete(codeView);
-
-                    if (codeView === activeCodeView) {
-                        this.changeActiveCodeView(null);
+                    if (removeAllCodeViewsAndFiles || identifier.startsWith(packageFolderPath)) {
+                        this.foldersManager.removeCodeViewByIdentifier(identifier);
+                        codeViewEntry.codeBoxCodeViewManager.unlinkCodeBox();
+                        this.codeViewEntries.delete(codeView);
+                        if (codeView === activeCodeView) {
+                            this.changeActiveCodeView(null);
+                        }
                     }
                 }
                 for (let codeBoxFile of codeBoxFiles) {
@@ -1058,9 +1060,11 @@ class ProjectCodeBox extends CodeBox {
                     if (!fileEntry) continue;
                     const identifier = codeBoxFile.getIdentifier();
                     if (identifier === null) continue;
-                    this.foldersManager.removeFileByIdentifier(identifier);
-                    fileEntry.codeBoxFileManager.unlinkCodeBox();
-                    this.fileEntries.delete(codeBoxFile);
+                    if (removeAllCodeViewsAndFiles || identifier.startsWith(packageFolderPath)) {
+                        this.foldersManager.removeFileByIdentifier(identifier);
+                        fileEntry.codeBoxFileManager.unlinkCodeBox();
+                        this.fileEntries.delete(codeBoxFile);
+                    }
                 }
 
                 const success = this.foldersManager.removePackage(name, removeAllCodeViewsAndFiles);

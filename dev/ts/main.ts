@@ -50,7 +50,7 @@ const projectCodeBox = new ProjectCodeBox(document.getElementById("ProjectCodeBo
     openPanelOnInit: true,
     createFoldersForPackages: true,
     preventActiveCodeViewFolderOpenOnInitIfPackage: true,
-    packagesFolderPath: "src/main",
+    // packagesFolderPath: "src/main",
     // closePanelOnCodeViewSelect: false
 });
 window.myCodeBox = projectCodeBox;
