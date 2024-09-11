@@ -996,8 +996,9 @@ describe("removePackage()", () => {
     it("should remove package but keep folder, code views and files", () => {
         const codeBox = createCodeBox();
 
-        codeBox.removePackage("io.github.jirkasa", false);
+        const result = codeBox.removePackage("io.github.jirkasa", false);
 
+        expect(result).toBe(true);
         expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
         expect(codeBox.folderExists("io.github.jirkasa")).toBe(true);
         expect(codeBox.getCodeView("io.github.jirkasa/MyApp.java")).not.toBeNull();
@@ -1009,8 +1010,9 @@ describe("removePackage()", () => {
     it("should remove package and its folder", () => {
         const codeBox = createCodeBox();
 
-        codeBox.removePackage("io.github.jirkasa");
+        const result = codeBox.removePackage("io.github.jirkasa");
 
+        expect(result).toBe(true);
         expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
         expect(codeBox.folderExists("io.github.jirkasa")).toBe(false);
         expect(codeBox.getCodeView("io.github.jirkasa/MyApp.java")).toBeNull();
@@ -1021,8 +1023,9 @@ describe("removePackage()", () => {
     it("should remove package, its folder, and all its code views and files", () => {
         const codeBox = createCodeBox();
 
-        codeBox.removePackage("io.github.jirkasa", true, true);
+        const result = codeBox.removePackage("io.github.jirkasa", true, true);
 
+        expect(result).toBe(true);
         expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
         expect(codeBox.folderExists("io.github.jirkasa")).toBe(false);
         expect(codeBox.getCodeView("io.github.jirkasa/MyApp.java")).toBeNull();
@@ -1032,8 +1035,9 @@ describe("removePackage()", () => {
     it("should remove package and all its code views and files but do not remove folder", () => {
         const codeBox = createCodeBox();
 
-        codeBox.removePackage("io.github.jirkasa", false, true);
+        const result = codeBox.removePackage("io.github.jirkasa", false, true);
 
+        expect(result).toBe(true);
         expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
         expect(codeBox.folderExists("io.github.jirkasa")).toBe(true);
         expect(codeBox.getCodeView("io.github.jirkasa/MyApp.java")).toBeNull();
@@ -1043,8 +1047,9 @@ describe("removePackage()", () => {
     it("it should remove package and its code view and files in its folder that belong to that package but do not remove the folder as it contains some other stuff (foldersDelimiterForPackages option is set)", () => {
         const codeBox = createCodeBox({ foldersDelimiterForPackages: "." });
 
-        codeBox.removePackage("io.github.jirkasa");
+        const result = codeBox.removePackage("io.github.jirkasa");
 
+        expect(result).toBe(true);
         expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
         expect(codeBox.folderExists("io/github/jirkasa")).toBe(true);
         expect(codeBox.folderExists("io/github/jirkasa/data")).toBe(true);
@@ -1056,12 +1061,321 @@ describe("removePackage()", () => {
     it("it should remove package and its code view and files but do not remove the folder as it contains some other stuff (foldersDelimiterForPackages option is set)", () => {
         const codeBox = createCodeBox({ foldersDelimiterForPackages: "." });
 
-        codeBox.removePackage("io.github.jirkasa", true, true);
+        const result = codeBox.removePackage("io.github.jirkasa", true, true);
 
+        expect(result).toBe(true);
         expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
         expect(codeBox.folderExists("io/github/jirkasa")).toBe(true);
         expect(codeBox.folderExists("io/github/jirkasa/data")).toBe(true);
         expect(codeBox.getCodeView("io/github/jirkasa/MyApp.java")).toBeNull();
         expect(codeBox.getFile("assets/img/favicon.svg")).toBeNull();
+    });
+
+    it("should remove package but keep folder, code views and files when packagesFolderPath option is set", () => {
+        const codeBox = createCodeBox({ packagesFolderPath: "src/main/java" });
+
+        const result = codeBox.removePackage("io.github.jirkasa", false);
+
+        expect(result).toBe(true);
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
+        expect(codeBox.folderExists("src/main/java/io.github.jirkasa")).toBe(true);
+        expect(codeBox.getCodeView("src/main/java/io.github.jirkasa/MyApp.java")).not.toBeNull();
+        expect(codeBox.getFile("assets/img/favicon.svg")).not.toBeNull();
+        expect(codeBox.getCodeView("src/main/java/io.github.jirkasa/MyApp.java")?.getPackage()).toBeUndefined();
+        expect(codeBox.getFile("assets/img/favicon.svg")?.getPackage()).toBeUndefined();
+    });
+
+    it("should return false when package does not exist", () => {
+        const codeBox = createCodeBox();
+
+        const result = codeBox.removePackage("asldkfjkd");
+
+        expect(result).toBe(false);
+    });
+
+    it("should remove package but keep code views and files when createFoldersForPackages options is disabled", () => {
+        const codeBox = createCodeBox({ createFoldersForPackages: false });
+
+        const result = codeBox.removePackage("io.github.jirkasa");
+
+        expect(result).toBe(true);
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
+        expect(codeBox.getCodeView("MyApp.java")).not.toBeNull();
+        expect(codeBox.getFile("assets/img/favicon.svg")).not.toBeNull();
+        expect(codeBox.getCodeView("MyApp.java")?.getPackage()).toBeUndefined();
+        expect(codeBox.getFile("assets/img/favicon.svg")?.getPackage()).toBeUndefined();
+    });
+
+    it("should remove package and its code views and files when createFoldersForPackages options is disabled but true is passed as last parameter", () => {
+        const codeBox = createCodeBox({ createFoldersForPackages: false });
+
+        const result = codeBox.removePackage("io.github.jirkasa", true, true);
+
+        expect(result).toBe(true);
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
+        expect(codeBox.getCodeView("MyApp.java")).toBeNull();
+        expect(codeBox.getFile("assets/img/favicon.svg")).toBeNull();
+    });
+});
+
+describe("renamePackage()", () => {
+    it("should rename package and its folder", () => {
+        const codeBox = createCodeBox();
+
+        const result = codeBox.renamePackage("io.github.jirkasa", "something.else");
+
+        expect(result).toBe(true);
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
+        expect(codeBox.packageExists("something.else")).toBe(true);
+        expect(codeBox.folderExists("io.github.jirkasa")).toBe(false);
+        expect(codeBox.folderExists("something.else")).toBe(true);
+        expect(codeBox.getCodeView("io.github.jirkasa/MyApp.java")).toBeNull();
+        expect(codeBox.getCodeView("something.else/MyApp.java")).not.toBeNull();
+        expect(codeBox.getCodeView("something.else/MyApp.java")?.getPackage()).toBe("something.else");
+        expect(codeBox.getFile("assets/img/favicon.svg")?.getPackage()).toBe("something.else");
+    });
+
+    it("should rename package and its folders when delimiter is set and potentionally create new folder", () => {
+        const codeBox = createCodeBox({ foldersDelimiterForPackages: "." });
+
+        const result = codeBox.renamePackage("io.github.jirkasa", "io.sickhub.jirkasa.new");
+
+        expect(result).toBe(true);
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
+        expect(codeBox.packageExists("io.sickhub.jirkasa.new")).toBe(true);
+        expect(codeBox.folderExists("io/sickhub/jirkasa/new")).toBe(true);
+        expect(codeBox.getCodeView("io/github/jirkasa/MyApp.java")).toBeNull();
+        expect(codeBox.getCodeView("io/sickhub/jirkasa/new/MyApp.java")?.getPackage()).toBe("io.sickhub.jirkasa.new");
+        expect(codeBox.getFile("assets/img/favicon.svg")?.getPackage()).toBe("io.sickhub.jirkasa.new");
+    });
+
+    it("should return false when package does not exist", () => {
+        const codeBox = createCodeBox();
+
+        const result = codeBox.renamePackage("lskdjflkdasf", "newPackage");
+
+        expect(result).toBe(false);
+    });
+
+    it("should return false when new package name is already taken", () => {
+        const codeBox = createCodeBox();
+
+        const result = codeBox.renamePackage("io.github.jirkasa", "io.github.jirkasa.data");
+
+        expect(result).toBe(false);
+    });
+});
+
+describe("openPackage()", () => {
+    it("should open package", () => {
+        const codeBox = createCodeBox();
+
+        codeBox.openPackage("io.github.jirkasa");
+
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(true);
+        expect(codeBox.isPackageOpened("io.github.jirkasa")).toBe(true);
+    });
+
+    it("should open default package", () => {
+        const codeBox = createCodeBox();
+
+        codeBox.openPackage(null);
+
+        expect(codeBox.isPackageOpened(null)).toBe(true);
+    });
+});
+
+describe("closePackage()", () => {
+    it("should close package", () => {
+        const codeBox = createCodeBox();
+        codeBox.openPackage("io.github.jirkasa");
+
+        codeBox.closePackage("io.github.jirkasa");
+
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(true);
+        expect(codeBox.isPackageOpened("io.github.jirkasa")).toBe(false);
+    });
+
+    it("should open default package", () => {
+        const codeBox = createCodeBox();
+
+        codeBox.closePackage(null);
+
+        expect(codeBox.isPackageOpened(null)).toBe(false);
+    });
+});
+
+describe("packageExists()", () => {
+    it("should return true when package exists", () => {
+        const codeBox = createCodeBox();
+
+        const result = codeBox.packageExists("io.github.jirkasa");
+
+        expect(result).toBe(true);
+    });
+
+    it("should return false when package does not exist", () => {
+        const codeBox = createCodeBox();
+
+        const result = codeBox.packageExists("ksldfa");
+
+        expect(result).toBe(false);
+    });
+});
+
+describe("isPackageOpened()", () => {
+    it("should return false when package is not opened", () => {
+        const codeBox = createCodeBox();
+        codeBox.closePackage("io.github.jirkasa");
+
+        const result = codeBox.isPackageOpened("io.github.jirkasa");
+
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(true);
+        expect(result).toBe(false);
+    });
+
+    it("should return true when package is opened", () => {
+        const codeBox = createCodeBox();
+        codeBox.openPackage("io.github.jirkasa");
+
+        const result = codeBox.isPackageOpened("io.github.jirkasa");
+
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(true);
+        expect(result).toBe(true);
+    });
+
+    it("should return false package when package does not exist", () => {
+        const codeBox = createCodeBox();
+
+        const result = codeBox.isPackageOpened("sdkfjsdfkl");
+
+        expect(codeBox.packageExists("sdkfjsdfkl")).toBe(false);
+        expect(result).toBe(false);
+    });
+
+    it("should return false when default package is not opened", () => {
+        const codeBox = createCodeBox();
+        codeBox.closePackage(null);
+
+        const result = codeBox.isPackageOpened(null);
+
+        expect(result).toBe(false);
+    });
+
+    it("should return true when default package is opened", () => {
+        const codeBox = createCodeBox();
+        codeBox.openPackage(null);
+
+        const result = codeBox.isPackageOpened(null);
+
+        expect(result).toBe(true);
+    });
+});
+
+describe("getPackages()", () => {
+    it("should return array of package names", () => {
+        const codeBox = createCodeBox();
+
+        const packages = codeBox.getPackages();
+
+        expect(packages.length).toBeGreaterThan(0);
+    });
+});
+
+describe("getPackagesFolderPath()", () => {
+    it("should return packages folder path when root folder is set as folder path for packages", () => {
+        const codeBox = createCodeBox();
+
+        const folderPath = codeBox.getPackagesFolderPath();
+
+        expect(folderPath).toBe("");
+    });
+
+    it("should return packages folder path", () => {
+        const codeBox = createCodeBox({ packagesFolderPath: "src/main/java" });
+
+        const folderPath = codeBox.getPackagesFolderPath();
+
+        expect(folderPath).toBe("src/main/java");
+    });
+});
+
+describe("changePackagesFolderPathAndRemoveAll()", () => {
+    it("should change packages folder path and remove all code views, files, folders and packages", () => {
+        const codeBox = createCodeBox();
+
+        codeBox.changePackagesFolderPathAndRemoveAll("src/main");
+
+        expect(codeBox.getPackagesFolderPath()).toBe("src/main");
+        expect(codeBox.getCodeViews().length).toBe(0);
+        expect(codeBox.getFiles().length).toBe(0);
+        const subfolderNames = codeBox.getSubfolderNames("/");
+        expect(subfolderNames).not.toBeNull();
+        if (subfolderNames != null) {
+            expect(subfolderNames.length).toBe(0);
+        }
+        expect(codeBox.getPackages().length).toBe(0);
+        expect(codeBox.getActiveCodeView()).toBeNull();
+    });
+});
+
+describe("getProjectName()", () => {
+    it("should return name of project (root) folder", () => {
+        const codeBox = createCodeBox({ projectName: "my-test" });
+
+        const projectName = codeBox.getProjectName();
+
+        expect(projectName).toBe("my-test");
+    });
+});
+
+describe("setProjectName()", () => {
+    it("should rename project (root) folder", () => {
+        const codeBox = createCodeBox({ projectName: "my-test" });
+
+        codeBox.setProjectName("my-new-name");
+
+        expect(codeBox.getProjectName()).toBe("my-new-name");
+    });
+});
+
+describe("openPanel()", () => {
+    it("should open panel", () => {
+        const codeBox = createCodeBox();
+
+        codeBox.openPanel();
+
+        expect(codeBox.isPanelOpened()).toBe(true);
+    });
+});
+
+describe("closePanel()", () => {
+    it("should close panel", () => {
+        const codeBox = createCodeBox();
+        codeBox.openPanel();
+
+        codeBox.closePanel();
+
+        expect(codeBox.isPanelOpened()).toBe(false);
+    });
+});
+
+describe("isPanelOpened()", () => {
+    it("should return false when panel is not opened", () => {
+        const codeBox = createCodeBox();
+        codeBox.closePanel();
+
+        const result = codeBox.isPanelOpened();
+
+        expect(result).toBe(false);
+    });
+
+    it("should return true when panel is opened", () => {
+        const codeBox = createCodeBox();
+        codeBox.openPanel();
+
+        const result = codeBox.isPanelOpened();
+
+        expect(result).toBe(true);
     });
 });
