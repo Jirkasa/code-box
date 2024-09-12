@@ -141,7 +141,7 @@ class VirtualCodeBox extends CodeBox {
         return this.activeCodeBoxCodeView;
     }
 
-    public addFile(identifier: string, downloadLink: string | null) : boolean {
+    public addFile(identifier: string, downloadLink: string | null = null) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
         if (this.fileEntries.has(identifier)) return false;
