@@ -83,6 +83,7 @@ describe("addCodeView()", () => {
         expect(codeBox.getCodeView("js/mytest.js")).not.toBeNull();
         expect(result).toBe(true);
     });
+
     it("should not add code view if some other code view with the same identifier exists", () => {
         const codeBox = createCodeBox();
 
@@ -710,8 +711,9 @@ describe("changeFileDownloadLink()", () => {
     it("should change download link of file", () => {
         const codeBox = createCodeBox();
 
-        codeBox.changeFileDownloadLink("assets/img/Image.png", "../static/SomethingElse.png");
+        const result = codeBox.changeFileDownloadLink("assets/img/Image.png", "../static/SomethingElse.png");
 
+        expect(result).toBe(true);
         const file = codeBox.getFile("assets/img/Image.png");
         expect(file?.getDownloadLink()).toBe("../static/SomethingElse.png");
     });
@@ -719,10 +721,19 @@ describe("changeFileDownloadLink()", () => {
     it("should set file as non-downloadable", () => {
         const codeBox = createCodeBox();
 
-        codeBox.changeFileDownloadLink("assets/img/Image.png", null);
+        const result = codeBox.changeFileDownloadLink("assets/img/Image.png", null);
 
+        expect(result).toBe(true);
         const file = codeBox.getFile("assets/img/Image.png");
         expect(file?.getDownloadLink()).toBeNull();
+    });
+
+    it("should return false when file does not exist", () => {
+        const codeBox = createCodeBox();
+
+        const result = codeBox.changeFileDownloadLink("asůlfdslfj", "../static/SomethingElse.png");
+
+        expect(result).toBe(false);
     });
 });
 
