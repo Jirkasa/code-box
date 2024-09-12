@@ -1,7 +1,7 @@
 import { Window } from "happy-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import TabCodeBox from "../../../src/ts/code-box/tab-code-box/TabCodeBox";
-import TabCodeBoxOptions from "../../../src/ts/code-box/tab-code-box/TabCodeBoxOptions";
+import VirtualCodeBox from "../../../src/ts/code-box/virtual-code-box/VirtualCodeBox";
+import CodeBoxOptions from "../../../src/ts/code-box/CodeBoxOptions";
 import CodeView from "../../../src/ts/code-view/CodeView";
 
 const window = new Window();
@@ -22,7 +22,7 @@ beforeEach(() => {
     </head>
     <body>
 
-    <div id="MyTabCodeBox">
+    <div id="MyVirtualCodeBox">
         <pre data-cb-name="CodeView1" data-cb-active><code>some content</code></pre>
         <pre data-cb-name="CodeView2"><code>some content</code></pre>
         <div data-cb-name="File1" data-cb-file="./assets/img/File.png"></div>
@@ -36,8 +36,8 @@ beforeEach(() => {
     `);
 });
 
-function createCodeBox(options : TabCodeBoxOptions = {}) : TabCodeBox {
-    const codeBox = new TabCodeBox(document.getElementById("MyTabCodeBox") as HTMLElement, options);
+function createCodeBox(options : CodeBoxOptions = {}) : VirtualCodeBox {
+    const codeBox = new VirtualCodeBox(document.getElementById("MyVirtualCodeBox") as HTMLElement, options);
     codeBox.init();
     return codeBox;
 }
@@ -146,62 +146,6 @@ describe("changeCodeViewIdentifier()", () => {
         const codeBox = createCodeBox();
 
         const result = codeBox.changeCodeViewIdentifier("alksdjfjklds", "RenamedCodeView");
-
-        expect(result).toBe(false);
-    });
-});
-
-describe("getCodeViewButtonPosition()", () => {
-    it("should return position of code view button", () => {
-        const codeBox = createCodeBox();
-
-        const position = codeBox.getCodeViewButtonPosition("CodeView2");
-
-        expect(position).toBe(1);
-    });
-
-    it("should return null if code view does not exist", () => {
-        const codeBox = createCodeBox();
-
-        const position = codeBox.getCodeViewButtonPosition("alskdjfdkl");
-
-        expect(position).toBeNull();
-    });
-});
-
-describe("setCodeViewButtonPosition()", () => {
-    it("should change position of code view button", () => {
-        const codeBox = createCodeBox();
-
-        const result = codeBox.setCodeViewButtonPosition("CodeView1", 2);
-
-        expect(result).toBe(true);
-        expect(codeBox.getCodeViewButtonPosition("CodeView1")).toBe(2);
-        expect(codeBox.getFileButtonPosition("File1")).toBe(0);
-    });
-
-    it("should return false when position after max position is passed", () => {
-        const codeBox = createCodeBox();
-
-        const result = codeBox.setCodeViewButtonPosition("CodeView1", 1000000);
-
-        expect(result).toBe(false);
-        expect(codeBox.getCodeViewButtonPosition("CodeView1")).toBe(0);
-    });
-
-    it("should return false when position lower than 0 is passed", () => {
-        const codeBox = createCodeBox();
-
-        const result = codeBox.setCodeViewButtonPosition("CodeView1", -1);
-
-        expect(result).toBe(false);
-        expect(codeBox.getCodeViewButtonPosition("CodeView1")).toBe(0);
-    });
-
-    it("should return false if code view does not exist", () => {
-        const codeBox = createCodeBox();
-
-        const result = codeBox.setCodeViewButtonPosition("asdfdsafjk", 1);
 
         expect(result).toBe(false);
     });
@@ -376,62 +320,6 @@ describe("changeFileIdentifier()", () => {
     });
 });
 
-describe("getFileButtonPosition()", () => {
-    it("should return position of file button", () => {
-        const codeBox = createCodeBox();
-
-        const position = codeBox.getFileButtonPosition("File2");
-
-        expect(position).toBe(3);
-    });
-
-    it("should return null if file does not exist", () => {
-        const codeBox = createCodeBox();
-
-        const position = codeBox.getFileButtonPosition("alskdjfdkl");
-
-        expect(position).toBeNull();
-    });
-});
-
-describe("setFileButtonPosition()", () => {
-    it("should change position of file button", () => {
-        const codeBox = createCodeBox();
-
-        const result = codeBox.setFileButtonPosition("File1", 0);
-
-        expect(result).toBe(true);
-        expect(codeBox.getFileButtonPosition("File1")).toBe(0);
-        expect(codeBox.getCodeViewButtonPosition("CodeView1")).toBe(2);
-    });
-
-    it("should return false when position after max position is passed", () => {
-        const codeBox = createCodeBox();
-
-        const result = codeBox.setFileButtonPosition("File1", 1000000);
-
-        expect(result).toBe(false);
-        expect(codeBox.getFileButtonPosition("File1")).toBe(2);
-    });
-
-    it("should return false when position lower than 0 is passed", () => {
-        const codeBox = createCodeBox();
-
-        const result = codeBox.setFileButtonPosition("File1", -1);
-
-        expect(result).toBe(false);
-        expect(codeBox.getFileButtonPosition("File1")).toBe(2);
-    });
-
-    it("should return false if file does not exist", () => {
-        const codeBox = createCodeBox();
-
-        const result = codeBox.setFileButtonPosition("asdfdsafjk", 1);
-
-        expect(result).toBe(false);
-    });
-});
-
 describe("changeFileDownloadLink()", () => {
     it("should change download link of file", () => {
         const codeBox = createCodeBox();
@@ -466,20 +354,16 @@ describe("reset()", () => {
     it("should reset code box to its post-initialization state", () => {
         const codeBox = createCodeBox();
         codeBox.removeCodeView("CodeView1");
+        codeBox.changeCodeViewIdentifier("CodeView2", "NewOne");
         codeBox.removeAllFiles();
         codeBox.addFile("NewFile");
-        codeBox.setCodeViewButtonPosition("CodeView1", 2);
         
         codeBox.reset();
 
         expect(codeBox.getCodeView("CodeView1")).not.toBeNull();
         expect(codeBox.getCodeView("CodeView2")).not.toBeNull();
-        expect(codeBox.getCodeView("CodeView1")?.getButtonPosition()).toBe(0);
-        expect(codeBox.getCodeView("CodeView2")?.getButtonPosition()).toBe(1);
         expect(codeBox.getFile("File1")).not.toBeNull();
         expect(codeBox.getFile("File2")).not.toBeNull();
-        expect(codeBox.getFile("File1")?.getButtonPosition()).toBe(2);
-        expect(codeBox.getFile("File2")?.getButtonPosition()).toBe(3);
         expect(codeBox.getCodeViews().length).toBe(2);
         expect(codeBox.getFiles().length).toBe(2);
         expect(codeBox.getActiveCodeView()?.getIdentifier()).toBe("CodeView1");
@@ -492,19 +376,15 @@ describe("createMemento() + applyMemento()", () => {
 
         const memento = codeBox.createMemento();
         codeBox.removeCodeView("CodeView1");
+        codeBox.changeCodeViewIdentifier("CodeView2", "NewOne");
         codeBox.removeAllFiles();
         codeBox.addFile("NewFile");
-        codeBox.setCodeViewButtonPosition("CodeView1", 2);
         codeBox.applyMemento(memento);
 
         expect(codeBox.getCodeView("CodeView1")).not.toBeNull();
         expect(codeBox.getCodeView("CodeView2")).not.toBeNull();
-        expect(codeBox.getCodeView("CodeView1")?.getButtonPosition()).toBe(0);
-        expect(codeBox.getCodeView("CodeView2")?.getButtonPosition()).toBe(1);
         expect(codeBox.getFile("File1")).not.toBeNull();
         expect(codeBox.getFile("File2")).not.toBeNull();
-        expect(codeBox.getFile("File1")?.getButtonPosition()).toBe(2);
-        expect(codeBox.getFile("File2")?.getButtonPosition()).toBe(3);
         expect(codeBox.getCodeViews().length).toBe(2);
         expect(codeBox.getFiles().length).toBe(2);
         expect(codeBox.getActiveCodeView()?.getIdentifier()).toBe("CodeView1");
