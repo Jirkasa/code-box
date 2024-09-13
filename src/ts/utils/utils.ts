@@ -105,7 +105,9 @@ export function createProjectCodeBoxOptionsCopy(options : ProjectCodeBoxOptions)
         folderAnimationEasingFunction: options.folderAnimationEasingFunction,
         openActiveCodeViewFolderOnInit: options.openActiveCodeViewFolderOnInit,
         openActiveCodeViewPackageOnInit: options.openActiveCodeViewPackageOnInit,
+        preventActiveCodeViewFolderOpenOnInitIfPackage: options.preventActiveCodeViewFolderOpenOnInitIfPackage,
         openRootFolderOnInit: options.openRootFolderOnInit,
+        closePanelOnCodeViewSelect: options.closePanelOnCodeViewSelect,
         openPanelOnInit: options.openPanelOnInit,
         openPanelButtonAriaLabel: options.openPanelButtonAriaLabel,
         closePanelButtonAriaLabel: options.closePanelButtonAriaLabel
