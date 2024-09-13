@@ -42,7 +42,7 @@ export { default as VirtualCodeBoxCreator } from "./creator/VirtualCodeBoxCreato
 
 
 
-/**
+/*
 TODO:
 - neincludovat dev types do dist
 - dokumentační komentáře kdyžtak upravit podle dokumentace (ale to uvidím jak se mi bude chtít)
@@ -51,7 +51,7 @@ TODO:
 - v README vysvětlit, jak se dá na knihovně pracovat
 */
 
-/**
+/*
 
 Jak vytvořit knihovnu:
 - https://krasimirtsonev.com/blog/article/javascript-library-starter-using-webpack-es6
@@ -59,6 +59,6 @@ Jak vytvořit knihovnu:
 - UglifyJsPlugin
  */
 
-/**
- * počet řádků: 9393
+/*
+ počet řádků: 9393
  */
