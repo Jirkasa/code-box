@@ -39,25 +39,3 @@ export { default as CodeViewCreator, CodeViewCreatorEntry } from "./creator/Code
 export { default as TabCodeBoxCreator } from "./creator/TabCodeBoxCreator";
 export { default as ProjectCodeBoxCreator } from "./creator/ProjectCodeBoxCreator";
 export { default as VirtualCodeBoxCreator } from "./creator/VirtualCodeBoxCreator";
-
-
-
-/*
-TODO:
-- napsat README (přidat tam odkaz na dokumentaci)
-- v README vysvětlit, jak se dá na knihovně pracovat
-*/
-
-
-
-/*
-
-Jak vytvořit knihovnu:
-- https://krasimirtsonev.com/blog/article/javascript-library-starter-using-webpack-es6
-
-- UglifyJsPlugin
- */
-
-/*
- počet řádků: 9393
- */
