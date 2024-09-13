@@ -63,13 +63,3 @@ Jak vytvořit knihovnu:
 /**
  * počet řádků: 9393
  */
-
-/*
-Co otestovat:
-X - CodeView
-X - ProjectCodeBox
-    - nevím jestli radši ještě neotestovat dědičnost (možná spíš ty mementa)
-X - TabCodeBox (tohle už bude o dost jednodušší - nejsou tam složky a packages)
-X - VirtualCodeBox
-- ... a dál - asi mementa, možná creatory.. - ještě uvidím
-*/
