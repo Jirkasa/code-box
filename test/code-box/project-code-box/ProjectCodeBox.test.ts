@@ -1390,3 +1390,82 @@ describe("isPanelOpened()", () => {
         expect(result).toBe(true);
     });
 });
+
+describe("reset()", () => {
+    it("should reset code box to its post-initialization state", () => {
+        const codeBox = createCodeBox();
+        codeBox.addFolder("newFolder");
+        codeBox.removeFolder("src/main");
+        codeBox.removePackage("io.github.jirkasa.data");
+        codeBox.addPackage("io.github.jirkasa.new");
+        codeBox.changeCodeViewPackage("css/style.css", "io.github.jirkasa", false);
+
+        codeBox.reset();
+
+        expect(codeBox.getCodeViews().length).toBe(6);
+        expect(codeBox.getFiles().length).toBe(5);
+        expect(codeBox.getPackages().length).toBe(2);
+        expect(codeBox.folderExists("src/main/java")).toBe(true);
+        expect(codeBox.folderExists("src/main/resources")).toBe(true);
+        expect(codeBox.folderExists("src/main/webapp")).toBe(true);
+        expect(codeBox.folderExists("src/test/java")).toBe(true);
+        expect(codeBox.folderExists("src/test/resources")).toBe(true);
+        expect(codeBox.folderExists("target")).toBe(true);
+        expect(codeBox.folderExists("newFolder")).toBe(false);
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(true);
+        expect(codeBox.packageExists("io.github.jirkasa.data")).toBe(true);
+        expect(codeBox.packageExists("io.github.jirkasa.new")).toBe(false);
+        expect(codeBox.getCodeView("css/style.css")).not.toBeNull();
+        expect(codeBox.getCodeView("css/style.css")?.getPackage()).toBeUndefined();
+        expect(codeBox.getCodeView("css/subfolder/anotherStyle.css")).not.toBeNull();
+        expect(codeBox.getCodeView("js/main.js")).not.toBeNull();
+        expect(codeBox.getCodeView("io.github.jirkasa/MyApp.java")).not.toBeNull();
+        expect(codeBox.getCodeView("Something.java")).not.toBeNull();
+        expect(codeBox.getCodeView("pom.xml")).not.toBeNull();
+        expect(codeBox.getFile("assets/img/Image.png")).not.toBeNull();
+        expect(codeBox.getFile("assets/img/favicon.svg")).not.toBeNull();
+        expect(codeBox.getFile("something.zip")).not.toBeNull();
+        expect(codeBox.getFile("io.github.jirkasa.data/data.xls")).not.toBeNull();
+        expect(codeBox.getFile("default_data.xls")).not.toBeNull();
+    });
+});
+
+describe("createMemento() + applyMemento()", () => {
+    it("should create and apply memento", () => {
+        const codeBox = createCodeBox();
+
+        const memento = codeBox.createMemento();
+        codeBox.addFolder("newFolder");
+        codeBox.removeFolder("src/main");
+        codeBox.removePackage("io.github.jirkasa.data");
+        codeBox.addPackage("io.github.jirkasa.new");
+        codeBox.changeCodeViewPackage("css/style.css", "io.github.jirkasa", false);
+        codeBox.applyMemento(memento);
+
+        expect(codeBox.getCodeViews().length).toBe(6);
+        expect(codeBox.getFiles().length).toBe(5);
+        expect(codeBox.getPackages().length).toBe(2);
+        expect(codeBox.folderExists("src/main/java")).toBe(true);
+        expect(codeBox.folderExists("src/main/resources")).toBe(true);
+        expect(codeBox.folderExists("src/main/webapp")).toBe(true);
+        expect(codeBox.folderExists("src/test/java")).toBe(true);
+        expect(codeBox.folderExists("src/test/resources")).toBe(true);
+        expect(codeBox.folderExists("target")).toBe(true);
+        expect(codeBox.folderExists("newFolder")).toBe(false);
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(true);
+        expect(codeBox.packageExists("io.github.jirkasa.data")).toBe(true);
+        expect(codeBox.packageExists("io.github.jirkasa.new")).toBe(false);
+        expect(codeBox.getCodeView("css/style.css")).not.toBeNull();
+        expect(codeBox.getCodeView("css/style.css")?.getPackage()).toBeUndefined();
+        expect(codeBox.getCodeView("css/subfolder/anotherStyle.css")).not.toBeNull();
+        expect(codeBox.getCodeView("js/main.js")).not.toBeNull();
+        expect(codeBox.getCodeView("io.github.jirkasa/MyApp.java")).not.toBeNull();
+        expect(codeBox.getCodeView("Something.java")).not.toBeNull();
+        expect(codeBox.getCodeView("pom.xml")).not.toBeNull();
+        expect(codeBox.getFile("assets/img/Image.png")).not.toBeNull();
+        expect(codeBox.getFile("assets/img/favicon.svg")).not.toBeNull();
+        expect(codeBox.getFile("something.zip")).not.toBeNull();
+        expect(codeBox.getFile("io.github.jirkasa.data/data.xls")).not.toBeNull();
+        expect(codeBox.getFile("default_data.xls")).not.toBeNull();
+    });
+});
