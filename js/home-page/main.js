@@ -1,7 +1,7 @@
 import { TabCodeBox, ProjectCodeBox } from "../../code-box/index";
 
 new TabCodeBox(document.getElementById("TabCodeBoxExample"), {
-    svgSpritePath: "../static/icon-sprite.svg",
+    svgSpritePath: "./static/icon-sprite.svg",
     svgSpriteIcons: {
         codeFile: "file",
         file: "file-2",
