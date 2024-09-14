@@ -1,5 +1,5 @@
 {
-  "name": "code-box",
+  "name": "@jirkasa/code-box",
   "version": "1.0.0",
   "description": "Showcase code samples on the web with a container that lets users select and display different samples.",
   "main": "dist/index.js",
