@@ -7,7 +7,7 @@ const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 module.exports = merge(commonConfig, {
     entry: {
         dev: {
-            import: "./dev/ts/main.ts",
+            import: "./dev/ts/index.ts",
             filename: "dev.js"
         },
         devStyle: "./dev/less/main.less",

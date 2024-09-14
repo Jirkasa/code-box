@@ -3,7 +3,7 @@ const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 module.exports = {
     entry: {
         main: {
-            import: "./src/ts/main.ts",
+            import: "./src/ts/index.ts",
             filename: "index.js"
         },
         style: "./src/less/main.less"

@@ -1,10 +1,13 @@
 {
   "name": "code-box",
   "version": "1.0.0",
-  "description": "",
+  "description": "Showcase code samples on the web with a container that lets users select and display different samples.",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "webpack --config webpack.prod.js --mode production",
     "dev": "webpack serve --config webpack.dev.js --mode development --open",
@@ -15,12 +18,17 @@
     "type": "git",
     "url": "git+https://github.com/Jirkasa/code-box.git"
   },
+  "keywords": [
+    "code-box",
+    "code-samples",
+    "code-showcase"
+  ],
   "author": "Jiří Satora",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Jirkasa/code-box/issues"
   },
-  "homepage": "https://github.com/Jirkasa/code-box#readme",
+  "homepage": "https://jirkasa.github.io/code-box",
   "devDependencies": {
     "@vitest/coverage-v8": "^2.0.5",
     "css-loader": "^7.1.2",

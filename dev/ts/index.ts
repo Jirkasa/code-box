@@ -1,4 +1,4 @@
-import {CodeView, TabCodeBox, ProjectCodeBox, CodeViewCreator, TabCodeBoxCreator, ProjectCodeBoxCreator, VirtualCodeBoxCreator, VirtualCodeBox} from "../../src/ts/main";
+import {CodeView, TabCodeBox, ProjectCodeBox, CodeViewCreator, TabCodeBoxCreator, ProjectCodeBoxCreator, VirtualCodeBoxCreator, VirtualCodeBox} from "../../src/ts/index";
 
 // ------------------------------------------------------------------------
 // An example of declaring a property of a window object for use in the console:
