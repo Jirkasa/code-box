@@ -3,27 +3,26 @@
 
 Code Box is a JavaScript library developed in TypeScript, designed for showcasing code samples on the web. While it doesn't provide syntax highlighting itself, it serves as a container that allows users to select and display different code samples. You can either enable users to switch between different code samples with a few buttons or present the entire source code in a project-like format. For syntax highlighting, you can use libraries like [highlight.js](https://highlightjs.org/).
 
-- [Documentation](#)
-- [Examples](#)
-- [NPM](#)
+- [Documentation](https://jirkasa.github.io/code-box/)
+- [Examples](https://jirkasa.github.io/code-box/examples/)
 
 ## Installation
 
 Code box is installed via NPM like any other package.
 
 ```
-npm install code-box --save
+npm install @jirkasa/code-box --save
 ```
 
 After installation, you need to integrate the core CSS styles into your project. If you're using a CSS preprocessor, you can import the styles as shown below. If you're not using a preprocessor, simply copy the CSS file from the node_modules folder.
 
 ```
-@import "code-box/style.min.css";
+@import "@jirkasa/code-box/dist/style.min.css";
 ```
 
 ## Getting Started
 
-To get started, check out the [Getting Started](#) guide. It includes examples and setup instructions for using Code Box in your projects.
+To get started, check out the [Getting Started](https://jirkasa.github.io/code-box/documentation/getting-started/) guide. It includes examples and setup instructions for using Code Box in your projects.
 
 ## Contributing
 
@@ -38,4 +37,4 @@ If you'd like to contribute or explore the source code, you can clone this repos
 
 ## License
 
-This project is licensed under the [MIT License](#).
+This project is licensed under the [MIT License](https://github.com/Jirkasa/code-box/blob/main/LICENSE).
