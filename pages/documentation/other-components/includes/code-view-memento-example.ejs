@@ -32,7 +32,7 @@ const codeView = new CodeView(document.getElementById("MyCodeView"));
 const codeViewMemento = codeView.createMemento();
 
 // do some changes
-codeView.addHighlight("4");
+codeView.addHighlight(4);
 
 // apply memento (restore to the saved state of code view)
 codeView.applyMemento(codeViewMemento);</code></pre>
