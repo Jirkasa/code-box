@@ -7,7 +7,7 @@ console.log("result: " + result);&lt;/code&gt;&lt;/pre&gt;</code></pre></div><bu
 
 const codeView = new CodeView(document.getElementById("MyCodeView"));
 
-const highlightBox = codeView.addHighlight("1");
+const highlightBox = codeView.addHighlight(1);
 highlightBox.setRange(4, 6);</code></pre></div><div class="code-example__result-box"><pre id="HighlightBoxExample"><code class="no-highlight">let x = 1;
 let y = 2;
 
@@ -26,7 +26,7 @@ const codeView = new CodeView(document.getElementById("MyCodeView"));
 const codeViewMemento = codeView.createMemento();
 
 // do some changes
-codeView.addHighlight("4");
+codeView.addHighlight(4);
 
 // apply memento (restore to the saved state of code view)
 codeView.applyMemento(codeViewMemento);</code></pre></div><div class="code-example__result-box"><pre id="CodeViewMementoExample"><code class="no-highlight">let x = 1;
