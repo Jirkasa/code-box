@@ -51,7 +51,7 @@ module.exports = merge(commonConfig, {
         new BannerPlugin({
             banner: `Code Box
 https://github.com/Jirkasa/code-box
-Copyright (c) 2024 Jiří Satora
+Copyright (c) 2025 Jiří Satora
 Licensed under the MIT license.`
         })
     ]

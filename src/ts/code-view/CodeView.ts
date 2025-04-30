@@ -165,11 +165,21 @@ class CodeView {
      * Adds new highlight.
      * @param start Start line of highlight.
      * @param end End line of highlight (default is the same as start line).
+     * @param customCssClass Custom CSS class(es) to be added to highlight element.
      * @returns Created highlight box.
      */
-    public addHighlight(start : number, end : number = start) : HighlightBox {
+    public addHighlight(start : number, end : number = start, customCssClass : string | string[] | null = null) : HighlightBox {
         const highlightBoxManager = new HighlightBoxManager();
         const highlightBox = new HighlightBox(this.containerElement, start, end, this, this.removeHighlightBoxEventSource, highlightBoxManager);
+        if (customCssClass) {
+            if (Array.isArray(customCssClass)) {
+                for (let cssClass of customCssClass) {
+                    highlightBox.addCustomCssClass(cssClass);
+                }
+            } else {
+                highlightBox.addCustomCssClass(customCssClass);
+            }
+        }
         this.highlightBoxEntries.push(new HighlightBoxEntry(highlightBox, highlightBoxManager));
         return highlightBox;
     }
@@ -297,13 +307,15 @@ class CodeView {
 
     /**
      * Initializes highlights based on passed string with highlights definitions.
-     * @param highlightString String with highlights definitions (for example: "1", "1-5", "2-4,6-8"...).
+     * @param highlightString String with highlights definitions (for example: "1", "1-5", "2-4,6-8", "1-5(custom-css-class another-css-class)"...).
      */
     private initHighlights(highlightString : string) : void {
         const sections = highlightString.split(",");
 
         for (let section of sections) {
-            let range = section.split("-");
+            let [rangePart, cssClassesPart] = section.split("(");
+
+            let range = rangePart.split("-");
 
             let startLine: number;
             let endLine: number;
@@ -324,7 +336,12 @@ class CodeView {
                 endLine = startLine;
             }
 
-            this.addHighlight(startLine, endLine);
+            if (cssClassesPart && cssClassesPart.endsWith(")")) {
+                cssClassesPart = cssClassesPart.substring(0, cssClassesPart.length - 1);
+            }
+            const cssClasses: string[] = cssClassesPart ? cssClassesPart.split(" ") : [];
+
+            this.addHighlight(startLine, endLine, cssClasses);
         }
     }
 

@@ -15,6 +15,8 @@ class HighlightBox {
     private start : number;
     /** End line of highlight. */
     private end : number;
+    /** Custom CSS classes applied to element of highlight box. */
+    private readonly customCssClasses : Set<string> = new Set<string>();
 
     /**
      * Creates new highlight box.
@@ -70,6 +72,41 @@ class HighlightBox {
 
         this.element.style.transform = `translateY(${this.codeView.lineHeight * (this.start-1)}${this.codeView.lineHeightUnit})`;
         this.element.style.height = `${this.codeView.lineHeight * (this.end-this.start+1)}${this.codeView.lineHeightUnit}`;
+    }
+
+    /**
+     * Adds custom CSS class to highlight element.
+     * @param cssClass CSS class to be added to highlight element.
+     */
+    public addCustomCssClass(cssClass : string) : void {
+        this.customCssClasses.add(cssClass);
+        this.element.classList.add(cssClass);
+    }
+
+    /**
+     * Removes custom CSS class from highlight element.
+     * @param cssClass CSS class to be removed from highlight element.
+     */
+    public removeCustomCssClass(cssClass : string) : void {
+        this.customCssClasses.delete(cssClass);
+        this.element.classList.remove(cssClass);
+    }
+
+    /**
+     * Checks if highlight element has custom CSS class.
+     * @param cssClass CSS class to be checked.
+     * @returns True if highlight element has custom CSS class, false otherwise.
+     */
+    public hasCustomCssClass(cssClass : string) : boolean {
+        return this.customCssClasses.has(cssClass);
+    }
+
+    /**
+     * Returns all custom CSS classes applied to highlight element.
+     * @returns All custom CSS classes applied to highlight element.
+     */
+    public getCustomCssClasses() : string[] {
+        return Array.from(this.customCssClasses.values());
     }
 
     /**

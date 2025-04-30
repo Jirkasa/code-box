@@ -6,8 +6,8 @@ class CodeViewMemento {
     private showGutter : boolean;
     /** Stores whether line numbers were shown when memento was created. */
     private showLineNumbers : boolean;
-    /** Stores ranges of highlights displayed in code view when memento was created. */
-    private highlights = new Array<[number, number]>();
+    /** Stores ranges of highlights along with custom CSS classes displayed in code view when memento was created. */
+    private highlights = new Array<[number, number, string[]]>();
 
     /**
      * Creates new code view memento.
@@ -18,7 +18,7 @@ class CodeViewMemento {
         this.showLineNumbers = codeView.areLineNumbersVisible();
 
         for (let highlightBox of codeView.getHighlightBoxes()) {
-            this.highlights.push([highlightBox.getStart(), highlightBox.getEnd()]);
+            this.highlights.push([highlightBox.getStart(), highlightBox.getEnd(), highlightBox.getCustomCssClasses()]);
         }
     }
 
@@ -39,7 +39,7 @@ class CodeViewMemento {
         }
         codeView.removeHighlights();
         for (let highlight of this.highlights) {
-            codeView.addHighlight(highlight[0], highlight[1]);
+            codeView.addHighlight(highlight[0], highlight[1], highlight[2]);
         }
     }
 }

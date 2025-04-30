@@ -91,13 +91,14 @@ describe("reset()", () => {
 
 describe("clone()", () => {
     it("should create copy of code view", () => {
-        const codeView = createCodeView({ highlight: "3-4", showLineNumbers: false });
+        const codeView = createCodeView({ highlight: "3-4(myClass)", showLineNumbers: false });
 
         const codeViewCopy = codeView.clone();
 
         expect(codeViewCopy).not.toBe(codeView);
         expect(codeViewCopy.getHighlightBoxes()[0].getStart()).toBe(3);
         expect(codeViewCopy.getHighlightBoxes()[0].getEnd()).toBe(4);
+        expect(codeViewCopy.getHighlightBoxes()[0].hasCustomCssClass("myClass")).toBe(true);
         expect(codeViewCopy.areLineNumbersVisible()).toBe(false);
     });
     it("should create copy of code view in its post-initialization state", () => {
@@ -167,6 +168,16 @@ describe("addHighlight()", () => {
     
         expect(highlight.getStart()).toBe(2);
         expect(highlight.getEnd()).toBe(codeView.linesCount);
+    });
+    it("should add highlight with custom CSS class", () => {
+        const codeView = createCodeView();
+    
+        codeView.addHighlight(1, 3, "myClass");
+        const highlight = codeView.getHighlightBoxes()[0];
+    
+        expect(highlight.getStart()).toBe(1);
+        expect(highlight.getEnd()).toBe(3);
+        expect(highlight.hasCustomCssClass("myClass")).toBe(true);
     });
 });
 
