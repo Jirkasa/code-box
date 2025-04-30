@@ -23,6 +23,22 @@
                         <td>Sets new range for highlight.</td>
                     </tr>
                     <tr>
+                        <th scope="row"><a href="#highlight-box-add-custom-css-class-method" class="link">addCustomCssClass</a></th>
+                        <td>Adds custom CSS class to highlight element.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><a href="#highlight-box-remove-custom-css-class-method" class="link">removeCustomCssClass</a></th>
+                        <td>Removes custom CSS class from highlight element.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><a href="#highlight-box-has-custom-css-class-method" class="link">hasCustomCssClass</a></th>
+                        <td>Checks if highlight element has custom CSS class.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><a href="#highlight-box-get-custom-css-classes-method" class="link">getCustomCssClasses</a></th>
+                        <td>Returns all custom CSS classes applied to highlight element.</td>
+                    </tr>
+                    <tr>
                         <th scope="row"><a href="#highlight-box-remove-method" class="link">remove</a></th>
                         <td>Removes highlight.</td>
                     </tr>
@@ -71,6 +87,73 @@
                     <tr>
                         <th scope="row">end <span class="properties-table__type">: number</span></th>
                         <td>End line.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 id="highlight-box-add-custom-css-class-method" class="method-heading u-mb-1">addCustomCssClass</h3>
+        <p class="method-signature u-mb-2">addCustomCssClass(cssClass: string): void</p>
+        <p class="u-mb-2">Adds custom CSS class to highlight element.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <div class="table-wrapper u-mb-4">
+            <table class="properties-table">
+                <tbody>
+                    <tr>
+                        <th scope="row">cssClass <span class="properties-table__type">: string</span></th>
+                        <td>CSS class to be added to highlight element.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 id="highlight-box-remove-custom-css-class-method" class="method-heading u-mb-1">removeCustomCssClass</h3>
+        <p class="method-signature u-mb-2">removeCustomCssClass(cssClass: string): void</p>
+        <p class="u-mb-2">Removes custom CSS class from highlight element.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <div class="table-wrapper u-mb-4">
+            <table class="properties-table">
+                <tbody>
+                    <tr>
+                        <th scope="row">cssClass <span class="properties-table__type">: string</span></th>
+                        <td>CSS class to be removed from highlight element.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 id="highlight-box-has-custom-css-class-method" class="method-heading u-mb-1">hasCustomCssClass</h3>
+        <p class="method-signature u-mb-2">hasCustomCssClass(cssClass: string): boolean</p>
+        <p class="u-mb-2">Checks if highlight element has custom CSS class.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <div class="table-wrapper u-mb-2">
+            <table class="properties-table">
+                <tbody>
+                    <tr>
+                        <th scope="row">cssClass <span class="properties-table__type">: string</span></th>
+                        <td>CSS class to be checked.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h4 class="u-mb-1">Returns</h4>
+        <div class="table-wrapper u-mb-4">
+            <table class="properties-table">
+                <tbody>
+                    <tr>
+                        <th scope="row"><span class="properties-table__type">boolean</span></th>
+                        <td>Indicates whether highlight element has custom CSS class.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 id="highlight-box-get-custom-css-classes-method" class="method-heading u-mb-1">getCustomCssClasses</h3>
+        <p class="method-signature u-mb-2">getCustomCssClasses(cssClass: string): string[]</p>
+        <p class="u-mb-2">Returns all custom CSS classes applied to highlight element.</p>
+        <h4 class="u-mb-1">Returns</h4>
+        <div class="table-wrapper u-mb-4">
+            <table class="properties-table">
+                <tbody>
+                    <tr>
+                        <th scope="row"><span class="properties-table__type">string[]</span></th>
+                        <td>All custom CSS classes applied to highlight element.</td>
                     </tr>
                 </tbody>
             </table>

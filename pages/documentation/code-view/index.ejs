@@ -42,7 +42,7 @@
         <h3 id="highlight-option" class="option-heading u-mb-1"><span class="option-heading__name">highlight</span> <span class="option-heading__type">: string</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">undefined</span></p>
         <p class="option-info u-mb-2">Data attribute alternative: <span class="option-info__value">data-cb-highlight</span></p>
-        <p class="u-mb-2">Specifies lines of code to be highlighted. For example, the string format can be "1" to highlight the first line, "1-5" to highlight lines 1 through 5, or "2-4,6-8" to highlight lines 2 through 4 and 6 through 8.</p>
+        <p class="u-mb-2">Specifies lines of code to be highlighted. For example, the string format can be "1" to highlight the first line, "1-5" to highlight lines 1 through 5, or "2-4,6-8" to highlight lines 2 through 4 and 6 through 8. You can also specify CSS classes to be applied for the highlight by adding them in parentheses after the line numbers, e.g., "1(primary),2-4(warning),6-8(secondary warning)".</p>
         <%- include("./includes/highlight-option-example.ejs") %>
         <h3 id="show-gutter-option" class="option-heading u-mb-1"><span class="option-heading__name">showGutter</span> <span class="option-heading__type">: boolean</span></h3>
         <p class="option-info">Default value: <span class="option-info__value">true</span></p>
@@ -221,7 +221,7 @@
             </table>
         </div>
         <h3 id="add-highlight-method" class="method-heading u-mb-1">addHighlight</h3>
-        <p class="method-signature u-mb-2">addHighlight(start: number, end: number = start): <a href="../other-components/#highlight-box" class="method-signature__link">HighlightBox</a></p>
+        <p class="method-signature u-mb-2">addHighlight(start: number, end: number = start, customCssClass: string | string[] | null = null): <a href="../other-components/#highlight-box" class="method-signature__link">HighlightBox</a></p>
         <p class="u-mb-2">Adds new highlight.</p>
         <h4 class="u-mb-1">Params</h4>
         <div class="table-wrapper u-mb-2">
@@ -234,6 +234,10 @@
                     <tr>
                         <th scope="row">end <span class="properties-table__type">?: number</span></th>
                         <td>End line of highlight (defaults to the same as the start line).</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">customCssClass <span class="properties-table__type">?: string | string[] | null</span></th>
+                        <td>Custom CSS class(es) to be added to highlight element.</td>
                     </tr>
                 </tbody>
             </table>

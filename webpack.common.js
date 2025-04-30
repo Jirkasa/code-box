@@ -5,14 +5,20 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 
-function createHtmlWebpackPluginsForPagesInFolder(folderName) {
+function createHtmlWebpackPluginsForPagesInFolder(folderName, version) {
     const htmlPlugins = [];
     fs.readdirSync(`./pages/${folderName}`).forEach(pageName => {
 
         const chunks = ["style", "common"];
 
-        if (fs.existsSync(`./js/documentation/${pageName}/main.js`)) {
-            chunks.push("documentation-" + pageName);
+        if (version) {
+            if (fs.existsSync(`./js/${version}/documentation/${pageName}/main.js`)) {
+                chunks.push("documentation-" + pageName + "-v" + version.replace(/\./g, ""));
+            }
+        } else {
+            if (fs.existsSync(`./js/documentation/${pageName}/main.js`)) {
+                chunks.push("documentation-" + pageName);
+            }
         }
 
         const htmlPlugin = new HtmlWebpackPlugin({
@@ -28,6 +34,7 @@ function createHtmlWebpackPluginsForPagesInFolder(folderName) {
 }
 
 const documentationPages = createHtmlWebpackPluginsForPagesInFolder("documentation");
+const documentationV10xPages = createHtmlWebpackPluginsForPagesInFolder("1.0.x/documentation", "1.0.x");
 
 module.exports = {
     entry: {
@@ -44,7 +51,18 @@ module.exports = {
         "documentation-project-code-box": "./js/documentation/project-code-box/main.js",
         "documentation-virtual-code-box": "./js/documentation/virtual-code-box/main.js",
         "documentation-creators": "./js/documentation/creators/main.js",
-        "documentation-other-components": "./js/documentation/other-components/main.js"
+        "documentation-other-components": "./js/documentation/other-components/main.js",
+        // VERSION 1.0.x
+        "examples-v10x": "./js/1.0.x/examples/main.js",
+        "documentation-getting-started-v10x": "./js/1.0.x/documentation/getting-started/main.js",
+        "documentation-styling-v10x": "./js/1.0.x/documentation/styling/main.js",
+        "documentation-code-view-v10x": "./js/1.0.x/documentation/code-view/main.js",
+        "documentation-code-box-v10x": "./js/1.0.x/documentation/code-box/main.js",
+        "documentation-tab-code-box-v10x": "./js/1.0.x/documentation/tab-code-box/main.js",
+        "documentation-project-code-box-v10x": "./js/1.0.x/documentation/project-code-box/main.js",
+        "documentation-virtual-code-box-v10x": "./js/1.0.x/documentation/virtual-code-box/main.js",
+        "documentation-creators-v10x": "./js/1.0.x/documentation/creators/main.js",
+        "documentation-other-components-v10x": "./js/1.0.x/documentation/other-components/main.js"
     },
     output: {
         clean: true
@@ -113,7 +131,14 @@ module.exports = {
             filename: `examples/index.html`,
             inject: true
         }),
+        new HtmlWebpackPlugin({
+            template: path.resolve(__dirname, "pages", "1.0.x", "examples", "index.ejs"),
+            chunks: ["style", "common", "examples-v10x"],
+            filename: `1.0.x/examples/index.html`,
+            inject: true
+        }),
         ...documentationPages,
+        ...documentationV10xPages,
         new CopyPlugin({
             patterns: [
                 {
