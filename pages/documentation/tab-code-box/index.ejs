@@ -108,6 +108,14 @@
                         <td>Returns currently active code view.</td>
                     </tr>
                     <tr>
+                        <th scope="row"><a href="#add-on-active-code-view-change-listener" class="link">addOnActiveCodeViewChangeListener</a></th>
+                        <td>Registers function to be called when active code view is changed.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><a href="#remove-on-active-code-view-change-listener" class="link">removeOnActiveCodeViewChangeListener</a></th>
+                        <td>Removes function that was registered to be called when active code view is changed.</td>
+                    </tr>
+                    <tr>
                         <th scope="row"><a href="#add-file-method" class="link">addFile</a></th>
                         <td>Adds new file to code box.</td>
                     </tr>
@@ -423,6 +431,34 @@
                     <tr>
                         <th scope="row"><span class="properties-table__type"><a href="../other-components/#tab-code-box-code-view" class="method-signature__link">TabCodeBoxCodeView</a> | null</span></th>
                         <td>Active code view or null if no code view is set as active.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 id="add-on-active-code-view-change-listener" class="method-heading u-mb-1">addOnActiveCodeViewChangeListener</h3>
+        <p class="method-signature u-mb-2">addOnActiveCodeViewChangeListener(callback: () => void): void</p>
+        <p class="u-mb-2">Registers function to be called when active code view is changed.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <div class="table-wrapper u-mb-4">
+            <table class="properties-table">
+                <tbody>
+                    <tr>
+                        <th scope="row">callback <span class="properties-table__type">: () => void</span></th>
+                        <td>Function to be called when active code view is changed.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 id="remove-on-active-code-view-change-listener" class="method-heading u-mb-1">removeOnActiveCodeViewChangeListener</h3>
+        <p class="method-signature u-mb-2">removeOnActiveCodeViewChangeListener(callback: () => void): void</p>
+        <p class="u-mb-2">Removes function that was registered to be called when active code view is changed.</p>
+        <h4 class="u-mb-1">Params</h4>
+        <div class="table-wrapper u-mb-4">
+            <table class="properties-table">
+                <tbody>
+                    <tr>
+                        <th scope="row">callback <span class="properties-table__type">: () => void</span></th>
+                        <td>Function to be removed.</td>
                     </tr>
                 </tbody>
             </table>
