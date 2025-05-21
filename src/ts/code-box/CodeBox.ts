@@ -84,6 +84,8 @@ abstract class CodeBox {
 
     /** Functions called after initialization of code box. */
     private onInitCallbacks : Array<() => void> | null = new Array<() => void>();
+    /** Functions called when code view is changed. */
+    private onActiveCodeViewChangeCallbacks : Array<() => void> = new Array<() => void>();
 
     /**
      * Creates new code box.
@@ -363,6 +365,27 @@ abstract class CodeBox {
     public abstract getActiveCodeView() : CodeBoxCodeView | null;
 
     /**
+     * Registers function to be called when active code view is changed.
+     * @param callback Function to be called when active code view is changed.
+     */
+    public addOnActiveCodeViewChangeListener(callback : () => void) : void {
+        if (this.onActiveCodeViewChangeCallbacks.includes(callback)) return;
+
+        this.onActiveCodeViewChangeCallbacks.push(callback);
+    }
+
+    /**
+     * Removes function that was registered to be called when active code view is changed.
+     * @param callback Function to be removed.
+     */
+    public removeOnActiveCodeViewChangeListener(callback : () => void) : void {
+        const index = this.onActiveCodeViewChangeCallbacks.indexOf(callback);
+        if (index === -1) return;
+
+        this.onActiveCodeViewChangeCallbacks.splice(index, 1);
+    }
+
+    /**
      * Adds new file to code box.
      * @param identifier Identifier under which the file should be added to code box.
      * @param downloadLink Download link (or null if file should not be downloadable).
@@ -444,6 +467,8 @@ abstract class CodeBox {
      * @param codeView Code view that should be displayed in code box or null if no code view should be displayed.
      */
     protected changeActiveCodeView(codeView : CodeView | null) : void {
+        if (this.activeCodeView === codeView) return;
+
         if (this.activeCodeView) {
             this.activeCodeView.detach();
         }
@@ -464,6 +489,13 @@ abstract class CodeBox {
             this.hideNoCodeViewSelectedMessage();
         } else {
             this.showNoCodeViewSelectedMessage();
+        }
+
+        // call all callbacks that are registered to be called when active code view is changed
+        if (this.isInitialized()) {
+            for (let callback of this.onActiveCodeViewChangeCallbacks) {
+                callback();
+            }
         }
     }
 

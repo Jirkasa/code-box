@@ -409,6 +409,55 @@ describe("getActiveCodeView()", () => {
     });
 });
 
+describe("addOnActiveCodeViewChangeListener()", () => {
+    it("should add listener", () => {
+        const codeBox = createCodeBox();
+
+        const listener = vi.fn();
+        codeBox.addOnActiveCodeViewChangeListener(listener);
+        codeBox.setActiveCodeView("js/main.js");
+
+        expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it("should not add listener if it is already added", () => {
+        const codeBox = createCodeBox();
+
+        const listener = vi.fn();
+        codeBox.addOnActiveCodeViewChangeListener(listener);
+        codeBox.addOnActiveCodeViewChangeListener(listener);
+
+        codeBox.setActiveCodeView("js/main.js");
+
+        expect(listener).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe("removeOnActiveCodeViewChangeListener()", () => {
+    it("should remove listener", () => {
+        const codeBox = createCodeBox();
+
+        const listener = vi.fn();
+        codeBox.addOnActiveCodeViewChangeListener(listener);
+        codeBox.removeOnActiveCodeViewChangeListener(listener);
+
+        codeBox.setActiveCodeView("js/main.js");
+
+        expect(listener).not.toHaveBeenCalled();
+    });
+
+    it("should not remove listener if it is not added", () => {
+        const codeBox = createCodeBox();
+
+        const listener = vi.fn();
+        codeBox.removeOnActiveCodeViewChangeListener(listener);
+
+        codeBox.setActiveCodeView("js/main.js");
+
+        expect(listener).not.toHaveBeenCalled();
+    });
+});
+
 describe("addFile()", () => {
     it("should add downloadable file", () => {
         const codeBox = createCodeBox();
