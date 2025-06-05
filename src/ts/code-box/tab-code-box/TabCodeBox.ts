@@ -578,16 +578,11 @@ class TabCodeBox extends CodeBox {
      * Updates code view and file buttons based on positions.
      */
     private updateButtonsOrder() : void {
-        const items = new Array<CodeViewEntry | FileEntry>();
+        const totalItems = this.codeViewEntries.size + this.fileEntries.size;
+        const items = new Array<CodeViewEntry | FileEntry>(totalItems);
 
-        this.codeViewEntries.forEach(entry => items.push(entry));
-        this.fileEntries.forEach(entry => items.push(entry));
-
-        for (let i = 0; i < items.length; i++) {
-            const entry = items[i];
-            items[i] = items[entry.position];
-            items[entry.position] = entry;
-        }
+        this.codeViewEntries.forEach(entry => items[entry.position] = entry);
+        this.fileEntries.forEach(entry => items[entry.position] = entry);
 
         for (let item of items) {
             if (item instanceof CodeViewEntry) {
