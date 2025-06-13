@@ -1,5 +1,5 @@
-<%- include("../../includes/page-start.ejs", {pathToRootFolder: "../../", useHighlightJS: true, title: "Other Components", metaDescription: "Learn about the other components of the Code Box library."}) %>
-    <%- include("../../includes/header.ejs", {pathToRootFolder: "../../", activeLink: "documentation"}) %>
+<%- include("../../../includes/page-start.ejs", {pathToRootFolder: "../../../", useHighlightJS: true, title: "Other Components", metaDescription: "Learn about the other components of the Code Box library."}) %>
+    <%- include("../../../includes/header.ejs", {pathToRootFolder: "../../../", activeLink: "documentation"}) %>
     <%- include("../../includes/documentation-page-start.ejs") %>
         <h1 class="u-mb-4">Other Components</h1>
         <p class="u-mb-6">This page provides information about components that are not covered in any other chapter of the documentation.</p>
@@ -365,7 +365,7 @@
             </table>
         </div>
         <h3 id="code-box-code-view-add-highlight-method" class="method-heading u-mb-1">addHighlight</h3>
-        <p class="method-signature u-mb-2">addHighlight(start: number, end: number = start, customCssClass: string | string[] | null = null): <a href="#highlight-box" class="method-signature__link">HighlightBox</a></p>
+        <p class="method-signature u-mb-2">addHighlight(start: number, end: number = start): <a href="#highlight-box" class="method-signature__link">HighlightBox</a></p>
         <p class="u-mb-2">Adds new highlight.</p>
         <h4 class="u-mb-1">Params</h4>
         <div class="table-wrapper u-mb-2">
@@ -378,10 +378,6 @@
                     <tr>
                         <th scope="row">end <span class="properties-table__type">?: number</span></th>
                         <td>End line of highlight (defaults to the same as the start line).</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">customCssClass <span class="properties-table__type">?: string | string[] | null</span></th>
-                        <td>Custom CSS class(es) to be added to highlight element.</td>
                     </tr>
                 </tbody>
             </table>
@@ -1076,6 +1072,6 @@
                 </tbody>
             </table>
         </div>
-    <%- include("../../includes/documentation-page-end.ejs", {pathToRootFolder: "../../", activeLink: "other-components"}) %>
-    <%- include("../../includes/footer.ejs") %>
-<%- include("../../includes/page-end.ejs") %>
+    <%- include("../../includes/documentation-page-end.ejs", {pathToRootFolder: "../../../", activeLink: "other-components"}) %>
+    <%- include("../../../includes/footer.ejs") %>
+<%- include("../../../includes/page-end.ejs") %>
