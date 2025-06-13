@@ -110,10 +110,11 @@ class CodeBoxCodeView<T extends CodeBox = CodeBox> {
      * Adds new highlight.
      * @param start Start line of highlight.
      * @param end End line of highlight (default is the same as start line).
+     * @param customCssClass Custom CSS class(es) to be added to highlight element.
      * @returns Created highlight box.
      */
-    public addHighlight(start : number, end : number = start) : HighlightBox {
-        return this.codeView.addHighlight(start, end);
+    public addHighlight(start : number, end : number = start, customCssClass : string | string[] | null = null) : HighlightBox {
+        return this.codeView.addHighlight(start, end, customCssClass);
     }
 
     /**
