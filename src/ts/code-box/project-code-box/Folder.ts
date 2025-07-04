@@ -258,6 +258,8 @@ class Folder {
         this.subfolders.delete(folderName);
         this.subfolders.set(newFolderName, folder);
 
+        this.sortItems();
+
         return true;
     }
 
