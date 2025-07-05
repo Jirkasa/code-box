@@ -1410,7 +1410,7 @@ class FoldersManager {
         if (!folder) return;
 
         if (closeSubfolders) {
-            this.closeFolderAndSubfolders(folder);
+            this.closeFolderAndSubfolders(folder, animate);
         } else {
             folder.close(animate);
         }
