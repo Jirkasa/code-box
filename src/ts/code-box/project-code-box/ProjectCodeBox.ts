@@ -472,6 +472,12 @@ class ProjectCodeBox extends CodeBox {
 
         this.codeViewEntries.delete(codeView);
 
+        if (this.foldersManager.hasPackages()) {
+            this.packagesSectionToggle.show();
+        } else {
+            this.packagesSectionToggle.hide();
+        }
+
         return true;
     }
 
@@ -713,6 +719,12 @@ class ProjectCodeBox extends CodeBox {
         fileEntry.codeBoxFileManager.unlinkCodeBox();
 
         this.fileEntries.delete(codeBoxFile);
+
+        if (this.foldersManager.hasPackages()) {
+            this.packagesSectionToggle.show();
+        } else {
+            this.packagesSectionToggle.hide();
+        }
 
         return true;
     }
