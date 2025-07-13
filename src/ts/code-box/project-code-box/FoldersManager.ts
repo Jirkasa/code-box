@@ -884,6 +884,8 @@ class FoldersManager {
         const packageFolder = this.getPackageFolder(packageItem.packageName);
         packageFolder?.removeCodeView(fileName);
 
+        this.codeViewFolderAndPackageMappings.removeByFileFolderPath(parsedFolderPath.length > 0 ? parsedFolderPath.join("/") : null, fileName);
+
         // potentionally remove folder for default package if it is empty
         if (packageFolder && packageFolder === this.defaultPackage) {
             if (packageFolder.getCodeViewsCount() === 0 && packageFolder.getFilesCount() === 0) {
@@ -891,8 +893,6 @@ class FoldersManager {
                 this.defaultPackage = null;
             }
         }
-
-        this.codeViewFolderAndPackageMappings.removeByFileFolderPath(parsedFolderPath.length > 0 ? parsedFolderPath.join("/") : null, fileName);
 
         return true;
     }
