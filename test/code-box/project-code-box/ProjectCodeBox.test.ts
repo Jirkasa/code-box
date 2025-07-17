@@ -889,6 +889,46 @@ describe("renameFolder()", () => {
         expect(codeBox.folderExists("css")).toBe(false);
         expect(codeBox.folderExists("styles")).toBe(true);
     });
+
+    it("should remove delimiter characters used for packages if folder represents part of package", () => {
+        const codeBox = createCodeBox({ packagesFolderPath: "src/main/java", foldersDelimiterForPackages: "." });
+
+        const result = codeBox.renameFolder("src/main/java/io/github/jirkasa", "with.out.delimiter");
+
+        expect(result).toBe(true);
+        expect(codeBox.folderExists("src/main/java/io/github/jirkasa")).toBe(false);
+        expect(codeBox.folderExists("src/main/java/io/github/withoutdelimiter")).toBe(true);
+        expect(codeBox.folderExists("src/main/java/io/github/with.out.delimiter")).toBe(false);
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
+        expect(codeBox.packageExists("io.github.withoutdelimiter")).toBe(true);
+        expect(codeBox.packageExists("io.github.with.out.delimiter")).toBe(false);
+    });
+
+    it("should allow delimiter characters used for packages if folder does not represent part of package", () => {
+        const codeBox = createCodeBox({ packagesFolderPath: "src/main/java", foldersDelimiterForPackages: "." });
+
+        const result = codeBox.renameFolder("js", "with.this.delimiter");
+
+        expect(result).toBe(true);
+        expect(codeBox.folderExists("js")).toBe(false);
+        expect(codeBox.folderExists("with.this.delimiter")).toBe(true);
+        expect(codeBox.getCodeView("js/main.js")).toBeNull();
+        expect(codeBox.getCodeView("with.this.delimiter/main.js")?.getIdentifier()).toBe("with.this.delimiter/main.js");
+    });
+
+    it("should allow delimiter characters used for packages if folder is part of packages folder path", () => {
+        const codeBox = createCodeBox({ packagesFolderPath: "src/main/java", foldersDelimiterForPackages: "." });
+
+        const result = codeBox.renameFolder("src/main", "main.e");
+
+        expect(result).toBe(true);
+        expect(codeBox.folderExists("src/main")).toBe(false);
+        expect(codeBox.folderExists("src/main.e")).toBe(true);
+        expect(codeBox.folderExists("src/main.e/java")).toBe(true);
+        expect(codeBox.getPackagesFolderPath()).toBe("src/main.e/java");
+        expect(codeBox.getFile("src/main/java/io/github/jirkasa/data/data.xls")).toBeNull();
+        expect(codeBox.getFile("src/main.e/java/io/github/jirkasa/data/data.xls")?.getIdentifier()).toBe("src/main.e/java/io/github/jirkasa/data/data.xls");
+    });
 });
 
 describe("openFolder()", () => {
@@ -1049,6 +1089,27 @@ describe("addPackage()", () => {
         expect(codeBox.packageExists("my.test")).toBe(true);
         expect(codeBox.folderExists("my.test")).toBe(false);
         expect(codeBox.folderExists("my/test")).toBe(true);
+    });
+
+    it("should remove slashes from package name if folders are created for packages", () => {
+        const codeBox = createCodeBox({ createFoldersForPackages: true });
+
+        codeBox.addPackage("my/test/package");
+
+        expect(codeBox.packageExists("mytestpackage")).toBe(true);
+        expect(codeBox.folderExists("my/test/package")).toBe(false);
+        expect(codeBox.folderExists("mytestpackage")).toBe(true);
+    });
+
+    it("should not remove slashes from package if folders are not created for packages", () => {
+        const codeBox = createCodeBox({ createFoldersForPackages: false });
+
+        codeBox.addPackage("my/test/package");
+
+        expect(codeBox.packageExists("my/test/package")).toBe(true);
+        expect(codeBox.packageExists("mytestpackage")).toBe(false);
+        expect(codeBox.folderExists("my/test/package")).toBe(false);
+        expect(codeBox.folderExists("mytestpackage")).toBe(false);
     });
 });
 

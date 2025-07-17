@@ -1147,6 +1147,8 @@ class ProjectCodeBox extends CodeBox {
     public renamePackage(name : string, newName : string) : boolean {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
+        newName = this.foldersManager.getSanitizedNormalizedPackageName(newName);
+
         if (!this.foldersManager.packageExists(name)) return false;
         if (this.foldersManager.packageExists(newName)) return false;
 

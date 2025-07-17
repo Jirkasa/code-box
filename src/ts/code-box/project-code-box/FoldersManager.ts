@@ -164,6 +164,16 @@ class FoldersManager {
     }
 
     /**
+     * Returns sanitized and normalized package name.
+     * @param packageName Package name.
+     * @returns Sanitized and normalized package name.
+     */
+    public getSanitizedNormalizedPackageName(packageName : string) : string {
+        packageName = this.sanitizePackageName(packageName);
+        return this.normalizePackageName(packageName);
+    }
+
+    /**
      * Sets name of root (project) folder.
      * @param name Name.
      */
@@ -326,7 +336,7 @@ class FoldersManager {
      */
     public renameFolder(folderPath : string, newName : string) : string | null {
         folderPath = this.normalizeFolderPath(folderPath);
-        newName = this.sanitizeFolderName(newName);
+        newName = this.sanitizeFolderNameForFolderRename(folderPath, newName);
 
         if (newName === "") return null;
 
@@ -545,6 +555,7 @@ class FoldersManager {
      * @returns Indicates whether package could be added. Only returns false if package could not be created because of bad package name, otherwise it always returns true (if the package already exists, it also returns true).
      */
     public addPackage(packageName : string) : boolean {
+        packageName = this.sanitizePackageName(packageName);
         packageName = this.normalizePackageName(packageName);
         if (packageName === "") return false;
         this.getPackageFolder(packageName, true);
@@ -1695,6 +1706,57 @@ class FoldersManager {
     }
 
     /**
+     * Sanitizes folder name for folder rename.
+     * @param normalizedFolderPath Normalized folder path.
+     * @param folderName Folder name.
+     * @returns Sanitized folder name.
+     */
+    private sanitizeFolderNameForFolderRename(normalizedFolderPath : string, folderName : string) : string {
+        folderName = this.sanitizeFolderName(folderName);
+        const foldersDelimiterForPackages = this.foldersDelimiterForPackages;
+
+        if (!this.createFoldersForPackages || foldersDelimiterForPackages === null) return folderName;
+
+        const packagesFolderPath = this.packagesFolderPath.join("/");
+
+        // if renamed folder is in packages folder, check whether it is used for packages
+        // and potentionally remove packagesDelimiterForPackages from folder name
+        if (packagesFolderPath === "" || normalizedFolderPath.startsWith(packagesFolderPath + "/")) {
+            let isUsedForPackages = false;
+            this.packages.forEach((_, packageName) => {
+                if (isUsedForPackages) return;
+
+                let parsedPackageName = packageName.split(foldersDelimiterForPackages);
+
+                const packageFolderPath = (packagesFolderPath === "" ? "" : (packagesFolderPath + "/")) + parsedPackageName.join("/");
+
+                if ((normalizedFolderPath + "/").startsWith(packageFolderPath + "/")) {
+                    isUsedForPackages = true;
+                }
+            });
+
+            if (isUsedForPackages) {
+                const escapedDelimiter = this.escapeRegExp(foldersDelimiterForPackages);
+                folderName = folderName.replace(new RegExp(escapedDelimiter, 'g'), '');
+            }
+        }
+        
+        return folderName;
+    }
+
+    /**
+     * Sanitizes package name.
+     * @param normalizedPackageName Normalized package name.
+     * @returns Sanitized package name.
+     */
+    private sanitizePackageName(normalizedPackageName : string) : string {
+        if (!this.createFoldersForPackages) return normalizedPackageName;
+
+        // remove all slashes
+        return normalizedPackageName.trim().replace(/\//g, '');
+    }
+
+    /**
      * Normalizes folder path (removes unnecessery slashes and so on).
      * @param folderPath Folder path.
      * @returns Normalized folder path.
@@ -1720,8 +1782,9 @@ class FoldersManager {
         const delimiter = this.foldersDelimiterForPackages;
         if (!this.createFoldersForPackages || delimiter === null) return packageName.trim();
         
-        const startEndRegex = new RegExp(`^\\${delimiter}+|\\${delimiter}+$`, 'g');
-        const multipleSeparatorRegex = new RegExp(`\\${delimiter}+`, 'g');
+        const escapedDelimiter = this.escapeRegExp(delimiter);
+        const startEndRegex = new RegExp(`^${escapedDelimiter}+|${escapedDelimiter}+$`, 'g');
+        const multipleSeparatorRegex = new RegExp(`${escapedDelimiter}+`, 'g');
 
         packageName = packageName.trim();
 
@@ -1764,6 +1827,15 @@ class FoldersManager {
             return [];
         }
         return result;
+    }
+
+    /**
+     * Escapes special regex characters in a string.
+     * @param string String to escape.
+     * @returns Escaped string safe for use in regex.
+     */
+    private escapeRegExp(string: string): string {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 }
 
