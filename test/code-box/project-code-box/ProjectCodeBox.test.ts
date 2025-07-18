@@ -904,6 +904,20 @@ describe("renameFolder()", () => {
         expect(codeBox.packageExists("io.github.with.out.delimiter")).toBe(false);
     });
 
+    it("should remove delimiter characters used for packages if folder represents part of package (middle folder of package is renamed)", () => {
+        const codeBox = createCodeBox({ packagesFolderPath: "src/main/java", foldersDelimiterForPackages: "." });
+
+        const result = codeBox.renameFolder("src/main/java/io/github", "with.out.delimiter");
+
+        expect(result).toBe(true);
+        expect(codeBox.folderExists("src/main/java/io/github/jirkasa")).toBe(false);
+        expect(codeBox.folderExists("src/main/java/io/withoutdelimiter/jirkasa")).toBe(true);
+        expect(codeBox.folderExists("src/main/java/io/with.out.delimiter/jirkasa")).toBe(false);
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
+        expect(codeBox.packageExists("io.withoutdelimiter.jirkasa")).toBe(true);
+        expect(codeBox.packageExists("io.with.out.delimiter.jirkasa")).toBe(false);
+    });
+
     it("should allow delimiter characters used for packages if folder does not represent part of package", () => {
         const codeBox = createCodeBox({ packagesFolderPath: "src/main/java", foldersDelimiterForPackages: "." });
 

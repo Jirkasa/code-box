@@ -1730,7 +1730,7 @@ class FoldersManager {
 
                 const packageFolderPath = (packagesFolderPath === "" ? "" : (packagesFolderPath + "/")) + parsedPackageName.join("/");
 
-                if ((normalizedFolderPath + "/").startsWith(packageFolderPath + "/")) {
+                if ((packageFolderPath + "/").startsWith(normalizedFolderPath + "/")) {
                     isUsedForPackages = true;
                 }
             });
