@@ -1299,6 +1299,19 @@ describe("renamePackage()", () => {
 
         expect(result).toBe(false);
     });
+
+    it("should rename package to package with fewer folders", () => {
+        const codeBox = createCodeBox({ foldersDelimiterForPackages: "." });
+        codeBox.addPackage("some.other.package");
+
+        const result = codeBox.renamePackage("some.other.package", "some.other");
+
+        expect(result).toBe(true);
+        expect(codeBox.packageExists("some.other.package")).toBe(false);
+        expect(codeBox.packageExists("some.other")).toBe(true);
+        expect(codeBox.folderExists("some/other/package")).toBe(false);
+        expect(codeBox.folderExists("some/other")).toBe(true);
+    });
 });
 
 describe("openPackage()", () => {

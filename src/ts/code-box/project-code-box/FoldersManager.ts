@@ -675,6 +675,10 @@ class FoldersManager {
         while (packageFolderPath.length > this.packagesFolderPath.length) {
             folder = this.getFolder(packageFolderPath);
             if (!folder) break;
+            if (this.foldersDelimiterForPackages !== null) {
+                const potentionalPackageName = packageFolderPath.slice(this.packagesFolderPath.length).join(this.foldersDelimiterForPackages);
+                if (this.packageExists(potentionalPackageName)) break;
+            }
             if (folder.getCodeViewsCount() > 0 || folder.getFilesCount() > 0 || folder.getFoldersCount() > 1) break;
 
             folderPath = packageFolderPath.join("/");
