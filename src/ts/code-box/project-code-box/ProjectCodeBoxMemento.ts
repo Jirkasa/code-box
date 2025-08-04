@@ -36,6 +36,10 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
     private packagesFolderPath : string;
     /** Indicates whether root folder was opened when memento was created. */
     private isRootFolderOpened : boolean;
+    /** Heading for folder structure when memento was created. */
+    private folderStructureHeading : string;
+    /** Heading for packages when memento was created. */
+    private packagesHeading : string;
     
     /**
      * Creates new project code box memento.
@@ -50,8 +54,10 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
      * @param projectName Project name.
      * @param isPanelOpened Indicates whether panel is opened.
      * @param isRootFolderOpened Indicates whether root folder is oepened.
+     * @param folderStructureHeading Heading for folder structure.
+     * @param packagesHeading Heading for packages.
      */
-    constructor(creator : ProjectCodeBox, addCodeViewToCreatorCodeBox : (identifier : string, codeView : CodeView) => void, codeViewEntries : ProjectCodeBoxCodeViewMementoEntry[], fileEntries : ProjectCodeBoxFileMementoEntry[], activeCodeView : CodeView | null, folderStructure : TreeNode<FolderInfo>[], packages : PackageInfo[], packagesFolderPath : string, projectName : string, isPanelOpened : boolean, isRootFolderOpened : boolean) {
+    constructor(creator : ProjectCodeBox, addCodeViewToCreatorCodeBox : (identifier : string, codeView : CodeView) => void, codeViewEntries : ProjectCodeBoxCodeViewMementoEntry[], fileEntries : ProjectCodeBoxFileMementoEntry[], activeCodeView : CodeView | null, folderStructure : TreeNode<FolderInfo>[], packages : PackageInfo[], packagesFolderPath : string, projectName : string, isPanelOpened : boolean, isRootFolderOpened : boolean, folderStructureHeading : string, packagesHeading : string) {
         super(creator, addCodeViewToCreatorCodeBox, codeViewEntries, fileEntries, activeCodeView);
 
         this.projectCodeBoxCodeViewEntries = codeViewEntries;
@@ -62,6 +68,8 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
         this.isPanelOpened = isPanelOpened;
         this.packagesFolderPath = packagesFolderPath;
         this.isRootFolderOpened = isRootFolderOpened;
+        this.folderStructureHeading = folderStructureHeading;
+        this.packagesHeading = packagesHeading;
     }
 
     public apply(codeBox : CodeBox) : void {
@@ -89,6 +97,9 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
         } else {
             codeBox.closePanel();
         }
+
+        codeBox.setFolderStructureHeading(this.folderStructureHeading);
+        codeBox.setPackagesHeading(this.packagesHeading);
 
         for (let codeViewEntry of this.projectCodeBoxCodeViewEntries) {
             if (codeViewEntry.package === undefined) continue;

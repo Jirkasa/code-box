@@ -54,6 +54,10 @@ class ProjectCodeBox extends CodeBox {
     private packagesSectionToggle : PackagesSectionToggle;
     /** Manages folders and its contents (and package folders). */
     private foldersManager : FoldersManager;
+    /** Folder structure heading element. */
+    private readonly folderStructureHeadingElement : HTMLElement;
+    /** Packages heading element. */
+    private readonly packagesHeadingElement : HTMLElement;
 
     /** Reference to parent code box. */
     private readonly parentCodeBox : ProjectCodeBox | null;
@@ -277,9 +281,12 @@ class ProjectCodeBox extends CodeBox {
         this.parentCodeBox = parentCodeBox;
         this.initialPackagesFolderPath = initialPackagesFolderPath;
         this.projectName = projectName;
+        
+        this.folderStructureHeadingElement = codeBoxBuilder.getFolderStructureHeadingElement();
+        this.packagesHeadingElement = codeBoxBuilder.getPackagesHeadingElement();
 
-        codeBoxBuilder.getFolderStructureHeadingElement().innerText = options.folderStructureHeading || GlobalConfig.DEFAULT_PROJECT_FOLDER_STRUCTURE_HEADING;
-        codeBoxBuilder.getPackagesHeadingElement().innerText = options.packagesHeading || GlobalConfig.DEFAULT_PROJECT_PACKAGES_HEADING;
+        this.folderStructureHeadingElement.innerText = options.folderStructureHeading || GlobalConfig.DEFAULT_PROJECT_FOLDER_STRUCTURE_HEADING;
+        this.packagesHeadingElement.innerText = options.packagesHeading || GlobalConfig.DEFAULT_PROJECT_PACKAGES_HEADING;
 
         this.panelToggle = new PanelToggle(
             codeBoxBuilder.getPanelElement(),
@@ -291,7 +298,7 @@ class ProjectCodeBox extends CodeBox {
         this.packagesSectionToggle = new PackagesSectionToggle(
             codeBoxBuilder.getPanelContentElement(),
             codeBoxBuilder.getHorizontalRule(),
-            codeBoxBuilder.getPackagesHeadingElement(),
+            this.packagesHeadingElement,
             codeBoxBuilder.getPackagesContainer()
         );
         this.foldersManager = foldersManager;
@@ -1313,6 +1320,46 @@ class ProjectCodeBox extends CodeBox {
         return this.panelToggle.isOpened();
     }
 
+    /**
+     * Returns folder structure heading.
+     * @returns Folder structure heading.
+     */
+    public getFolderStructureHeading() : string {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.folderStructureHeadingElement.innerText;
+    }
+
+    /**
+     * Sets new folder structure heading.
+     * @param newHeading New folder structure heading.
+     */
+    public setFolderStructureHeading(newHeading : string) : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        this.folderStructureHeadingElement.innerText = newHeading;
+    }
+
+    /**
+     * Returns packages heading.
+     * @returns Packages heading.
+     */
+    public getPackagesHeading() : string {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        return this.packagesHeadingElement.innerText;
+    }
+
+    /**
+     * Sets new packages heading.
+     * @param newHeading New packages heading.
+     */
+    public setPackagesHeading(newHeading : string) : void {
+        if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
+
+        this.packagesHeadingElement.innerText = newHeading;
+    }
+
     public reset() : void {
         if (!this.isInitialized()) throw new Error(CodeBox.CODE_BOX_NOT_INITIALIZED_ERROR);
 
@@ -1476,7 +1523,9 @@ class ProjectCodeBox extends CodeBox {
             this.foldersManager.getPackagesFolderPath(),
             this.getProjectName(),
             this.isPanelOpened(),
-            this.isFolderOpened("/")
+            this.isFolderOpened("/"),
+            this.getFolderStructureHeading(),
+            this.getPackagesHeading()
         );
     }
 

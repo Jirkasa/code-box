@@ -1528,6 +1528,62 @@ describe("isPanelOpened()", () => {
     });
 });
 
+describe("getFolderStructureHeading()", () => {
+    it("should return folder structure heading", () => {
+        const codeBox = createCodeBox();
+
+        const heading = codeBox.getFolderStructureHeading();
+
+        expect(heading).toBe("Folder structure");
+    });
+
+    it("should return custom folder structure heading", () => {
+        const codeBox = createCodeBox({ folderStructureHeading: "My Custom Heading" });
+
+        const heading = codeBox.getFolderStructureHeading();
+
+        expect(heading).toBe("My Custom Heading");
+    });
+});
+
+describe("setFolderStructureHeading()", () => {
+    it("should set folder structure heading", () => {
+        const codeBox = createCodeBox();
+
+        codeBox.setFolderStructureHeading("My Custom Heading");
+
+        expect(codeBox.getFolderStructureHeading()).toBe("My Custom Heading");
+    });
+});
+
+describe("getPackagesHeading()", () => {
+    it("should return packages heading", () => {
+        const codeBox = createCodeBox();
+
+        const heading = codeBox.getPackagesHeading();
+
+        expect(heading).toBe("Packages");
+    });
+
+    it("should return custom packages heading", () => {
+        const codeBox = createCodeBox({ packagesHeading: "My Custom Packages Heading" });
+
+        const heading = codeBox.getPackagesHeading();
+
+        expect(heading).toBe("My Custom Packages Heading");
+    });
+});
+
+describe("setPackagesHeading()", () => {
+    it("should set packages heading", () => {
+        const codeBox = createCodeBox();
+
+        codeBox.setPackagesHeading("My Custom Packages Heading");
+
+        expect(codeBox.getPackagesHeading()).toBe("My Custom Packages Heading");
+    });
+});
+
 describe("reset()", () => {
     it("should reset code box to its post-initialization state", () => {
         const codeBox = createCodeBox();
@@ -1536,6 +1592,8 @@ describe("reset()", () => {
         codeBox.removePackage("io.github.jirkasa.data");
         codeBox.addPackage("io.github.jirkasa.new");
         codeBox.changeCodeViewPackage("css/style.css", "io.github.jirkasa", false);
+        codeBox.setFolderStructureHeading("Something");
+        codeBox.setPackagesHeading("My Packages");
 
         codeBox.reset();
 
@@ -1564,6 +1622,8 @@ describe("reset()", () => {
         expect(codeBox.getFile("something.zip")).not.toBeNull();
         expect(codeBox.getFile("io.github.jirkasa.data/data.xls")).not.toBeNull();
         expect(codeBox.getFile("default_data.xls")).not.toBeNull();
+        expect(codeBox.getFolderStructureHeading()).toBe("Folder structure");
+        expect(codeBox.getPackagesHeading()).toBe("Packages");
     });
 });
 
@@ -1577,6 +1637,8 @@ describe("createMemento() + applyMemento()", () => {
         codeBox.removePackage("io.github.jirkasa.data");
         codeBox.addPackage("io.github.jirkasa.new");
         codeBox.changeCodeViewPackage("css/style.css", "io.github.jirkasa", false);
+        codeBox.setFolderStructureHeading("Something");
+        codeBox.setPackagesHeading("My Packages");
         codeBox.applyMemento(memento);
 
         expect(codeBox.getCodeViews().length).toBe(6);
@@ -1604,5 +1666,7 @@ describe("createMemento() + applyMemento()", () => {
         expect(codeBox.getFile("something.zip")).not.toBeNull();
         expect(codeBox.getFile("io.github.jirkasa.data/data.xls")).not.toBeNull();
         expect(codeBox.getFile("default_data.xls")).not.toBeNull();
+        expect(codeBox.getFolderStructureHeading()).toBe("Folder structure");
+        expect(codeBox.getPackagesHeading()).toBe("Packages");
     });
 });
