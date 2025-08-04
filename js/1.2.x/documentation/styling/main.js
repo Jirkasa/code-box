@@ -1,4 +1,4 @@
-import { CodeView, TabCodeBox, ProjectCodeBox } from "../../../../code-box/v1.1.x/index";
+import { CodeView, TabCodeBox, ProjectCodeBox } from "../../../../code-box/v1.2.x/index";
 
 const cssCodeSwitches = document.querySelectorAll("[data-css-code-switch]");
 cssCodeSwitches.forEach(codeSwitch => {

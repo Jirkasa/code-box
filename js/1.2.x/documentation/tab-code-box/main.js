@@ -1,4 +1,4 @@
-import { TabCodeBox } from "../../../../code-box/v1.1.x/index";
+import { TabCodeBox } from "../../../../code-box/v1.2.x/index";
 
 new TabCodeBox(document.getElementById("CreateTabCodeBoxExample"), {
     svgSpritePath: "../../../static/icon-sprite.svg",

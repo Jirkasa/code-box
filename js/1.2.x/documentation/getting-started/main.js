@@ -1,4 +1,4 @@
-import { CodeView, TabCodeBox, ProjectCodeBox, TabCodeBoxCreator } from "../../../../code-box/v1.1.x/index";
+import { CodeView, TabCodeBox, ProjectCodeBox, TabCodeBoxCreator } from "../../../../code-box/v1.2.x/index";
 
 new CodeView(document.getElementById("MyCodeView"));
 

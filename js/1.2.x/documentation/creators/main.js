@@ -1,4 +1,4 @@
-import { CodeViewCreator, TabCodeBoxCreator, ProjectCodeBoxCreator, VirtualCodeBoxCreator } from "../../../../code-box/v1.1.x/index";
+import { CodeViewCreator, TabCodeBoxCreator, ProjectCodeBoxCreator, VirtualCodeBoxCreator } from "../../../../code-box/v1.2.x/index";
 
 const codeViewCreator = new CodeViewCreator();
 codeViewCreator.create("[data-my-code-view]");

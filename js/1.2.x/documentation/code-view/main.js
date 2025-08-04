@@ -1,4 +1,4 @@
-import { CodeView } from "../../../../code-box/v1.1.x/index";
+import { CodeView } from "../../../../code-box/v1.2.x/index";
 
 const optionCodeSwitches = document.querySelectorAll("[data-option-code-switch]");
 optionCodeSwitches.forEach(codeSwitch => {

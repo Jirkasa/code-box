@@ -1,4 +1,4 @@
-import { CodeView, TabCodeBox } from "../../../../code-box/v1.1.x/index";
+import { CodeView, TabCodeBox } from "../../../../code-box/v1.2.x/index";
 
 const highlightBoxExampleCodeView = new CodeView(document.getElementById("HighlightBoxExample"));
 const highlightBox = highlightBoxExampleCodeView.addHighlight("1");

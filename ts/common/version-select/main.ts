@@ -1,5 +1,5 @@
 function initVersionSelect() {
-    const oldVersions = ["1.2.x", "1.1.x", "1.0.x"];
+    const oldVersions = ["1.3.x", "1.2.x", "1.1.x", "1.0.x"];
 
     const versionSelect = document.getElementById("VersionSelect");
     if (!(versionSelect instanceof HTMLSelectElement)) return;

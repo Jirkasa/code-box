@@ -1,4 +1,4 @@
-import { ProjectCodeBox } from "../../../../code-box/v1.1.x/index";
+import { ProjectCodeBox } from "../../../../code-box/v1.2.x/index";
 
 new ProjectCodeBox(document.getElementById("CreateProjectCodeBoxExample"), {
     minCodeViewLinesCount: 20,
