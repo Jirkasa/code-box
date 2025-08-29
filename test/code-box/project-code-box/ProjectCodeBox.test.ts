@@ -53,6 +53,7 @@ beforeEach(() => {
     <pre data-cb-name="MyApp.java" data-cb-package="io.github.jirkasa" data-cb-active><code>some content</code></pre>
     <pre data-cb-name="Something.java" data-cb-package><code>some content</code></pre>
     <pre data-cb-name="pom.xml"><code>some content</code></pre>
+    <pre data-cb-name="root-file.txt" data-cb-folder="" data-cb-package="io.one"><code>something</code></pre>
 
     <div data-cb-name="Image.png" data-cb-file="../static/Image.png" data-cb-folder="assets/img"></div>
     <div data-cb-name="favicon.svg" data-cb-file="../static/favicon.svg" data-cb-folder="assets/img" data-cb-package="io.github.jirkasa"></div>
@@ -1597,9 +1598,9 @@ describe("reset()", () => {
 
         codeBox.reset();
 
-        expect(codeBox.getCodeViews().length).toBe(6);
+        expect(codeBox.getCodeViews().length).toBe(7);
         expect(codeBox.getFiles().length).toBe(5);
-        expect(codeBox.getPackages().length).toBe(2);
+        expect(codeBox.getPackages().length).toBe(3);
         expect(codeBox.folderExists("src/main/java")).toBe(true);
         expect(codeBox.folderExists("src/main/resources")).toBe(true);
         expect(codeBox.folderExists("src/main/webapp")).toBe(true);
@@ -1641,9 +1642,9 @@ describe("createMemento() + applyMemento()", () => {
         codeBox.setPackagesHeading("My Packages");
         codeBox.applyMemento(memento);
 
-        expect(codeBox.getCodeViews().length).toBe(6);
+        expect(codeBox.getCodeViews().length).toBe(7);
         expect(codeBox.getFiles().length).toBe(5);
-        expect(codeBox.getPackages().length).toBe(2);
+        expect(codeBox.getPackages().length).toBe(3);
         expect(codeBox.folderExists("src/main/java")).toBe(true);
         expect(codeBox.folderExists("src/main/resources")).toBe(true);
         expect(codeBox.folderExists("src/main/webapp")).toBe(true);
@@ -1669,4 +1670,14 @@ describe("createMemento() + applyMemento()", () => {
         expect(codeBox.getFolderStructureHeading()).toBe("Folder structure");
         expect(codeBox.getPackagesHeading()).toBe("Packages");
     });
+});
+
+it("should keep code view in root folder when data-cb-folder attribute is set and data-cb-package is set too", () => {
+    const codeBox = createCodeBox();
+
+    const codeView = codeBox.getCodeView("root-file.txt");
+
+    expect(codeView).not.toBeNull();
+    expect(codeView?.getFolderPath()).toBe("");
+    expect(codeView?.getPackage()).toBe("io.one");
 });

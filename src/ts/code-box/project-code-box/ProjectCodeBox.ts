@@ -1918,7 +1918,8 @@ class ProjectCodeBox extends CodeBox {
      * @returns Folder path or null if folder path is not defined in dataset.
      */
     private static getFolderPathFromDataset(dataset : DOMStringMap) : string | null {
-        return dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Folder"] || null;
+        const folderPath = dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Folder"];
+        return folderPath !== undefined ? folderPath : null;
     }
 
     /**
