@@ -225,6 +225,17 @@ describe("changeCodeViewIdentifier()", () => {
         expect(result).toBe(true);
     });
 
+    it("should change identifier of code view (input with leading slash)", () => {
+        const codeBox = createCodeBox();
+
+        const result = codeBox.changeCodeViewIdentifier("/js/main.js", "/ts/main.ts");
+
+        expect(codeBox.getCodeView("js/main.js")).toBeNull();
+        expect(codeBox.getCodeView("ts/main.ts")).not.toBeNull();
+        expect(codeBox.getCodeView("ts/main.ts")?.getIdentifier()).toBe("ts/main.ts");
+        expect(result).toBe(true);
+    });
+
     it("should return false if code view is not found", () => {
         const codeBox = createCodeBox();
 
@@ -618,6 +629,17 @@ describe("changeFileIdentifier()", () => {
 
         expect(codeBox.getFile("assets/img/Image.png")).toBeNull();
         expect(codeBox.getFile("assets/images/MyImage.png")).not.toBeNull();
+        expect(result).toBe(true);
+    });
+
+    it("should change identifier of file (input with leading slash)", () => {
+        const codeBox = createCodeBox();
+
+        const result = codeBox.changeFileIdentifier("/assets/img/Image.png", "/assets/images/MyImage.png");
+
+        expect(codeBox.getFile("assets/img/Image.png")).toBeNull();
+        expect(codeBox.getFile("assets/images/MyImage.png")).not.toBeNull();
+        expect(codeBox.getFile("assets/images/MyImage.png")?.getIdentifier()).toBe("assets/images/MyImage.png");
         expect(result).toBe(true);
     });
 

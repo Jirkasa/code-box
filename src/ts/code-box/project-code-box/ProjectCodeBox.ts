@@ -519,7 +519,7 @@ class ProjectCodeBox extends CodeBox {
         if (!codeView) return false;
 
         const codeViewEntry = this.codeViewEntries.get(codeView);
-        codeViewEntry?.codeBoxCodeViewManager.changeIdentifier(newIdentifier);
+        codeViewEntry?.codeBoxCodeViewManager.changeIdentifier(this.foldersManager.getNormalizedFolderPath(newIdentifier));
 
         return true;
     }
@@ -767,7 +767,7 @@ class ProjectCodeBox extends CodeBox {
         if (!codeBoxFile) return false;
 
         const fileEntry = this.fileEntries.get(codeBoxFile);
-        fileEntry?.codeBoxFileManager.changeIdentifier(newIdentifier);
+        fileEntry?.codeBoxFileManager.changeIdentifier(this.foldersManager.getNormalizedFolderPath(newIdentifier));
 
         return true;
     }
