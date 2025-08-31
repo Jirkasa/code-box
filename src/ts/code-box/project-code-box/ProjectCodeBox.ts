@@ -1041,8 +1041,27 @@ class ProjectCodeBox extends CodeBox {
             const packageFolderPath = this.foldersManager.getFolderPathToRemovePackage(name);
             if (packageFolderPath !== null) {
                 if (removeAllCodeViewsAndFiles) {
+                    const codeViews = this.foldersManager.getCodeViewsInPackage(name);
+                    const codeBoxFiles = this.foldersManager.getFilesInPackage(name);
+
                     const success = this.foldersManager.removePackage(name, true);
                     if (!success) return false;
+
+                    for (let codeView of codeViews) {
+                        const codeViewEntry = this.codeViewEntries.get(codeView);
+                        codeViewEntry?.codeBoxCodeViewManager.unlinkCodeBox();
+                        this.codeViewEntries.delete(codeView);
+
+                        if (codeView === activeCodeView) {
+                            this.changeActiveCodeView(null);
+                        }
+                    }
+
+                    for (let codeBoxFile of codeBoxFiles) {
+                        const fileEntry = this.fileEntries.get(codeBoxFile);
+                        fileEntry?.codeBoxFileManager.unlinkCodeBox();
+                        this.fileEntries.delete(codeBoxFile);
+                    }
                 }
                 const success = this.removeFolder(packageFolderPath);
 

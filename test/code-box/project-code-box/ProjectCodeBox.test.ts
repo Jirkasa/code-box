@@ -1274,6 +1274,18 @@ describe("removePackage()", () => {
         expect(codeBox.getCodeView("MyApp.java")).toBeNull();
         expect(codeBox.getFile("assets/img/favicon.svg")).toBeNull();
     });
+
+    it("should remove package, its folder, code views and files when createFoldersForPackages options is enabled and true is passed as second and last parameter", () => {
+        const codeBox = createCodeBox({ createFoldersForPackages: true, foldersDelimiterForPackages: "."});
+
+        const result = codeBox.removePackage("io.one", true, true);
+
+        expect(result).toBe(true);
+        expect(codeBox.packageExists("io.one")).toBe(false);
+        expect(codeBox.folderExists("io/one")).toBe(false);
+        expect(codeBox.getCodeView("root-file.txt")).toBeNull();
+        expect(codeBox.getCodeViews().length).toBe(6);
+    });
 });
 
 describe("renamePackage()", () => {
