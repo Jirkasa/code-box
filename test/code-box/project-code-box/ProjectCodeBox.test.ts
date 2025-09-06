@@ -63,6 +63,8 @@ beforeEach(() => {
 </div>
 
     <pre id="MyCodeView"><code>some content</code></pre>
+
+<div id="MyEmptyProjectCodeBox"></div>
     </body>
     </html>
     `);
@@ -70,6 +72,12 @@ beforeEach(() => {
 
 function createCodeBox(options : ProjectCodeBoxOptions = {}) : ProjectCodeBox {
     const codeBox = new ProjectCodeBox(document.getElementById("MyProjectCodeBox") as HTMLElement, options);
+    codeBox.init();
+    return codeBox;
+}
+
+function createEmptyCodeBox(options : ProjectCodeBoxOptions = {}) : ProjectCodeBox {
+    const codeBox = new ProjectCodeBox(document.getElementById("MyEmptyProjectCodeBox") as HTMLElement, options);
     codeBox.init();
     return codeBox;
 }
@@ -893,6 +901,24 @@ describe("renameFolder()", () => {
         expect(codeBox.packageExists("io.github.something.data")).toBe(true);
         expect(codeBox.getFile("src/main/java/io/github/jirkasa/data/data.xls")).toBeNull();
         expect(codeBox.getFile("src/main/java/io/github/something/data/data.xls")?.getIdentifier()).toBe("src/main/java/io/github/something/data/data.xls");
+    });
+
+    it("should rename package when there are two almost same packages but with first folder different", () => {
+        const codeBox = createEmptyCodeBox({ packagesFolderPath: "src/main/java", foldersDelimiterForPackages: "."});
+        codeBox.addPackage("io.github.jirkasa");
+        codeBox.addPackage("ios.github.jirkasa");
+
+        const result = codeBox.renameFolder("src/main/java/io/github", "githube");
+
+        expect(result).toBe(true);
+        expect(codeBox.folderExists("src/main/java/io/github/jirkasa")).toBe(false);
+        expect(codeBox.folderExists("src/main/java/io/githube/jirkasa")).toBe(true);
+        expect(codeBox.folderExists("src/main/java/ios/github/jirkasa")).toBe(true);
+        expect(codeBox.folderExists("src/main/java/ios/githube/jirkasa")).toBe(false);
+        expect(codeBox.packageExists("io.github.jirkasa")).toBe(false);
+        expect(codeBox.packageExists("io.githube.jirkasa")).toBe(true);
+        expect(codeBox.packageExists("ios.github.jirkasa")).toBe(true);
+        expect(codeBox.packageExists("ios.githube.jirkasa")).toBe(false);
     });
 
     it("should return false if folder does not exist", () => {

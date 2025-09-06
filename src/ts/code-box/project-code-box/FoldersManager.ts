@@ -386,6 +386,12 @@ class FoldersManager {
 
                 if (parsedPackageName.length-1 < index) return;
                 if (parsedPackageName[index] !== oldName) return;
+                // Check if the entire path up to the renamed folder matches
+                for (let i = 0; i < packagesFolderNames.length - 1; i++) {
+                    if (i >= parsedPackageName.length || parsedPackageName[i] !== packagesFolderNames[i]) {
+                        return;
+                    }
+                }
 
                 parsedPackageName[index] = newName;
 
