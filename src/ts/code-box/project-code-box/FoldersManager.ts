@@ -669,9 +669,31 @@ class FoldersManager {
         let folder = this.getFolder(packageFolderPath);
         if (!folder) return null;
 
+        const codeViewsInFolder = new Set<CodeView>();
+        for (const item of folder.getCodeViews()) {
+            codeViewsInFolder.add(item.codeView);
+        }
+        const filesInFolder = new Set<ProjectCodeBoxFile>();
+        for (const item of folder.getFiles()) {
+            filesInFolder.add(item.codeBoxFile);
+        }
+
+        let packageCodeViewsCountInFolderOfPackage = 0;
+        for (const item of packageFolder.getCodeViews()) {
+            if (codeViewsInFolder.has(item.codeView)) {
+                packageCodeViewsCountInFolderOfPackage++;
+            }
+        }
+        let packageFilesCountInFolderOfPackage = 0;
+        for (const item of packageFolder.getFiles()) {
+            if (filesInFolder.has(item.codeBoxFile)) {
+                packageFilesCountInFolderOfPackage++;
+            }
+        }
+
         if (
-            folder.getCodeViewsCount() > packageFolder.getCodeViewsCount()
-            || folder.getFilesCount() > packageFolder.getFilesCount()
+            folder.getCodeViewsCount() > packageCodeViewsCountInFolderOfPackage
+            || folder.getFilesCount() > packageFilesCountInFolderOfPackage
             || folder.getFoldersCount() > 0
         ) return null;
 

@@ -3,6 +3,7 @@ import { Window } from 'happy-dom';
 import ProjectCodeBox from '../../../src/ts/code-box/project-code-box/ProjectCodeBox';
 import ProjectCodeBoxOptions from '../../../src/ts/code-box/project-code-box/ProjectCodeBoxOptions';
 import CodeView from '../../../src/ts/code-view/CodeView';
+import CodeViewOptions from '../../../src/ts/code-view/CodeViewOptions';
 
 const window = new Window();
 vi.stubGlobal('window', window);
@@ -80,6 +81,14 @@ function createEmptyCodeBox(options : ProjectCodeBoxOptions = {}) : ProjectCodeB
     const codeBox = new ProjectCodeBox(document.getElementById("MyEmptyProjectCodeBox") as HTMLElement, options);
     codeBox.init();
     return codeBox;
+}
+
+function createCodeView(code: string | null = null, options?: CodeViewOptions) : CodeView {
+    const preElement = document.createElement("pre");
+    const codeElement = document.createElement("code");
+    codeElement.textContent = code || "";
+    preElement.appendChild(codeElement);
+    return new CodeView(preElement, options);
 }
 
 describe("addCodeView()", () => {
@@ -1311,6 +1320,24 @@ describe("removePackage()", () => {
         expect(codeBox.folderExists("io/one")).toBe(false);
         expect(codeBox.getCodeView("root-file.txt")).toBeNull();
         expect(codeBox.getCodeViews().length).toBe(6);
+    });
+
+    it("should not remove folder when folder contains other code view and package has code view in different folder", () => {
+        const codeBox = createEmptyCodeBox({ createFoldersForPackages: true, foldersDelimiterForPackages: ".", packagesFolderPath: "src"});
+        codeBox.addCodeView("src/io/test/test.txt", createCodeView("test"));
+        codeBox.addPackage("io.test");
+        codeBox.addCodeView("src/io/test/test2.txt", createCodeView("test2"));
+        codeBox.changeCodeViewPackage("src/io/test/test2.txt", "io.test", false);
+        codeBox.addCodeView("test3.txt", createCodeView("test3"));
+        codeBox.changeCodeViewPackage("test3.txt", "io.test", true);
+
+        const result = codeBox.removePackage("io.test", true, false);
+        expect(result).toBe(true);
+        expect(codeBox.packageExists("io.test")).toBe(false);
+        expect(codeBox.folderExists("src/io/test")).toBe(true);
+        expect(codeBox.getCodeView("src/io/test/test.txt")).not.toBeNull();
+        expect(codeBox.getCodeView("src/io/test/test2.txt")).toBeNull();
+        expect(codeBox.getCodeView("test3.txt")).not.toBeNull();
     });
 });
 
