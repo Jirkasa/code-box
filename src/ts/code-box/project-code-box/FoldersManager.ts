@@ -1632,7 +1632,9 @@ class FoldersManager {
         if (normalizedPackageName === null) {
             if (!this.defaultPackage) {
                 if (createIfNotExist) {
-                    this.getFolder(this.packagesFolderPath, true);
+                    if (this.createFoldersForPackages) {
+                        this.getFolder(this.packagesFolderPath, true);
+                    }
                     this.defaultPackage = new Folder(
                         this.defaultPackageName,
                         this.panelOpened,

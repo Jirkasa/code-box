@@ -339,6 +339,19 @@ describe("changeCodeViewPackage()", () => {
         expect(codeView?.getFolderPath()).toBe("css");
         expect(codeView?.getPackage()).toBeNull();
     });
+
+    it("should not create any folders when package is changed to default for code view passing true as keepFolderPath parameter and createFoldersForPackages options is set to false", () => {
+        const codeBox = createEmptyCodeBox({ packagesFolderPath: "src/main/java", createFoldersForPackages: false });
+        codeBox.addCodeView("test.txt", createCodeView("some content"));
+
+        codeBox.changeCodeViewPackage("test.txt", null, true);
+
+        expect(codeBox.folderExists("src/main/java")).toBe(false);
+        expect(codeBox.folderExists("src/main")).toBe(false);
+        expect(codeBox.folderExists("src")).toBe(false);
+        expect(codeBox.getCodeView("test.txt")?.getFolderPath()).toBe("");
+        expect(codeBox.getCodeView("test.txt")?.getPackage()).toBeNull();
+    });
 });
 
 describe("removeCodeViewPackage()", () => {
@@ -745,6 +758,19 @@ describe("changeFilePackage()", () => {
         expect(result).toBe(true);
         expect(file?.getFolderPath()).toBe("assets/img");
         expect(file?.getPackage()).toBeNull();
+    });
+
+    it("should not create any folders when package is changed to default for file passing true as keepFolderPath parameter and createFoldersForPackages options is set to false", () => {
+        const codeBox = createEmptyCodeBox({ packagesFolderPath: "src/main/java", createFoldersForPackages: false });
+        codeBox.addFile("test.txt");
+
+        codeBox.changeFilePackage("test.txt", null, true);
+
+        expect(codeBox.folderExists("src/main/java")).toBe(false);
+        expect(codeBox.folderExists("src/main")).toBe(false);
+        expect(codeBox.folderExists("src")).toBe(false);
+        expect(codeBox.getFile("test.txt")?.getFolderPath()).toBe("");
+        expect(codeBox.getFile("test.txt")?.getPackage()).toBeNull();
     });
 });
 
