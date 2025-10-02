@@ -607,15 +607,61 @@ class FoldersManager {
     }
 
     /**
+     * Checks whether package can be renamed without any conflicts.
+     * @param oldPackageName Old package name.
+     * @param newPackageName New package name.
+     * @returns Indicates whether package can be renamed without any conflicts.
+     */
+    public canPackageBeRenamed(oldPackageName : string, newPackageName : string) : boolean {
+        if (!this.packageExists(oldPackageName)) return false;
+        if (this.packageExists(newPackageName)) return false;
+
+        if (!this.createFoldersForPackages) return true;
+
+        const oldPackageFolderPath = this.getPackageFolderPath(oldPackageName);
+        if (oldPackageFolderPath === null) return false;
+        const newPackageFolderPath = this.getPackageFolderPath(newPackageName, false);
+        if (newPackageFolderPath === null) return false;
+
+        const oldPackageFolder = this.getFolder(this.parseFolderPath(oldPackageFolderPath));
+        if (!oldPackageFolder) return false;
+
+        const newPackageFolder = this.getFolder(this.parseFolderPath(newPackageFolderPath));
+        if (!newPackageFolder) return true;
+
+        const codeViewNamesInFolder = new Set<string>();
+        const fileNamesInFolder = new Set<string>();
+        for (const codeViewName of newPackageFolder.getCodeViewNames()) {
+            codeViewNamesInFolder.add(codeViewName);
+        }
+        for (const fileName of newPackageFolder.getFileNames()) {
+            fileNamesInFolder.add(fileName);
+        }
+
+        for (const codeViewName of oldPackageFolder.getCodeViewNames()) {
+            const codeView = this.codeViewFolderAndPackageMappings.getPackageItemByFileFolderPath(oldPackageFolderPath, codeViewName);
+            if (!codeView) continue;
+            if (codeViewNamesInFolder.has(codeViewName)) return false;
+        }
+        for (const fileName of oldPackageFolder.getFileNames()) {
+            const file = this.fileFolderAndPackageMappings.getPackageItemByFileFolderPath(oldPackageFolderPath, fileName);
+            if (!file) continue;
+            if (fileNamesInFolder.has(fileName)) return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Returns folder path for package.
      * @param packageName Package name.
      * @returns Package folder path or null if package does not exists.
      */
-    public getPackageFolderPath(packageName : string | null) : string | null {
+    public getPackageFolderPath(packageName : string | null, checkPackageExistence : boolean = true) : string | null {
         if (packageName === null) return this.packagesFolderPath.join("/");
         packageName = this.normalizePackageName(packageName);
 
-        if (!this.packageExists(packageName)) return null;
+        if (!this.packageExists(packageName) && checkPackageExistence) return null;
         if (!this.createFoldersForPackages) return this.packagesFolderPath.join("/");
 
         let parsedPackageName : string[];

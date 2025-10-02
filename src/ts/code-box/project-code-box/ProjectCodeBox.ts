@@ -1175,8 +1175,7 @@ class ProjectCodeBox extends CodeBox {
 
         newName = this.foldersManager.getSanitizedNormalizedPackageName(newName);
 
-        if (!this.foldersManager.packageExists(name)) return false;
-        if (this.foldersManager.packageExists(newName)) return false;
+        if (!this.foldersManager.canPackageBeRenamed(name, newName)) return false;
 
         const codeViews = this.foldersManager.getCodeViewsInPackage(name);
         const codeBoxFiles = this.foldersManager.getFilesInPackage(name);

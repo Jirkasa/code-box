@@ -331,6 +331,16 @@ class Folder {
     }
 
     /**
+     * Returns names of code view items in folder (not including code view items in subfolders).
+     * @returns Code view names.
+     */
+    public getCodeViewNames() : string[] {
+        const codeViewNames = new Array<string>();
+        this.codeViewItems.forEach((_, name) => codeViewNames.push(name));
+        return codeViewNames;
+    }
+
+    /**
      * Removes code view item.
      * @param name Name of code view.
      * @returns Indicates whether code view item was successfully found and removed.
@@ -410,6 +420,16 @@ class Folder {
         }
 
         return fileItems;
+    }
+    
+    /**
+     * Returns names of file items in folder (not including file items in subfolders).
+     * @returns File names.
+     */
+    public getFileNames() : string[] {
+        const fileNames = new Array<string>();
+        this.fileItems.forEach((_, name) => fileNames.push(name));
+        return fileNames;
     }
 
     /**

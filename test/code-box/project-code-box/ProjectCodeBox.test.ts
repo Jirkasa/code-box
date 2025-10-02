@@ -1426,6 +1426,44 @@ describe("renamePackage()", () => {
         expect(codeBox.folderExists("some/other/package")).toBe(false);
         expect(codeBox.folderExists("some/other")).toBe(true);
     });
+
+    it("should not rename package when new folder for package contains code view or file with the same name", () => {
+        const codeBox = createEmptyCodeBox({ createFoldersForPackages: true });
+        codeBox.addCodeView("test2/test.txt", createCodeView("test"));
+        codeBox.addPackage("test");
+        codeBox.addCodeView("test/test.txt", createCodeView("test2"));
+        codeBox.changeCodeViewPackage("test/test.txt", "test", false);
+
+        const result = codeBox.renamePackage("test", "test2");
+
+        expect(result).toBe(false);
+        expect(codeBox.packageExists("test")).toBe(true);
+        expect(codeBox.packageExists("test2")).toBe(false);
+        expect(codeBox.folderExists("test")).toBe(true);
+        expect(codeBox.folderExists("test2")).toBe(true);
+        expect(codeBox.getCodeView("test2/test.txt")).not.toBeNull();
+        expect(codeBox.getCodeView("test/test.txt")).not.toBeNull();
+    });
+
+    it("should rename package when new folder for package contains code view or file with the same name as the code view or file in the old folder that is not part of the package", () => {
+        const codeBox = createEmptyCodeBox({ createFoldersForPackages: true });
+        codeBox.addCodeView("test2/test.txt", createCodeView("test"));
+        codeBox.addPackage("test");
+        codeBox.addCodeView("test/test.txt", createCodeView("test2"));
+
+        const result = codeBox.renamePackage("test", "test2");
+
+        expect(result).toBe(true);
+        expect(codeBox.packageExists("test")).toBe(false);
+        expect(codeBox.packageExists("test2")).toBe(true);
+        expect(codeBox.folderExists("test")).toBe(true);
+        expect(codeBox.folderExists("test2")).toBe(true);
+        expect(codeBox.getCodeViewsByPackage("test2").length).toBe(0);
+        expect(codeBox.getCodeView("test2/test.txt")).not.toBeNull();
+        expect(codeBox.getCodeView("test/test.txt")).not.toBeNull();
+        expect(codeBox.getCodeView("test2/test.txt")?.getPackage()).toBeUndefined();
+        expect(codeBox.getCodeView("test/test.txt")?.getPackage()).toBeUndefined();
+    });
 });
 
 describe("openPackage()", () => {
