@@ -655,7 +655,8 @@ class FoldersManager {
     /**
      * Returns folder path for package.
      * @param packageName Package name.
-     * @returns Package folder path or null if package does not exists.
+     * @param checkPackageExistence Determines whether should be checked if package exists.
+     * @returns Package folder path or null if package does not exists and checkPackageExistence parameter is true.
      */
     public getPackageFolderPath(packageName : string | null, checkPackageExistence : boolean = true) : string | null {
         if (packageName === null) return this.packagesFolderPath.join("/");
