@@ -640,12 +640,12 @@ class FoldersManager {
 
         for (const codeViewName of oldPackageFolder.getCodeViewNames()) {
             const codeView = this.codeViewFolderAndPackageMappings.getPackageItemByFileFolderPath(oldPackageFolderPath, codeViewName);
-            if (!codeView) continue;
+            if (!codeView || codeView.packageName !== oldPackageName) continue;
             if (codeViewNamesInFolder.has(codeViewName)) return false;
         }
         for (const fileName of oldPackageFolder.getFileNames()) {
             const file = this.fileFolderAndPackageMappings.getPackageItemByFileFolderPath(oldPackageFolderPath, fileName);
-            if (!file) continue;
+            if (!file || file.packageName !== oldPackageName) continue;
             if (fileNamesInFolder.has(fileName)) return false;
         }
 
