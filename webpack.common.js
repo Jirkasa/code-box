@@ -34,6 +34,7 @@ function createHtmlWebpackPluginsForPagesInFolder(folderName, version) {
 }
 
 const documentationPages = createHtmlWebpackPluginsForPagesInFolder("documentation");
+const documentationV15xPages = createHtmlWebpackPluginsForPagesInFolder("1.5.x/documentation", "1.5.x");
 const documentationV14xPages = createHtmlWebpackPluginsForPagesInFolder("1.4.x/documentation", "1.4.x");
 const documentationV13xPages = createHtmlWebpackPluginsForPagesInFolder("1.3.x/documentation", "1.3.x");
 const documentationV12xPages = createHtmlWebpackPluginsForPagesInFolder("1.2.x/documentation", "1.2.x");
@@ -56,6 +57,17 @@ module.exports = {
         "documentation-virtual-code-box": "./js/documentation/virtual-code-box/main.js",
         "documentation-creators": "./js/documentation/creators/main.js",
         "documentation-other-components": "./js/documentation/other-components/main.js",
+        // VERSION 1.5.x
+        "examples-v15x": "./js/1.5.x/examples/main.js",
+        "documentation-getting-started-v15x": "./js/1.5.x/documentation/getting-started/main.js",
+        "documentation-styling-v15x": "./js/1.5.x/documentation/styling/main.js",
+        "documentation-code-view-v15x": "./js/1.5.x/documentation/code-view/main.js",
+        "documentation-code-box-v15x": "./js/1.5.x/documentation/code-box/main.js",
+        "documentation-tab-code-box-v15x": "./js/1.5.x/documentation/tab-code-box/main.js",
+        "documentation-project-code-box-v15x": "./js/1.5.x/documentation/project-code-box/main.js",
+        "documentation-virtual-code-box-v15x": "./js/1.5.x/documentation/virtual-code-box/main.js",
+        "documentation-creators-v15x": "./js/1.5.x/documentation/creators/main.js",
+        "documentation-other-components-v15x": "./js/1.5.x/documentation/other-components/main.js",
         // VERSION 1.4.x
         "examples-v14x": "./js/1.4.x/examples/main.js",
         "documentation-getting-started-v14x": "./js/1.4.x/documentation/getting-started/main.js",
@@ -180,6 +192,12 @@ module.exports = {
             inject: true
         }),
         new HtmlWebpackPlugin({
+            template: path.resolve(__dirname, "pages", "1.5.x", "examples", "index.ejs"),
+            chunks: ["style", "common", "examples-v15x"],
+            filename: `1.5.x/examples/index.html`,
+            inject: true
+        }),
+        new HtmlWebpackPlugin({
             template: path.resolve(__dirname, "pages", "1.4.x", "examples", "index.ejs"),
             chunks: ["style", "common", "examples-v14x"],
             filename: `1.4.x/examples/index.html`,
@@ -210,6 +228,7 @@ module.exports = {
             inject: true
         }),
         ...documentationPages,
+        ...documentationV15xPages,
         ...documentationV14xPages,
         ...documentationV13xPages,
         ...documentationV12xPages,
