@@ -54,7 +54,7 @@ beforeEach(() => {
     <pre data-cb-name="MyApp.java" data-cb-package="io.github.jirkasa" data-cb-active><code>some content</code></pre>
     <pre data-cb-name="Something.java" data-cb-package><code>some content</code></pre>
     <pre data-cb-name="pom.xml"><code>some content</code></pre>
-    <pre data-cb-name="root-file.txt" data-cb-folder="" data-cb-package="io.one"><code>something</code></pre>
+    <pre data-cb-name="root-file.txt" data-cb-highlight="1" data-cb-folder="" data-cb-package="io.one"><code>something</code></pre>
 
     <div data-cb-name="Image.png" data-cb-file="../static/Image.png" data-cb-folder="assets/img"></div>
     <div data-cb-name="favicon.svg" data-cb-file="../static/favicon.svg" data-cb-folder="assets/img" data-cb-package="io.github.jirkasa"></div>
@@ -1831,4 +1831,23 @@ it("should keep code view in root folder when data-cb-folder attribute is set an
     expect(codeView).not.toBeNull();
     expect(codeView?.getFolderPath()).toBe("");
     expect(codeView?.getPackage()).toBe("io.one");
+});
+
+it("should have code view with highlight", () => {
+    const codeBox = createCodeBox();
+
+    const codeView = codeBox.getCodeView("root-file.txt");
+
+    expect(codeView).not.toBeNull();
+    expect(codeView?.getHighlightBoxes().length).toBe(1);
+});
+
+it("should not inherit code view highlight", () => {
+    const codeBox = createCodeBox();
+    const codeBox2 = new ProjectCodeBox(document.getElementById("MyEmptyProjectCodeBox") as HTMLElement, {}, codeBox);
+    codeBox2.init();
+
+    const codeView = codeBox2.getCodeView("root-file.txt");
+
+    expect(codeView?.getHighlightBoxes().length).toBe(0);
 });

@@ -100,10 +100,11 @@ class CodeBoxCodeView<T extends CodeBox = CodeBox> {
 
     /**
      * Returns copy of code view.
+     * @param clearHighlights Indicates whether highlights should be cleared in created copy (defaults to false).
      * @returns Copy of code view.
      */
-    public clone() : CodeView {
-        return this.codeView.clone();
+    public clone(clearHighlights : boolean = false) : CodeView {
+        return this.codeView.clone(clearHighlights);
     }
 
     /**

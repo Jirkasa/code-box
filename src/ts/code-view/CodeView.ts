@@ -153,11 +153,19 @@ class CodeView {
 
     /**
      * Creates copy of code view.
+     * @param clearHighlights Indicates whether highlights should be cleared in created copy (defaults to false).
      * @returns Copy of code view.
      */
-    public clone() : CodeView {
+    public clone(clearHighlights : boolean = false) : CodeView {
         const preElementCopy = this.preElement.cloneNode(true) as HTMLPreElement;
         preElementCopy.removeAttribute("id");
+
+        const initialOptionsCopy = createCodeViewOptionsCopy(this.initialOptions);
+        if (clearHighlights) {
+            preElementCopy.dataset[GlobalConfig.DATA_ATTRIBUTE_PREFIX + "Highlight"] = "";
+            initialOptionsCopy.highlight = undefined;
+        }
+        
         return new CodeView(preElementCopy, this.initialOptions);
     }
 

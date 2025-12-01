@@ -120,7 +120,7 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
             const codeBoxCodeView = codeBox.getCodeView(codeViewEntry.identifier);
 
             if (!codeBoxCodeView) {
-                let codeView = codeViewEntry.codeView.clone();
+                let codeView = codeViewEntry.codeView.clone(true);
                 codeView.applyMemento(codeViewEntry.codeViewMemento);
                 codeView.removeHighlights();
                 codeBox.addCodeView(codeViewEntry.identifier, codeView);
