@@ -1,5 +1,5 @@
-<%- include("../../includes/page-start.ejs", {pathToRootFolder: "../../", useHighlightJS: true, title: "Code View", metaDescription: "Learn how to use CodeView, a core component of the Code Box library, to display and customize code samples."}) %>
-    <%- include("../../includes/header.ejs", {pathToRootFolder: "../../", activeLink: "documentation"}) %>
+<%- include("../../../includes/page-start.ejs", {pathToRootFolder: "../../../", useHighlightJS: true, title: "Code View", metaDescription: "Learn how to use CodeView, a core component of the Code Box library, to display and customize code samples."}) %>
+    <%- include("../../../includes/header.ejs", {pathToRootFolder: "../../../", activeLink: "documentation"}) %>
     <%- include("../../includes/documentation-page-start.ejs") %>
         <h1 class="u-mb-4">Code View</h1>
         <p class="u-mb-6">CodeView is one of the core components of the library. While it is used by code boxes, it can also be created independently. It simply represents a code sample.</p>
@@ -209,17 +209,6 @@
         <h3 id="clone-method" class="method-heading u-mb-1">clone</h3>
         <p class="method-signature u-mb-2">clone(): <a href="../code-view/" class="method-signature__link">CodeView</a></p>
         <p class="u-mb-2">Creates a copy of code view. The copy reflects the state after initialization with the original options and does not include any changes made by subsequent method calls.</p>
-        <h4 class="u-mb-1">Params</h4>
-        <div class="table-wrapper u-mb-2">
-            <table class="properties-table">
-                <tbody>
-                    <tr>
-                        <th scope="row">clearHighlights <span class="properties-table__type">?: boolean</span></th>
-                        <td>Indicates whether highlights should be cleared in created copy (defaults to false).</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
         <h4 class="u-mb-1">Returns</h4>
         <div class="table-wrapper u-mb-4">
             <table class="properties-table">
@@ -365,6 +354,6 @@
                 </tbody>
             </table>
         </div>
-    <%- include("../../includes/documentation-page-end.ejs", {pathToRootFolder: "../../", activeLink: "code-view"}) %>
-    <%- include("../../includes/footer.ejs") %>
-<%- include("../../includes/page-end.ejs") %>
+    <%- include("../../includes/documentation-page-end.ejs", {pathToRootFolder: "../../../", activeLink: "code-view"}) %>
+    <%- include("../../../includes/footer.ejs") %>
+<%- include("../../../includes/page-end.ejs") %>
