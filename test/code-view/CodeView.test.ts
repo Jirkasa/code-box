@@ -179,6 +179,17 @@ describe("addHighlight()", () => {
         expect(highlight.getEnd()).toBe(3);
         expect(highlight.hasCustomCssClass("myClass")).toBe(true);
     });
+    it("should add highlight with multiple custom CSS classes", () => {
+        const codeView = createCodeView();
+
+        codeView.addHighlight(1, 3, ["class1", "class2"]);
+        const highlight = codeView.getHighlightBoxes()[0];
+
+        expect(highlight.getStart()).toBe(1);
+        expect(highlight.getEnd()).toBe(3);
+        expect(highlight.hasCustomCssClass("class1")).toBe(true);
+        expect(highlight.hasCustomCssClass("class2")).toBe(true);
+    });
 });
 
 describe("removeHighlights()", ()=> {

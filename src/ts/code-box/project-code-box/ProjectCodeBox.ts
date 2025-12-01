@@ -1818,15 +1818,24 @@ class ProjectCodeBox extends CodeBox {
         if (typeof command.identifier !== "string") return;
         if (typeof command.start !== "number") return;
         if ((typeof command.end !== "number") && command.end !== undefined) return;
+        let addCustomCssClass = (typeof command.customCssClass === "string") || (Array.isArray(command.customCssClass));
+        if (addCustomCssClass && Array.isArray(command.customCssClass)) {
+            for (let cssClass of command.customCssClass) {
+                if (typeof cssClass !== "string") {
+                    addCustomCssClass = false;
+                    break;
+                }
+            }
+        }
         const codeView = this.foldersManager.getCodeViewByIdentifier(command.identifier);
         if (!codeView) return;
         const codeViewEntry = this.codeViewEntries.get(codeView);
         if (!codeViewEntry) return;
-        if (command.end !== undefined) {
-            codeViewEntry.codeBoxCodeView.addHighlight(command.start, command.end);
-        } else {
-            codeViewEntry.codeBoxCodeView.addHighlight(command.start);
-        }
+        codeViewEntry.codeBoxCodeView.addHighlight(
+            command.start,
+            command.end !== undefined ? command.end : command.start,
+            addCustomCssClass ? command.customCssClass : undefined
+        );
     }
 
     private processRemoveCodeViewHighlightCommand(command : any) : void {

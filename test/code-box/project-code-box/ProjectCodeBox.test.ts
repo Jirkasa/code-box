@@ -66,6 +66,20 @@ beforeEach(() => {
     <pre id="MyCodeView"><code>some content</code></pre>
 
 <div id="MyEmptyProjectCodeBox"></div>
+
+<div id="MyProjectCodeBox2">
+    <pre data-cb-name="file.txt"><code>some text</code></pre>
+    <script type="application/json" data-cb-commands>
+        [
+            {
+                "command": "add code view highlight",
+                "identifier": "file.txt",
+                "start": 1,
+                "customCssClass": "my-custom-class"
+            }
+        ]
+    </script>
+</div>
     </body>
     </html>
     `);
@@ -73,6 +87,12 @@ beforeEach(() => {
 
 function createCodeBox(options : ProjectCodeBoxOptions = {}) : ProjectCodeBox {
     const codeBox = new ProjectCodeBox(document.getElementById("MyProjectCodeBox") as HTMLElement, options);
+    codeBox.init();
+    return codeBox;
+}
+
+function createCodeBox2(options : ProjectCodeBoxOptions = {}) : ProjectCodeBox {
+    const codeBox = new ProjectCodeBox(document.getElementById("MyProjectCodeBox2") as HTMLElement, options);
     codeBox.init();
     return codeBox;
 }
@@ -1850,4 +1870,17 @@ it("should not inherit code view highlight", () => {
     const codeView = codeBox2.getCodeView("root-file.txt");
 
     expect(codeView?.getHighlightBoxes().length).toBe(0);
+});
+
+it("should have code view with highlight with custom CSS class", () => {
+    const codeBox = createCodeBox2();
+
+    const codeView = codeBox.getCodeView("file.txt");
+
+    expect(codeView).not.toBeNull();
+    expect(codeView?.getHighlightBoxes().length).toBe(1);
+    expect(codeView?.getHighlightBoxes()[0].getStart()).toBe(1);
+    expect(codeView?.getHighlightBoxes()[0].getEnd()).toBe(1);
+    expect(codeView?.getHighlightBoxes()[0].getCustomCssClasses().length).toBe(1);
+    expect(codeView?.getHighlightBoxes()[0].getCustomCssClasses()[0]).toBe("my-custom-class");
 });
