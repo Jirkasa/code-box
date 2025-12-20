@@ -4,6 +4,7 @@ import ProjectCodeBox from '../../../src/ts/code-box/project-code-box/ProjectCod
 import ProjectCodeBoxOptions from '../../../src/ts/code-box/project-code-box/ProjectCodeBoxOptions';
 import CodeView from '../../../src/ts/code-view/CodeView';
 import CodeViewOptions from '../../../src/ts/code-view/CodeViewOptions';
+import { ac } from 'vitest/dist/chunks/reporters.C_zwCd4j.js';
 
 const window = new Window();
 vi.stubGlobal('window', window);
@@ -68,7 +69,7 @@ beforeEach(() => {
 <div id="MyEmptyProjectCodeBox"></div>
 
 <div id="MyProjectCodeBox2">
-    <pre data-cb-name="file.txt"><code>some text</code></pre>
+    <pre data-cb-name="file.txt" data-cb-package data-cb-active><code>some text</code></pre>
     <script type="application/json" data-cb-commands>
         [
             {
@@ -1883,4 +1884,27 @@ it("should have code view with highlight with custom CSS class", () => {
     expect(codeView?.getHighlightBoxes()[0].getEnd()).toBe(1);
     expect(codeView?.getHighlightBoxes()[0].getCustomCssClasses().length).toBe(1);
     expect(codeView?.getHighlightBoxes()[0].getCustomCssClasses()[0]).toBe("my-custom-class");
+});
+
+it("should open package of active code view on reset when openActiveCodeViewPackageOnInit options is set to true", () => {
+    const codeBox = createCodeBox({ openActiveCodeViewPackageOnInit: true });
+
+    const activeCodeView = codeBox.getActiveCodeView();
+    const packageName = activeCodeView?.getPackage();
+    codeBox.reset();
+
+    expect(packageName).toBe("io.github.jirkasa");
+    expect(codeBox.isPackageOpened(packageName!)).toBe(true);
+});
+
+it("should open default package of active code view on reset when openActiveCodeViewPackageOnInit options is set to true", () => {
+    const codeBox = createCodeBox2({ openActiveCodeViewPackageOnInit: true });
+
+    const activeCodeView = codeBox.getActiveCodeView();
+    const packageName = activeCodeView?.getPackage();
+    codeBox.reset();
+
+    expect(activeCodeView).not.toBeNull();
+    expect(packageName).toBeNull();
+    expect(codeBox.isPackageOpened(packageName!)).toBe(true);
 });

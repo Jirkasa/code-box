@@ -28,6 +28,8 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
     private folderStructure : TreeNode<FolderInfo>[];
     /** Packages of code box when memento was created. */
     private packages : PackageInfo[];
+    /** Indicates whether default package was opened when memento was created. */
+    private isDefaultPackageOpened : boolean;
     /** Project name of code box when memento was created. */
     private projectName : string;
     /** Indicates whether panel was opened when memento was created. */
@@ -50,6 +52,7 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
      * @param activeCodeView Active code view.
      * @param folderStructure Folder structure.
      * @param packages Packages.
+     * @param isDefaultPackageOpened Indicates whether default package is opened.
      * @param packagesFolderPath Folder path for packages.
      * @param projectName Project name.
      * @param isPanelOpened Indicates whether panel is opened.
@@ -57,13 +60,14 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
      * @param folderStructureHeading Heading for folder structure.
      * @param packagesHeading Heading for packages.
      */
-    constructor(creator : ProjectCodeBox, addCodeViewToCreatorCodeBox : (identifier : string, codeView : CodeView) => void, codeViewEntries : ProjectCodeBoxCodeViewMementoEntry[], fileEntries : ProjectCodeBoxFileMementoEntry[], activeCodeView : CodeView | null, folderStructure : TreeNode<FolderInfo>[], packages : PackageInfo[], packagesFolderPath : string, projectName : string, isPanelOpened : boolean, isRootFolderOpened : boolean, folderStructureHeading : string, packagesHeading : string) {
+    constructor(creator : ProjectCodeBox, addCodeViewToCreatorCodeBox : (identifier : string, codeView : CodeView) => void, codeViewEntries : ProjectCodeBoxCodeViewMementoEntry[], fileEntries : ProjectCodeBoxFileMementoEntry[], activeCodeView : CodeView | null, folderStructure : TreeNode<FolderInfo>[], packages : PackageInfo[], isDefaultPackageOpened : boolean, packagesFolderPath : string, projectName : string, isPanelOpened : boolean, isRootFolderOpened : boolean, folderStructureHeading : string, packagesHeading : string) {
         super(creator, addCodeViewToCreatorCodeBox, codeViewEntries, fileEntries, activeCodeView);
 
         this.projectCodeBoxCodeViewEntries = codeViewEntries;
         this.projectCodeBoxFileEntries = fileEntries;
         this.folderStructure = folderStructure;
         this.packages = packages;
+        this.isDefaultPackageOpened = isDefaultPackageOpened;
         this.projectName = projectName;
         this.isPanelOpened = isPanelOpened;
         this.packagesFolderPath = packagesFolderPath;
@@ -108,6 +112,12 @@ class ProjectCodeBoxMemento extends CodeBoxMemento {
         for (let fileEntry of this.projectCodeBoxFileEntries) {
             if (fileEntry.package === undefined) continue;
             codeBox.changeFilePackage(fileEntry.identifier, fileEntry.package, true);
+        }
+
+        if (this.isDefaultPackageOpened) {
+            codeBox.openPackage(null, false);
+        } else {
+            codeBox.closePackage(null, false);
         }
     }
 

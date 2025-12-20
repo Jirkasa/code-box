@@ -1538,6 +1538,7 @@ class ProjectCodeBox extends CodeBox {
             this.getCurrentlyActiveCodeView(),
             this.foldersManager.getFolderStructure(),
             this.foldersManager.getPackageInfos(),
+            this.foldersManager.isPackageFolderOpened(null),
             this.foldersManager.getPackagesFolderPath(),
             this.getProjectName(),
             this.isPanelOpened(),
